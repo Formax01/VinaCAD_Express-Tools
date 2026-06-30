@@ -1,0 +1,250 @@
+﻿<Window
+    x:Class="Tools.View.UI.XLDMWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Tools.View.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Xác lập để đánh danh mục tự động"
+    Width="600"
+    ResizeMode="NoResize"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid Background="#9DB9D3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="38" />
+        </Grid.RowDefinitions>
+
+        <!--  Header button  -->
+        <Button
+            Grid.Row="0"
+            Height="28"
+            Margin="10,10,10,10"
+            Command="{Binding ChoseBlockCmd}"
+            Content="Chọn Khung Tên"
+            FontWeight="Bold"
+            Foreground="Blue" />
+
+        <!--  Content  -->
+        <Grid Grid.Row="1" Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Left form  -->
+            <Grid Grid.Column="0" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="42" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tên Block:" />
+
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Height="22"
+                    IsEnabled="False"
+                    IsReadOnly="True"
+                    Text="{Binding BlockName, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Kí hiệu bản vẽ:" />
+
+                <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Height="22"
+                    ItemsSource="{Binding KiHieuBanVeItems}"
+                    SelectedItem="{Binding KiHieuBanVeSelected}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tên bản vẽ(dòng 1):" />
+
+                <ComboBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Height="22"
+                    ItemsSource="{Binding TenBanVe1Items}"
+                    SelectedItem="{Binding TenBanVe1Selected}" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tên bản vẽ(dòng 2):" />
+
+                <ComboBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Height="22"
+                    ItemsSource="{Binding TenBanVe2Items}"
+                    SelectedItem="{Binding TenBanVe2Selected}" />
+
+
+
+                <TextBlock
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tên bản vẽ(dòng 3):" />
+
+                <ComboBox
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Height="22"
+                    ItemsSource="{Binding TenBanVe3Items}"
+                    SelectedItem="{Binding TenBanVe3Selected}" />
+
+                <TextBlock
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Tỉ lệ bản vẽ:" />
+
+                <TextBox
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Height="22"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                    Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="K/c sai số&#x0a;cho phép&#x0a;(mm)." />
+
+                <TextBox
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Height="22"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Right"
+                    behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                    Foreground="Red"
+                    Text="{Binding Tolerance, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <!--  Right group  -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="0" Header="Chọn theo kiểu nào nhỉ ?">
+
+                    <StackPanel Margin="10,10,10,0">
+
+                        <RadioButton
+                            Margin="0,0,0,18"
+                            Content="Từ trái sang phải, trên xuống dưới"
+                            GroupName="SortType"
+                            IsChecked="{Binding IsLeftToRight, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <RadioButton
+                            Content="Từ trên xuống dưới, trái sang phải"
+                            GroupName="SortType"
+                            IsChecked="{Binding IsTopToBottom, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </StackPanel>
+                </GroupBox>
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="22" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="22" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="Tiền tố kí hiệu bản vẽ:" />
+
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Height="22"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Left"
+                        behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                        Foreground="Red"
+                        Text="{Binding TienTo, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="Số hiệu bản vẽ bắt đầu:" />
+
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Height="22"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Left"
+                        behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                        Foreground="Red"
+                        Text="{Binding HauTo, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+
+            </Grid>
+        </Grid>
+
+        <!--  Bottom buttons  -->
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+
+            <Button
+                Width="70"
+                Height="25"
+                Margin="0,0,10,0"
+                Command="{Binding OkCmd}"
+                Content="OK"
+                FontWeight="Bold"
+                Foreground="Blue" />
+
+            <Button
+                Width="70"
+                Height="25"
+                Margin="0,0,10,0"
+                Command="{Binding CancelCmd}"
+                Content="Thoát"
+                FontWeight="Bold"
+                Foreground="Blue" />
+        </StackPanel>
+    </Grid>
+</Window>

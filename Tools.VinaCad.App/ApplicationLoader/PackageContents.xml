@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ApplicationPackage SchemaVersion="1.0" VinaCADProduct="VinaCAD"
+                    ProductType="Application" Name="VinaCAD_ExpressTools"
+                    Description="VinaCAD_ExpressTools"
+                    AppVersion="1.0.0" FriendlyVersion="1.0.0">
+
+
+  <Components Description="2026">
+    <RuntimeRequirements OS="Win32|Win64"
+							           Platform="VinaCAD"
+							           SeriesMin="R26.7"
+							           SeriesMax="R26.12" />
+
+    <ComponentEntry AppName="VinaCAD_ExpressTools" Version="2026.0"
+						        ModuleName="./Contents/Outcome_V2026/Tools.VinaCad.App.dll"
+						        AppDescription="VinaCAD_ExpressTools 2026"
+                    LoadOnAutoCADStartup="True"/>
+  </Components>
+  <Components Description="CUI">
+    <ComponentEntry AppName="VinaCAD_ExpressTools cui" ModuleName="./Contents/Outcome_V2026/VinaCAD_ExpressTools.cuix"  AppDescription="VinaCAD_ExpressTools cui" />
+  </Components>
+</ApplicationPackage>

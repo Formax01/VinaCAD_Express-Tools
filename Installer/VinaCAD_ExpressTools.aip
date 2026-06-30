@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="21.2" version="21.2" PreviousModules="simple" Modules="professional" RootPath="." Language="en" Id="{6A2FE233-25D9-42CB-B056-FB3F4778118C}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="ActSyncAppComponent;CPLAppletComponent;AppXAppDetailsComponent;FixupComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="Manufacturer" Value="Formax Technologies"/>
+    <ROW Property="ProductCode" Value="1033:{080873A1-9D82-4BB0-BB48-D2B28AD0430F} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="VinaCAD_ExpressTools"/>
+    <ROW Property="ProductVersion" Value="1.0.0.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{4005BA50-D5AB-4AB5-A590-4C893DB29184}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="AutoRebar.bundle_Dir" Directory_Parent="APPDIR" DefaultDir="EXPRES~1.BUN|ExpressTools.bundle"/>
+    <ROW Directory="Contents_Dir" Directory_Parent="AutoRebar.bundle_Dir" DefaultDir="Contents"/>
+    <ROW Directory="Images_Dir" Directory_Parent="Resources_Dir" DefaultDir="Images"/>
+    <ROW Directory="Resources_Dir" Directory_Parent="Contents_Dir" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="Settings_Dir" Directory_Parent="Resources_Dir" DefaultDir="Settings"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="Templates_Dir" Directory_Parent="Resources_Dir" DefaultDir="TEMPLA~1|Templates"/>
+    <ROW Directory="__1_Dir" Directory_Parent="Contents_Dir" DefaultDir="OUTCOM~1|Outcome_V2026"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="ACCAMERA_26.12_17.tx" ComponentId="{C88B47E4-8ADF-4A73-A81B-D59EF3ADA18C}" Directory_="__1_Dir" Attributes="256" KeyPath="ACCAMERA_26.12_17.tx" Type="0"/>
+    <ROW Component="APPDIR" ComponentId="{DBA6AE8E-707F-4A92-A6B0-723EAE368377}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="PackageContents.xml" ComponentId="{DA68906C-2F40-475C-AE6C-47A3EE349C95}" Directory_="AutoRebar.bundle_Dir" Attributes="0" KeyPath="PackageContents.xml" Type="0"/>
+    <ROW Component="PrLogTrackingSystem.dll" ComponentId="{BF932FE7-FE45-47AD-81DD-77B0BE370E46}" Directory_="__1_Dir" Attributes="0" KeyPath="PrLogTrackingSystem.dll"/>
+    <ROW Component="PrMVVMCore.dll" ComponentId="{7BC74E9E-9F2C-429E-AA56-604D05D26CB4}" Directory_="__1_Dir" Attributes="0" KeyPath="PrMVVMCore.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{8885C68E-E7ED-4127-925E-FF103F385B8B}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="Sample.xlsx" ComponentId="{D23C923E-F3AD-4759-ADFD-690A2667903E}" Directory_="Settings_Dir" Attributes="0" KeyPath="Sample.xlsx" Type="0"/>
+    <ROW Component="Sample.xlsx_1" ComponentId="{845D5BAD-586A-481E-ABCA-795ACC589368}" Directory_="Templates_Dir" Attributes="0" KeyPath="Sample.xlsx_1" Type="0"/>
+    <ROW Component="Sample_Image.png" ComponentId="{7F3D7E0F-DE4E-433C-914F-8EB520983D11}" Directory_="Images_Dir" Attributes="0" KeyPath="Setting.png" Type="0"/>
+    <ROW Component="System.Windows.Forms.Primitives.dll" ComponentId="{6962200B-0779-4FAC-B340-D2D0AFA2E9FE}" Directory_="__1_Dir" Attributes="256" KeyPath="System.Windows.Forms.Primitives.dll"/>
+    <ROW Component="System.Windows.Forms.dll" ComponentId="{8120FEAD-A205-4A8B-9CCE-773D60FEBF89}" Directory_="__1_Dir" Attributes="256" KeyPath="System.Windows.Forms.dll"/>
+    <ROW Component="TD_Alloc_26.12_17.dll" ComponentId="{F3A4B8EB-E3AD-4DCA-8948-0BF85BF60E9B}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Alloc_26.12_17.dll"/>
+    <ROW Component="TD_DbCore_26.12_17.dll" ComponentId="{8FE97586-E5C6-4D25-B5FC-06B62815316B}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_DbCore_26.12_17.dll"/>
+    <ROW Component="TD_DbRoot_26.12_17.dll" ComponentId="{F63FAB00-7C8D-400E-A903-70ABDA20BEFA}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_DbRoot_26.12_17.dll"/>
+    <ROW Component="TD_Db_26.12_17.dll" ComponentId="{ECCCF941-FDAD-4FB0-BD7A-7F1275905E3F}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Db_26.12_17.dll"/>
+    <ROW Component="TD_Ge_26.12_17.dll" ComponentId="{A6D46F57-732A-48B6-AA71-8057398D6074}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Ge_26.12_17.dll"/>
+    <ROW Component="TD_Gi_26.12_17.dll" ComponentId="{BE2AC9F8-5F2E-4311-B3F3-F64428FBB74F}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Gi_26.12_17.dll"/>
+    <ROW Component="TD_Gs_26.12_17.dll" ComponentId="{16B27237-CC73-47E9-B8B3-0C2604B4BBA7}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Gs_26.12_17.dll"/>
+    <ROW Component="TD_Mgd_Net8_26.12_17.dll" ComponentId="{D54E7053-ADBF-4C52-962C-7409207CB9AD}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Mgd_Net8_26.12_17.dll"/>
+    <ROW Component="TD_Root_26.12_17.dll" ComponentId="{2D15D216-EE5A-4CCB-A637-D95EB5EDD4F2}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Root_26.12_17.dll"/>
+    <ROW Component="TD_SpatialIndex_26.12_17.dll" ComponentId="{2859154F-F312-4637-BB18-C32C482AE593}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_SpatialIndex_26.12_17.dll"/>
+    <ROW Component="Tools.Model.dll" ComponentId="{16C2CCD2-40FA-4437-9122-BD318043E38F}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.Model.dll"/>
+    <ROW Component="Tools.Resources.dll" ComponentId="{F699336D-6C29-4BF4-8C1F-E97CAB9F4BBE}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.Resources.dll"/>
+    <ROW Component="Tools.View.dll" ComponentId="{42A61915-A5DC-427C-B079-9DAF6C49C887}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.View.dll"/>
+    <ROW Component="Tools.ViewModel.dll" ComponentId="{A9CC3520-CE6B-4B47-B5BF-75D548D15954}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.ViewModel.dll"/>
+    <ROW Component="Tools.VinaCad.Action.dll" ComponentId="{53512200-C4E5-447B-818C-3FCD09F7D681}" Directory_="__1_Dir" Attributes="256" KeyPath="Tools.VinaCad.Action.dll"/>
+    <ROW Component="Tools.VinaCad.App.dll" ComponentId="{009DE2CE-8DE8-41FF-9E9C-A7D8C1AC14F5}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.dll"/>
+    <ROW Component="Tools.VinaCad.Helper.dll" ComponentId="{BDFBB239-E082-4CDF-A900-32B5224A4BAC}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Helper.dll"/>
+    <ROW Component="Tools.VinaCad.Modeling.dll" ComponentId="{BD131F09-E514-4786-AFE1-FEFBBB6DB1AA}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Modeling.dll"/>
+    <ROW Component="VinaCADCoreMgd_Net8.dll" ComponentId="{1184DD2A-40CA-4EA2-AC56-DA9D3B0CE00E}" Directory_="__1_Dir" Attributes="256" KeyPath="VinaCADCoreMgd_Net8.dll"/>
+    <ROW Component="log4net.dll" ComponentId="{927454FC-16EE-4925-BF1E-63AFBB07AD01}" Directory_="__1_Dir" Attributes="0" KeyPath="log4net.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="Setting.png" Component_="Sample_Image.png" FileName="Setting.png" Attributes="0" SourcePath="..\Resources\Images\Setting.png" SelfReg="false"/>
+    <ROW File="Sample.xlsx" Component_="Sample.xlsx" FileName="SAMPLE~1.XLS|Sample.xlsx" Attributes="0" SourcePath="..\Resources\Settings\Sample.xlsx" SelfReg="false"/>
+    <ROW File="Sample.xlsx_1" Component_="Sample.xlsx_1" FileName="SAMPLE~1.XLS|Sample.xlsx" Attributes="0" SourcePath="..\Resources\Templates\Sample.xlsx" SelfReg="false"/>
+    <ROW File="BangtraDTCT.PNG" Component_="Sample_Image.png" FileName="BANGTR~1.PNG|BangtraDTCT.PNG" Attributes="0" SourcePath="..\Resources\Images\BangtraDTCT.PNG" SelfReg="false"/>
+    <ROW File="BT.png" Component_="Sample_Image.png" FileName="BT.png" Attributes="0" SourcePath="..\Resources\Images\BT.png" SelfReg="false"/>
+    <ROW File="BTCNeoNoiChauAu.PNG" Component_="Sample_Image.png" FileName="BTCNEO~1.PNG|BTCNeoNoiChauAu.PNG" Attributes="0" SourcePath="..\Resources\Images\BTCNeoNoiChauAu.PNG" SelfReg="false"/>
+    <ROW File="BTCNeoNoiVN.PNG" Component_="Sample_Image.png" FileName="BTCNEO~2.PNG|BTCNeoNoiVN.PNG" Attributes="0" SourcePath="..\Resources\Images\BTCNeoNoiVN.PNG" SelfReg="false"/>
+    <ROW File="dang01.png" Component_="Sample_Image.png" FileName="dang01.png" Attributes="0" SourcePath="..\Resources\Images\dang01.png" SelfReg="false"/>
+    <ROW File="dang02.png" Component_="Sample_Image.png" FileName="dang02.png" Attributes="0" SourcePath="..\Resources\Images\dang02.png" SelfReg="false"/>
+    <ROW File="dang03.png" Component_="Sample_Image.png" FileName="dang03.png" Attributes="0" SourcePath="..\Resources\Images\dang03.png" SelfReg="false"/>
+    <ROW File="dang04.png" Component_="Sample_Image.png" FileName="dang04.png" Attributes="0" SourcePath="..\Resources\Images\dang04.png" SelfReg="false"/>
+    <ROW File="dang05.png" Component_="Sample_Image.png" FileName="dang05.png" Attributes="0" SourcePath="..\Resources\Images\dang05.png" SelfReg="false"/>
+    <ROW File="dang06.png" Component_="Sample_Image.png" FileName="dang06.png" Attributes="0" SourcePath="..\Resources\Images\dang06.png" SelfReg="false"/>
+    <ROW File="Dang07.png" Component_="Sample_Image.png" FileName="Dang07.png" Attributes="0" SourcePath="..\Resources\Images\Dang07.png" SelfReg="false"/>
+    <ROW File="Dang08.png" Component_="Sample_Image.png" FileName="Dang08.png" Attributes="0" SourcePath="..\Resources\Images\Dang08.png" SelfReg="false"/>
+    <ROW File="dang09.png" Component_="Sample_Image.png" FileName="dang09.png" Attributes="0" SourcePath="..\Resources\Images\dang09.png" SelfReg="false"/>
+    <ROW File="dang10.png" Component_="Sample_Image.png" FileName="dang10.png" Attributes="0" SourcePath="..\Resources\Images\dang10.png" SelfReg="false"/>
+    <ROW File="dang11.png" Component_="Sample_Image.png" FileName="dang11.png" Attributes="0" SourcePath="..\Resources\Images\dang11.png" SelfReg="false"/>
+    <ROW File="dang12.png" Component_="Sample_Image.png" FileName="dang12.png" Attributes="0" SourcePath="..\Resources\Images\dang12.png" SelfReg="false"/>
+    <ROW File="dang13.png" Component_="Sample_Image.png" FileName="dang13.png" Attributes="0" SourcePath="..\Resources\Images\dang13.png" SelfReg="false"/>
+    <ROW File="dang14.png" Component_="Sample_Image.png" FileName="dang14.png" Attributes="0" SourcePath="..\Resources\Images\dang14.png" SelfReg="false"/>
+    <ROW File="dang15.png" Component_="Sample_Image.png" FileName="dang15.png" Attributes="0" SourcePath="..\Resources\Images\dang15.png" SelfReg="false"/>
+    <ROW File="PackageContents.xml" Component_="PackageContents.xml" FileName="PACKAG~1.XML|PackageContents.xml" Attributes="0" SourcePath="..\Tools.VinaCad.App\ApplicationLoader\PackageContents.xml" SelfReg="false"/>
+    <ROW File="ACCAMERA_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="ACCAME~1.TX|ACCAMERA_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\ACCAMERA_26.12_17.tx" SelfReg="false"/>
+    <ROW File="AcMPolygonObj15_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="ACMPOL~1.TX|AcMPolygonObj15_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\AcMPolygonObj15_26.12_17.tx" SelfReg="false"/>
+    <ROW File="ATEXT_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="ATEXT_~1.TX|ATEXT_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\ATEXT_26.12_17.tx" SelfReg="false"/>
+    <ROW File="DbConstraints_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="DBCONS~1.TX|DbConstraints_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\DbConstraints_26.12_17.tx" SelfReg="false"/>
+    <ROW File="ISM_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="ISM_26~1.TX|ISM_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\ISM_26.12_17.tx" SelfReg="false"/>
+    <ROW File="Log4net.config" Component_="ACCAMERA_26.12_17.tx" FileName="LOG4NE~1.CON|Log4net.config" Attributes="0" SourcePath="..\Outcome_V2026\Log4net.config" SelfReg="false"/>
+    <ROW File="log4net.dll" Component_="log4net.dll" FileName="log4net.dll" Attributes="0" SourcePath="..\Outcome_V2026\log4net.dll" SelfReg="false"/>
+    <ROW File="PrLogTrackingSystem.dll" Component_="PrLogTrackingSystem.dll" FileName="PRLOGT~1.DLL|PrLogTrackingSystem.dll" Attributes="0" SourcePath="..\Outcome_V2026\PrLogTrackingSystem.dll" SelfReg="false"/>
+    <ROW File="PrMVVMCore.dll" Component_="PrMVVMCore.dll" FileName="PRMVVM~1.DLL|PrMVVMCore.dll" Attributes="0" SourcePath="..\Outcome_V2026\PrMVVMCore.dll" SelfReg="false"/>
+    <ROW File="RecomputeDimBlock_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="RECOMP~1.TX|RecomputeDimBlock_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\RecomputeDimBlock_26.12_17.tx" SelfReg="false"/>
+    <ROW File="RText_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="RTEXT_~1.TX|RText_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\RText_26.12_17.tx" SelfReg="false"/>
+    <ROW File="SCENEOE_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="SCENEO~1.TX|SCENEOE_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\SCENEOE_26.12_17.tx" SelfReg="false"/>
+    <ROW File="System.Windows.Forms.dll" Component_="System.Windows.Forms.dll" FileName="SYSTEM~1.DLL|System.Windows.Forms.dll" Attributes="0" SourcePath="..\Outcome_V2026\System.Windows.Forms.dll" SelfReg="false"/>
+    <ROW File="System.Windows.Forms.Primitives.dll" Component_="System.Windows.Forms.Primitives.dll" FileName="SYSTEM~2.DLL|System.Windows.Forms.Primitives.dll" Attributes="0" SourcePath="..\Outcome_V2026\System.Windows.Forms.Primitives.dll" SelfReg="false"/>
+    <ROW File="TD_Alloc_26.12_17.dll" Component_="TD_Alloc_26.12_17.dll" FileName="TD_ALL~1.DLL|TD_Alloc_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Alloc_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Ave_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_AVE~1.TX|TD_Ave_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_Ave_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TD_DbCore_26.12_17.dll" Component_="TD_DbCore_26.12_17.dll" FileName="TD_DBC~1.DLL|TD_DbCore_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_DbCore_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_DbEntities_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_DBE~1.TX|TD_DbEntities_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_DbEntities_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TD_DbIO_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_DBI~1.TX|TD_DbIO_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_DbIO_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TD_DbRoot_26.12_17.dll" Component_="TD_DbRoot_26.12_17.dll" FileName="TD_DBR~1.DLL|TD_DbRoot_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_DbRoot_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Db_26.12_17.dll" Component_="TD_Db_26.12_17.dll" FileName="TD_DB_~1.DLL|TD_Db_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Db_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_DynBlocks_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_DYN~1.TX|TD_DynBlocks_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_DynBlocks_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TD_Ge_26.12_17.dll" Component_="TD_Ge_26.12_17.dll" FileName="TD_GE_~1.DLL|TD_Ge_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Ge_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Gi_26.12_17.dll" Component_="TD_Gi_26.12_17.dll" FileName="TD_GI_~1.DLL|TD_Gi_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Gi_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Gs_26.12_17.dll" Component_="TD_Gs_26.12_17.dll" FileName="TD_GS_~1.DLL|TD_Gs_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Gs_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Mgd_Net8_26.12_17.dll" Component_="TD_Mgd_Net8_26.12_17.dll" FileName="TD_MGD~1.DLL|TD_Mgd_Net8_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Mgd_Net8_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Root_26.12_17.dll" Component_="TD_Root_26.12_17.dll" FileName="TD_ROO~1.DLL|TD_Root_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Root_26.12_17.dll" SelfReg="false"/>
+    <ROW File="TD_Sm_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_SM_~1.TX|TD_Sm_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_Sm_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TD_SpatialIndex_26.12_17.dll" Component_="TD_SpatialIndex_26.12_17.dll" FileName="TD_SPA~1.DLL|TD_SpatialIndex_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_SpatialIndex_26.12_17.dll" SelfReg="false"/>
+    <ROW File="Tools.Model.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSM~1.JSO|Tools.Model.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Model.deps.json" SelfReg="false"/>
+    <ROW File="Tools.Model.dll" Component_="Tools.Model.dll" FileName="TOOLSM~1.DLL|Tools.Model.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Model.dll" SelfReg="false"/>
+    <ROW File="Tools.Model.pdb" Component_="Tools.Model.dll" FileName="TOOLSM~1.PDB|Tools.Model.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Model.pdb" SelfReg="false"/>
+    <ROW File="Tools.Resources.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSR~1.JSO|Tools.Resources.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.deps.json" SelfReg="false"/>
+    <ROW File="Tools.Resources.dll" Component_="Tools.Resources.dll" FileName="TOOLSR~1.DLL|Tools.Resources.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.dll" SelfReg="false"/>
+    <ROW File="Tools.Resources.pdb" Component_="Tools.Resources.dll" FileName="TOOLSR~1.PDB|Tools.Resources.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.pdb" SelfReg="false"/>
+    <ROW File="Tools.View.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~1.JSO|Tools.View.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.deps.json" SelfReg="false"/>
+    <ROW File="Tools.View.dll" Component_="Tools.View.dll" FileName="TOOLSV~1.DLL|Tools.View.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.dll" SelfReg="false"/>
+    <ROW File="Tools.View.pdb" Component_="Tools.View.dll" FileName="TOOLSV~1.PDB|Tools.View.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.pdb" SelfReg="false"/>
+    <ROW File="Tools.ViewModel.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~2.JSO|Tools.ViewModel.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.ViewModel.deps.json" SelfReg="false"/>
+    <ROW File="Tools.ViewModel.dll" Component_="Tools.ViewModel.dll" FileName="TOOLSV~2.DLL|Tools.ViewModel.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.ViewModel.dll" SelfReg="false"/>
+    <ROW File="Tools.ViewModel.pdb" Component_="Tools.ViewModel.dll" FileName="TOOLSV~2.PDB|Tools.ViewModel.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.ViewModel.pdb" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Action.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~3.JSO|Tools.VinaCad.Action.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Action.deps.json" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Action.dll" Component_="Tools.VinaCad.Action.dll" FileName="TOOLSV~3.DLL|Tools.VinaCad.Action.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Action.dll" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Action.pdb" Component_="Tools.VinaCad.Action.dll" FileName="TOOLSV~3.PDB|Tools.VinaCad.Action.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Action.pdb" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.App.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~4.JSO|Tools.VinaCad.App.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.deps.json" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.App.dll" Component_="Tools.VinaCad.App.dll" FileName="TOOLSV~4.DLL|Tools.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.dll" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.App.pdb" Component_="Tools.VinaCad.App.dll" FileName="TOOLSV~4.PDB|Tools.VinaCad.App.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.pdb" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Helper.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~5.JSO|Tools.VinaCad.Helper.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Helper.deps.json" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Helper.dll" Component_="Tools.VinaCad.Helper.dll" FileName="TOOLSV~5.DLL|Tools.VinaCad.Helper.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Helper.dll" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Helper.pdb" Component_="Tools.VinaCad.Helper.dll" FileName="TOOLSV~5.PDB|Tools.VinaCad.Helper.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Helper.pdb" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Modeling.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~6.JSO|Tools.VinaCad.Modeling.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Modeling.deps.json" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Modeling.dll" Component_="Tools.VinaCad.Modeling.dll" FileName="TOOLSV~6.DLL|Tools.VinaCad.Modeling.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Modeling.dll" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.Modeling.pdb" Component_="Tools.VinaCad.Modeling.dll" FileName="TOOLSV~6.PDB|Tools.VinaCad.Modeling.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Modeling.pdb" SelfReg="false"/>
+    <ROW File="VinaCADCoreMgd_Net8.dll" Component_="VinaCADCoreMgd_Net8.dll" FileName="VINACA~1.DLL|VinaCADCoreMgd_Net8.dll" Attributes="0" SourcePath="..\Outcome_V2026\VinaCADCoreMgd_Net8.dll" SelfReg="false"/>
+    <ROW File="VinaCADCoreMgd_Net8.pdb" Component_="VinaCADCoreMgd_Net8.dll" FileName="VINACA~1.PDB|VinaCADCoreMgd_Net8.pdb" Attributes="0" SourcePath="..\Outcome_V2026\VinaCADCoreMgd_Net8.pdb" SelfReg="false"/>
+    <ROW File="WipeOut_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="WIPEOU~1.TX|WipeOut_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\WipeOut_26.12_17.tx" SelfReg="false"/>
+    <ROW File="TemplateBlocks.dwg" Component_="Sample.xlsx_1" FileName="TEMPLA~1.DWG|TemplateBlocks.dwg" Attributes="0" SourcePath="..\Resources\Templates\TemplateBlocks.dwg" SelfReg="false"/>
+    <ROW File="VinaCAD_ExpressTools.cuix" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~1.CUI|VinaCAD_ExpressTools.cuix" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools.cuix" SelfReg="false"/>
+    <ROW File="LNEO.png" Component_="Sample_Image.png" FileName="LNEO.png" Attributes="0" SourcePath="..\Resources\Images\LNEO.png" SelfReg="false"/>
+    <ROW File="LNOI.png" Component_="Sample_Image.png" FileName="LNOI.png" Attributes="0" SourcePath="..\Resources\Images\LNOI.png" SelfReg="false"/>
+    <ROW File="ExpressTools.pdf" Component_="Sample.xlsx_1" FileName="EXPRES~1.PDF|Express Tools.pdf" Attributes="0" SourcePath="..\Resources\Templates\Express Tools.pdf" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFileName="VinaCAD_ExpressTools_v[|ProductVersion]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildEventsComponent">
+    <ROW EventId="0" EventRun="D:\01-Workplace\01-SourceCode\03-BIMfan_AutoRebar\Installer\rename_msiname_with_date.bat" EventCmdLine="[|ProductVersion]" EventOrder="1" EventType="2" EventInterupt="false" EventEnabled="false" EventPrecompression="false" RollbackEvent="false" EventBuild="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DynamicPropertyComponent">
+    <ROW Property="ProductVersion" Type="10" SourcePath="Tools.VinaCad.App.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AppDataFolder]\VinaCAD\ApplicationPlugins"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="Sample_Image.png"/>
+    <ROW Feature_="MainFeature" Component_="Sample.xlsx_1"/>
+    <ROW Feature_="MainFeature" Component_="Sample.xlsx"/>
+    <ROW Feature_="MainFeature" Component_="PackageContents.xml"/>
+    <ROW Feature_="MainFeature" Component_="ACCAMERA_26.12_17.tx"/>
+    <ROW Feature_="MainFeature" Component_="log4net.dll"/>
+    <ROW Feature_="MainFeature" Component_="PrLogTrackingSystem.dll"/>
+    <ROW Feature_="MainFeature" Component_="PrMVVMCore.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Forms.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Forms.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Alloc_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_DbCore_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_DbRoot_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Db_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Ge_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Gi_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Gs_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Mgd_Net8_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_Root_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="TD_SpatialIndex_26.12_17.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.Model.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.Resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.View.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.ViewModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Action.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.VinaCad.App.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Helper.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Modeling.dll"/>
+    <ROW Feature_="MainFeature" Component_="VinaCADCoreMgd_Net8.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="769" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
+    <ROW Directory_="__1_Dir" SourcePath="..\Outcome_V2026" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" ExcludeSubFolders="true" FileAddOptions="4"/>
+    <ROW Directory_="Images_Dir" SourcePath="..\Resources\Images" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="Settings_Dir" SourcePath="..\Resources\Settings" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+    <ROW Directory_="Templates_Dir" SourcePath="..\Resources\Templates" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="4"/>
+  </COMPONENT>
+</DOCUMENT>

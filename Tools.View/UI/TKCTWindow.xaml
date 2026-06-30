@@ -1,0 +1,240 @@
+﻿<Window
+    x:Class="Tools.View.UI.TKCTWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Tools.View.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Bảng Thống Kê Cốt Thép"
+    Width="520"
+    Height="600"
+    Loaded="BangToaDoCocWindow_Loaded"
+    Topmost="True"
+    mc:Ignorable="d">
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Border
+            Grid.Row="0"
+            Margin="0,0,0,8"
+            Background="White"
+            BorderBrush="Gray"
+            BorderThickness="1">
+
+            <Image
+                x:Name="imgPreview"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Stretch="Uniform" />
+        </Border>
+        <DataGrid
+            x:Name="dgDanhMuc"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,10"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            GridLinesVisibility="All"
+            HeadersVisibility="All"
+            ItemsSource="{Binding CotThepItems}"
+            KeyDown="dgDanhMuc_KeyDown"
+            SelectionChanged="dgDanhMuc_SelectionChanged"
+            SelectionMode="Single"
+            SelectionUnit="FullRow">
+            <DataGrid.Columns>
+
+                <!--  S.HIỆU  -->
+                <DataGridTextColumn
+                    Width="60"
+                    Binding="{Binding SoHieu, UpdateSourceTrigger=PropertyChanged}"
+                    Header="S.Hiệu"
+                    SortMemberPath="SoHieu">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  L1  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding L1, UpdateSourceTrigger=PropertyChanged}"
+                    Header="L1">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  L2  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding L2, UpdateSourceTrigger=PropertyChanged}"
+                    Header="L2">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  L3  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding L3, UpdateSourceTrigger=PropertyChanged}"
+                    Header="L3">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  D  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding D, UpdateSourceTrigger=PropertyChanged}"
+                    Header="D">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  SL  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding SL, UpdateSourceTrigger=PropertyChanged}"
+                    Header="SL">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--  SCK  -->
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding SCK, UpdateSourceTrigger=PropertyChanged}"
+                    Header="SCK">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+
+                <!--  TKL  -->
+
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding L4, UpdateSourceTrigger=PropertyChanged}"
+                    Header="L4">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding L5, UpdateSourceTrigger=PropertyChanged}"
+                    Header="L5">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+
+            <Button
+                Width="70"
+                Height="25"
+                Margin="0,0,110,0"
+                Command="{Binding UpdateCmd}"
+                Content="Cập Nhật" />
+
+            <Button
+                Width="70"
+                Height="25"
+                Command="{Binding CancelCmd}"
+                Content="Thoát" />
+        </StackPanel>
+    </Grid>
+</Window>
