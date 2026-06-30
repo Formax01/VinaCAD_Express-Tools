@@ -1,0 +1,163 @@
+﻿<Window
+    x:Class="Tools.View.UI.SettingKiemTraDimCongDonWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Tools.View.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Setting Dim Cộng Dồn"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
+
+        </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            Header="Sai số cho phép để xem dim là liên tiếp nhau">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Khoảng cách lệch phương cho phép:" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                    Foreground="Red"
+                    Text="{Binding LechPhuong}"
+                    TextAlignment="Right" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Khoảng cách lệch giữa 2 chân dim cho phép:" />
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Right"
+                    VerticalContentAlignment="Center"
+                    behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                    Foreground="Red"
+                    Text="{Binding LechChanDim}"
+                    TextAlignment="Right" />
+            </Grid>
+        </GroupBox>
+        <GroupBox
+            Grid.Row="1"
+            Margin="0,0,0,10"
+            Header="Xác lập quy tắc dim cộng dồn">
+            <Grid Margin="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Quy tắc phương ngang:" />
+                <RadioButton
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Content="Trái sang phải"
+                    GroupName="HuongBoTriNgang"
+                    IsChecked="{Binding IsLeftToRightHorizontal}" />
+                <RadioButton
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Content="Phải sang trái"
+                    GroupName="HuongBoTriNgang"
+                    IsChecked="{Binding IsRightToLeftHorizontal}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Quy tắc phương đứng:" />
+                <RadioButton
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Content="Trên xuống dưới"
+                    GroupName="HuongBoTriDung"
+                    IsChecked="{Binding IsTopToBottomVertical}" />
+                <RadioButton
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Content="Dưới lên trên"
+                    GroupName="HuongBoTriDung"
+                    IsChecked="{Binding IsBottomToTopVertical}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="Quy tắc phương xiên:" />
+                <RadioButton
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Content="Dưới lên trên"
+                    GroupName="HuongBoTriXien"
+                    IsChecked="{Binding IsBottomToTopAligned}" />
+                <RadioButton
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Content="Trên xuống dưới"
+                    GroupName="HuongBoTriXien"
+                    IsChecked="{Binding IsTopToBottomAligned}" />
+            </Grid>
+        </GroupBox>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Width="70"
+                Height="25"
+                Margin="0,0,110,0"
+                Command="{Binding OKCmd}"
+                Content="OK" />
+            <Button
+                Width="70"
+                Height="25"
+                Command="{Binding CancelCmd}"
+                Content="Thoát" />
+        </StackPanel>
+    </Grid>
+</Window>
