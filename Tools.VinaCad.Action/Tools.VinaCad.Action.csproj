@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Configurations>Debug;Release;V2026</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V2026|AnyCPU'">
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);V2026</DefineConstants>
+    <OutputPath>..\Outcome_V2026\</OutputPath>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(Configuration)' == 'V2026'">
+    <Reference Include="TD_Mgd_Net8_26.12_17">
+      <HintPath>..\Lib\VinaCad\2026\TD_Mgd_Net8_26.12_17.dll</HintPath>
+    </Reference>
+    <Reference Include="PrLogTrackingSystem">
+      <HintPath>..\Lib\PR\2026\PrLogTrackingSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="PrMVVMCore">
+      <HintPath>..\Lib\PR\2026\PrMVVMCore.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\Tools.VinaCad.Helper\Tools.VinaCad.Helper.csproj" />
+    <ProjectReference Include="..\Tools.VinaCad.Modeling\Tools.VinaCad.Modeling.csproj" />
+    <ProjectReference Include="..\Resources\Tools.Resources.csproj" />
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj" />
+    <ProjectReference Include="..\Tools.ViewModel\Tools.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="VinaCADCoreMgd_Net8">
+      <HintPath>C:\Program Files\VinaCAD\VinaCAD 2026\VinaCADCoreMgd_Net8.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

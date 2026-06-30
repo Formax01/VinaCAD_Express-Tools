@@ -1,0 +1,99 @@
+﻿<Window
+    x:Class="Tools.View.UI.TimTextWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Tools.View.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Tìm và chọn đối tượng Text và MText"
+    Width="300"
+    ResizeMode="NoResize"
+    SizeToContent="Height"
+    Topmost="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Tools.View;component/Themes/SharedStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontWeight="SemiBold"
+                Foreground="Blue"
+                Text="Nhập Text cần tìm:" />
+
+            <TextBox
+                Grid.Column="2"
+                Height="24"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Center"
+                behaviors:TextBoxBehavior.IsFocused="True"
+                GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                Style="{StaticResource TextTextBoxStyle}"
+                Text="{Binding TextFind, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <GroupBox Grid.Row="2">
+            <GroupBox.Header>
+                <TextBlock
+                    FontWeight="SemiBold"
+                    Foreground="Blue"
+                    Text="Bạn muốn tìm theo kiểu nào?" />
+            </GroupBox.Header>
+
+            <StackPanel Orientation="Vertical">
+                <CheckBox
+                    Margin="0,10,0,10"
+                    Content="Tìm chính xác Text cần tìm"
+                    IsChecked="{Binding IsExactMatch}" />
+
+                <CheckBox
+                    Margin="0,0,0,10"
+                    Content="Tìm Text chứa Text cần tìm"
+                    IsChecked="{Binding IsContainsMatch}" />
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel
+            Grid.Row="4"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+
+            <Button
+                Width="70"
+                Height="25"
+                Margin="0,0,35,0"
+                Command="{Binding SelectAllCmd}"
+                Content="Chọn All" />
+
+            <Button
+                Width="70"
+                Height="25"
+                Command="{Binding ScanSelectCmd}"
+                Content="Quét Chọn" />
+
+        </StackPanel>
+    </Grid>
+</Window>

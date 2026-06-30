@@ -1,0 +1,112 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Style x:Key="CustomButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="80" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="CustomTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="TextTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="behaviors:TextBoxBehavior.SelectAllTextOnFocus" Value="True" />
+    </Style>
+
+    <Style x:Key="NumericTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Right" />
+        <Setter Property="behaviors:TextBoxBehavior.SelectAllTextOnFocus" Value="True" />
+    </Style>
+
+    <Style x:Key="CustomComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="CustomDataGridStyle" TargetType="{x:Type DataGrid}">
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="False" />
+        <Setter Property="CanUserSortColumns" Value="False" />
+        <Setter Property="EnableColumnVirtualization" Value="False" />
+        <Setter Property="EnableRowVirtualization" Value="False" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="MinRowHeight" Value="28" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="WhiteSmoke" />
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Height" Value="Auto" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="FontWeight" Value="DemiBold" />
+                    <Setter Property="Height" Value="35" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="HorizontalGridLinesBrush">
+            <Setter.Value>
+                <LinearGradientBrush MappingMode="Absolute" SpreadMethod="Repeat" StartPoint="0,0" EndPoint="3,0">
+                    <GradientStop Offset="0.2" Color="Gray" />
+                    <GradientStop Offset="0.2" Color="Gray" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="VerticalGridLinesBrush">
+            <Setter.Value>
+                <LinearGradientBrush MappingMode="Absolute" SpreadMethod="Repeat" StartPoint="0,0" EndPoint="0,3">
+                    <GradientStop Offset="1" Color="Gray" />
+                    <GradientStop Offset="1" Color="Gray" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CenterAlignedTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+</ResourceDictionary>
