@@ -7,7 +7,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tools.AutoCad.Helper.Utils
+namespace Tools.VinaCAD.Helper.Utils
 {
     public class Utils
     {

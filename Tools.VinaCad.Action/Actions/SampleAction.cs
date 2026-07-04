@@ -1,5 +1,5 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
-using Tools.AutoCad.Modeling;
+using Tools.VinaCAD.Modeling;
 using Tools.Resources.Definitions;
 using Tools.View.UI;
 using Tools.ViewModel;
@@ -10,7 +10,7 @@ using PrMVVMCore;
 using PrLogTrackingSystem;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Tools.AutoCad.Action.Actions
+namespace Tools.VinaCAD.Action.Actions
 {
     public class SampleAction
     {

@@ -7,11 +7,11 @@ using Teigha.Runtime;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using System.Windows;
 using PrLogTrackingSystem;
-using Tools.AutoCad.Action.Actions;
+using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Action.Actions;
 
-namespace Tools.AutoCad.App.Commands
+namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
