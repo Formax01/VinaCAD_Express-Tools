@@ -24,6 +24,23 @@ namespace Tools.View.UI
             InitializeComponent();
             this.PreviewKeyDown += FindTextView_PreviewKeyDown;
         }
+
+        private void XLTKCKWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Ensure focus is set after layout pass
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var pickButton = this.FindName("btnPickText") as Button;
+                if (pickButton != null)
+                {
+                    pickButton.Focus();
+                    Keyboard.Focus(pickButton);
+                    // IsDefault is already set in XAML; keep it if needed:
+                    pickButton.IsDefault = true;
+                }
+            }), System.Windows.Threading.DispatcherPriority.Input);
+        }
+
         private void FindTextView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
