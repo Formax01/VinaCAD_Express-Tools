@@ -62,10 +62,10 @@
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Quy tắc sắp xếp :" Style="{StaticResource LabelStyle}"/>
         <ComboBox  Grid.Row="4" Grid.Column="1" SelectedIndex="{Binding Ordering, Mode=TwoWay}">
-            <ComboBoxItem>Trên → Dưới, Trái → Phải</ComboBoxItem>
-            <ComboBoxItem>Trên → Dưới, Phải → Trái</ComboBoxItem>
-            <ComboBoxItem>Dưới → Trên, Trái → Phải</ComboBoxItem>
-            <ComboBoxItem>Dưới → Trên, Phải → Trái</ComboBoxItem>
+            <ComboBoxItem>Trái → Phải, Trên → Dưới</ComboBoxItem>
+            <ComboBoxItem>Trái → Phải, Dưới → Trên</ComboBoxItem>
+            <ComboBoxItem>Phải → Trái, Trên → Dưới</ComboBoxItem>
+            <ComboBoxItem>Phải → Trái, Dưới → Trên</ComboBoxItem>
         </ComboBox>
 
         <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"

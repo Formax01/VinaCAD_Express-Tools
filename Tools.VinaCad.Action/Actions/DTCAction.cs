@@ -263,7 +263,7 @@ namespace Tools.VinaCad.Action.Actions
         private List<(ObjectId id, Point3d pos)> SortByOrdering(List<(ObjectId id, Point3d pos)> piles, int ordering)
         {
             const double eps = POSITION_EPS;
-            
+
             Comparison<(ObjectId id, Point3d pos)> cmp = (a, b) =>
             {
                 double ax = a.pos.X, ay = a.pos.Y;
@@ -271,32 +271,37 @@ namespace Tools.VinaCad.Action.Actions
 
                 switch (ordering)
                 {
-                    case 0: // Top→Bottom, Left→Right (primary: Y desc, secondary: X asc)
+                    case 0: // Trái→Phải, Trên→Dưới => Y desc (top->bottom), X asc
                         {
-                            int c = -CompareDouble(ay, by, eps); // Y descending (top to bottom)
+                            int c = -CompareDouble(ay, by, eps); // primary: Y descending
                             if (c != 0) return c;
-                            return CompareDouble(ax, bx, eps); // X ascending (left to right)
+                            return CompareDouble(ax, bx, eps);   // secondary: X ascending
                         }
-                    case 1: // Top→Bottom, Right→Left (primary: Y desc, secondary: X desc)
+                    case 1: // Trái→Phải, Dưới→Trên => Y asc (bottom->top), X asc
                         {
-                            int c = -CompareDouble(ay, by, eps); // Y descending (top to bottom)
+                            int c = CompareDouble(ay, by, eps);  // primary: Y ascending
                             if (c != 0) return c;
-                            return -CompareDouble(ax, bx, eps); // X descending (right to left)
+                            return CompareDouble(ax, bx, eps);   // secondary: X ascending
                         }
-                    case 2: // Bottom→Top, Left→Right (primary: Y asc, secondary: X asc)
+                    case 2: // Phải→Trái, Trên→Dưới => Y desc, X desc
                         {
-                            int c = CompareDouble(ay, by, eps); // Y ascending (bottom to top)
+                            int c = -CompareDouble(ay, by, eps); // primary: Y descending
                             if (c != 0) return c;
-                            return CompareDouble(ax, bx, eps); // X ascending (left to right)
+                            return -CompareDouble(ax, bx, eps);  // secondary: X descending
                         }
-                    case 3: // Bottom→Top, Right→Left (primary: Y asc, secondary: X desc)
+                    case 3: // Phải→Trái, Dưới→Trên => Y asc, X desc
                         {
-                            int c = CompareDouble(ay, by, eps); // Y ascending (bottom to top)
+                            int c = CompareDouble(ay, by, eps);  // primary: Y ascending
                             if (c != 0) return c;
-                            return -CompareDouble(ax, bx, eps); // X descending (right to left)
+                            return -CompareDouble(ax, bx, eps);  // secondary: X descending
                         }
                     default:
-                        return CompareDouble(ay, by, eps);
+                        // fallback: row-first top->bottom then left->right
+                        {
+                            int c = -CompareDouble(ay, by, eps);
+                            if (c != 0) return c;
+                            return CompareDouble(ax, bx, eps);
+                        }
                 }
             };
 

@@ -52,11 +52,41 @@ namespace Tools.VinaCad.Action.Actions
                     Ordering = XLDatTenCocSetting.Ordering
                 };
 
-                // Load text styles from the drawing
-                LoadTextStylesFromDrawing();
+                // Load text styles from the drawing and get available style names
+                var styles = LoadTextStylesFromDrawing();
 
-                // Set the selected text style from saved setting
-                _vm.SelectedTextStyle = XLDatTenCocSetting.TextStyleName ?? string.Empty;
+                // Default text style: prefer saved setting; otherwise choose the first text style in drawing; fallback to literal "C"
+                if (!string.IsNullOrWhiteSpace(XLDatTenCocSetting.TextStyleName) &&
+                    styles.Any(s => string.Equals(s, XLDatTenCocSetting.TextStyleName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    _vm.SelectedTextStyle = XLDatTenCocSetting.TextStyleName;
+                }
+                else if (styles.Count > 0)
+                {
+                    // choose the first text style from drawing as default
+                    _vm.SelectedTextStyle = styles.First();
+                }
+                else
+                {
+                    // no styles discovered -> use literal "C" as default shown to user
+                    _vm.SelectedTextStyle = "C";
+                }
+
+                // If there is no saved prefix, try to load default prefix from drawing title block (DRAWINGNO);
+                // if not found, fall back to "C"
+                if (string.IsNullOrWhiteSpace(XLDatTenCocSetting.Prefix))
+                {
+                    string prefixFromDrawing = LoadDefaultPrefixFromDrawing();
+                    if (!string.IsNullOrWhiteSpace(prefixFromDrawing))
+                        _vm.Prefix = prefixFromDrawing;
+                    else
+                        _vm.Prefix = "C";
+                }
+                else
+                {
+                    // saved prefix exists
+                    _vm.Prefix = XLDatTenCocSetting.Prefix;
+                }
 
                 // wire commands (close/save run on UI thread)
                 _vm.SaveCmd = new RelayCommand(SaveInvoke);
@@ -77,12 +107,14 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        private void LoadTextStylesFromDrawing()
+        /// <summary>
+        /// Loads text style names from the drawing and populates the VM. Returns the list of style names.
+        /// </summary>
+        private List<string> LoadTextStylesFromDrawing()
         {
+            var styleNames = new List<string>();
             try
             {
-                var styleNames = new List<string>();
-
                 using (Transaction tr = _db.TransactionManager.StartTransaction())
                 {
                     TextStyleTable tst = tr.GetObject(_db.TextStyleTableId, OpenMode.ForRead) as TextStyleTable;
@@ -92,22 +124,65 @@ namespace Tools.VinaCad.Action.Actions
                         {
                             TextStyleTableRecord tsr = tr.GetObject(tsId, OpenMode.ForRead) as TextStyleTableRecord;
                             if (tsr != null)
-                            {
                                 styleNames.Add(tsr.Name);
+                        }
+                    }
+                    tr.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(nameof(LoadTextStylesFromDrawing), ex);
+            }
+
+            _vm.LoadTextStylesFromDrawing(styleNames);
+            return styleNames;
+        }
+
+        /// <summary>
+        /// Attempt to read a title-block attribute (DRAWINGNO) from modelspace block references and return its value.
+        /// </summary>
+        private string LoadDefaultPrefixFromDrawing()
+        {
+            try
+            {
+                using (Transaction tr = _db.TransactionManager.StartTransaction())
+                {
+                    BlockTable bt = tr.GetObject(_db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                    if (bt == null) return string.Empty;
+
+                    BlockTableRecord ms = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForRead) as BlockTableRecord;
+                    if (ms == null) return string.Empty;
+
+                    foreach (ObjectId entId in ms)
+                    {
+                        DBObject obj = tr.GetObject(entId, OpenMode.ForRead);
+                        if (obj is BlockReference br)
+                        {
+                            // iterate attribute references attached to the block reference
+                            foreach (ObjectId attId in br.AttributeCollection)
+                            {
+                                DBObject attObj = tr.GetObject(attId, OpenMode.ForRead);
+                                if (attObj is AttributeReference attrRef)
+                                {
+                                    if (string.Equals(attrRef.Tag, BlockAttributeName.SoHieuBanVe, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        string val = (attrRef.TextString ?? string.Empty).Trim();
+                                        if (!string.IsNullOrWhiteSpace(val))
+                                            return val;
+                                    }
+                                }
                             }
                         }
                     }
                     tr.Commit();
                 }
-
-                _vm.LoadTextStylesFromDrawing(styleNames);
             }
             catch (Exception ex)
             {
-                Logger.Info(nameof(LoadTextStylesFromDrawing), ex);
-                // If loading fails, continue with empty list
-                _vm.LoadTextStylesFromDrawing(new List<string>());
+                Logger.Info(nameof(LoadDefaultPrefixFromDrawing), ex);
             }
+            return string.Empty;
         }
 
         private void SaveInvoke()
