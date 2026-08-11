@@ -1,0 +1,78 @@
+﻿<Window x:Class="Tools.View.UI.XLDatTenCocWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Xác Lập Đặt Tên Cọc"
+        Width="450"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="90"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Tiền tố :" Style="{StaticResource LabelStyle}"/>
+        <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding Prefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                   CharacterCasing="Upper"/>    
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Số bắt đầu :" Style="{StaticResource LabelStyle}"/>
+        <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding StartNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Cỡ chữ :" Style="{StaticResource LabelStyle}"/>
+        <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding TextHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Kiểu Text :" Style="{StaticResource LabelStyle}"/>
+        <ComboBox  Grid.Row="3" Grid.Column="1"
+                   ItemsSource="{Binding TextStyles}"
+                   SelectedItem="{Binding SelectedTextStyle, Mode=TwoWay}"
+                   IsEditable="False"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Quy tắc sắp xếp :" Style="{StaticResource LabelStyle}"/>
+        <ComboBox  Grid.Row="4" Grid.Column="1" SelectedIndex="{Binding Ordering, Mode=TwoWay}">
+            <ComboBoxItem>Trên → Dưới, Trái → Phải</ComboBoxItem>
+            <ComboBoxItem>Trên → Dưới, Phải → Trái</ComboBoxItem>
+            <ComboBoxItem>Dưới → Trên, Trái → Phải</ComboBoxItem>
+            <ComboBoxItem>Dưới → Trên, Phải → Trái</ComboBoxItem>
+        </ComboBox>
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+            <Button Content="Lưu" Command="{Binding SaveCmd}" Margin="0,0,8,0"/>
+            <Button Content="Hủy" Command="{Binding CancelCmd}"/>
+        </StackPanel>
+    </Grid>
+</Window>
