@@ -241,7 +241,11 @@ namespace Tools.VinaCad.Action.Actions
                     }
 
                     tr.Commit();
-                    ed.WriteMessage($"\nDTC: Assigned names to {sorted.Count} piles starting at {XLDatTenCocSetting.StartNumber} (prefix='{prefix}', TextStyle='{textStyleName}').\n");
+
+                    // Update StartNumber in setting to continue from the next number on next run
+                    XLDatTenCocSetting.StartNumber = num;
+
+                    ed.WriteMessage($"\nDTC: Assigned names to {sorted.Count} piles (prefix='{prefix}', TextStyle='{textStyleName}'). Next start number is {num}.\n");
                 }
             }
             catch (Exception ex)
@@ -255,15 +259,15 @@ namespace Tools.VinaCad.Action.Actions
         /// Sorts piles by ordering mode with ROW (Y-axis) as primary sort key and COLUMN (X-axis) as secondary.
         /// 
         /// Ordering modes:
-        /// 0: Top→Bottom (descending Y), Left→Right (ascending X)
-        /// 1: Top→Bottom (descending Y), Right→Left (descending X)
-        /// 2: Bottom→Top (ascending Y), Left→Right (ascending X)
-        /// 3: Bottom→Top (ascending Y), Right→Left (descending X)
+        /// 0: Trái→Phải, Trên→Dưới (Left→Right, Top→Bottom) => Y desc, X asc
+        /// 1: Trái→Phải, Dưới→Trên (Left→Right, Bottom→Top) => Y asc, X asc
+        /// 2: Phải→Trái, Trên→Dưới (Right→Left, Top→Bottom) => Y desc, X desc
+        /// 3: Phải→Trái, Dưới→Trên (Right→Left, Bottom→Top) => Y asc, X desc
         /// </summary>
         private List<(ObjectId id, Point3d pos)> SortByOrdering(List<(ObjectId id, Point3d pos)> piles, int ordering)
         {
             const double eps = POSITION_EPS;
-
+            
             Comparison<(ObjectId id, Point3d pos)> cmp = (a, b) =>
             {
                 double ax = a.pos.X, ay = a.pos.Y;
@@ -271,25 +275,25 @@ namespace Tools.VinaCad.Action.Actions
 
                 switch (ordering)
                 {
-                    case 0: // Trái→Phải, Trên→Dưới => Y desc (top->bottom), X asc
+                    case 0: // Trái→Phải, Trên→Dưới => Y desc (top->bottom), X asc (left->right)
                         {
                             int c = -CompareDouble(ay, by, eps); // primary: Y descending
                             if (c != 0) return c;
                             return CompareDouble(ax, bx, eps);   // secondary: X ascending
                         }
-                    case 1: // Trái→Phải, Dưới→Trên => Y asc (bottom->top), X asc
+                    case 1: // Trái→Phải, Dưới→Trên => Y asc (bottom->top), X asc (left->right)
                         {
                             int c = CompareDouble(ay, by, eps);  // primary: Y ascending
                             if (c != 0) return c;
                             return CompareDouble(ax, bx, eps);   // secondary: X ascending
                         }
-                    case 2: // Phải→Trái, Trên→Dưới => Y desc, X desc
+                    case 2: // Phải→Trái, Trên→Dưới => Y desc (top->bottom), X desc (right->left)
                         {
                             int c = -CompareDouble(ay, by, eps); // primary: Y descending
                             if (c != 0) return c;
                             return -CompareDouble(ax, bx, eps);  // secondary: X descending
                         }
-                    case 3: // Phải→Trái, Dưới→Trên => Y asc, X desc
+                    case 3: // Phải→Trái, Dưới→Trên => Y asc (bottom->top), X desc (right->left)
                         {
                             int c = CompareDouble(ay, by, eps);  // primary: Y ascending
                             if (c != 0) return c;
