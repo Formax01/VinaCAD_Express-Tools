@@ -1,5 +1,6 @@
 ﻿<Window x:Class="Tools.View.UI.XLDatTenCocWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Xác Lập Đặt Tên Cọc"
         Width="450"
