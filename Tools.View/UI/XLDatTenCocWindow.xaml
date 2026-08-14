@@ -48,13 +48,17 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Tiền tố :" Style="{StaticResource LabelStyle}"/>
         <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding Prefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                   CharacterCasing="Upper" Margin="0,0,0,10"/>
+                   CharacterCasing="Upper" Margin="0,0,0,10"
+                   behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                   behaviors:TextBoxBehavior.IsFocused="True"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Số bắt đầu :" Style="{StaticResource LabelStyle}" Margin="0,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.547,-0.342"/>
-        <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding StartNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+        <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding StartNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"
+                   behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Cỡ chữ :" Style="{StaticResource LabelStyle}" Margin="0,10,0,0" VerticalAlignment="Top"/>
-        <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding TextHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+        <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding TextHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"
+                   behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Kiểu Text :" Style="{StaticResource LabelStyle}" Margin="0,10,0,0" VerticalAlignment="Top"/>
         <ComboBox  Grid.Row="3" Grid.Column="1"
