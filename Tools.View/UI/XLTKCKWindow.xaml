@@ -11,7 +11,8 @@
     ResizeMode="NoResize"
     SizeToContent="Height"
     WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="XLTKCKWindow_Loaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -24,12 +25,14 @@
         </Grid.RowDefinitions>
 
         <Button
+            x:Name="btnPickText"
             Grid.Row="0"
             Margin="0,0,0,10"
             Command="{Binding PickTextCmd}"
             Content="Chọn Text Trên Màn Hình"
             FontWeight="SemiBold"
-            Foreground="Blue" />
+            Foreground="Blue"
+            IsDefault="True" />
 
         <Grid Grid.Row="2" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
