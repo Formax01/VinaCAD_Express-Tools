@@ -10,6 +10,7 @@
     Height="450"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
+    Loaded="BangToaDoCocWindow_Loaded"
     mc:Ignorable="d">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -53,7 +54,7 @@
                     Width="150"
                     Binding="{Binding TenCauKien, UpdateSourceTrigger=PropertyChanged}"
                     Header="Tên CK"
-                    SortMemberPath="ElementName">
+                    SortMemberPath="TenCauKien">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -146,11 +147,13 @@
             Orientation="Horizontal">
 
             <Button
+                x:Name="btnDrawTable"
                 Width="70"
                 Height="25"
                 Margin="0,0,70,0"
                 Command="{Binding DrawTableCmd}"
-                Content="Vẽ bảng" />
+                Content="Vẽ bảng"
+                IsDefault="True" />
 
             <Button
                 Width="70"

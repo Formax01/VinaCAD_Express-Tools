@@ -77,10 +77,15 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 else
                 {
+                    // Use CompareSoHieuNatural from ToaDoCocModel (shared location)
+                    veCocs = veCocs
+                        .OrderBy(x => x.SoHieu, Comparer<string>.Create(ToaDoCocModel.CompareSoHieuNatural))
+                        .ToList();
+
                     List<ObjectId> createdIds = new List<ObjectId>();
                     if (_VeCocVM.IsMeter)
                     {
-                        createdIds  = DrawPilesByCoordinates( veCocs,StringDefinition.blockNamecocm);
+                        createdIds  = DrawPilesByCoordinates(veCocs, StringDefinition.blockNamecocm);
                     }
                     else
                     {

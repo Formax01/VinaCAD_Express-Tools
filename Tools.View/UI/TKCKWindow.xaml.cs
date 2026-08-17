@@ -36,6 +36,13 @@ namespace Tools.View.UI
 
             Left = workArea.Right - ActualWidth - marginRight;
             Top = workArea.Top + (workArea.Height - ActualHeight) / 2;
+
+            // Focus on the "Vẽ bảng" button and set it as default
+            var drawButton = this.FindName("btnDrawTable") as Button;
+            if (drawButton != null)
+            {
+                drawButton.Focus();
+            }
         }
 
         private void FindTextView_PreviewKeyDown(object sender, KeyEventArgs e)

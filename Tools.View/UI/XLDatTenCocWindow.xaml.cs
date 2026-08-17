@@ -15,30 +15,14 @@ using System.Windows.Shapes;
 namespace Tools.View.UI
 {
     /// <summary>
-    /// Interaction logic for XLTKCKWindow.xaml
+    /// Interaction logic for XLDatTenCocWindow.xaml
     /// </summary>
-    public partial class XLTKCKWindow : Window
+    public partial class XLDatTenCocWindow : Window
     {
-        public XLTKCKWindow()
+        public XLDatTenCocWindow()
         {
             InitializeComponent();
             this.PreviewKeyDown += FindTextView_PreviewKeyDown;
-        }
-
-        private void XLTKCKWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Ensure focus is set after layout pass
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                var pickButton = this.FindName("btnPickText") as Button;
-                if (pickButton != null)
-                {
-                    pickButton.Focus();
-                    Keyboard.Focus(pickButton);
-                    // IsDefault is already set in XAML; keep it if needed:
-                    pickButton.IsDefault = true;
-                }
-            }), System.Windows.Threading.DispatcherPriority.Input);
         }
 
         private void FindTextView_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -48,6 +32,11 @@ namespace Tools.View.UI
                 e.Handled = true;
                 this.Close();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -464,17 +464,27 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+<<<<<<< HEAD
         [CommandMethod("WW")]
         public void DrawWallCommand()
         {
             try
             {
                 DrawWallAction action = new DrawWallAction();
+=======
+        [CommandMethod("XLDTC")]
+        public void XLDatTenCocCommand()
+        {
+            try
+            {
+                XLDatTenCocAction action = new XLDatTenCocAction();
+>>>>>>> 70b03bac281927fde81e0b6dd7e9be90bf6d4942
                 action.Execute();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+<<<<<<< HEAD
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
@@ -485,12 +495,28 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 EraseAutoHealWallAction action = new EraseAutoHealWallAction();
+=======
+                Logger.Info(nameof(XLDatTenCocCommand), ex);
+            }
+        }
+
+        [CommandMethod("DTC")]
+        public void DTCCommand()
+        {
+            try
+            {
+                DTCAction action = new DTCAction();
+>>>>>>> 70b03bac281927fde81e0b6dd7e9be90bf6d4942
                 action.Execute();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+<<<<<<< HEAD
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
+=======
+                Logger.Info(nameof(DTCCommand), ex);
+>>>>>>> 70b03bac281927fde81e0b6dd7e9be90bf6d4942
             }
         }
     }
