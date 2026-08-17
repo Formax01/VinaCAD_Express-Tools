@@ -353,3 +353,4 @@ Build/*
 *-SetupFiles/
 Prerequisites/
 /.github
+*.md
