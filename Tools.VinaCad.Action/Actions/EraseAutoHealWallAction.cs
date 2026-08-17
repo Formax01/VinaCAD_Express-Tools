@@ -13,10 +13,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Tools.VinaCAD.Action.Actions
 {
-    /// <summary>
-    /// EW (Erase & Auto-Heal Wall) Command Action
-    /// Flow chuẩn: Quét chọn các đối tượng thừa (cửa, nét vụn). Nhấn Enter -> Xóa đối tượng đó và Heal các tường đứt xung quanh.
-    /// </summary>
+
     public class EraseAutoHealWallAction
     {
         private const double Tolerance = 0.001;
@@ -30,9 +27,8 @@ namespace Tools.VinaCAD.Action.Actions
             Database db = doc.Database;
             Editor ed = doc.Editor;
 
-            // ---------------------------------------------------------
-            // BƯỚC 1: CHO PHÉP QUÉT CHỌN ĐỐI TƯỢNG (Kết thúc bằng Enter/Space)
-            // ---------------------------------------------------------
+
+            // BƯỚC 1: CHO PHÉP QUÉT CHỌN ĐỐI TƯỢNG (Kết thúc bằng Enter/Space)            
             PromptSelectionOptions pso = new PromptSelectionOptions();
             pso.MessageForAdding = "\n[VinaCAD] - Quét chọn đối tượng cần xóa (cửa/nét thừa) -> Nhấn Enter/Space: ";
 
@@ -46,9 +42,7 @@ namespace Tools.VinaCAD.Action.Actions
                     Extents3d? totalExtents = null;
                     List<ObjectId> erasedIds = new List<ObjectId>();
 
-                    // ---------------------------------------------------------
                     // BƯỚC 2: XÓA ĐỐI TƯỢNG VÀ TÍNH TOÁN VÙNG HEAL
-                    // ---------------------------------------------------------
                     foreach (SelectedObject selObj in psr.Value)
                     {
                         DBObject obj = tr.GetObject(selObj.ObjectId, OpenMode.ForWrite);
@@ -71,16 +65,14 @@ namespace Tools.VinaCAD.Action.Actions
                                                     Math.Max(totalExtents.Value.MaxPoint.Z, ext.MaxPoint.Z))
                                     );
                             }
-                            catch { /* Bỏ qua nếu Entity không có Extents (vd: point) */ }
+                            catch {}
                         }
 
                         obj.Erase(true);
                         erasedIds.Add(selObj.ObjectId);
                     }
 
-                    // ---------------------------------------------------------
                     // BƯỚC 3: TÌM VÀ NỐI CÁC ĐƯỜNG TƯỜNG BỊ ĐỨT (HEAL)
-                    // ---------------------------------------------------------
                     if (totalExtents != null)
                     {
                         HealBrokenWalls(ed, tr, totalExtents.Value, erasedIds);

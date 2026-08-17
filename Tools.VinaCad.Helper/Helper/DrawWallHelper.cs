@@ -13,29 +13,10 @@ namespace Tools.VinaCad.Helper.Helper
     {
         private const double Tolerance = 0.001;
 
-        // FIX (lỗi "Trái/Phải nối đoạn không kín góc"):
-        // Với căn Trái/Phải, line1 = đường tim gốc (không lệch), line2 = đường lệch
-        // NGUYÊN thickness. Khi Phase 1 tìm "đường láng giềng" để bo góc cho line2 của
-        // đoạn tường mới, nó có thể vô tình chọn NHẦM line1 (đường tim) của đoạn tường kề
-        // bên làm mục tiêu — vì line1 luôn đi sát đỉnh góc nên điểm giao tính ra có vẻ
-        // "gần" và thắng điểm so với line2 (mục tiêu đúng) của đoạn kề. Hậu quả: line2 bị
-        // kéo/snap sai vị trí, góc không khép kín. Với căn Giữa thì không xảy ra vì cả
-        // line1 và line2 đều là đường lệch (không có đường "tim trần" cạnh tranh).
-        // => Đánh dấu mỗi line vừa tạo là "mặt A" (line1) hay "mặt B" (line2) bằng XData,
-        // rồi ở Phase 1 chỉ cho phép ghép cùng mặt (A-A hoặc B-B). Line cũ (vẽ trước khi
-        // có fix này) không có tag => vẫn được chấp nhận ghép như cũ (không phá bản vẽ cũ).
         private const string WallSideAppName = "YQARCH_WALL_SIDE";
         private const string SideA = "A";
         private const string SideB = "B";
 
-        // FIX (lỗi "tiếp tục vẽ ở đầu đã bo bị sót đường thừa"):
-        // CapFreeEnd vẽ 1 đường bo đầu khi tường kết thúc tự do. Nhưng nếu sau đó người
-        // dùng chạy lại lệnh WW và vẽ TIẾP từ đúng điểm đã bo đó, đầu mút đó không còn
-        // "tự do" nữa — đường bo đầu cũ trở thành thừa, nhưng thuật toán không có cách nào
-        // nhận ra và xoá nó (nó không phải Side A/B của tường, cũng không chắc bị đục lỗ
-        // đúng bởi Phase 2&3 vì nằm sát mép, dễ lọt qua bộ lọc "strictly on segment").
-        // => Đánh dấu riêng mọi cap line bằng XData "IS_CAP", để có thể chủ động tìm và xoá
-        // đúng đường bo đầu cũ mỗi khi phát hiện có điểm vẽ mới trùng gần đó.
         private const string CapAppName = "YQARCH_WALL_CAP";
         private const string CapMarker = "1";
 

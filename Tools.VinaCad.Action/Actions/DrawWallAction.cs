@@ -90,16 +90,13 @@ namespace Tools.VinaCAD.Action.Actions
 
             _editor.WriteMessage("\nCài đặt: chọn chiều dày, cách căn và layer tường.");
 
-            // 1. GỌI GIAO DIỆN WPF CHỌN ĐỘ DÀY TƯỜNG
             bool showDialog = true;
             while (showDialog)
             {
                 var thicknessWindow = new Tools.VinaCAD.UI.WallThicknessWindow(_wallModel.Thickness);
 
-                // SỬA Ở ĐÂY: Chỉ gọi hàm mở Window, không gán vào biến bool? nữa
                 Prima.VinaCAD.ApplicationServices.Application.ShowModalWindow(thicknessWindow);
 
-                // Kiểm tra trực tiếp kết quả từ chính cửa sổ thicknessWindow
                 if (thicknessWindow.DialogResult == true)
                 {
                     if (thicknessWindow.IsPickUpRequested)
@@ -203,9 +200,6 @@ namespace Tools.VinaCAD.Action.Actions
                     // Add point to list
                     if (wallPoints.Count == 0 || !newPoint.IsEqualTo(wallPoints[wallPoints.Count - 1]))
                     {
-                        // FIX: nếu điểm vừa click trùng vào 1 đầu tường đã được bo ở lần vẽ
-                        // trước (CapFreeEnd), đầu đó không còn tự do nữa — xoá cap cũ trước
-                        // khi nối tường mới vào, tránh sót lại đường thừa ở góc.
                         DrawWallHelper.RemoveCapAt(_database, newPoint, _wallModel.Thickness, _wallModel.WallLayer);
 
                         wallPoints.Add(newPoint);
@@ -220,12 +214,7 @@ namespace Tools.VinaCAD.Action.Actions
             }
 
             if (wallPoints.Count > 1)
-            {
-                // FIX: bo đầu tường tại 2 đầu mút TỰ DO của cả chuỗi (điểm đầu tiên và điểm
-                // cuối cùng người dùng click) — chỉ gọi ở đây (sau khi vẽ xong toàn bộ),
-                // không gọi cho từng đoạn, vì các điểm ở giữa chuỗi luôn được đoạn tiếp theo
-                // nối vào rồi. Nếu chuỗi khép kín thành 1 vòng (điểm cuối trùng điểm đầu),
-                // CapFreeEnd tự nhận ra tại đó có nhiều hơn 2 đầu mút hội tụ và sẽ không bo.
+            {                
                 try
                 {
                     Point3d firstPoint = wallPoints[0];
