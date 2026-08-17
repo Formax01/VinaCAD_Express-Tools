@@ -352,3 +352,4 @@ Build/*
 *-cache/
 *-SetupFiles/
 Prerequisites/
+*.md
