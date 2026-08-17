@@ -17,7 +17,10 @@
 
         <TextBlock Grid.Row="0" Text="Danh Sách Độ Dày Tường" Margin="0,0,0,5" FontWeight="Medium"/>
 
-        <ListBox Grid.Row="1" x:Name="LstThickness" SelectionChanged="LstThickness_SelectionChanged" Margin="0,0,0,10">
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding Thicknesses}"
+                 SelectedItem="{Binding SelectedThickness, Mode=TwoWay}"
+                 Margin="0,0,0,10">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="5,2"/>
@@ -33,7 +36,10 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="Độ Dày Tường:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <TextBox Grid.Column="1" x:Name="TxtThickness" VerticalAlignment="Center" Margin="0,0,10,0" Padding="2" PreviewTextInput="TxtThickness_PreviewTextInput"/>
+            <TextBox Grid.Column="1" x:Name="TxtThickness"
+                     Text="{Binding ThicknessText, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center" Margin="0,0,10,0" Padding="2"
+                     PreviewTextInput="TxtThickness_PreviewTextInput"/>
             <Button Grid.Column="2" x:Name="BtnPickUp" Content="Chọn" Width="60" Padding="5,2" Click="BtnPickUp_Click"/>
         </Grid>
 

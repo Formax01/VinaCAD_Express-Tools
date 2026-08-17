@@ -13,11 +13,12 @@ namespace Tools.VinaCad.Helper.Helper
     {
         private const double Tolerance = 0.001;
 
-        private const string WallSideAppName = "YQARCH_WALL_SIDE";
+        private const string WallSideAppName = "VINACAD_WALL_SIDE";
+        private const string WallSegmentAppName = "VINACAD_WALL_SEGMENT";
         private const string SideA = "A";
         private const string SideB = "B";
 
-        private const string CapAppName = "YQARCH_WALL_CAP";
+        private const string CapAppName = "VINACAD_WALL_CAP";
         private const string CapMarker = "1";
 
         private static void EnsureRegApp(Transaction tr, Database db, string appName)
@@ -41,7 +42,7 @@ namespace Tools.VinaCad.Helper.Helper
             line.XData = rb;
         }
 
-        private static string GetWallSide(Line line)
+        public static string GetWallSideMarker(Line line)
         {
             try
             {
@@ -57,6 +58,76 @@ namespace Tools.VinaCad.Helper.Helper
             return null;
         }
 
+        public static string GetWallSegmentId(Line line)
+        {
+            try
+            {
+                ResultBuffer rb = line.GetXDataForApplication(WallSegmentAppName);
+                if (rb == null) return null;
+
+                foreach (TypedValue tv in rb)
+                {
+                    if (tv.TypeCode == (int)DxfCode.ExtendedDataAsciiString)
+                        return tv.Value as string;
+                }
+            }
+            catch { /* bản vẽ cũ chưa có XData đoạn tường */ }
+            return null;
+        }
+
+        private static void TagWallSegment(
+            Transaction tr,
+            Database db,
+            Line line,
+            string side,
+            string segmentId,
+            Point3d startPoint,
+            Point3d endPoint,
+            Point3d line1Start,
+            Point3d line1End,
+            Point3d line2Start,
+            Point3d line2End)
+        {
+            EnsureRegApp(tr, db, WallSideAppName);
+            EnsureRegApp(tr, db, WallSegmentAppName);
+
+            // Ghi hai nhóm XData trong cùng một lần để không làm mất tag của nhóm kia.
+            // Sáu Point3d trước đây nằm trong WallSegment nay được lưu trực tiếp trên entity.
+            line.XData = new ResultBuffer(
+                new TypedValue((int)DxfCode.ExtendedDataRegAppName, WallSideAppName),
+                new TypedValue((int)DxfCode.ExtendedDataAsciiString, side),
+                new TypedValue((int)DxfCode.ExtendedDataRegAppName, WallSegmentAppName),
+                new TypedValue((int)DxfCode.ExtendedDataAsciiString, segmentId),
+                new TypedValue((int)DxfCode.ExtendedDataReal, startPoint.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, startPoint.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, startPoint.Z),
+                new TypedValue((int)DxfCode.ExtendedDataReal, endPoint.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, endPoint.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, endPoint.Z),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1Start.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1Start.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1Start.Z),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1End.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1End.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line1End.Z),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2Start.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2Start.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2Start.Z),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2End.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2End.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line2End.Z));
+        }
+
+        public static void CopyWallMetadata(Transaction tr, Database db, Line source, Line target)
+        {
+            ResultBuffer sourceXData = source.XData;
+            if (sourceXData == null) return;
+
+            EnsureRegApp(tr, db, WallSideAppName);
+            EnsureRegApp(tr, db, WallSegmentAppName);
+            target.XData = new ResultBuffer(sourceXData.AsArray());
+        }
+
         private static void TagAsCap(Transaction tr, Database db, Line line)
         {
             EnsureRegApp(tr, db, CapAppName);
@@ -66,7 +137,7 @@ namespace Tools.VinaCad.Helper.Helper
             line.XData = rb;
         }
 
-        private static bool IsCapLine(Line line)
+        public static bool IsWallCap(Line line)
         {
             try
             {
@@ -74,6 +145,14 @@ namespace Tools.VinaCad.Helper.Helper
                 return rb != null;
             }
             catch { return false; }
+        }
+
+        private static Point3d MidPoint(Point3d first, Point3d second)
+        {
+            return new Point3d(
+                (first.X + second.X) / 2.0,
+                (first.Y + second.Y) / 2.0,
+                (first.Z + second.Z) / 2.0);
         }
 
         #region 1. TÍNH TOÁN & TẠO LINE
@@ -121,13 +200,19 @@ namespace Tools.VinaCad.Helper.Helper
                     BlockTableRecord modelSpace = tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
                     ObjectId layerId = GetOrCreateLayer(db, tr, layerName);
 
+                    string segmentId = Guid.NewGuid().ToString("N");
+                    Point3d startPoint = MidPoint(line1Start, line2Start);
+                    Point3d endPoint = MidPoint(line1End, line2End);
+
                     Line line1 = new Line(line1Start, line1End) { LayerId = layerId };
                     modelSpace.AppendEntity(line1); tr.AddNewlyCreatedDBObject(line1, true); lineIds.Add(line1.ObjectId);
-                    TagWallSide(tr, db, line1, SideA);
+                    TagWallSegment(tr, db, line1, SideA, segmentId, startPoint, endPoint,
+                        line1Start, line1End, line2Start, line2End);
 
                     Line line2 = new Line(line2Start, line2End) { LayerId = layerId };
                     modelSpace.AppendEntity(line2); tr.AddNewlyCreatedDBObject(line2, true); lineIds.Add(line2.ObjectId);
-                    TagWallSide(tr, db, line2, SideB);
+                    TagWallSegment(tr, db, line2, SideB, segmentId, startPoint, endPoint,
+                        line1Start, line1End, line2Start, line2End);
 
                     tr.Commit();
                 }
@@ -146,6 +231,30 @@ namespace Tools.VinaCad.Helper.Helper
             ObjectId layerId = layerTableWrite.Add(layerRecord);
             tr.AddNewlyCreatedDBObject(layerRecord, true);
             return layerId;
+        }
+
+        public static string EnsureWallLayer(Database db, string layerName, out bool wasCreated)
+        {
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                LayerTable layerTable = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
+                wasCreated = !layerTable.Has(layerName);
+
+                ObjectId layerId = GetOrCreateLayer(db, tr, layerName);
+                LayerTableRecord layer = (LayerTableRecord)tr.GetObject(layerId, OpenMode.ForWrite);
+
+                // Layer tường phải ở trạng thái có thể vẽ và đặt làm layer hiện hành.
+                layer.IsOff = false;
+                layer.IsFrozen = false;
+                layer.IsLocked = false;
+
+                // Đặt làm layer hiện hành và đồng thời trả về đúng tên đang có trong DWG
+                // (LayerTable không phân biệt hoa/thường, tránh tạo trùng WALL và Wall).
+                db.Clayer = layerId;
+                string actualLayerName = layer.Name;
+                tr.Commit();
+                return actualLayerName;
+            }
         }
         #endregion
 
@@ -194,13 +303,6 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (intersections == null || intersections.Count == 0 || newWallLineIds.Count < 2) return;
 
-            // FIX (lỗi "căn Trái không kéo dài đường bên ngoài"):
-            // Với căn lề Trái/Phải, đường offset (line2) lệch NGUYÊN chiều dày (thickness)
-            // so với tim tường, trong khi căn Giữa chỉ lệch thickness/2. Ở góc tường dày,
-            // khoảng cách cần "vươn" tới điểm giao thực tế của Phase 1 (SMART SNAP) dễ
-            // vượt quá bán kính cố định 400 => bị bỏ qua, đường ngoài không được kéo dài
-            // ra góc. Đặt maxRadius co giãn theo thickness, có sàn tối thiểu để không đổi
-            // hành vi với tường mỏng.
             double maxRadius = Math.Max(400.0, thickness * 6.0);
 
             using (Transaction tr = db.TransactionManager.StartTransaction())
@@ -218,13 +320,10 @@ namespace Tools.VinaCad.Helper.Helper
                     allLines.AddRange(exLines);
 
                     // Đọc XData 1 lần cho mỗi line, tránh đọc lặp lại trong vòng lặp lồng nhau bên dưới
-                    Dictionary<ObjectId, string> sideMap = allLines.ToDictionary(l => l.ObjectId, l => GetWallSide(l));
+                    Dictionary<ObjectId, string> sideMap = allLines.ToDictionary(l => l.ObjectId, l => GetWallSideMarker(l));
 
-                    // ==============================================================================
                     // PHASE 1: SMART SNAP (Chữa lành Góc chữ L và điểm dừng của Ngã 3)
-                    // Tách riêng theo từng căn lề — logic "giao điểm/ngã ba" (Phase 2&3) và
-                    // "bo đầu" (CapFreeEnd) hoàn toàn KHÔNG đổi, chỉ Phase 1 này được chia 3.
-                    // ==============================================================================
+
                     switch (alignment)
                     {
                         case WallAlignment.Center:
@@ -241,9 +340,7 @@ namespace Tools.VinaCad.Helper.Helper
                             break;
                     }
 
-                    // ==============================================================================
                     // PHASE 2 & 3: TÌM VẾT CẮT THỰC TẾ VÀ ĐỤC LỖ RỖNG BẰNG TOÁN CSG
-                    // ==============================================================================
                     Dictionary<ObjectId, List<Point3d>> lineCuts = new Dictionary<ObjectId, List<Point3d>>();
                     foreach (var l in allLines) lineCuts[l.ObjectId] = new List<Point3d>();
 
@@ -301,9 +398,7 @@ namespace Tools.VinaCad.Helper.Helper
                                 // Giữ nguyên tag Side của line gốc cho đoạn mới, nếu không
                                 // đoạn này sẽ thành "vô danh" và Phase 1 của lần vẽ tiếp theo
                                 // lại có thể ghép nhầm mặt như trước khi fix.
-                                string originalSide = sideMap.ContainsKey(line.ObjectId) ? sideMap[line.ObjectId] : null;
-                                if (originalSide != null)
-                                    TagWallSide(tr, db, newSeg, originalSide);
+                                CopyWallMetadata(tr, db, line, newSeg);
                             }
                         }
                         toErase.Add(line.ObjectId);
@@ -321,45 +416,25 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        // ------------------------------------------------------------------------------------
-        // CĂN GIỮA: giữ NGUYÊN VĂN thuật toán gốc (không lọc theo mặt A/B) — vì cả line1 và
-        // line2 đều lệch tim đối xứng (thickness/2 mỗi bên), không có đường "tim trần" nào
-        // gây nhập nhằng nên thuật toán gốc đã chọn đúng láng giềng gần nhất một cách tự
-        // nhiên. Đã xác nhận hoạt động tốt — KHÔNG đụng vào logic bên trong hàm này.
-        // ------------------------------------------------------------------------------------
         private static void SnapCornersCenter(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
         {
             foreach (Line newLine in newLines)
                 ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: false);
         }
 
-        // ------------------------------------------------------------------------------------
-        // CĂN TRÁI: newLines[0] = line "tim" (mặt A, trùng khít điểm click — không lệch),
-        // newLines[1] = line "biên" (mặt B, lệch nguyên thickness). Cả 2 line đều cần chạy
-        // qua Phase 1 như bình thường (kể cả line tim, vì nó vẫn có thể cần bo Ngã 3 khi
-        // đâm vào tường khác) — điểm khác biệt DUY NHẤT so với bản gốc là: ở nhánh GÓC L
-        // (corner), chỉ chấp nhận mục tiêu CÙNG MẶT (A với A, B với B) để không bị hút nhầm
-        // sang đường tim/biên của tường kề như lỗi cũ. Nhánh NGÃ BA (T-junction) KHÔNG lọc
-        // theo mặt, vì mục tiêu ở đó luôn là một bức tường KHÁC — mặt A/B của nó không liên
-        // quan gì đến mặt A/B của tường đang vẽ.
-        // ------------------------------------------------------------------------------------
         private static void SnapCornersLeft(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
         {
             foreach (Line newLine in newLines)
                 ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: true);
         }
 
-        // CĂN PHẢI: hình học là ảnh gương của Trái (dấu offset ngược lại ở CalculateWallLines),
-        // nhưng cách xử lý Phase 1 giống hệt Trái — vẫn tách hàm riêng để khớp 1-1 với switch
-        // của CalculateWallLines và dễ chỉnh sau này nếu Phải cần một quy tắc riêng.
+
         private static void SnapCornersRight(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
         {
             foreach (Line newLine in newLines)
                 ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: true);
         }
 
-        // Hàm dùng chung: xử lý bo góc/ngã ba cho CẢ 2 đầu mút của 1 line, thân thuật toán
-        // y hệt bản gốc — chỉ thêm 1 điều kiện lọc mặt A/B, và CHỈ áp dụng cho nhánh Góc L.
         private static void ProcessLineEndpoints(Line newLine, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius, bool restrictCornerToSameSide)
         {
             string sideN = sideMap.ContainsKey(newLine.ObjectId) ? sideMap[newLine.ObjectId] : null;
@@ -393,10 +468,6 @@ namespace Tools.VinaCad.Helper.Helper
 
                         if (dB < maxRadius)
                         {
-                            // FIX: lọc mặt A/B CHỈ ở nhánh Góc L — vì đây là trường hợp duy
-                            // nhất mà "mặt" có ý nghĩa (2 đoạn tường nối tiếp CÙNG 1 chuỗi
-                            // đang vẽ hoặc nối trực tiếp). Không áp dụng cho T-junction bên
-                            // dưới vì mục tiêu T-junction là tường khác, không cùng quy ước.
                             if (restrictCornerToSameSide)
                             {
                                 string sideT = sideMap.ContainsKey(target.ObjectId) ? sideMap[target.ObjectId] : null;
@@ -443,12 +514,6 @@ namespace Tools.VinaCad.Helper.Helper
         #region 3. HÀM TOÁN HỌC HỖ TRỢ (MATH UTILS)
         private static bool IsInsideAnyWall(Point3d pt, List<Line> allLines, ObjectId selfId, double thickness)
         {
-            // FIX (lỗi "căn Phải/Giữa không xóa các đường bên trong giao nhau"):
-            // Khoảng "bề rộng hợp lệ" trước đây cố định cứng 5–600 đơn vị vẽ. Nếu tường
-            // được vẽ với chiều dày nằm ngoài khoảng này (đơn vị khác, hoặc tường dày),
-            // điều kiện w > 5.0 && w < 600.0 KHÔNG BAO GIỜ đúng => đoạn line nằm lọt bên
-            // trong một bức tường khác sẽ không được nhận diện là "bên trong" và do đó
-            // không bị xóa. Đặt ngưỡng co giãn theo thickness thực tế của lệnh đang chạy.
             double minW = Math.Min(5.0, thickness * 0.2);
             double maxW = Math.Max(600.0, thickness * 4.0);
 
@@ -533,20 +598,6 @@ namespace Tools.VinaCad.Helper.Helper
         #endregion
 
         #region 4. BO ĐẦU TƯỜNG (END CAP)
-        // FIX (lỗi "tất cả các căn lề đều cần bo đầu nếu không giao nhau với tường khác"):
-        // Thuật toán gốc chỉ xử lý 2 trường hợp trong Phase 1 (góc chữ L và Ngã 3 chữ T),
-        // hoàn toàn không có bước nào đóng kín tiết diện tường tại đầu mút TỰ DO (không
-        // chạm tường nào khác). Vì vị trí thực của đầu mút 2 đường biên phụ thuộc alignment
-        // (Trái/Phải: 1 đường nằm đúng tại điểm click, đường kia lệch nguyên "thickness";
-        // Giữa: cả 2 đường lệch thickness/2 về 2 phía) nên không thể chỉ tìm đúng-tại-đỉnh-
-        // click. Thay vào đó, hàm này quét quanh đỉnh (bán kính ~thickness) để tìm 2 đầu
-        // mút "mồ côi" (không có tường/đầu mút nào khác hội tụ) rồi nối chúng lại bằng một
-        // đường bo đầu. Nếu tại đó có từ 3 đầu mút trở lên (góc/ngã ba thật) thì bỏ qua vì
-        // đã được Phase 1/2/3 xử lý đúng rồi.
-        //
-        // CÁCH DÙNG: gọi 1 lần cho điểm ĐẦU TIÊN và 1 lần cho điểm CUỐI CÙNG của cả chuỗi
-        // polyline tường, SAU KHI đã vẽ xong toàn bộ các đoạn (không gọi cho từng đoạn/điểm
-        // giữa chừng, vì các điểm giữa luôn được nối bởi đoạn tường tiếp theo).
         public static void CapFreeEnd(Database db, Point3d vertex, double thickness, string wallLayerName)
         {
             double searchRadius = Math.Max(thickness, 1.0) + 5.0;
@@ -636,11 +687,6 @@ namespace Tools.VinaCad.Helper.Helper
             public ObjectId LineId;
             public Vector3d Dir;
         }
-
-        // FIX (lỗi "tiếp tục vẽ ở đầu đã bo bị sót đường thừa"):
-        // Gọi hàm này TRƯỚC khi vẽ đoạn tường mới, với điểm người dùng vừa click. Nếu tại
-        // gần điểm đó có sẵn 1 đường đã được đánh dấu là cap (do CapFreeEnd tạo ở lần vẽ
-        // trước), xoá nó đi — vì đầu mút đó sắp có tường nối vào, không còn "tự do" nữa.
         public static void RemoveCapAt(Database db, Point3d vertex, double thickness, string wallLayerName)
         {
             double searchRadius = Math.Max(thickness, 1.0) + 5.0;
@@ -660,7 +706,7 @@ namespace Tools.VinaCad.Helper.Helper
                     foreach (ObjectId objId in modelSpace)
                     {
                         DBObject obj = tr.GetObject(objId, OpenMode.ForRead);
-                        if (obj is Line ln && ln.LayerId == targetLayerId && IsCapLine(ln))
+                        if (obj is Line ln && ln.LayerId == targetLayerId && IsWallCap(ln))
                         {
                             if (ln.StartPoint.DistanceTo(vertex) <= searchRadius || ln.EndPoint.DistanceTo(vertex) <= searchRadius)
                                 toErase.Add(objId);

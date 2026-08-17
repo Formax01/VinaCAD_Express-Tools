@@ -18,11 +18,15 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'V2026'">
+    <Reference Include="PrMVVMCore">
+      <HintPath>..\Lib\PR\2026\PrMVVMCore.dll</HintPath>
+    </Reference>
     <ProjectReference Include="..\Resources\Tools.Resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tools.Model\Tools.Model.csproj" />
+    <ProjectReference Include="..\Tools.ViewModel\Tools.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

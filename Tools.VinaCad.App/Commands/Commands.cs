@@ -276,7 +276,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 DanhSoHieuTKTDAction action = new DanhSoHieuTKTDAction();
-                action.Execute();
+                action.Execute(); 
             }
             catch (System.Exception ex)
             {

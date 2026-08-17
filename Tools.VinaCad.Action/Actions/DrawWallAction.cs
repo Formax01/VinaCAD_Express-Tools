@@ -43,6 +43,8 @@ namespace Tools.VinaCAD.Action.Actions
                     throw new Exception("Không có tài liệu hoạt động");
                 }
 
+                SelectWallLayer(showCreatedMessage: true);
+
                 _editor.WriteMessage("\nWW: D = Vẽ tường | S = Cài đặt | Q = Thoát.");
 
                 while (true)
@@ -88,7 +90,7 @@ namespace Tools.VinaCAD.Action.Actions
             if (_editor == null)
                 return;
 
-            _editor.WriteMessage("\nCài đặt: chọn chiều dày, cách căn và layer tường.");
+            _editor.WriteMessage("\nCài đặt: chọn chiều dày và cách căn tường.");
 
             bool showDialog = true;
             while (showDialog)
@@ -146,18 +148,6 @@ namespace Tools.VinaCAD.Action.Actions
                 }
             }
 
-            // 3. Cài đặt Layer
-            PromptStringOptions psoLayer = new PromptStringOptions("\nLayer tường: ")
-            {
-                DefaultValue = _wallModel.WallLayer
-            };
-
-            PromptResult layerResult = _editor.GetString(psoLayer);
-            if (layerResult.Status == PromptStatus.OK && !string.IsNullOrEmpty(layerResult.StringResult))
-            {
-                _wallModel.WallLayer = layerResult.StringResult.Trim();
-            }
-
             _editor.WriteMessage("\nĐã cập nhật cài đặt.");
         }
 
@@ -165,6 +155,8 @@ namespace Tools.VinaCAD.Action.Actions
         {
             if (_editor == null)
                 return;
+
+            SelectWallLayer(showCreatedMessage: false);
 
             _editor.WriteMessage("\nChọn các điểm liên tiếp; nhấn Enter để kết thúc.");
 
@@ -237,6 +229,17 @@ namespace Tools.VinaCAD.Action.Actions
 
                 _editor.WriteMessage($"\nĐã vẽ {wallPoints.Count - 1} đoạn tường.");
             }
+        }
+
+        private void SelectWallLayer(bool showCreatedMessage)
+        {
+            if (_database == null) return;
+
+            _wallModel.WallLayer = DrawWallHelper.EnsureWallLayer(
+                _database, "Wall", out bool wasCreated);
+
+            if (showCreatedMessage && wasCreated)
+                _editor?.WriteMessage("\nĐã tạo và chọn layer Wall.");
         }
 
         private void DrawWallSegment(Point3d startPoint, Point3d endPoint)
