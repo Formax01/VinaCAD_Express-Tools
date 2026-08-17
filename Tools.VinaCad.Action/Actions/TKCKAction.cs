@@ -193,6 +193,7 @@ namespace Tools.VinaCad.Action.Actions
 
             List<TKCKModel> result = textContents
                 .GroupBy(x => x)
+                .OrderBy(g => g.Key)
                 .Select((g, index) => new TKCKModel
                 {
                     STT = (index + 1).ToString(),

@@ -463,5 +463,35 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(AboutToolsCommand), ex);
             }
         }
+
+        [CommandMethod("XLDTC")]
+        public void XLDatTenCocCommand()
+        {
+            try
+            {
+                XLDatTenCocAction action = new XLDatTenCocAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(XLDatTenCocCommand), ex);
+            }
+        }
+
+        [CommandMethod("DTC")]
+        public void DTCCommand()
+        {
+            try
+            {
+                DTCAction action = new DTCAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DTCCommand), ex);
+            }
+        }
     }
 }
