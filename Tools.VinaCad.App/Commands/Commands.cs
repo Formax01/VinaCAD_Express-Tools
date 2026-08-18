@@ -523,5 +523,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
+        [CommandMethod("TW")]
+        public void TrimFixWallCommand()
+        {
+            try
+            {
+                TrimFixWallAction action = new TrimFixWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(TrimFixWallCommand), ex);
+            }
+        }
     }
 }
