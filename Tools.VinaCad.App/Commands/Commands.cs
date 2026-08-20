@@ -523,5 +523,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
+        [CommandMethod("WWT")]
+        public void ChangeWallThicknessCommand()
+        {
+            try
+            {
+                ChangeWallThicknessAction action = new ChangeWallThicknessAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ChangeWallThicknessCommand), ex);
+            }
+        }
     }
 }
