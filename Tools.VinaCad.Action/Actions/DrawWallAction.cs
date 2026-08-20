@@ -247,6 +247,8 @@ namespace Tools.VinaCAD.Action.Actions
             if (_database == null || _editor == null)
                 return;
 
+            List<ObjectId>? lineIds = null;
+
             try
             {
                 // Calculate wall lines
@@ -270,7 +272,7 @@ namespace Tools.VinaCAD.Action.Actions
                     _wallModel.WallLayer);
 
                 // Create wall lines
-                var lineIds = DrawWallHelper.CreateWallLines(
+                lineIds = DrawWallHelper.CreateWallLines(
                     _database,
                     line1Start,
                     line1End,
@@ -294,6 +296,18 @@ namespace Tools.VinaCAD.Action.Actions
             }
             catch (Exception ex)
             {
+                if (lineIds != null && lineIds.Count > 0)
+                {
+                    try
+                    {
+                        DrawWallHelper.EraseEntities(_database, lineIds);
+                    }
+                    catch (Exception rollbackEx)
+                    {
+                        Logger.Info($"{nameof(DrawWallSegment)}_Rollback", rollbackEx);
+                    }
+                }
+
                 _editor.WriteMessage($"\nLỗi vẽ tường: {ex.Message}");
                 Logger.Info(nameof(DrawWallSegment), ex);
             }
