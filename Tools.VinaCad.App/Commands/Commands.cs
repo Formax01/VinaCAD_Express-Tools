@@ -493,5 +493,35 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DTCCommand), ex);
             }
         }
+
+        [CommandMethod("WW")]
+        public void DrawWallCommand()
+        {
+            try
+            {
+                DrawWallAction action = new DrawWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawWallCommand), ex);
+            }
+        }
+
+        [CommandMethod("EW")]
+        public void EraseAutoHealWallCommand()
+        {
+            try
+            {
+                EraseAutoHealWallAction action = new EraseAutoHealWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(EraseAutoHealWallCommand), ex);
+            }
+        }
     }
 }
