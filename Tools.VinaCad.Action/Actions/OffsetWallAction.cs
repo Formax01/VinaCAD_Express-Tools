@@ -34,8 +34,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             try
             {
-                PromptDistanceOptions distanceOptions = new PromptDistanceOptions(
-                    $"\nKhoảng cách offset tường (tim-tim) <{DefaultOffsetDistance:0.##}>: ")
+                PromptDistanceOptions distanceOptions = new PromptDistanceOptions($"\nKhoảng cách offset tường (tâm-tâm) <{DefaultOffsetDistance:0.##}>: ")
                 {
                     AllowNegative = false,
                     AllowZero = false,
@@ -48,17 +47,33 @@ namespace Tools.VinaCAD.Action.Actions
                     return;
 
                 double offsetDistance = distanceResult.Value;
+                PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\nXử lý nút giao [Giữ/Auto] <Giữ>: ")
+                {
+                    AllowNone = true,
+                    AppendKeywordsToMessage = false
+                };
+                junctionOptions.Keywords.Add("Keep", "Giữ", "Giữ");
+                junctionOptions.Keywords.Add("Auto", "Auto", "Auto");
+                junctionOptions.Keywords.Default = "Keep";
+
+                PromptResult junctionResult = editor.GetKeywords(junctionOptions);
+                if (junctionResult.Status != PromptStatus.OK &&
+                    junctionResult.Status != PromptStatus.None)
+                    return;
+
+                bool autoHealJunctions =
+                    junctionResult.Status == PromptStatus.OK &&
+                    string.Equals(
+                        junctionResult.StringResult,
+                        "Auto",
+                        StringComparison.OrdinalIgnoreCase);
                 int createdCount = 0;
-                editor.WriteMessage(
-                    $"\nWWO: Khoảng cách tim-tim = {offsetDistance:0.##}. " +
-                    "Chọn tường rồi chỉ phía offset.");
+                editor.WriteMessage($"\nWWO: Khoảng cách tâm-tâm = {offsetDistance:0.##}. " +$"Xử lý nút giao = {(autoHealJunctions ? "Tự động" : "Giữ nguyên")}. " +"Chọn tường rồi chỉ phía offset.");
 
                 while (true)
                 {
-                    PromptEntityOptions entityOptions = new PromptEntityOptions(
-                        "\nChọn một mặt tường <Kết thúc>: ");
-                    entityOptions.SetRejectMessage(
-                        "\nWWO chỉ nhận đường thẳng Line của tường.");
+                    PromptEntityOptions entityOptions = new PromptEntityOptions("\nChọn một mặt tường <Kết thúc>: ");
+                    entityOptions.SetRejectMessage("\nWWO chỉ nhận đường thẳng Line của tường.");
                     entityOptions.AddAllowedClass(typeof(Line), true);
 
                     PromptEntityResult entityResult = editor.GetEntity(entityOptions);
@@ -75,8 +90,7 @@ namespace Tools.VinaCAD.Action.Actions
                         continue;
                     }
 
-                    PromptPointOptions sideOptions = new PromptPointOptions(
-                        "\nChọn điểm về phía cần offset: ")
+                    PromptPointOptions sideOptions = new PromptPointOptions("\nChọn điểm về phía cần offset: ")
                     {
                         UseBasePoint = true,
                         BasePoint = Midpoint(preview.CenterStart, preview.CenterEnd),
@@ -91,6 +105,7 @@ namespace Tools.VinaCAD.Action.Actions
                             entityResult.ObjectId,
                             sideResult.Value,
                             offsetDistance,
+                            autoHealJunctions,
                             out string resultMessage))
                     {
                         createdCount++;
@@ -117,6 +132,7 @@ namespace Tools.VinaCAD.Action.Actions
             ObjectId selectedId,
             Point3d sidePoint,
             double offsetDistance,
+            bool autoHealJunctions,
             out string message)
         {
             message = string.Empty;
@@ -145,6 +161,17 @@ namespace Tools.VinaCAD.Action.Actions
                 Point3d newCenterStart = source.CenterStart + offset;
                 Point3d newCenterEnd = source.CenterEnd + offset;
 
+                if (!autoHealJunctions)
+                {
+                    TrimOffsetWallToInsideFace(
+                        source,
+                        side,
+                        direction,
+                        offset,
+                        ref newCenterStart,
+                        ref newCenterEnd);
+                }
+
                 DrawWallHelper.CalculateWallLines(
                     newCenterStart,
                     newCenterEnd,
@@ -162,48 +189,73 @@ namespace Tools.VinaCAD.Action.Actions
                 List<Line> allLines = modelSpaceLines
                     .Where(line => !DrawWallHelper.IsWallCap(line))
                     .ToList();
-                // A wall offset can move beyond the old host endpoints by the
-                // full offset distance. Search exactly that corridor so both
-                // faces of the host can be extended into a proper L junction.
-                double endConnectionDistance =
-                    offsetDistance + source.Thickness * 2.0;
-                // Giới hạn tìm kiếm theo đúng hành lang từ tường nguồn tới tường
-                // offset. Không dùng bán kính toàn cục, nhưng vẫn cho WW-style
-                // smart snap bắt mọi đầu tường thực sự hướng tới tường mới.
-                double branchConnectionDistance =
-                    offsetDistance + source.Thickness * 2.0;
-                bool startConnected = TryConnectWallEnd(
-                    transaction,
-                    database,
-                    allLines,
-                    source.LayerId,
-                    source.Thickness,
-                    endConnectionDistance,
-                    offset,
-                    newCenterStart,
-                    newCenterEnd,
-                    ref firstStart,
-                    ref secondStart,
-                    out LineCutRequest? startJunctionCut,
-                    out HashSet<ObjectId> startConnectedHostIds);
-                bool endConnected = TryConnectWallEnd(
-                    transaction,
-                    database,
-                    allLines,
-                    source.LayerId,
-                    source.Thickness,
-                    endConnectionDistance,
-                    offset,
-                    newCenterEnd,
-                    newCenterStart,
-                    ref firstEnd,
-                    ref secondEnd,
-                    out LineCutRequest? endJunctionCut,
-                    out HashSet<ObjectId> endConnectedHostIds);
+                bool startConnected = false;
+                bool endConnected = false;
+                LineCutRequest? startJunctionCut = null;
+                LineCutRequest? endJunctionCut = null;
+                HashSet<ObjectId> connectedHostIds = new HashSet<ObjectId>();
+                int connectedBranchCount = 0;
 
-                HashSet<ObjectId> connectedHostIds =
-                    new HashSet<ObjectId>(startConnectedHostIds);
-                connectedHostIds.UnionWith(endConnectedHostIds);
+                if (autoHealJunctions)
+                {
+                    // A wall offset can move beyond the old host endpoints by the
+                    // full offset distance. Search exactly that corridor so both
+                    // faces of the host can be extended into a proper L junction.
+                    double endConnectionDistance =
+                        offsetDistance + source.Thickness * 2.0;
+                    // Giới hạn tìm kiếm theo đúng hành lang từ tường nguồn tới tường
+                    // offset. Không dùng bán kính toàn cục, nhưng vẫn cho WW-style
+                    // smart snap bắt mọi đầu tường thực sự hướng tới tường mới.
+                    double branchConnectionDistance =
+                        offsetDistance + source.Thickness * 2.0;
+                    startConnected = TryConnectWallEnd(
+                        transaction,
+                        database,
+                        allLines,
+                        source.LayerId,
+                        source.Thickness,
+                        endConnectionDistance,
+                        offset,
+                        newCenterStart,
+                        newCenterEnd,
+                        ref firstStart,
+                        ref secondStart,
+                        out startJunctionCut,
+                        out HashSet<ObjectId> startConnectedHostIds);
+                    endConnected = TryConnectWallEnd(
+                        transaction,
+                        database,
+                        allLines,
+                        source.LayerId,
+                        source.Thickness,
+                        endConnectionDistance,
+                        offset,
+                        newCenterEnd,
+                        newCenterStart,
+                        ref firstEnd,
+                        ref secondEnd,
+                        out endJunctionCut,
+                        out HashSet<ObjectId> endConnectedHostIds);
+
+                    connectedHostIds.UnionWith(startConnectedHostIds);
+                    connectedHostIds.UnionWith(endConnectedHostIds);
+
+                    connectedBranchCount = ConnectNearbyWallBranches(
+                        transaction,
+                        database,
+                        allLines,
+                        modelSpaceLines
+                            .Where(DrawWallHelper.IsWallCap)
+                            .ToList(),
+                        source.LayerId,
+                        source.Thickness,
+                        branchConnectionDistance,
+                        connectedHostIds,
+                        firstStart,
+                        firstEnd,
+                        secondStart,
+                        secondEnd);
+                }
 
                 if (WallAlreadyExists(
                         allLines,
@@ -216,22 +268,6 @@ namespace Tools.VinaCAD.Action.Actions
                     message = "đã tồn tại tường trùng tại vị trí offset.";
                     return false;
                 }
-
-                int connectedBranchCount = ConnectNearbyWallBranches(
-                    transaction,
-                    database,
-                    allLines,
-                    modelSpaceLines
-                        .Where(DrawWallHelper.IsWallCap)
-                        .ToList(),
-                    source.LayerId,
-                    source.Thickness,
-                    branchConnectionDistance,
-                    connectedHostIds,
-                    firstStart,
-                    firstEnd,
-                    secondStart,
-                    secondEnd);
 
                 Line selected = (Line)transaction.GetObject(selectedId, OpenMode.ForRead);
                 BlockTableRecord owner = (BlockTableRecord)transaction.GetObject(
@@ -252,18 +288,20 @@ namespace Tools.VinaCAD.Action.Actions
                 source.FirstProperties.Apply(firstLine);
                 source.SecondProperties.Apply(secondLine);
 
-                int healedIntersectionCount = HealOffsetWallIntersections(
-                    transaction,
-                    database,
-                    firstLine,
-                    secondLine,
-                    allLines,
-                    source.LayerId,
-                    new[] { startJunctionCut, endJunctionCut }
-                        .Where(cut => cut != null)
-                        .Select(cut => cut!)
-                        .ToList(),
-                    connectedHostIds);
+                int healedIntersectionCount = autoHealJunctions
+                    ? HealOffsetWallIntersections(
+                        transaction,
+                        database,
+                        firstLine,
+                        secondLine,
+                        allLines,
+                        source.LayerId,
+                        new[] { startJunctionCut, endJunctionCut }
+                            .Where(cut => cut != null)
+                            .Select(cut => cut!)
+                            .ToList(),
+                        connectedHostIds)
+                    : 0;
 
                 // Create caps from the exact new endpoints. Nearby source walls can
                 // no longer interfere with cap detection.
@@ -299,10 +337,7 @@ namespace Tools.VinaCAD.Action.Actions
 
                 transaction.Commit();
 
-                message =
-                    $"Đã tạo tường song song cách tim {offsetDistance:0.##}. " +
-                    $"Đã nối {connectedBranchCount} đầu tường và xóa nét trong " +
-                    $"{healedIntersectionCount} vùng giao.";
+                message = autoHealJunctions? $"Đã tạo tường song song cách tim {offsetDistance:0.##}. " +$"Đã nối {connectedBranchCount} đầu tường và xóa nét trong " +$"{healedIntersectionCount} vùng giao.": $"Đã tạo nguyên trạng tường song song cách tim " +$"{offsetDistance:0.##}; không xử lý nút giao.";
                 return true;
             }
             catch (Exception ex)
@@ -355,6 +390,10 @@ namespace Tools.VinaCAD.Action.Actions
             Line? opposite;
             Point3d centerStart;
             Point3d centerEnd;
+            Point3d selectedFaceStart;
+            Point3d selectedFaceEnd;
+            Point3d oppositeFaceStart;
+            Point3d oppositeFaceEnd;
 
             if (!string.IsNullOrEmpty(segmentId))
             {
@@ -404,21 +443,21 @@ namespace Tools.VinaCAD.Action.Actions
                         selectedSideMembers,
                         selected.StartPoint,
                         sourceAxis,
-                        out Point3d selectedStart,
-                        out Point3d selectedEnd) ||
+                        out selectedFaceStart,
+                        out selectedFaceEnd) ||
                     !TryGetAggregateFaceEndpoints(
                         oppositeSideMembers,
                         selected.StartPoint,
                         sourceAxis,
-                        out Point3d oppositeStart,
-                        out Point3d oppositeEnd))
+                        out oppositeFaceStart,
+                        out oppositeFaceEnd))
                 {
                     message = "không thể tái dựng đầy đủ hai mặt tường.";
                     return false;
                 }
 
-                centerStart = Midpoint(selectedStart, oppositeStart);
-                centerEnd = Midpoint(selectedEnd, oppositeEnd);
+                centerStart = Midpoint(selectedFaceStart, oppositeFaceStart);
+                centerEnd = Midpoint(selectedFaceEnd, oppositeFaceEnd);
             }
             else
             {
@@ -434,6 +473,16 @@ namespace Tools.VinaCAD.Action.Actions
                     opposite,
                     out centerStart,
                     out centerEnd);
+                OrderFaceEndpoints(
+                    selected,
+                    centerStart,
+                    out selectedFaceStart,
+                    out selectedFaceEnd);
+                OrderFaceEndpoints(
+                    opposite,
+                    centerStart,
+                    out oppositeFaceStart,
+                    out oppositeFaceEnd);
             }
 
             double thickness = DistanceToInfiniteLine(opposite.StartPoint, selected);
@@ -458,6 +507,18 @@ namespace Tools.VinaCAD.Action.Actions
             {
                 CenterStart = centerStart,
                 CenterEnd = centerEnd,
+                FirstFaceStart = selectedIsFirst
+                    ? selectedFaceStart
+                    : oppositeFaceStart,
+                FirstFaceEnd = selectedIsFirst
+                    ? selectedFaceEnd
+                    : oppositeFaceEnd,
+                SecondFaceStart = selectedIsFirst
+                    ? oppositeFaceStart
+                    : selectedFaceStart,
+                SecondFaceEnd = selectedIsFirst
+                    ? oppositeFaceEnd
+                    : selectedFaceEnd,
                 Thickness = thickness,
                 LayerId = selected.LayerId,
                 FirstProperties = selectedIsFirst
@@ -1889,10 +1950,84 @@ namespace Tools.VinaCAD.Action.Actions
                 (first.Z + second.Z) / 2.0);
         }
 
+        private static void OrderFaceEndpoints(
+            Line face,
+            Point3d centerStart,
+            out Point3d faceStart,
+            out Point3d faceEnd)
+        {
+            if (face.StartPoint.DistanceTo(centerStart) <=
+                face.EndPoint.DistanceTo(centerStart))
+            {
+                faceStart = face.StartPoint;
+                faceEnd = face.EndPoint;
+            }
+            else
+            {
+                faceStart = face.EndPoint;
+                faceEnd = face.StartPoint;
+            }
+        }
+
+        private static void TrimOffsetWallToInsideFace(
+            WallDefinition source,
+            double side,
+            Vector3d direction,
+            Vector3d offset,
+            ref Point3d newCenterStart,
+            ref Point3d newCenterEnd)
+        {
+            Point3d towardStart = side > 0.0
+                ? source.FirstFaceStart
+                : source.SecondFaceStart;
+            Point3d towardEnd = side > 0.0
+                ? source.FirstFaceEnd
+                : source.SecondFaceEnd;
+            Point3d awayStart = side > 0.0
+                ? source.SecondFaceStart
+                : source.FirstFaceStart;
+            Point3d awayEnd = side > 0.0
+                ? source.SecondFaceEnd
+                : source.FirstFaceEnd;
+
+            double towardMinimum = Math.Min(
+                (towardStart - source.CenterStart).DotProduct(direction),
+                (towardEnd - source.CenterStart).DotProduct(direction));
+            double towardMaximum = Math.Max(
+                (towardStart - source.CenterStart).DotProduct(direction),
+                (towardEnd - source.CenterStart).DotProduct(direction));
+            double awayMinimum = Math.Min(
+                (awayStart - source.CenterStart).DotProduct(direction),
+                (awayEnd - source.CenterStart).DotProduct(direction));
+            double awayMaximum = Math.Max(
+                (awayStart - source.CenterStart).DotProduct(direction),
+                (awayEnd - source.CenterStart).DotProduct(direction));
+
+            double centerLength = source.CenterStart.DistanceTo(source.CenterEnd);
+            double trimmedStart = 0.0;
+            double trimmedEnd = centerLength;
+
+            // Khi offset về phía mặt ngắn hơn của tường bao, co từng đầu về
+            // đúng mép trong. Offset ra ngoài hoặc tường tự do vẫn giữ nguyên.
+            if (towardMinimum > awayMinimum + Tolerance)
+                trimmedStart = Math.Max(trimmedStart, towardMinimum);
+            if (towardMaximum < awayMaximum - Tolerance)
+                trimmedEnd = Math.Min(trimmedEnd, towardMaximum);
+
+            if (trimmedEnd - trimmedStart <= Tolerance) return;
+
+            newCenterStart = source.CenterStart + offset + direction * trimmedStart;
+            newCenterEnd = source.CenterStart + offset + direction * trimmedEnd;
+        }
+
         private sealed class WallDefinition
         {
             public Point3d CenterStart { get; init; }
             public Point3d CenterEnd { get; init; }
+            public Point3d FirstFaceStart { get; init; }
+            public Point3d FirstFaceEnd { get; init; }
+            public Point3d SecondFaceStart { get; init; }
+            public Point3d SecondFaceEnd { get; init; }
             public double Thickness { get; init; }
             public ObjectId LayerId { get; init; }
             public EntityProperties FirstProperties { get; init; } = null!;
