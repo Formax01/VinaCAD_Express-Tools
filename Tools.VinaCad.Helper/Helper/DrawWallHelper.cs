@@ -75,6 +75,39 @@ namespace Tools.VinaCad.Helper.Helper
             return null;
         }
 
+        public static bool TryGetWallCenterLine(
+            Line line,
+            out Point3d startPoint,
+            out Point3d endPoint)
+        {
+            startPoint = Point3d.Origin;
+            endPoint = Point3d.Origin;
+
+            try
+            {
+                ResultBuffer rb = line.GetXDataForApplication(WallSegmentAppName);
+                if (rb == null) return false;
+
+                List<double> coordinates = rb
+                    .Cast<TypedValue>()
+                    .Where(value => value.TypeCode == (int)DxfCode.ExtendedDataReal)
+                    .Select(value => Convert.ToDouble(value.Value))
+                    .ToList();
+                if (coordinates.Count < 6) return false;
+
+                startPoint = new Point3d(
+                    coordinates[0], coordinates[1], coordinates[2]);
+                endPoint = new Point3d(
+                    coordinates[3], coordinates[4], coordinates[5]);
+                return startPoint.DistanceTo(endPoint) > Tolerance;
+            }
+            catch
+            {
+                // Legacy or malformed wall metadata; callers may use geometry fallback.
+                return false;
+            }
+        }
+
         private static void TagWallSegment(
             Transaction tr,
             Database db,
@@ -126,6 +159,46 @@ namespace Tools.VinaCad.Helper.Helper
             EnsureRegApp(tr, db, WallSideAppName);
             EnsureRegApp(tr, db, WallSegmentAppName);
             target.XData = new ResultBuffer(sourceXData.AsArray());
+        }
+
+        public static bool UpdateWallPairMetadata(
+            Transaction tr,
+            Database db,
+            Line first,
+            Line second)
+        {
+            string segmentId = GetWallSegmentId(first);
+            if (string.IsNullOrEmpty(segmentId) ||
+                GetWallSegmentId(second) != segmentId)
+                return false;
+
+            string firstSide = GetWallSideMarker(first);
+            string secondSide = GetWallSideMarker(second);
+            if (string.IsNullOrEmpty(firstSide) ||
+                string.IsNullOrEmpty(secondSide) ||
+                firstSide == secondSide)
+                return false;
+
+            double direct = first.StartPoint.DistanceTo(second.StartPoint) +
+                            first.EndPoint.DistanceTo(second.EndPoint);
+            double crossed = first.StartPoint.DistanceTo(second.EndPoint) +
+                             first.EndPoint.DistanceTo(second.StartPoint);
+            Point3d secondStart = direct <= crossed
+                ? second.StartPoint
+                : second.EndPoint;
+            Point3d secondEnd = direct <= crossed
+                ? second.EndPoint
+                : second.StartPoint;
+            Point3d centerStart = MidPoint(first.StartPoint, secondStart);
+            Point3d centerEnd = MidPoint(first.EndPoint, secondEnd);
+
+            TagWallSegment(
+                tr, db, first, firstSide, segmentId, centerStart, centerEnd,
+                first.StartPoint, first.EndPoint, secondStart, secondEnd);
+            TagWallSegment(
+                tr, db, second, secondSide, segmentId, centerStart, centerEnd,
+                first.StartPoint, first.EndPoint, secondStart, secondEnd);
+            return true;
         }
 
         private static void TagAsCap(Transaction tr, Database db, Line line)
@@ -219,6 +292,55 @@ namespace Tools.VinaCad.Helper.Helper
                 catch (Exception ex) { tr.Abort(); throw new Exception($"Error creating wall lines: {ex.Message}", ex); }
             }
             return lineIds;
+        }
+
+        public static List<ObjectId> CreateWallLines(
+            Transaction tr,
+            Database db,
+            BlockTableRecord owner,
+            ObjectId layerId,
+            Point3d line1Start,
+            Point3d line1End,
+            Point3d line2Start,
+            Point3d line2End)
+        {
+            List<ObjectId> lineIds = new List<ObjectId>();
+            string segmentId = Guid.NewGuid().ToString("N");
+            Point3d startPoint = MidPoint(line1Start, line2Start);
+            Point3d endPoint = MidPoint(line1End, line2End);
+
+            Line line1 = new Line(line1Start, line1End) { LayerId = layerId };
+            owner.AppendEntity(line1);
+            tr.AddNewlyCreatedDBObject(line1, true);
+            lineIds.Add(line1.ObjectId);
+            TagWallSegment(
+                tr, db, line1, SideA, segmentId, startPoint, endPoint,
+                line1Start, line1End, line2Start, line2End);
+
+            Line line2 = new Line(line2Start, line2End) { LayerId = layerId };
+            owner.AppendEntity(line2);
+            tr.AddNewlyCreatedDBObject(line2, true);
+            lineIds.Add(line2.ObjectId);
+            TagWallSegment(
+                tr, db, line2, SideB, segmentId, startPoint, endPoint,
+                line1Start, line1End, line2Start, line2End);
+
+            return lineIds;
+        }
+
+        public static ObjectId CreateWallCap(
+            Transaction tr,
+            Database db,
+            BlockTableRecord owner,
+            ObjectId layerId,
+            Point3d startPoint,
+            Point3d endPoint)
+        {
+            Line cap = new Line(startPoint, endPoint) { LayerId = layerId };
+            owner.AppendEntity(cap);
+            tr.AddNewlyCreatedDBObject(cap, true);
+            TagAsCap(tr, db, cap);
+            return cap.ObjectId;
         }
 
         private static ObjectId GetOrCreateLayer(Database db, Transaction tr, string layerName)

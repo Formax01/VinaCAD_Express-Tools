@@ -523,5 +523,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
+        [CommandMethod("WWO")]
+        public void OffsetWallCommand()
+        {
+            try
+            {
+                OffsetWallAction action = new OffsetWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OffsetWallCommand), ex);
+            }
+        }
     }
 }
