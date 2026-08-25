@@ -530,12 +530,26 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 ChangeWallThicknessAction action = new ChangeWallThicknessAction();
-                action.Execute();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(ChangeWallThicknessCommand), ex);
+            }
+        }
+      
+        [CommandMethod("TW")
+        public void TrimFixWallCommand()
+        {
+            try
+            {
+                TrimFixWallAction action = new TrimFixWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);;
+                Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
     }
