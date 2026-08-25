@@ -530,6 +530,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 ChangeWallThicknessAction action = new ChangeWallThicknessAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
