@@ -15,15 +15,12 @@ using MessageBox = System.Windows.MessageBox;
 namespace Tools.VinaCAD.Action.Actions
 {
     /// <summary>
-    /// Repairs WW wall geometry inside a two-point window. WW face/cap XData is the
-    /// primary source of truth. Untagged lines rebuilt by EW are accepted only when
-    /// they belong to the same wall layer and form a valid parallel wall pair.
+    /// Sửa hình học tường trong vùng chọn, ưu tiên metadata do lệnh WW tạo.
     /// </summary>
     public class TrimFixWallAction
     {
         private const double Tolerance = 0.001;
-        // 0.999961923 ~= cos(0.5 degree). The previous 0.99 threshold accepted
-        // lines that differed by more than 8 degrees and could merge a real corner.
+        // cos(0,5°): giới hạn độ lệch để hai line được xem là song song.
         private const double ParallelDotTolerance = 0.999961923;
         private const double DefaultHealDistance = 600.0;
         private const double MaximumSupportedThickness = 5000.0;
@@ -40,8 +37,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             try
             {
-                editor.WriteMessage(
-                    "\nTW: Kéo chọn các tường cần sửa, nhấn Enter để thực hiện.");
+                editor.WriteMessage("\nTW: Kéo chọn các tường cần sửa, nhấn Enter để thực hiện.");
 
                 TypedValue[] filterValues =
                 {
@@ -51,9 +47,7 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     MessageForAdding = "\nKéo chọn tường: "
                 };
-                PromptSelectionResult selection = editor.GetSelection(
-                    selectionOptions,
-                    new SelectionFilter(filterValues));
+                PromptSelectionResult selection = editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
 
                 if (selection.Status != PromptStatus.OK || selection.Value == null)
                 {
@@ -61,9 +55,7 @@ namespace Tools.VinaCAD.Action.Actions
                     return;
                 }
 
-                RepairSummary summary = Repair(
-                    database,
-                    selection.Value.GetObjectIds());
+                RepairSummary summary = Repair(database, selection.Value.GetObjectIds());
 
                 if (summary.WallLineCount == 0)
                 {
@@ -127,23 +119,12 @@ namespace Tools.VinaCAD.Action.Actions
             }
 
             double typicalThickness = Median(initialPairs.Select(pair => pair.Width));
-            // A large heal range is allowed only when matching SegmentId confirms
-            // that both fragments came from one WW wall. Legacy untagged walls use
-            // a conservative local limit inside HealCollinearGaps.
-            double collinearHealDistance = Math.Max(
-                DefaultHealDistance,
-                typicalThickness * 3.0);
+            // Chỉ nối khe lớn khi metadata xác nhận các đoạn thuộc cùng một tường.
+            double collinearHealDistance = Math.Max(DefaultHealDistance, typicalThickness * 3.0);
             double windowPadding = Math.Max(10.0, typicalThickness * 2.0);
-            RepairWindow window = RepairWindow.FromLines(
-                walls,
-                windowPadding);
+            RepairWindow window = RepairWindow.FromLines(walls, windowPadding);
 
-            List<LineRecord> caps = ReadCapsInWindow(
-                transaction,
-                database,
-                acceptedLayers,
-                window,
-                selectedCaps);
+            List<LineRecord> caps = ReadCapsInWindow(transaction, database, acceptedLayers, window, selectedCaps);
 
             Dictionary<ObjectId, double> thicknessByLine = initialPairs
                 .SelectMany(pair => new[]
@@ -154,81 +135,33 @@ namespace Tools.VinaCAD.Action.Actions
                 .GroupBy(item => item.Key)
                 .ToDictionary(group => group.Key, group => Median(group.Select(item => item.Value)));
 
-            // A CSG/trim pass can split only one face while the opposite face
-            // remains continuous. Heal that safe case first: matching WW
-            // SegmentId + Side is required and the opposite face must span the gap.
-            int healedGaps = HealSingleFaceGaps(
-                walls,
-                caps,
-                window,
-                collinearHealDistance,
-                typicalThickness);
+            // Nối mặt tường bị đứt nếu mặt đối diện vẫn liên tục qua khe.
+            int healedGaps = HealSingleFaceGaps(walls, caps, window, collinearHealDistance, typicalThickness);
 
-            healedGaps += HealCollinearGaps(
-                initialPairs,
-                caps,
-                window,
-                collinearHealDistance);
+            healedGaps += HealCollinearGaps(initialPairs, caps, window, collinearHealDistance);
 
-            // Fragments of one host wall face are common: any earlier TW/WW pass
-            // (or a crossing wall drawn first) can split a host into several
-            // collinear LINE pieces. A new branch landing near that split must
-            // still resolve to ONE logical host, so chain-joining uses the same
-            // metadata-confirmed distance as HealCollinearGaps above.
+            // Xem các đoạn cùng mặt tường là một host để nhận diện đúng giao T.
             double hostChainJoinDistance = collinearHealDistance;
-            List<ClosedTJunction> existingClosedTJunctions = FindClosedTJunctions(
-                walls,
-                initialPairs,
-                hostChainJoinDistance);
+            List<ClosedTJunction> existingClosedTJunctions = FindClosedTJunctions(walls, initialPairs, hostChainJoinDistance);
 
             List<Point3d> junctionPoints = new List<Point3d>();
-            SnapWallEndpoints(
-                walls,
-                caps,
-                existingClosedTJunctions,
-                window,
-                thicknessByLine,
-                junctionPoints);
+            SnapWallEndpoints(walls, caps, existingClosedTJunctions, window, thicknessByLine, junctionPoints);
 
-            // EX-style extension stops at the nearest wall face. Rebuild the T
-            // topology after snap so newly closed gaps participate in CSG trim.
-            List<ClosedTJunction> finalClosedTJunctions = FindClosedTJunctions(
-                walls,
-                initialPairs,
-                hostChainJoinDistance);
+            // Nhận diện lại giao T sau khi kéo các đầu tường vào giao điểm.
+            List<ClosedTJunction> finalClosedTJunctions = FindClosedTJunctions(walls, initialPairs, hostChainJoinDistance);
 
-            // Keep the A/B pairing established before endpoint mutation. Re-pairing
-            // after snap can match one extended face with a face from the next wall,
-            // producing a very wide phantom wall and deleting a long horizontal span.
+            // Giữ cặp A/B ban đầu để tránh ghép nhầm mặt tường sau khi kéo dài.
             List<WallPair> repairedPairs = initialPairs
                 .Where(pair => pairedIds.Contains(pair.First.Id) &&
                                pairedIds.Contains(pair.Second.Id))
                 .ToList();
-            Dictionary<ObjectId, List<SegmentPiece>> output = BuildOutput(
-                walls,
-                repairedPairs,
-                caps,
-                finalClosedTJunctions,
-                window,
-                junctionPoints);
+            Dictionary<ObjectId, List<SegmentPiece>> output = BuildOutput(walls, repairedPairs, caps, finalClosedTJunctions, window, junctionPoints);
 
-            ReplaceResult replaceResult = ReplaceChangedLines(
-                transaction,
-                database,
-                walls,
-                output);
+            ReplaceResult replaceResult = ReplaceChangedLines(transaction, database, walls, output);
 
-            int erasedCaps = EraseObsoleteCaps(
-                transaction,
-                caps,
-                junctionPoints,
-                typicalThickness);
+            int erasedCaps = EraseObsoleteCaps(transaction, caps, junctionPoints, typicalThickness);
 
-            int normalizedLines = NormalizeCollinearResults(
-                transaction,
-                database,
-                replaceResult.ResultIds,
-                typicalThickness);
+            int normalizedLines = NormalizeCollinearResults(transaction, database, replaceResult.ResultIds, typicalThickness);
 
             transaction.Commit();
             return new RepairSummary
@@ -351,8 +284,7 @@ namespace Tools.VinaCAD.Action.Actions
                 .SelectMany(pair => new[] { pair.First.Id, pair.Second.Id })
                 .ToHashSet();
 
-            // Geometry is only a compatibility fallback for legacy entities that
-            // do not carry a segment id. Never let it override authoritative WW data.
+            // Line cũ không có SegmentId mới được ghép cặp bằng hình học.
             List<LineRecord> legacyLines = lines
                 .Where(line => string.IsNullOrEmpty(line.SegmentId) &&
                                !taggedPairIds.Contains(line.Id))
@@ -612,8 +544,7 @@ namespace Tools.VinaCAD.Action.Actions
                         HasProtectingCap(caps, joint, typicalThickness))
                         continue;
 
-                    // Do not close a real opening: one opposite WW face with the
-                    // same SegmentId must continuously cover both ends of the gap.
+                    // Không nối khe nếu mặt đối diện không chạy liên tục qua khe đó.
                     bool oppositeFaceIsContinuous = walls.Any(opposite =>
                         opposite.Id != first.Id &&
                         opposite.Id != second.Id &&
@@ -791,13 +722,7 @@ namespace Tools.VinaCAD.Action.Actions
             return result;
         }
 
-        // A host wall face is frequently NOT a single LINE by the time TW runs:
-        // any earlier crossing (a prior WW segment, or a previous TW pass) splits
-        // it into collinear fragments that keep the same SegmentId/Side metadata.
-        // A branch whose two faces land on two different fragments of the SAME
-        // original host must still be recognised as one closed T - otherwise the
-        // host is never trimmed at BuildOutput and the branch is only extended,
-        // leaving a redundant host stub sitting inside the T mouth.
+        // Gộp logic các đoạn đồng tuyến cùng metadata thành một mặt tường host.
         private static List<HostChain> BuildHostChains(
             IReadOnlyList<LineRecord> lines,
             double joinDistance)
@@ -884,9 +809,7 @@ namespace Tools.VinaCAD.Action.Actions
                                        !string.IsNullOrEmpty(second.SegmentId);
             if (hasSegmentMetadata)
             {
-                // Trust WW metadata: only fragments of the SAME original wall
-                // face may rejoin as one host - never a different wall that
-                // simply happens to sit on the same infinite line.
+                // Có metadata: chỉ ghép các đoạn cùng SegmentId và cùng mặt A/B.
                 if (string.IsNullOrEmpty(first.SegmentId) ||
                     first.SegmentId != second.SegmentId ||
                     string.IsNullOrEmpty(first.Side) ||
@@ -896,8 +819,7 @@ namespace Tools.VinaCAD.Action.Actions
                 return SegmentGap(first, second) <= joinDistance;
             }
 
-            // Legacy, untagged lines: only bridge a very small numeric seam,
-            // exactly like the conservative fallback in HealCollinearGaps.
+            // Không có metadata: chỉ cho phép nối một khe sai số rất nhỏ.
             double legacyGap = Math.Max(5.0, Math.Min(25.0, joinDistance * 0.05));
             return SegmentGap(first, second) <= legacyGap;
         }
@@ -1116,8 +1038,7 @@ namespace Tools.VinaCAD.Action.Actions
                                  onTargetInterior &&
                                  IsOutwardExtension(endpoint, otherEndpoint, intersection))
                         {
-                            // EX semantics: stop at the nearest host face. Closed-T
-                            // topology is rebuilt after snap and drives the CSG trim.
+                            // Dừng đầu tường tại mặt host gần nhất.
                             candidates.Add(new EndpointMoveCandidate
                             {
                                 Point = intersection,
@@ -1545,14 +1466,12 @@ namespace Tools.VinaCAD.Action.Actions
                 }
                 catch
                 {
-                    // An original line may already have been replaced or erased.
+                    // Line nguồn có thể đã được thay thế ở bước trước.
                 }
             }
 
             List<List<NormalizeLine>> collinearGroups = GroupCollinearLines(lines);
-            // Normalize only numerical seams created by this CSG pass. Real wall
-            // gaps are handled pair-by-pair before CSG, where both faces and caps
-            // can be validated. A broad 600-unit merge here could close doors.
+            // Chỉ gộp khe sai số nhỏ để không làm mất cửa hoặc lỗ mở thật.
             double joinTolerance = Math.Max(
                 Tolerance * 10.0,
                 Math.Min(1.0, wallThickness * 0.001));
@@ -1601,7 +1520,6 @@ namespace Tools.VinaCAD.Action.Actions
                         SameSegment(cluster.Lines[0], mergedStart, mergedEnd))
                         continue;
 
-                    // Prefer a real tagged wall face over an untagged legacy cap.
                     NormalizeLine source = cluster.Lines
                         .OrderBy(line => line.IsCap ? 1 : 0)
                         .ThenBy(line => string.IsNullOrEmpty(line.Side) ? 1 : 0)
@@ -1799,9 +1717,7 @@ namespace Tools.VinaCAD.Action.Actions
 
         private static bool CanFormWallPair(LineRecord first, LineRecord second)
         {
-            // WW always writes one A face and one B face for a wall. EW lines from
-            // older drawings can be untagged, in which case geometry remains the
-            // fallback. Two tagged faces with the same marker are never one wall.
+            // Một tường WW hợp lệ gồm một mặt A và một mặt B.
             return string.IsNullOrEmpty(first.Side) ||
                    string.IsNullOrEmpty(second.Side) ||
                    first.Side != second.Side;
@@ -2076,9 +1992,7 @@ namespace Tools.VinaCAD.Action.Actions
 
         private sealed class ClosedTJunction
         {
-            // Kept as a single representative line (used for ordering/logging).
-            // BuildOutput must trim ALL fragments of the host, so the actual
-            // cut test uses HostChainIds, not this single Id.
+            // Host chỉ là line đại diện; HostChainIds chứa toàn bộ đoạn cần trim.
             public LineRecord Host { get; init; } = null!;
             public HashSet<ObjectId> HostChainIds { get; init; } = new HashSet<ObjectId>();
             public LineRecord FirstBranchLine { get; init; } = null!;
