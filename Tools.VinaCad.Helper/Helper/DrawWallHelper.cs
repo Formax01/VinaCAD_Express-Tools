@@ -158,7 +158,63 @@ namespace Tools.VinaCad.Helper.Helper
 
             EnsureRegApp(tr, db, WallSideAppName);
             EnsureRegApp(tr, db, WallSegmentAppName);
-            target.XData = new ResultBuffer(sourceXData.AsArray());
+            TypedValue[] values = sourceXData.AsArray();
+
+            // Keep the stored WW geometry synchronized when a wall face is
+            // trimmed, extended, split or joined. The old implementation copied
+            // the original 6 Point3d values unchanged, leaving stale XData after
+            // TW/EW/WW CSG replacement operations.
+            int segmentAppIndex = Array.FindIndex(
+                values,
+                value => value.TypeCode == (int)DxfCode.ExtendedDataRegAppName &&
+                         string.Equals(value.Value as string, WallSegmentAppName, StringComparison.Ordinal));
+            if (segmentAppIndex >= 0 && values.Length >= segmentAppIndex + 20)
+            {
+                bool sameDirection =
+                    source.StartPoint.DistanceTo(target.StartPoint) +
+                    source.EndPoint.DistanceTo(target.EndPoint) <=
+                    source.StartPoint.DistanceTo(target.EndPoint) +
+                    source.EndPoint.DistanceTo(target.StartPoint);
+
+                Point3d targetStart = sameDirection ? target.StartPoint : target.EndPoint;
+                Point3d targetEnd = sameDirection ? target.EndPoint : target.StartPoint;
+                Vector3d startDelta = targetStart - source.StartPoint;
+                Vector3d endDelta = targetEnd - source.EndPoint;
+
+                // Relative to the segment RegApp marker:
+                // +2 center start, +5 center end, +8 line A start, +11 line A end,
+                // +14 line B start, +17 line B end.
+                TranslateStoredPoint(values, segmentAppIndex + 2, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 5, endDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 8, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 11, endDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 14, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 17, endDelta);
+            }
+
+            target.XData = new ResultBuffer(values);
+        }
+
+        private static void TranslateStoredPoint(
+            TypedValue[] values,
+            int startIndex,
+            Vector3d delta)
+        {
+            if (startIndex < 0 || startIndex + 2 >= values.Length ||
+                values[startIndex].TypeCode != (int)DxfCode.ExtendedDataReal ||
+                values[startIndex + 1].TypeCode != (int)DxfCode.ExtendedDataReal ||
+                values[startIndex + 2].TypeCode != (int)DxfCode.ExtendedDataReal)
+                return;
+
+            values[startIndex] = new TypedValue(
+                values[startIndex].TypeCode,
+                Convert.ToDouble(values[startIndex].Value) + delta.X);
+            values[startIndex + 1] = new TypedValue(
+                values[startIndex + 1].TypeCode,
+                Convert.ToDouble(values[startIndex + 1].Value) + delta.Y);
+            values[startIndex + 2] = new TypedValue(
+                values[startIndex + 2].TypeCode,
+                Convert.ToDouble(values[startIndex + 2].Value) + delta.Z);
         }
 
         public static bool UpdateWallPairMetadata(
