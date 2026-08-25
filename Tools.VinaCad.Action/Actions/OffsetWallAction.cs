@@ -47,14 +47,14 @@ namespace Tools.VinaCAD.Action.Actions
                     return;
 
                 double offsetDistance = distanceResult.Value;
-                PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\nXử lý nút giao [Giữ/Auto] <Giữ>: ")
+                PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\nXử lý nút giao [Auto/Giữ] <Auto>: ")
                 {
                     AllowNone = true,
                     AppendKeywordsToMessage = false
                 };
                 junctionOptions.Keywords.Add("Keep", "Giữ", "Giữ");
                 junctionOptions.Keywords.Add("Auto", "Auto", "Auto");
-                junctionOptions.Keywords.Default = "Keep";
+                junctionOptions.Keywords.Default = "Auto";
 
                 PromptResult junctionResult = editor.GetKeywords(junctionOptions);
                 if (junctionResult.Status != PromptStatus.OK &&
@@ -80,11 +80,7 @@ namespace Tools.VinaCAD.Action.Actions
                     if (entityResult.Status != PromptStatus.OK)
                         break;
 
-                    if (!TryReadWallDefinition(
-                            database,
-                            entityResult.ObjectId,
-                            out WallDefinition? preview,
-                            out string validationMessage))
+                    if (!TryReadWallDefinition(editor, database, entityResult.ObjectId, out WallDefinition? preview, out string validationMessage))
                     {
                         editor.WriteMessage($"\nKhông thể offset: {validationMessage}");
                         continue;
@@ -101,8 +97,10 @@ namespace Tools.VinaCAD.Action.Actions
                         break;
 
                     if (CreateOffsetWall(
+                            editor,
                             database,
                             entityResult.ObjectId,
+                            preview,
                             sideResult.Value,
                             offsetDistance,
                             autoHealJunctions,
@@ -128,8 +126,10 @@ namespace Tools.VinaCAD.Action.Actions
         }
 
         private static bool CreateOffsetWall(
+            Editor editor,
             Database database,
             ObjectId selectedId,
+            WallDefinition source,
             Point3d sidePoint,
             double offsetDistance,
             bool autoHealJunctions,
@@ -140,14 +140,6 @@ namespace Tools.VinaCAD.Action.Actions
             using Transaction transaction = database.TransactionManager.StartTransaction();
             try
             {
-                if (!TryReadWallDefinition(
-                        transaction,
-                        database,
-                        selectedId,
-                        out WallDefinition? source,
-                        out message))
-                    return false;
-
                 Vector3d direction = (source.CenterEnd - source.CenterStart).GetNormal();
                 Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
                 double side = (sidePoint - source.CenterStart).DotProduct(normal);
@@ -182,11 +174,25 @@ namespace Tools.VinaCAD.Action.Actions
                     out Point3d secondStart,
                     out Point3d secondEnd);
 
-                List<Line> modelSpaceLines = ReadModelSpaceLines(
+                double searchPadding = autoHealJunctions ? offsetDistance + source.Thickness * 2.0 : source.Thickness * 2.0;
+                List<Line> nearbyLines = WallObjectQueryHelper.ReadLinesNear(
+                    editor,
                     transaction,
-                    database,
+                    source.LayerName,
+                    new[]
+                    {
+                        source.FirstFaceStart,
+                        source.FirstFaceEnd,
+                        source.SecondFaceStart,
+                        source.SecondFaceEnd,
+                        firstStart,
+                        firstEnd,
+                        secondStart,
+                        secondEnd
+                    },
+                    searchPadding,
                     includeWallCaps: true);
-                List<Line> allLines = modelSpaceLines
+                List<Line> allLines = nearbyLines
                     .Where(line => !DrawWallHelper.IsWallCap(line))
                     .ToList();
                 bool startConnected = false;
@@ -198,63 +204,54 @@ namespace Tools.VinaCAD.Action.Actions
 
                 if (autoHealJunctions)
                 {
-                    // A wall offset can move beyond the old host endpoints by the
-                    // full offset distance. Search exactly that corridor so both
-                    // faces of the host can be extended into a proper L junction.
-                    double endConnectionDistance =
-                        offsetDistance + source.Thickness * 2.0;
+                    double connectionDistance = offsetDistance + source.Thickness * 2.0;
                     // Giới hạn tìm kiếm theo đúng hành lang từ tường nguồn tới tường
                     // offset. Không dùng bán kính toàn cục, nhưng vẫn cho WW-style
                     // smart snap bắt mọi đầu tường thực sự hướng tới tường mới.
-                    double branchConnectionDistance =
-                        offsetDistance + source.Thickness * 2.0;
-                    startConnected = TryConnectWallEnd(
-                        transaction,
-                        database,
-                        allLines,
-                        source.LayerId,
-                        source.Thickness,
-                        endConnectionDistance,
-                        offset,
-                        newCenterStart,
-                        newCenterEnd,
-                        ref firstStart,
-                        ref secondStart,
-                        out startJunctionCut,
-                        out HashSet<ObjectId> startConnectedHostIds);
-                    endConnected = TryConnectWallEnd(
-                        transaction,
-                        database,
-                        allLines,
-                        source.LayerId,
-                        source.Thickness,
-                        endConnectionDistance,
-                        offset,
-                        newCenterEnd,
-                        newCenterStart,
-                        ref firstEnd,
-                        ref secondEnd,
-                        out endJunctionCut,
-                        out HashSet<ObjectId> endConnectedHostIds);
+                    WallConnectionContext connection = new WallConnectionContext
+                    {
+                        Transaction = transaction,
+                        Database = database,
+                        AllLines = allLines,
+                        WallCaps = nearbyLines.Where(DrawWallHelper.IsWallCap).ToList(),
+                        LayerId = source.LayerId,
+                        WallThickness = source.Thickness,
+                        SearchDistance = connectionDistance,
+                        Offset = offset,
+                        NewWall = new WallFaceGeometry
+                        {
+                            CenterStart = newCenterStart,
+                            CenterEnd = newCenterEnd,
+                            FirstStart = firstStart,
+                            FirstEnd = firstEnd,
+                            SecondStart = secondStart,
+                            SecondEnd = secondEnd
+                        }
+                    };
 
-                    connectedHostIds.UnionWith(startConnectedHostIds);
-                    connectedHostIds.UnionWith(endConnectedHostIds);
+                    WallEndConnectionResult? startResult = TryConnectWallEnd(connection, atStart: true);
+                    startConnected = startResult != null;
+                    if (startResult != null)
+                    {
+                        connection.NewWall.ApplyEnd(atStart: true, startResult);
+                        startJunctionCut = startResult.JunctionCut;
+                        connectedHostIds.UnionWith(startResult.ConnectedHostIds);
+                    }
 
-                    connectedBranchCount = ConnectNearbyWallBranches(
-                        transaction,
-                        database,
-                        allLines,
-                        modelSpaceLines
-                            .Where(DrawWallHelper.IsWallCap)
-                            .ToList(),
-                        source.LayerId,
-                        source.Thickness,
-                        branchConnectionDistance,
-                        connectedHostIds,
-                        firstStart,
-                        firstEnd,
-                        secondStart,
-                        secondEnd);
+                    WallEndConnectionResult? endResult = TryConnectWallEnd(connection, atStart: false);
+                    endConnected = endResult != null;
+                    if (endResult != null)
+                    {
+                        connection.NewWall.ApplyEnd(atStart: false, endResult);
+                        endJunctionCut = endResult.JunctionCut;
+                        connectedHostIds.UnionWith(endResult.ConnectedHostIds);
+                    }
+
+                    connectedBranchCount = ConnectNearbyWallBranches(connection, connectedHostIds);
+                    firstStart = connection.NewWall.FirstStart;
+                    firstEnd = connection.NewWall.FirstEnd;
+                    secondStart = connection.NewWall.SecondStart;
+                    secondEnd = connection.NewWall.SecondEnd;
                 }
 
                 if (WallAlreadyExists(
@@ -350,25 +347,21 @@ namespace Tools.VinaCAD.Action.Actions
         }
 
         private static bool TryReadWallDefinition(
+            Editor editor,
             Database database,
             ObjectId selectedId,
             out WallDefinition? definition,
             out string message)
         {
             using Transaction transaction = database.TransactionManager.StartTransaction();
-            bool result = TryReadWallDefinition(
-                transaction,
-                database,
-                selectedId,
-                out definition,
-                out message);
+            bool result = TryReadWallDefinition(editor, transaction, selectedId, out definition, out message);
             transaction.Commit();
             return result;
         }
 
         private static bool TryReadWallDefinition(
+            Editor editor,
             Transaction transaction,
-            Database database,
             ObjectId selectedId,
             out WallDefinition? definition,
             out string message)
@@ -383,7 +376,7 @@ namespace Tools.VinaCAD.Action.Actions
                 return false;
             }
 
-            List<Line> lines = ReadModelSpaceLines(transaction, database);
+            List<Line> lines = WallObjectQueryHelper.ReadLines(editor, transaction, selected.Layer);
             string? segmentId = DrawWallHelper.GetWallSegmentId(selected);
             string? selectedSide = DrawWallHelper.GetWallSideMarker(selected);
 
@@ -412,7 +405,7 @@ namespace Tools.VinaCAD.Action.Actions
                         line.ObjectId != selected.ObjectId &&
                         !string.IsNullOrEmpty(DrawWallHelper.GetWallSideMarker(line)) &&
                         DrawWallHelper.GetWallSideMarker(line) != selectedSide)
-                    .OrderBy(line => DistanceToInfiniteLine(line.StartPoint, selected))
+                    .OrderBy(line => DistancePointToInfiniteLine(line.StartPoint, selected))
                     .FirstOrDefault();
                 if (opposite == null)
                 {
@@ -485,7 +478,7 @@ namespace Tools.VinaCAD.Action.Actions
                     out oppositeFaceEnd);
             }
 
-            double thickness = DistanceToInfiniteLine(opposite.StartPoint, selected);
+            double thickness = DistancePointToInfiniteLine(opposite.StartPoint, selected);
             if (thickness <= Tolerance)
             {
                 message = "hai mặt tường đang trùng nhau.";
@@ -521,6 +514,7 @@ namespace Tools.VinaCAD.Action.Actions
                     : selectedFaceEnd,
                 Thickness = thickness,
                 LayerId = selected.LayerId,
+                LayerName = selected.Layer,
                 FirstProperties = selectedIsFirst
                     ? selectedProperties
                     : oppositeProperties,
@@ -541,7 +535,7 @@ namespace Tools.VinaCAD.Action.Actions
                     line.LayerId == selected.LayerId &&
                     string.IsNullOrEmpty(DrawWallHelper.GetWallSegmentId(line)) &&
                     AreParallelAndOverlapping(selected, line))
-                .OrderBy(line => DistanceToInfiniteLine(line.StartPoint, selected))
+                .OrderBy(line => DistancePointToInfiniteLine(line.StartPoint, selected))
                 .FirstOrDefault();
         }
 
@@ -601,29 +595,6 @@ namespace Tools.VinaCAD.Action.Actions
             endPoint = reference.StartPoint +
                        axis * (maximumStation - referenceStation);
             return true;
-        }
-
-        private static List<Line> ReadModelSpaceLines(
-            Transaction transaction,
-            Database database,
-            bool includeWallCaps = false)
-        {
-            BlockTable table = (BlockTable)transaction.GetObject(
-                database.BlockTableId,
-                OpenMode.ForRead);
-            BlockTableRecord modelSpace = (BlockTableRecord)transaction.GetObject(
-                table[BlockTableRecord.ModelSpace],
-                OpenMode.ForRead);
-
-            List<Line> lines = new List<Line>();
-            foreach (ObjectId id in modelSpace)
-            {
-                if (transaction.GetObject(id, OpenMode.ForRead) is Line line &&
-                    !line.IsErased &&
-                    (includeWallCaps || !DrawWallHelper.IsWallCap(line)))
-                    lines.Add(line);
-            }
-            return lines;
         }
 
         private static bool WallAlreadyExists(
@@ -817,7 +788,7 @@ namespace Tools.VinaCAD.Action.Actions
 
                 Line firstReference = sides[0][0];
                 Line secondReference = sides[1]
-                    .OrderBy(line => DistanceToInfiniteLine(
+                    .OrderBy(line => DistancePointToInfiniteLine(
                         line.StartPoint,
                         firstReference))
                     .First();
@@ -1119,26 +1090,16 @@ namespace Tools.VinaCAD.Action.Actions
         }
 
         private static int ConnectNearbyWallBranches(
-            Transaction transaction,
-            Database database,
-            IReadOnlyList<Line> allLines,
-            IReadOnlyList<Line> wallCaps,
-            ObjectId layerId,
-            double wallThickness,
-            double searchDistance,
-            IReadOnlyCollection<ObjectId> excludedLineIds,
-            Point3d newFirstStart,
-            Point3d newFirstEnd,
-            Point3d newSecondStart,
-            Point3d newSecondEnd)
+            WallConnectionContext context,
+            IReadOnlyCollection<ObjectId> excludedLineIds)
         {
-            Vector3d newWallDirection = newFirstEnd - newFirstStart;
+            Vector3d newWallDirection = context.NewWall.FirstEnd - context.NewWall.FirstStart;
             if (newWallDirection.Length <= Tolerance) return 0;
             newWallDirection = newWallDirection.GetNormal();
 
-            List<Line> layerFaces = allLines
+            List<Line> layerFaces = context.AllLines
                 .Where(line =>
-                    line.LayerId == layerId &&
+                    line.LayerId == context.LayerId &&
                     !excludedLineIds.Contains(line.ObjectId))
                 .ToList();
             HashSet<ObjectId> processed = new HashSet<ObjectId>();
@@ -1160,101 +1121,78 @@ namespace Tools.VinaCAD.Action.Actions
 
                 processed.Add(first.ObjectId);
                 processed.Add(second.ObjectId);
-
-                double direct = first.StartPoint.DistanceTo(second.StartPoint) +
-                                first.EndPoint.DistanceTo(second.EndPoint);
-                double crossed = first.StartPoint.DistanceTo(second.EndPoint) +
-                                 first.EndPoint.DistanceTo(second.StartPoint);
-                bool secondIsReversed = crossed < direct;
-                Point3d secondAtStart = secondIsReversed
-                    ? second.EndPoint
-                    : second.StartPoint;
-                Point3d secondAtEnd = secondIsReversed
-                    ? second.StartPoint
-                    : second.EndPoint;
-
-                bool connectsAtStart = TryConnectBranchEnd(
-                    first.StartPoint,
-                    first.EndPoint,
-                    secondAtStart,
-                    secondAtEnd,
-                    newFirstStart,
-                    newFirstEnd,
-                    newSecondStart,
-                    newSecondEnd,
-                    wallThickness,
-                    searchDistance,
-                    out Point3d snappedFirstStart,
-                    out Point3d snappedSecondStart);
-                bool connectsAtEnd = TryConnectBranchEnd(
-                    first.EndPoint,
-                    first.StartPoint,
-                    secondAtEnd,
-                    secondAtStart,
-                    newFirstStart,
-                    newFirstEnd,
-                    newSecondStart,
-                    newSecondEnd,
-                    wallThickness,
-                    searchDistance,
-                    out Point3d snappedFirstEnd,
-                    out Point3d snappedSecondEnd);
-
-                if (!connectsAtStart && !connectsAtEnd) continue;
-
-                Line writableFirst = (Line)transaction.GetObject(
-                    first.ObjectId,
-                    OpenMode.ForWrite);
-                Line writableSecond = (Line)transaction.GetObject(
-                    second.ObjectId,
-                    OpenMode.ForWrite);
-
-                if (connectsAtStart)
-                {
-                    Point3d oldFirst = writableFirst.StartPoint;
-                    Point3d oldSecond = secondIsReversed
-                        ? writableSecond.EndPoint
-                        : writableSecond.StartPoint;
-                    writableFirst.StartPoint = snappedFirstStart;
-                    if (secondIsReversed)
-                        writableSecond.EndPoint = snappedSecondStart;
-                    else
-                        writableSecond.StartPoint = snappedSecondStart;
-                    EraseWallCapAt(
-                        transaction,
-                        wallCaps,
-                        oldFirst,
-                        oldSecond);
-                    connectedEndCount++;
-                }
-
-                if (connectsAtEnd)
-                {
-                    Point3d oldFirst = writableFirst.EndPoint;
-                    Point3d oldSecond = secondIsReversed
-                        ? writableSecond.StartPoint
-                        : writableSecond.EndPoint;
-                    writableFirst.EndPoint = snappedFirstEnd;
-                    if (secondIsReversed)
-                        writableSecond.StartPoint = snappedSecondEnd;
-                    else
-                        writableSecond.EndPoint = snappedSecondEnd;
-                    EraseWallCapAt(
-                        transaction,
-                        wallCaps,
-                        oldFirst,
-                        oldSecond);
-                    connectedEndCount++;
-                }
-
-                DrawWallHelper.UpdateWallPairMetadata(
-                    transaction,
-                    database,
-                    writableFirst,
-                    writableSecond);
+                connectedEndCount += ConnectWallBranchPair(context, first, second);
             }
 
             return connectedEndCount;
+        }
+
+        private static int ConnectWallBranchPair(WallConnectionContext context, Line first, Line second)
+        {
+            double direct = first.StartPoint.DistanceTo(second.StartPoint) + first.EndPoint.DistanceTo(second.EndPoint);
+            double crossed = first.StartPoint.DistanceTo(second.EndPoint) + first.EndPoint.DistanceTo(second.StartPoint);
+            bool secondIsReversed = crossed < direct;
+            Point3d secondAtStart = secondIsReversed ? second.EndPoint : second.StartPoint;
+            Point3d secondAtEnd = secondIsReversed ? second.StartPoint : second.EndPoint;
+
+            WallEndpointPair? startConnection = TryConnectBranchEnd(context, new WallBranchEnd
+            {
+                FirstEndpoint = first.StartPoint,
+                FirstOtherEndpoint = first.EndPoint,
+                SecondEndpoint = secondAtStart,
+                SecondOtherEndpoint = secondAtEnd
+            });
+            WallEndpointPair? endConnection = TryConnectBranchEnd(context, new WallBranchEnd
+            {
+                FirstEndpoint = first.EndPoint,
+                FirstOtherEndpoint = first.StartPoint,
+                SecondEndpoint = secondAtEnd,
+                SecondOtherEndpoint = secondAtStart
+            });
+            if (startConnection == null && endConnection == null) return 0;
+
+            Line writableFirst = (Line)context.Transaction.GetObject(first.ObjectId, OpenMode.ForWrite);
+            Line writableSecond = (Line)context.Transaction.GetObject(second.ObjectId, OpenMode.ForWrite);
+            WallBranchPair writablePair = new WallBranchPair
+            {
+                First = writableFirst,
+                Second = writableSecond,
+                SecondIsReversed = secondIsReversed
+            };
+            int connectedEndCount = 0;
+            if (startConnection != null)
+            {
+                ApplyBranchEndConnection(context, writablePair, atStart: true, startConnection);
+                connectedEndCount++;
+            }
+            if (endConnection != null)
+            {
+                ApplyBranchEndConnection(context, writablePair, atStart: false, endConnection);
+                connectedEndCount++;
+            }
+
+            DrawWallHelper.UpdateWallPairMetadata(context.Transaction, context.Database, writableFirst, writableSecond);
+            return connectedEndCount;
+        }
+
+        private static void ApplyBranchEndConnection(WallConnectionContext context, WallBranchPair pair, bool atStart, WallEndpointPair connection)
+        {
+            Point3d oldFirst = atStart ? pair.First.StartPoint : pair.First.EndPoint;
+            Point3d oldSecond = atStart
+                ? (pair.SecondIsReversed ? pair.Second.EndPoint : pair.Second.StartPoint)
+                : (pair.SecondIsReversed ? pair.Second.StartPoint : pair.Second.EndPoint);
+
+            if (atStart)
+                pair.First.StartPoint = connection.First;
+            else
+                pair.First.EndPoint = connection.First;
+
+            if (atStart == pair.SecondIsReversed)
+                pair.Second.EndPoint = connection.Second;
+            else
+                pair.Second.StartPoint = connection.Second;
+
+            EraseWallCapAt(context.Transaction, context.WallCaps, oldFirst, oldSecond);
         }
 
         private static Line? FindPairedWallFaceForConnection(
@@ -1272,7 +1210,7 @@ namespace Tools.VinaCAD.Action.Actions
                         DrawWallHelper.GetWallSegmentId(line) == segmentId &&
                         DrawWallHelper.GetWallSideMarker(line) != selectedSide &&
                         AreParallelAndOverlapping(selected, line))
-                    .OrderBy(line => DistanceToInfiniteLine(
+                    .OrderBy(line => DistancePointToInfiniteLine(
                         line.StartPoint,
                         selected))
                     .FirstOrDefault();
@@ -1281,58 +1219,25 @@ namespace Tools.VinaCAD.Action.Actions
             return FindLegacyPairedFace(selected, lines);
         }
 
-        private static bool TryConnectBranchEnd(
-            Point3d firstEndpoint,
-            Point3d firstOtherEndpoint,
-            Point3d secondEndpoint,
-            Point3d secondOtherEndpoint,
-            Point3d newFirstStart,
-            Point3d newFirstEnd,
-            Point3d newSecondStart,
-            Point3d newSecondEnd,
-            double wallThickness,
-            double searchDistance,
-            out Point3d snappedFirst,
-            out Point3d snappedSecond)
+        private static WallEndpointPair? TryConnectBranchEnd(
+            WallConnectionContext context,
+            WallBranchEnd branchEnd)
         {
-            snappedFirst = firstEndpoint;
-            snappedSecond = secondEndpoint;
-
             // Giống smart snap của WW: cả hai mặt của một tường phải cùng kéo
             // được theo tia đầu mút và cắt đủ hai mặt của tường offset. Việc dựa
             // vào giao hình học thật tránh bỏ sót khi tim tường nguồn đã bị WW/TW
             // chia nhỏ hoặc XData vẫn mang chiều dài cũ.
-            return TrySnapBranchFaceEndpoint(
-                       firstEndpoint,
-                       firstOtherEndpoint,
-                       newFirstStart,
-                       newFirstEnd,
-                       newSecondStart,
-                       newSecondEnd,
-                       wallThickness,
-                       searchDistance,
-                       out snappedFirst) &&
-                   TrySnapBranchFaceEndpoint(
-                       secondEndpoint,
-                       secondOtherEndpoint,
-                       newFirstStart,
-                       newFirstEnd,
-                       newSecondStart,
-                       newSecondEnd,
-                       wallThickness,
-                       searchDistance,
-                       out snappedSecond);
+            if (!TrySnapBranchFaceEndpoint(context, branchEnd.FirstEndpoint, branchEnd.FirstOtherEndpoint, out Point3d snappedFirst) ||
+                !TrySnapBranchFaceEndpoint(context, branchEnd.SecondEndpoint, branchEnd.SecondOtherEndpoint, out Point3d snappedSecond))
+                return null;
+
+            return new WallEndpointPair { First = snappedFirst, Second = snappedSecond };
         }
 
         private static bool TrySnapBranchFaceEndpoint(
+            WallConnectionContext context,
             Point3d endpoint,
             Point3d otherEndpoint,
-            Point3d newFirstStart,
-            Point3d newFirstEnd,
-            Point3d newSecondStart,
-            Point3d newSecondEnd,
-            double wallThickness,
-            double searchDistance,
             out Point3d snapped)
         {
             snapped = endpoint;
@@ -1342,8 +1247,8 @@ namespace Tools.VinaCAD.Action.Actions
             List<(Point3d Point, double Movement)> intersections =
                 new List<(Point3d, double)>();
 
-            Point3d[] starts = { newFirstStart, newSecondStart };
-            Point3d[] ends = { newFirstEnd, newSecondEnd };
+            Point3d[] starts = { context.NewWall.FirstStart, context.NewWall.SecondStart };
+            Point3d[] ends = { context.NewWall.FirstEnd, context.NewWall.SecondEnd };
             for (int index = 0; index < starts.Length; index++)
             {
                 if (!TryInfiniteIntersection(
@@ -1358,12 +1263,12 @@ namespace Tools.VinaCAD.Action.Actions
                 bool liesOnWall = ProjectionFallsOnExpandedSegment(
                     intersection,
                     temporaryFace,
-                    wallThickness * 2.0);
+                    context.WallThickness * 2.0);
                 temporaryFace.Dispose();
                 if (!liesOnWall) continue;
 
                 double movement = (intersection - endpoint).DotProduct(outward);
-                if (movement >= -searchDistance && movement <= searchDistance)
+                if (movement >= -context.SearchDistance && movement <= context.SearchDistance)
                     intersections.Add((intersection, movement));
             }
 
@@ -1402,302 +1307,180 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        private static bool TryConnectWallEnd(
-            Transaction transaction,
-            Database database,
-            IReadOnlyList<Line> allLines,
-            ObjectId layerId,
-            double wallThickness,
-            double searchDistance,
-            Vector3d offset,
-            Point3d centerEndpoint,
-            Point3d otherCenterEndpoint,
-            ref Point3d firstFaceEndpoint,
-            ref Point3d secondFaceEndpoint,
-            out LineCutRequest? junctionCut,
-            out HashSet<ObjectId> connectedHostIds)
+        private static WallEndConnectionResult? TryConnectWallEnd(WallConnectionContext context, bool atStart)
         {
-            junctionCut = null;
-            connectedHostIds = new HashSet<ObjectId>();
-            Vector3d wallDirection = centerEndpoint - otherCenterEndpoint;
-            if (wallDirection.Length <= Tolerance) return false;
-            Vector3d outward = wallDirection.GetNormal();
-            double backwardAllowance = wallThickness * 2.0 + Tolerance;
+            WallEndSearch? search = CreateWallEndSearch(context, atStart);
+            if (search == null) return null;
 
-            List<HostCandidate> candidates = new List<HostCandidate>();
-            foreach (Line line in allLines.Where(line => line.LayerId == layerId))
-            {
-                Vector3d targetDirection = line.EndPoint - line.StartPoint;
-                if (targetDirection.Length <= Tolerance ||
-                    Math.Abs(outward.DotProduct(targetDirection.GetNormal())) >=
-                    1.0 - ParallelTolerance)
-                    continue;
+            HostCandidate? nearest = FindNearestHostCandidate(search);
+            if (nearest == null) return null;
 
-                if (!TryInfiniteIntersection(
-                        centerEndpoint,
-                        centerEndpoint + outward,
-                        line.StartPoint,
-                        line.EndPoint,
-                        out Point3d intersection))
-                    continue;
+            List<Line> hostFaces = GetHostFaces(nearest.Face, context.AllLines);
+            List<HostCandidate> orderedHosts = OrderHostCandidates(search, hostFaces);
+            if (orderedHosts.Count < 2) return null;
 
-                double movement = (intersection - centerEndpoint).DotProduct(outward);
-                if (movement < -backwardAllowance ||
-                    movement > searchDistance ||
-                    !ProjectionFallsOnExpandedSegment(
-                        intersection,
-                        line,
-                        searchDistance))
-                    continue;
-
-                candidates.Add(new HostCandidate
-                {
-                    Face = line,
-                    Movement = movement,
-                    LongitudinalGap = DistanceAlongLineToSegment(
-                        intersection,
-                        line)
-                });
-            }
-
-            HostCandidate? nearest = candidates
-                .OrderBy(candidate => Math.Abs(candidate.Movement))
-                .ThenBy(candidate => candidate.LongitudinalGap)
-                .FirstOrDefault();
-            if (nearest == null) return false;
-
-            List<Line> hostFaces = GetHostFaces(nearest.Face, allLines);
-            if (hostFaces.Count < 2) return false;
-
-            List<HostCandidate> orderedHostFaces = hostFaces
-                .Select(face =>
-                {
-                    if (!TryInfiniteIntersection(
-                            centerEndpoint,
-                            centerEndpoint + outward,
-                            face.StartPoint,
-                            face.EndPoint,
-                            out Point3d point))
-                        return null;
-
-                    double movement = (point - centerEndpoint)
-                        .DotProduct(outward);
-                    if (movement < -backwardAllowance ||
-                        movement > searchDistance ||
-                        !ProjectionFallsOnExpandedSegment(
-                            point,
-                            face,
-                            searchDistance))
-                        return null;
-
-                    return new HostCandidate
-                    {
-                        Face = face,
-                        Movement = movement,
-                        LongitudinalGap = DistanceAlongLineToSegment(
-                            point,
-                            face)
-                    };
-                })
-                .Where(candidate => candidate != null)
-                .Select(candidate => candidate!)
-                .GroupBy(candidate => Math.Round(
-                    candidate.Movement / Math.Max(Tolerance, 0.001)))
-                .Select(group => group
-                    .OrderBy(candidate => candidate.LongitudinalGap)
-                    .First())
-                .OrderBy(candidate => candidate.Movement)
-                .ToList();
-            if (orderedHostFaces.Count < 2 || offset.Length <= Tolerance)
-                return false;
-
-            HostCandidate nearHost = orderedHostFaces.First();
-            HostCandidate farHost = orderedHostFaces.Last();
-            Vector3d offsetDirection = offset.GetNormal();
-            bool firstFaceIsFartherOffset =
-                (firstFaceEndpoint - secondFaceEndpoint)
-                    .DotProduct(offsetDirection) > 0.0;
+            HostCandidate nearHost = orderedHosts.First();
+            HostCandidate farHost = orderedHosts.Last();
 
             // Nếu cả hai mặt của tường chủ còn chạy qua phía offset, đầu tường
-            // mới đang đâm vào GIỮA tường chủ (giao T), không phải góc L. Với T,
-            // cả hai mặt mới phải dừng ở mặt gần và chỉ mở một khe trên mặt đó.
-            // Logic cũ ép một mặt tới near face và mặt kia tới far face, tạo cap
-            // xiên/đóng hình chữ nhật khi tim nguồn nằm giữa bề dày tường chủ.
-            bool isTJunction = HostContinuesPastOffsetSide(
-                                   nearHost.Face,
-                                   firstFaceEndpoint,
-                                   secondFaceEndpoint,
-                                   outward,
-                                   offsetDirection,
-                                   wallThickness) &&
-                               HostContinuesPastOffsetSide(
-                                   farHost.Face,
-                                   firstFaceEndpoint,
-                                   secondFaceEndpoint,
-                                   outward,
-                                   offsetDirection,
-                                   wallThickness);
-            if (isTJunction)
-            {
-                if (!TryGetWallEndIntersection(
-                        firstFaceEndpoint,
-                        outward,
-                        nearHost.Face,
-                        backwardAllowance,
-                        searchDistance,
-                        out Point3d tFirst) ||
-                    !TryGetWallEndIntersection(
-                        secondFaceEndpoint,
-                        outward,
-                        nearHost.Face,
-                        backwardAllowance,
-                        searchDistance,
-                        out Point3d tSecond) ||
-                    !ProjectionFallsOnSegment(
-                        tFirst,
-                        nearHost.Face.StartPoint,
-                        nearHost.Face.EndPoint) ||
-                    !ProjectionFallsOnSegment(
-                        tSecond,
-                        nearHost.Face.StartPoint,
-                        nearHost.Face.EndPoint))
-                    return false;
+            // mới đang đâm vào GIỮA tường chủ (giao T), không phải góc L.
+            bool isTJunction = HostContinuesPastOffsetSide(nearHost.Face, search) &&
+                               HostContinuesPastOffsetSide(farHost.Face, search);
+            return isTJunction
+                ? TryConnectTJunction(search, nearHost.Face, hostFaces)
+                : TryConnectCornerJunction(search, nearHost.Face, farHost.Face, hostFaces);
+        }
 
-                firstFaceEndpoint = tFirst;
-                secondFaceEndpoint = tSecond;
-                junctionCut = new LineCutRequest
-                {
-                    Face = nearHost.Face,
-                    FirstPoint = tFirst,
-                    SecondPoint = tSecond
-                };
-                connectedHostIds.UnionWith(
-                    hostFaces.Select(face => face.ObjectId));
-                return true;
+        private static WallEndSearch? CreateWallEndSearch(WallConnectionContext context, bool atStart)
+        {
+            if (context.Offset.Length <= Tolerance) return null;
+
+            Point3d centerEndpoint = atStart ? context.NewWall.CenterStart : context.NewWall.CenterEnd;
+            Point3d otherCenterEndpoint = atStart ? context.NewWall.CenterEnd : context.NewWall.CenterStart;
+            Vector3d wallDirection = centerEndpoint - otherCenterEndpoint;
+            if (wallDirection.Length <= Tolerance) return null;
+
+            return new WallEndSearch
+            {
+                Context = context,
+                CenterEndpoint = centerEndpoint,
+                FirstFaceEndpoint = atStart ? context.NewWall.FirstStart : context.NewWall.FirstEnd,
+                SecondFaceEndpoint = atStart ? context.NewWall.SecondStart : context.NewWall.SecondEnd,
+                Outward = wallDirection.GetNormal(),
+                OffsetDirection = context.Offset.GetNormal(),
+                BackwardAllowance = context.WallThickness * 2.0 + Tolerance
+            };
+        }
+
+        private static HostCandidate? FindNearestHostCandidate(WallEndSearch search)
+        {
+            List<HostCandidate> candidates = new List<HostCandidate>();
+            foreach (Line line in search.Context.AllLines.Where(line => line.LayerId == search.Context.LayerId))
+            {
+                if (TryCreateHostCandidate(search, line, out HostCandidate? candidate))
+                    candidates.Add(candidate!);
             }
 
-            Line firstHostFace = firstFaceIsFartherOffset
-                ? farHost.Face
-                : nearHost.Face;
-            Line secondHostFace = firstFaceIsFartherOffset
-                ? nearHost.Face
-                : farHost.Face;
+            return candidates.OrderBy(candidate => Math.Abs(candidate.Movement))
+                .ThenBy(candidate => candidate.LongitudinalGap)
+                .FirstOrDefault();
+        }
 
-            if (!TryGetCornerIntersection(
-                    firstFaceEndpoint,
-                    outward,
-                    firstHostFace,
-                    backwardAllowance,
-                    searchDistance,
-                    out Point3d snappedFirst) ||
-                !TryGetCornerIntersection(
-                    secondFaceEndpoint,
-                    outward,
-                    secondHostFace,
-                    backwardAllowance,
-                    searchDistance,
-                    out Point3d snappedSecond))
+        private static List<HostCandidate> OrderHostCandidates(WallEndSearch search, IEnumerable<Line> hostFaces)
+        {
+            List<HostCandidate> candidates = new List<HostCandidate>();
+            foreach (Line face in hostFaces)
+            {
+                if (TryCreateHostCandidate(search, face, out HostCandidate? candidate))
+                    candidates.Add(candidate!);
+            }
+
+            return candidates.GroupBy(candidate => Math.Round(candidate.Movement / Math.Max(Tolerance, 0.001)))
+                .Select(group => group.OrderBy(candidate => candidate.LongitudinalGap).First())
+                .OrderBy(candidate => candidate.Movement)
+                .ToList();
+        }
+
+        private static bool TryCreateHostCandidate(WallEndSearch search, Line face, out HostCandidate? candidate)
+        {
+            candidate = null;
+            Vector3d targetDirection = face.EndPoint - face.StartPoint;
+            if (targetDirection.Length <= Tolerance ||
+                Math.Abs(search.Outward.DotProduct(targetDirection.GetNormal())) >= 1.0 - ParallelTolerance ||
+                !TryInfiniteIntersection(search.CenterEndpoint, search.CenterEndpoint + search.Outward, face.StartPoint, face.EndPoint, out Point3d intersection))
                 return false;
 
-            ExtendHostFaceTo(transaction, firstHostFace, snappedFirst);
-            ExtendHostFaceTo(transaction, secondHostFace, snappedSecond);
-            Line writableFirstHost = (Line)transaction.GetObject(
-                firstHostFace.ObjectId,
-                OpenMode.ForWrite);
-            Line writableSecondHost = (Line)transaction.GetObject(
-                secondHostFace.ObjectId,
-                OpenMode.ForWrite);
-            DrawWallHelper.UpdateWallPairMetadata(
-                transaction,
-                database,
-                writableFirstHost,
-                writableSecondHost);
-            firstFaceEndpoint = snappedFirst;
-            secondFaceEndpoint = snappedSecond;
-            connectedHostIds.UnionWith(
-                hostFaces.Select(face => face.ObjectId));
+            double movement = (intersection - search.CenterEndpoint).DotProduct(search.Outward);
+            if (movement < -search.BackwardAllowance ||
+                movement > search.Context.SearchDistance ||
+                !ProjectionFallsOnExpandedSegment(intersection, face, search.Context.SearchDistance))
+                return false;
+
+            candidate = new HostCandidate
+            {
+                Face = face,
+                Movement = movement,
+                LongitudinalGap = DistanceAlongLineToSegment(intersection, face)
+            };
             return true;
         }
 
-        private static bool TryGetCornerIntersection(
-            Point3d newFaceEndpoint,
-            Vector3d outward,
-            Line hostFace,
-            double backwardAllowance,
-            double searchDistance,
-            out Point3d intersection)
+        private static WallEndConnectionResult? TryConnectTJunction(WallEndSearch search, Line nearHostFace, IEnumerable<Line> hostFaces)
         {
-            return TryGetWallEndIntersection(
-                newFaceEndpoint,
-                outward,
-                hostFace,
-                backwardAllowance,
-                searchDistance,
-                out intersection);
+            if (!TryGetWallEndIntersection(search, search.FirstFaceEndpoint, nearHostFace, out Point3d first) ||
+                !TryGetWallEndIntersection(search, search.SecondFaceEndpoint, nearHostFace, out Point3d second) ||
+                !ProjectionFallsOnSegment(first, nearHostFace.StartPoint, nearHostFace.EndPoint) ||
+                !ProjectionFallsOnSegment(second, nearHostFace.StartPoint, nearHostFace.EndPoint))
+                return null;
+
+            return CreateWallEndResult(first, second, hostFaces, new LineCutRequest
+            {
+                Face = nearHostFace,
+                FirstPoint = first,
+                SecondPoint = second
+            });
         }
 
-        private static bool TryGetWallEndIntersection(
-            Point3d newFaceEndpoint,
-            Vector3d outward,
-            Line hostFace,
-            double backwardAllowance,
-            double searchDistance,
-            out Point3d intersection)
+        private static WallEndConnectionResult? TryConnectCornerJunction(WallEndSearch search, Line nearHostFace, Line farHostFace, IEnumerable<Line> hostFaces)
         {
-            intersection = newFaceEndpoint;
-            if (!TryInfiniteIntersection(
-                    newFaceEndpoint,
-                    newFaceEndpoint + outward,
-                    hostFace.StartPoint,
-                    hostFace.EndPoint,
-                    out Point3d candidate))
+            bool firstFaceIsFartherOffset =
+                (search.FirstFaceEndpoint - search.SecondFaceEndpoint).DotProduct(search.OffsetDirection) > 0.0;
+            Line firstHostFace = firstFaceIsFartherOffset ? farHostFace : nearHostFace;
+            Line secondHostFace = firstFaceIsFartherOffset ? nearHostFace : farHostFace;
+
+            if (!TryGetWallEndIntersection(search, search.FirstFaceEndpoint, firstHostFace, out Point3d first) ||
+                !TryGetWallEndIntersection(search, search.SecondFaceEndpoint, secondHostFace, out Point3d second))
+                return null;
+
+            ExtendHostFaceTo(search.Context.Transaction, firstHostFace, first);
+            ExtendHostFaceTo(search.Context.Transaction, secondHostFace, second);
+            Line writableFirst = (Line)search.Context.Transaction.GetObject(firstHostFace.ObjectId, OpenMode.ForWrite);
+            Line writableSecond = (Line)search.Context.Transaction.GetObject(secondHostFace.ObjectId, OpenMode.ForWrite);
+            DrawWallHelper.UpdateWallPairMetadata(search.Context.Transaction, search.Context.Database, writableFirst, writableSecond);
+            return CreateWallEndResult(first, second, hostFaces);
+        }
+
+        private static WallEndConnectionResult CreateWallEndResult(Point3d first, Point3d second, IEnumerable<Line> hostFaces, LineCutRequest? junctionCut = null)
+        {
+            return new WallEndConnectionResult
+            {
+                FirstFaceEndpoint = first,
+                SecondFaceEndpoint = second,
+                JunctionCut = junctionCut,
+                ConnectedHostIds = new HashSet<ObjectId>(hostFaces.Select(face => face.ObjectId))
+            };
+        }
+
+        private static bool TryGetWallEndIntersection(WallEndSearch search, Point3d faceEndpoint, Line hostFace, out Point3d intersection)
+        {
+            intersection = faceEndpoint;
+            if (!TryInfiniteIntersection(faceEndpoint, faceEndpoint + search.Outward, hostFace.StartPoint, hostFace.EndPoint, out Point3d candidate))
                 return false;
 
-            double movement = (candidate - newFaceEndpoint)
-                .DotProduct(outward);
-            if (movement < -backwardAllowance ||
-                movement > searchDistance ||
-                !ProjectionFallsOnExpandedSegment(
-                    candidate,
-                    hostFace,
-                    searchDistance))
+            double movement = (candidate - faceEndpoint).DotProduct(search.Outward);
+            if (movement < -search.BackwardAllowance ||
+                movement > search.Context.SearchDistance ||
+                !ProjectionFallsOnExpandedSegment(candidate, hostFace, search.Context.SearchDistance))
                 return false;
 
             intersection = candidate;
             return true;
         }
 
-        private static bool HostContinuesPastOffsetSide(
-            Line hostFace,
-            Point3d firstFaceEndpoint,
-            Point3d secondFaceEndpoint,
-            Vector3d outward,
-            Vector3d offsetDirection,
-            double wallThickness)
+        private static bool HostContinuesPastOffsetSide(Line hostFace, WallEndSearch search)
         {
             Point3d fartherOffsetEndpoint =
-                (firstFaceEndpoint - secondFaceEndpoint)
-                    .DotProduct(offsetDirection) >= 0.0
-                    ? firstFaceEndpoint
-                    : secondFaceEndpoint;
-            if (!TryInfiniteIntersection(
-                    fartherOffsetEndpoint,
-                    fartherOffsetEndpoint + outward,
-                    hostFace.StartPoint,
-                    hostFace.EndPoint,
-                    out Point3d boundary) ||
-                !ProjectionFallsOnSegment(
-                    boundary,
-                    hostFace.StartPoint,
-                    hostFace.EndPoint))
+                (search.FirstFaceEndpoint - search.SecondFaceEndpoint).DotProduct(search.OffsetDirection) >= 0.0
+                    ? search.FirstFaceEndpoint
+                    : search.SecondFaceEndpoint;
+            if (!TryInfiniteIntersection(fartherOffsetEndpoint, fartherOffsetEndpoint + search.Outward, hostFace.StartPoint, hostFace.EndPoint, out Point3d boundary) ||
+                !ProjectionFallsOnSegment(boundary, hostFace.StartPoint, hostFace.EndPoint))
                 return false;
 
             double continuation = Math.Max(
-                (hostFace.StartPoint - boundary).DotProduct(offsetDirection),
-                (hostFace.EndPoint - boundary).DotProduct(offsetDirection));
-            double continuationTolerance = Math.Max(
-                Tolerance * 10.0,
-                wallThickness * 0.05);
+                (hostFace.StartPoint - boundary).DotProduct(search.OffsetDirection),
+                (hostFace.EndPoint - boundary).DotProduct(search.OffsetDirection));
+            double continuationTolerance = Math.Max(Tolerance * 10.0, search.Context.WallThickness * 0.05);
             return continuation > continuationTolerance;
         }
 
@@ -1937,11 +1720,6 @@ namespace Tools.VinaCAD.Action.Actions
             return (offset - direction * offset.DotProduct(direction)).Length;
         }
 
-        private static double DistanceToInfiniteLine(Point3d point, Line line)
-        {
-            return DistancePointToInfiniteLine(point, line);
-        }
-
         private static Point3d Midpoint(Point3d first, Point3d second)
         {
             return new Point3d(
@@ -2030,8 +1808,86 @@ namespace Tools.VinaCAD.Action.Actions
             public Point3d SecondFaceEnd { get; init; }
             public double Thickness { get; init; }
             public ObjectId LayerId { get; init; }
+            public string LayerName { get; init; } = string.Empty;
             public EntityProperties FirstProperties { get; init; } = null!;
             public EntityProperties SecondProperties { get; init; } = null!;
+        }
+
+        private sealed class WallConnectionContext
+        {
+            public Transaction Transaction { get; init; } = null!;
+            public Database Database { get; init; } = null!;
+            public IReadOnlyList<Line> AllLines { get; init; } = Array.Empty<Line>();
+            public IReadOnlyList<Line> WallCaps { get; init; } = Array.Empty<Line>();
+            public ObjectId LayerId { get; init; }
+            public double WallThickness { get; init; }
+            public double SearchDistance { get; init; }
+            public Vector3d Offset { get; init; }
+            public WallFaceGeometry NewWall { get; init; } = null!;
+        }
+
+        private sealed class WallFaceGeometry
+        {
+            public Point3d CenterStart { get; init; }
+            public Point3d CenterEnd { get; init; }
+            public Point3d FirstStart { get; set; }
+            public Point3d FirstEnd { get; set; }
+            public Point3d SecondStart { get; set; }
+            public Point3d SecondEnd { get; set; }
+
+            public void ApplyEnd(bool atStart, WallEndConnectionResult result)
+            {
+                if (atStart)
+                {
+                    FirstStart = result.FirstFaceEndpoint;
+                    SecondStart = result.SecondFaceEndpoint;
+                }
+                else
+                {
+                    FirstEnd = result.FirstFaceEndpoint;
+                    SecondEnd = result.SecondFaceEndpoint;
+                }
+            }
+        }
+
+        private sealed class WallEndSearch
+        {
+            public WallConnectionContext Context { get; init; } = null!;
+            public Point3d CenterEndpoint { get; init; }
+            public Point3d FirstFaceEndpoint { get; init; }
+            public Point3d SecondFaceEndpoint { get; init; }
+            public Vector3d Outward { get; init; }
+            public Vector3d OffsetDirection { get; init; }
+            public double BackwardAllowance { get; init; }
+        }
+
+        private sealed class WallEndConnectionResult
+        {
+            public Point3d FirstFaceEndpoint { get; init; }
+            public Point3d SecondFaceEndpoint { get; init; }
+            public LineCutRequest? JunctionCut { get; init; }
+            public HashSet<ObjectId> ConnectedHostIds { get; init; } = new HashSet<ObjectId>();
+        }
+
+        private sealed class WallBranchEnd
+        {
+            public Point3d FirstEndpoint { get; init; }
+            public Point3d FirstOtherEndpoint { get; init; }
+            public Point3d SecondEndpoint { get; init; }
+            public Point3d SecondOtherEndpoint { get; init; }
+        }
+
+        private sealed class WallBranchPair
+        {
+            public Line First { get; init; } = null!;
+            public Line Second { get; init; } = null!;
+            public bool SecondIsReversed { get; init; }
+        }
+
+        private sealed class WallEndpointPair
+        {
+            public Point3d First { get; init; }
+            public Point3d Second { get; init; }
         }
 
         private sealed class HostCandidate

@@ -572,16 +572,22 @@ namespace Tools.VinaCad.Helper.Helper
 
                     foreach (IGrouping<string, WallLineCandidate> group in tagged.GroupBy(x => x.Wall.SegmentId))
                     {
-                        WallSegmentData existingWall = group.First().Wall;
-                        if (!WallFootprintsOverlap(newWall, existingWall)) continue;
+                        List<WallSegmentData> overlappingPieces = group
+                            .Select(candidate => candidate.Wall)
+                            .Where(wall => WallFootprintsOverlap(newWall, wall))
+                            .ToList();
+                        if (overlappingPieces.Count == 0) continue;
 
-                        bool isEndJunction = TryFindEndpointConnection(
-                            newWall, existingWall,
-                            out _, out bool existingAtStart);
+                        WallSegmentData endpointPiece = overlappingPieces.FirstOrDefault(wall =>
+                            TryFindEndpointConnection(newWall, wall, out _, out _));
+                        bool isEndJunction = endpointPiece != null;
+                        bool existingAtStart = false;
+                        if (isEndJunction)
+                            TryFindEndpointConnection(newWall, endpointPiece, out _, out existingAtStart);
 
                         List<WallLineCandidate> local = group
                             .Where(x => SegmentTouchesWallFootprint(x.Line.StartPoint, x.Line.EndPoint, newWall) ||
-                                        (isEndJunction && LineBelongsToEndpoint(x.Line, existingWall, existingAtStart)))
+                                        (isEndJunction && LineBelongsToEndpoint(x.Line, endpointPiece, existingAtStart)))
                             .ToList();
 
                         // Trường hợp đoạn mới nằm hoàn toàn trong footprint tường cũ: vẫn cần
@@ -655,29 +661,27 @@ namespace Tools.VinaCad.Helper.Helper
                         return;
                     }
 
-                    Dictionary<string, WallSegmentData> wallData = new Dictionary<string, WallSegmentData>
-                    {
-                        [newWall.SegmentId] = newWall
-                    };
+                    List<WallSegmentData> wallData = new List<WallSegmentData> { newWall };
 
                     foreach (Line line in existingLines)
                     {
                         if (TryGetWallSegmentData(line, out WallSegmentData data))
-                            wallData[data.SegmentId] = data;
+                            wallData.Add(data);
                     }
 
                     // Chỉ junction endpoint-endpoint mới được miter. T và X giữ nguyên
                     // endpoint; phần giao được giải quyết bởi local CSG phía dưới.
-                    foreach (WallSegmentData targetWall in wallData.Values.Where(x => x.SegmentId != newWall.SegmentId))
+                    foreach (IGrouping<string, WallSegmentData> targetPieces in wallData
+                        .Where(wall => wall.SegmentId != newWall.SegmentId)
+                        .GroupBy(wall => wall.SegmentId))
                     {
-                        if (TryFindEndpointConnection(
-                            newWall, targetWall,
-                            out bool newAtStart, out bool targetAtStart))
+                        foreach (WallSegmentData targetWall in targetPieces)
                         {
-                            MiterEndpointJunction(
-                                newLines, existingLines,
-                                newWall, targetWall,
-                                newAtStart, targetAtStart);
+                            if (!TryFindEndpointConnection(newWall, targetWall, out bool newAtStart, out bool targetAtStart))
+                                continue;
+
+                            MiterEndpointJunction(newLines, existingLines, newWall, targetWall, newAtStart, targetAtStart);
+                            break;
                         }
                     }
 
@@ -750,7 +754,7 @@ namespace Tools.VinaCad.Helper.Helper
                             Point3d midpoint = MidPoint(first, second);
                             string ownerId = ownerMap[line.ObjectId];
 
-                            if (IsInsideAnotherWall(midpoint, ownerId, wallData.Values)) continue;
+                            if (IsInsideAnotherWall(midpoint, ownerId, wallData)) continue;
                             if (createdSegments.Any(segment => SameUndirectedSegment(
                                 first, second, segment.Start, segment.End))) continue;
 
@@ -1109,7 +1113,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                     List<Line> wallLines = new List<Line>();
                     List<Line> caps = new List<Line>();
-                    Dictionary<string, WallSegmentData> wallData = new Dictionary<string, WallSegmentData>();
+                    List<WallSegmentData> wallData = new List<WallSegmentData>();
 
                     foreach (ObjectId objId in modelSpace)
                     {
@@ -1125,14 +1129,14 @@ namespace Tools.VinaCad.Helper.Helper
 
                         wallLines.Add(line);
                         if (TryGetWallSegmentData(line, out WallSegmentData data))
-                            wallData[data.SegmentId] = data;
+                            wallData.Add(data);
                     }
 
                     WallSegmentData selectedWall = null;
                     bool selectedAtStart = false;
                     double bestDistance = double.MaxValue;
 
-                    foreach (WallSegmentData data in wallData.Values)
+                    foreach (WallSegmentData data in wallData)
                     {
                         for (int endpoint = 0; endpoint < 2; endpoint++)
                         {
@@ -1148,7 +1152,7 @@ namespace Tools.VinaCad.Helper.Helper
                     }
 
                     if (selectedWall == null ||
-                        IsEndpointConnectedToAnotherWall(selectedWall, selectedAtStart, wallData.Values))
+                        IsEndpointConnectedToAnotherWall(selectedWall, selectedAtStart, wallData))
                     {
                         tr.Commit();
                         return;
@@ -1171,11 +1175,23 @@ namespace Tools.VinaCad.Helper.Helper
                         ? sideBLine.StartPoint
                         : sideBLine.EndPoint;
 
+                    double expectedWidth = expectedA.DistanceTo(expectedB);
+                    double endpointTolerance = Math.Max(pickTolerance * 2.0, expectedWidth * 2.0 + Tolerance);
+                    double actualWidth = actualA.DistanceTo(actualB);
+                    double widthTolerance = Math.Max(Tolerance * 10.0, expectedWidth * 0.25);
+                    if (actualA.DistanceTo(expectedA) > endpointTolerance ||
+                        actualB.DistanceTo(expectedB) > endpointTolerance ||
+                        Math.Abs(actualWidth - expectedWidth) > widthTolerance)
+                    {
+                        tr.Commit();
+                        return;
+                    }
+
                     bool alreadyCapped = caps.Any(cap =>
                         (cap.StartPoint.DistanceTo(actualA) <= Tolerance && cap.EndPoint.DistanceTo(actualB) <= Tolerance) ||
                         (cap.StartPoint.DistanceTo(actualB) <= Tolerance && cap.EndPoint.DistanceTo(actualA) <= Tolerance));
 
-                    if (!alreadyCapped && actualA.DistanceTo(actualB) > Tolerance)
+                    if (!alreadyCapped && actualWidth > Tolerance)
                     {
                         Line cap = new Line(actualA, actualB) { LayerId = targetLayerId };
                         modelSpace.AppendEntity(cap);
@@ -1245,15 +1261,36 @@ namespace Tools.VinaCad.Helper.Helper
                         }
                     }
 
-                    foreach (ObjectId id in toErase)
-                    {
-                        DBObject obj = tr.GetObject(id, OpenMode.ForWrite);
-                        if (obj != null && !obj.IsErased) obj.Erase();
-                    }
+                    EraseEntities(tr, toErase);
 
                     tr.Commit();
                 }
                 catch (Exception ex) { tr.Abort(); throw new Exception($"Error removing old cap: {ex.Message}", ex); }
+            }
+        }
+
+        public static void EraseEntities(Database db, IEnumerable<ObjectId> entityIds)
+        {
+            using Transaction tr = db.TransactionManager.StartTransaction();
+            try
+            {
+                EraseEntities(tr, entityIds);
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Abort();
+                throw;
+            }
+        }
+
+        private static void EraseEntities(Transaction tr, IEnumerable<ObjectId> entityIds)
+        {
+            foreach (ObjectId id in entityIds.Where(id => !id.IsNull).Distinct())
+            {
+                DBObject obj = tr.GetObject(id, OpenMode.ForWrite, true);
+                if (!obj.IsErased)
+                    obj.Erase(true);
             }
         }
         #endregion
