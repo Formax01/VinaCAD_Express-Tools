@@ -275,7 +275,8 @@ namespace Tools.VinaCad.Helper.Helper
                         {
                             continue;
                         }
-                        //TryGetHandle(objectId) tự bắt lỗi và trả về string.Empty.Nếu không đọc được Handle, chỉ cột ID bị rỗng; các property khác vẫn được xuất, giúp hạn chế mất dữ liệu
+                        // TryGetHandle handles conversion failures internally. If the handle cannot be read,
+                        // only the ID column is left blank so the remaining properties can still be exported.
                         entities.Add(new EntityIdentity(objectId, entity.Layer ?? string.Empty, GetEntityName(entity), TryGetHandle(objectId), true));
                     }
                     catch (Exception ex)
@@ -629,7 +630,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (value is ObjectId objectId)
             {
-                return objectId.IsNull ? string.Empty : objectId.Handle.ToString();
+                return TryGetHandle(objectId);
             }
 
             Type valueType = value.GetType();
@@ -840,7 +841,15 @@ namespace Tools.VinaCad.Helper.Helper
         {
             try
             {
-                return objectId.IsNull ? string.Empty : objectId.Handle.ToString();
+                if (objectId.IsNull)
+                {
+                    return string.Empty;
+                }
+
+                string hexadecimalHandle = objectId.Handle.ToString();
+                return ulong.TryParse(hexadecimalHandle, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ulong decimalHandle)
+                    ? decimalHandle.ToString(CultureInfo.InvariantCulture)
+                    : string.Empty;
             }
             catch
             {
