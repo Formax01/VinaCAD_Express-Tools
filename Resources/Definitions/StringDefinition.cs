@@ -21,6 +21,49 @@ namespace Tools.Resources.Definitions
         public static readonly string EXCSV_HEADER_PROPERTY_NAME = "Property name";
         public static readonly string EXCSV_HEADER_PROPERTY_VALUE = "Property value";
 
+        public static readonly IReadOnlyDictionary<string, string> EXCSV_ENTITY_DISPLAY_NAMES =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["INSERT"] = "Block",
+                ["LINE"] = "Line",
+                ["LWPOLYLINE"] = "Polyline",
+                ["POLYLINE"] = "Polyline",
+                ["ARC"] = "Arc",
+                ["CIRCLE"] = "Circle",
+                ["ELLIPSE"] = "Ellipse",
+                ["SPLINE"] = "Spline",
+                ["TEXT"] = "Text",
+                ["MTEXT"] = "MText",
+                ["POINT"] = "Point",
+                ["HATCH"] = "Hatch",
+                ["LEADER"] = "Leader",
+                ["MULTILEADER"] = "MLeader",
+                ["DIMENSION"] = "Dimension",
+                ["VIEWPORT"] = "Viewport",
+                ["ACAD_TABLE"] = "Table",
+                ["3DSOLID"] = "3D Solid",
+                ["SOLID"] = "2D Solid",
+                ["3DFACE"] = "3D Face",
+                ["REGION"] = "Region",
+                ["BODY"] = "Body",
+                ["RAY"] = "Ray",
+                ["XLINE"] = "Construction Line",
+                ["MLINE"] = "Multiline",
+                ["HELIX"] = "Helix",
+                ["MESH"] = "Mesh",
+                ["WIPEOUT"] = "Wipeout",
+                ["IMAGE"] = "Raster Image",
+                ["PDFUNDERLAY"] = "PDF Underlay",
+                ["DWFUNDERLAY"] = "DWF Underlay",
+                ["DGNUNDERLAY"] = "DGN Underlay",
+                ["ATTDEF"] = "Attribute Definition",
+                ["ATTRIB"] = "Attribute",
+                ["SHAPE"] = "Shape",
+                ["TRACE"] = "Trace",
+                ["OLE2FRAME"] = "OLE Object",
+                ["ACAD_PROXY_ENTITY"] = "Proxy Entity",
+            };
+
         public static readonly string BlockTemplates = "TemplateBlocks.dwg";
         public static readonly string PDFAboutTools = "Express Tools.pdf";
 

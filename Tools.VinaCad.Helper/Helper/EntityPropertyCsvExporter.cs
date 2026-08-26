@@ -49,103 +49,30 @@ namespace Tools.VinaCad.Helper.Helper
             "Thickness",
         };
 
-        private static readonly HashSet<string> CommonPalettePropertyNames = new(
-            PropertiesPaletteOrder,
-            StringComparer.OrdinalIgnoreCase);
+        private static readonly IEntityPropertyProvider DefaultEntityPropertyProvider = new DxfEntityPropertyProvider(Array.Empty<string>());
 
-        private static readonly string[] LinePropertiesPaletteOrder =
-            PropertiesPaletteOrder
-                .Concat(new[]
-                {
-                    "StartPoint",
-                    "EndPoint",
-                    "Delta",
-                    "Length",
-                    "Angle",
-                    "Material",
-                })
-                .ToArray();
-
-        private static readonly HashSet<string> LinePalettePropertyNames = new(
-            new[]
+        private static readonly IReadOnlyList<IEntityPropertyProvider> EntityPropertyProviders =
+            new IEntityPropertyProvider[]
             {
-                "Angle",
-                "Delta",
-                "Length",
-                "StartPoint",
-                "EndPoint",
-                "Material",
-            },
-            StringComparer.OrdinalIgnoreCase);
-
-        private static readonly HashSet<string> HiddenApiPropertyNames = new(
-            new[]
-            {
-                "StartParam",
-                "EndParam",
-                "Spline",
-                "IsPeriodic",
-                "PlotStyleNameId",
-                "CompoundObjectTransform",
-                "ForceAnnoAllVisible",
-                "Visible",
-                "MaterialMapper",
-                "EntityColor",
-                "LayerId",
-                "GeometricExtents",
-                "Ecs",
-                "VisualStyleId",
-                "FaceStyleId",
-                "EdgeStyleId",
-                "LinetypeId",
-                "ReceiveShadows",
-                "CollisionType",
-                "CloneMeForDragging",
-                "IsPlanar",
-                "ColorIndex",
-                "CastShadows",
-                "BlockId",
-                "MaterialId",
-                "XData",
-                "UndoFiler",
-                "PaperOrientation",
-                "ObjectBirthVersion",
-                "MergeStyle",
-                "IsWriteEnabled",
-                "IsUndoing",
-                "IsTransactionResident",
-                "IsReallyClosing",
-                "IsReadEnabled",
-                "IsPersistent",
-                "IsObjectIdsInFlux",
-                "IsNotifying",
-                "IsNotifyEnabled",
-                "IsNewObject",
-                "IsModifiedXData",
-                "IsModifiedGraphics",
-                "IsModified",
-                "IsEraseStatusToggled",
-                "IsErased",
-                "IsCancelling",
-                "IsAProxy",
-                "OwnerId",
-                "ObjectId",
-                "Id",
-                "HasSaveVersionOverride",
-                "HasFields",
-                "Handle",
-                "ExtensionDictionary",
-                "Drawable",
-                "Database",
-                "ClassID",
-                "AcadObject",
-                "DrawableType",
-                "Bounds",
-                "UnmanagedObject",
-                "IsDisposed",
-                "AutoDelete",
-            },
-            StringComparer.OrdinalIgnoreCase);
+                new DxfEntityPropertyProvider(new[] { "LINE" }, "StartPoint", "EndPoint", "Delta", "Length", "Angle"),
+                new DxfEntityPropertyProvider(new[] { "INSERT" }, "Name", "Position", "ScaleFactors", "Rotation", "BlockUnit", "UnitFactor", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "LWPOLYLINE", "POLYLINE" }, "Closed", "ConstantWidth", "Elevation", "Area", "Length", "Plinegen", "NumberOfVertices", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "LEADER" }, "FirstVertex", "LastVertex", "NumVertices", "IsSplined", "HasArrowHead", "DimensionStyleName", "AnnoType", "Annotation", "AnnotationOffset", "Dimasz", "Dimgap", "Dimtxt", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "TEXT" }, "TextString", "TextStyleName", "Position", "AlignmentPoint", "Height", "Rotation", "WidthFactor", "Oblique", "Justify", "HorizontalMode", "VerticalMode", "IsMirroredInX", "IsMirroredInY", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "MTEXT" }, "Contents", "TextStyleName", "Location", "TextHeight", "Rotation", "Attachment", "Width", "Height", "ActualWidth", "ActualHeight", "LineSpacingStyle", "LineSpacingFactor", "ColumnType", "ColumnCount", "ColumnWidth", "ColumnGutterWidth", "BackgroundFill", "BackgroundFillColor", "BackgroundTransparency", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "HATCH" }, "PatternName", "PatternType", "PatternScale", "PatternAngle", "PatternDouble", "Associative", "HatchStyle", "Origin", "Elevation", "Area", "BackgroundColor", "GradientName", "GradientAngle", "GradientOneColorMode", "GradientShift", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "CIRCLE" }, "Center", "Radius", "Diameter", "Circumference", "Area", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "ARC" }, "Center", "Radius", "StartAngle", "EndAngle", "TotalAngle", "Length", "Area", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "SPLINE" }, "Degree", "NumControlPoints", "NumFitPoints", "FitTolerance", "StartFitTangent", "EndFitTangent", "StartPoint", "EndPoint", "Closed", "Area", "IsRational", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "IMAGE" }, "Name", "Path", "Position", "Scale", "Rotation", "Width", "Height", "Brightness", "Contrast", "Fade", "ShowImage", "ImageTransparency", "IsClipped", "ClipBoundaryType", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "DIMENSION" }, "DimensionStyleName", "DimensionText", "Measurement", "TextPosition", "TextRotation", "HorizontalRotation", "Rotation", "Oblique", "XLine1Point", "XLine2Point", "DimLinePoint", "ArcPoint", "Elevation", "Prefix", "Suffix", "AlternatePrefix", "AlternateSuffix", "SuppressLeadingZeros", "SuppressTrailingZeros", "ToleranceSuppressLeadingZeros", "ToleranceSuppressTrailingZeros", "CenterMarkType", "CenterMarkSize", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "POINT" }, "Position", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "ELLIPSE" }, "Center", "MajorAxis", "MinorAxis", "RadiusRatio", "StartAngle", "EndAngle", "Area", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "RAY", "XLINE" }, "BasePoint", "UnitDir", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "ACAD_TABLE" }, "Position", "Rows", "Columns", "Width", "Height", "Direction", "TableStyleName", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "VIEWPORT" }, "CenterPoint", "Width", "Height", "ViewCenter", "ViewHeight", "CustomScale", "TwistAngle", "Locked", "ShadePlot", "Annotative"),
+                new DxfEntityPropertyProvider(new[] { "ATTDEF", "ATTRIB" }, "Tag", "Prompt", "TextString", "Position", "AlignmentPoint", "Height", "Rotation", "TextStyleName", "Invisible", "Constant", "Verifiable", "Preset", "LockPositionInBlock", "Annotative"),
+            };
 
         public int CountEntities(Database database)
         {
@@ -398,10 +325,8 @@ namespace Tools.VinaCad.Helper.Helper
             EntityPropertyExportResult result)
         {
             List<ExportProperty> exportedProperties = new();
-            IReadOnlyList<string> paletteOrder = entity is Line
-                ? LinePropertiesPaletteOrder
-                : PropertiesPaletteOrder;
-            AddDisplayProperties(entity, identity, paletteOrder, exportedProperties, result);
+            IEntityPropertyProvider propertyProvider = ResolveEntityPropertyProvider(entity);
+            AddDisplayProperties(transaction, entity, identity, propertyProvider.PropertyOrder, exportedProperties, result);
 
             if (entity is BlockReference blockReference)
             {
@@ -413,6 +338,7 @@ namespace Tools.VinaCad.Helper.Helper
         }
 
         private static void AddDisplayProperties(
+            Transaction transaction,
             object source,
             EntityIdentity identity,
             IReadOnlyList<string> preferredOrder,
@@ -432,20 +358,32 @@ namespace Tools.VinaCad.Helper.Helper
 
             foreach (PropertyDescriptor descriptor in OrderPropertyDescriptors(descriptors, preferredOrder))
             {
-                if (!descriptor.IsBrowsable ||
-                    !IsVisiblePaletteProperty(source, descriptor.Name))
+                if (!descriptor.IsBrowsable)
+                {
+                    continue;
+                }
+
+                if (source is Spline spline && IsSplineFitTangent(descriptor.Name) && !HasSplineFitData(spline))
                 {
                     continue;
                 }
 
                 try
                 {
-                    object? value = descriptor.GetValue(source);
+                    object? value = source is Dimension dimension &&
+                        string.Equals(descriptor.Name, "DimensionStyleName", StringComparison.OrdinalIgnoreCase)
+                            ? GetDimensionStyleName(transaction, dimension)
+                            : descriptor.GetValue(source);
                     exportedProperties.Add(new ExportProperty(descriptor.DisplayName, FormatDisplayValue(descriptor, value)));
                 }
                 catch (Exception ex)
                 {
-                    exportedProperties.Add(new ExportProperty(descriptor.DisplayName, UnreadableValue));
+                    if (source is Hatch && string.Equals(descriptor.Name, "Area", StringComparison.OrdinalIgnoreCase))
+                    {
+                        exportedProperties.Add(new ExportProperty(descriptor.DisplayName, string.Empty));
+                        continue;
+                    }
+
                     result.AddError("Property", identity.LayerName, identity.EntityName, identity.Handle, descriptor.DisplayName, ex);
                 }
             }
@@ -467,24 +405,48 @@ namespace Tools.VinaCad.Helper.Helper
                 }
             }
 
-            foreach (PropertyDescriptor descriptor in descriptors)
-            {
-                if (emittedNames.Add(descriptor.Name))
-                {
-                    yield return descriptor;
-                }
-            }
         }
 
-        private static bool IsVisiblePaletteProperty(object source, string propertyName)
+        private static IEntityPropertyProvider ResolveEntityPropertyProvider(Entity entity)
         {
-            if (source is Line)
+            string dxfName = TryGetDxfName(entity);
+            return EntityPropertyProviders.FirstOrDefault(provider => provider.CanHandle(dxfName)) ?? DefaultEntityPropertyProvider;
+        }
+
+        private static string[] CreatePropertyOrder(IEnumerable<string> entityPropertyNames)
+        {
+            return PropertiesPaletteOrder.Concat(entityPropertyNames).Append("Material").Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        }
+
+        private static string GetDimensionStyleName(Transaction transaction, Dimension dimension)
+        {
+            ObjectId dimensionStyleId = dimension.DimensionStyle;
+            if (dimensionStyleId.IsNull || !dimensionStyleId.IsValid || dimensionStyleId.IsErased)
             {
-                return CommonPalettePropertyNames.Contains(propertyName) ||
-                    LinePalettePropertyNames.Contains(propertyName);
+                return string.Empty;
             }
 
-            return !HiddenApiPropertyNames.Contains(propertyName);
+            return transaction.GetObject(dimensionStyleId, OpenMode.ForRead, false) is DimStyleTableRecord dimensionStyle
+                ? dimensionStyle.Name ?? string.Empty
+                : string.Empty;
+        }
+
+        private static bool IsSplineFitTangent(string propertyName)
+        {
+            return string.Equals(propertyName, "StartFitTangent", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(propertyName, "EndFitTangent", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool HasSplineFitData(Spline spline)
+        {
+            try
+            {
+                return spline.HasFitData;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static string FormatDisplayValue(PropertyDescriptor descriptor, object? value)
@@ -890,11 +852,54 @@ namespace Tools.VinaCad.Helper.Helper
         {
             try
             {
-                return entity.GetRXClass().DxfName ?? entity.GetType().Name;
+                string dxfName = TryGetDxfName(entity);
+                if (!string.IsNullOrWhiteSpace(dxfName) && StringDefinition.EXCSV_ENTITY_DISPLAY_NAMES.TryGetValue(dxfName, out string? displayName))
+                {
+                    return displayName;
+                }
+
+                return entity.GetType().Name;
             }
             catch
             {
                 return entity.GetType().Name;
+            }
+        }
+
+        private static string TryGetDxfName(Entity entity)
+        {
+            try
+            {
+                return entity.GetRXClass().DxfName ?? string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private interface IEntityPropertyProvider
+        {
+            IReadOnlyList<string> PropertyOrder { get; }
+
+            bool CanHandle(string dxfName);
+        }
+
+        private sealed class DxfEntityPropertyProvider : IEntityPropertyProvider
+        {
+            private readonly HashSet<string> _dxfNames;
+
+            public DxfEntityPropertyProvider(IEnumerable<string> dxfNames, params string[] entityPropertyNames)
+            {
+                _dxfNames = new HashSet<string>(dxfNames, StringComparer.OrdinalIgnoreCase);
+                PropertyOrder = CreatePropertyOrder(entityPropertyNames);
+            }
+
+            public IReadOnlyList<string> PropertyOrder { get; }
+
+            public bool CanHandle(string dxfName)
+            {
+                return _dxfNames.Contains(dxfName);
             }
         }
 
