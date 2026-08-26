@@ -107,9 +107,6 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        /// <summary>
-        /// Loads text style names from the drawing and populates the VM. Returns the list of style names.
-        /// </summary>
         private List<string> LoadTextStylesFromDrawing()
         {
             var styleNames = new List<string>();
@@ -139,9 +136,6 @@ namespace Tools.VinaCad.Action.Actions
             return styleNames;
         }
 
-        /// <summary>
-        /// Attempt to read a title-block attribute (DRAWINGNO) from modelspace block references and return its value.
-        /// </summary>
         private string LoadDefaultPrefixFromDrawing()
         {
             try
@@ -207,8 +201,6 @@ namespace Tools.VinaCad.Action.Actions
                 XLDatTenCocSetting.Ordering = _vm.Ordering;
                 XLDatTenCocSetting.Prefix = _vm.Prefix ?? string.Empty;
                 XLDatTenCocSetting.TextStyleName = _vm.SelectedTextStyle ?? string.Empty;
-
-                _ed?.WriteMessage($"\nXLDTC: Saved settings (Prefix='{_vm.Prefix}', Start={_vm.StartNumber}, Height={_vm.TextHeight}, Ordering={_vm.Ordering}, TextStyle='{_vm.SelectedTextStyle}').\n");
 
                 _view?.Close();
             }

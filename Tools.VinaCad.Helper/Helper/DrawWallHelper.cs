@@ -125,7 +125,63 @@ namespace Tools.VinaCad.Helper.Helper
 
             EnsureRegApp(tr, db, WallSideAppName);
             EnsureRegApp(tr, db, WallSegmentAppName);
-            target.XData = new ResultBuffer(sourceXData.AsArray());
+            TypedValue[] values = sourceXData.AsArray();
+
+            // Keep the stored WW geometry synchronized when a wall face is
+            // trimmed, extended, split or joined. The old implementation copied
+            // the original 6 Point3d values unchanged, leaving stale XData after
+            // TW/EW/WW CSG replacement operations.
+            int segmentAppIndex = Array.FindIndex(
+                values,
+                value => value.TypeCode == (int)DxfCode.ExtendedDataRegAppName &&
+                         string.Equals(value.Value as string, WallSegmentAppName, StringComparison.Ordinal));
+            if (segmentAppIndex >= 0 && values.Length >= segmentAppIndex + 20)
+            {
+                bool sameDirection =
+                    source.StartPoint.DistanceTo(target.StartPoint) +
+                    source.EndPoint.DistanceTo(target.EndPoint) <=
+                    source.StartPoint.DistanceTo(target.EndPoint) +
+                    source.EndPoint.DistanceTo(target.StartPoint);
+
+                Point3d targetStart = sameDirection ? target.StartPoint : target.EndPoint;
+                Point3d targetEnd = sameDirection ? target.EndPoint : target.StartPoint;
+                Vector3d startDelta = targetStart - source.StartPoint;
+                Vector3d endDelta = targetEnd - source.EndPoint;
+
+                // Relative to the segment RegApp marker:
+                // +2 center start, +5 center end, +8 line A start, +11 line A end,
+                // +14 line B start, +17 line B end.
+                TranslateStoredPoint(values, segmentAppIndex + 2, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 5, endDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 8, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 11, endDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 14, startDelta);
+                TranslateStoredPoint(values, segmentAppIndex + 17, endDelta);
+            }
+
+            target.XData = new ResultBuffer(values);
+        }
+
+        private static void TranslateStoredPoint(
+            TypedValue[] values,
+            int startIndex,
+            Vector3d delta)
+        {
+            if (startIndex < 0 || startIndex + 2 >= values.Length ||
+                values[startIndex].TypeCode != (int)DxfCode.ExtendedDataReal ||
+                values[startIndex + 1].TypeCode != (int)DxfCode.ExtendedDataReal ||
+                values[startIndex + 2].TypeCode != (int)DxfCode.ExtendedDataReal)
+                return;
+
+            values[startIndex] = new TypedValue(
+                values[startIndex].TypeCode,
+                Convert.ToDouble(values[startIndex].Value) + delta.X);
+            values[startIndex + 1] = new TypedValue(
+                values[startIndex + 1].TypeCode,
+                Convert.ToDouble(values[startIndex + 1].Value) + delta.Y);
+            values[startIndex + 2] = new TypedValue(
+                values[startIndex + 2].TypeCode,
+                Convert.ToDouble(values[startIndex + 2].Value) + delta.Z);
         }
 
         private static void TagAsCap(Transaction tr, Database db, Line line)
@@ -153,6 +209,100 @@ namespace Tools.VinaCad.Helper.Helper
                 (first.X + second.X) / 2.0,
                 (first.Y + second.Y) / 2.0,
                 (first.Z + second.Z) / 2.0);
+        }
+
+        private sealed class WallSegmentData
+        {
+            public string SegmentId = string.Empty;
+            public Point3d CenterStart;
+            public Point3d CenterEnd;
+            public Point3d SideAStart;
+            public Point3d SideAEnd;
+            public Point3d SideBStart;
+            public Point3d SideBEnd;
+
+            public double Width => SideAStart.DistanceTo(SideBStart);
+
+            public Point3d[] Outline => new[]
+            {
+                SideAStart,
+                SideAEnd,
+                SideBEnd,
+                SideBStart
+            };
+
+            public void GetEndpointFace(bool atStart, out Point3d sideA, out Point3d sideB)
+            {
+                sideA = atStart ? SideAStart : SideAEnd;
+                sideB = atStart ? SideBStart : SideBEnd;
+            }
+
+            public void GetBoundary(string side, out Point3d start, out Point3d end)
+            {
+                bool isSideA = side == SideA;
+                start = isSideA ? SideAStart : SideBStart;
+                end = isSideA ? SideAEnd : SideBEnd;
+            }
+        }
+
+        private static WallSegmentData CreateWallSegmentData(
+            string segmentId,
+            Point3d line1Start,
+            Point3d line1End,
+            Point3d line2Start,
+            Point3d line2End)
+        {
+            return new WallSegmentData
+            {
+                SegmentId = segmentId,
+                CenterStart = MidPoint(line1Start, line2Start),
+                CenterEnd = MidPoint(line1End, line2End),
+                SideAStart = line1Start,
+                SideAEnd = line1End,
+                SideBStart = line2Start,
+                SideBEnd = line2End
+            };
+        }
+
+        private static bool TryGetWallSegmentData(Line line, out WallSegmentData data)
+        {
+            data = null!;
+
+            try
+            {
+                ResultBuffer rb = line.GetXDataForApplication(WallSegmentAppName);
+                if (rb == null) return false;
+
+                string? segmentId = null;
+                List<double> values = new List<double>();
+
+                foreach (TypedValue tv in rb)
+                {
+                    if (tv.TypeCode == (int)DxfCode.ExtendedDataAsciiString && segmentId == null)
+                        segmentId = tv.Value as string;
+                    else if (tv.TypeCode == (int)DxfCode.ExtendedDataReal && tv.Value != null)
+                        values.Add(Convert.ToDouble(tv.Value));
+                }
+
+                if (string.IsNullOrEmpty(segmentId) || values.Count < 18) return false;
+
+                data = new WallSegmentData
+                {
+                    SegmentId = segmentId,
+                    CenterStart = new Point3d(values[0], values[1], values[2]),
+                    CenterEnd = new Point3d(values[3], values[4], values[5]),
+                    SideAStart = new Point3d(values[6], values[7], values[8]),
+                    SideAEnd = new Point3d(values[9], values[10], values[11]),
+                    SideBStart = new Point3d(values[12], values[13], values[14]),
+                    SideBEnd = new Point3d(values[15], values[16], values[17])
+                };
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #region 1. TÍNH TOÁN & TẠO LINE
@@ -221,6 +371,30 @@ namespace Tools.VinaCad.Helper.Helper
             return lineIds;
         }
 
+        public static void EraseEntities(Database db, IEnumerable<ObjectId> entityIds)
+        {
+            if (entityIds == null) return;
+
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                try
+                {
+                    foreach (ObjectId id in entityIds.Distinct())
+                    {
+                        DBObject obj = tr.GetObject(id, OpenMode.ForWrite);
+                        if (obj != null && !obj.IsErased) obj.Erase();
+                    }
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Abort();
+                    throw;
+                }
+            }
+        }
+
         private static ObjectId GetOrCreateLayer(Database db, Transaction tr, string layerName)
         {
             LayerTable layerTable = tr.GetObject(db.LayerTableId, OpenMode.ForRead) as LayerTable;
@@ -258,11 +432,14 @@ namespace Tools.VinaCad.Helper.Helper
         }
         #endregion
 
-        #region 2. CSG CLEANUP (THE UNIVERSAL ALGORITHM)
+        #region 2. TOPOLOGY & LOCAL CSG
         public static List<IntersectionInfo> FindWallIntersections(
             Database db, Point3d line1Start, Point3d line1End, Point3d line2Start, Point3d line2End, string wallLayerName)
         {
             List<IntersectionInfo> intersections = new List<IntersectionInfo>();
+            WallSegmentData newWall = CreateWallSegmentData(
+                "__NEW_WALL__", line1Start, line1End, line2Start, line2End);
+
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 try
@@ -271,31 +448,81 @@ namespace Tools.VinaCad.Helper.Helper
                     BlockTableRecord modelSpace = tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForRead) as BlockTableRecord;
                     LayerTable layerTable = tr.GetObject(db.LayerTableId, OpenMode.ForRead) as LayerTable;
 
-                    if (!layerTable.Has(wallLayerName)) return intersections;
+                    if (!layerTable.Has(wallLayerName)) { tr.Commit(); return intersections; }
                     ObjectId targetLayerId = layerTable[wallLayerName];
+
+                    List<WallLineCandidate> tagged = new List<WallLineCandidate>();
+                    List<WallLineCandidate> legacy = new List<WallLineCandidate>();
 
                     foreach (ObjectId objId in modelSpace)
                     {
                         DBObject obj = tr.GetObject(objId, OpenMode.ForRead);
-                        if (obj is Line existingLine && existingLine.LayerId == targetLayerId)
+                        if (!(obj is Line line) || line.LayerId != targetLayerId || IsWallCap(line)) continue;
+                        if (line.StartPoint.DistanceTo(line.EndPoint) <= Tolerance) continue;
+
+                        WallLineCandidate candidate = new WallLineCandidate { LineId = objId, Line = line };
+                        if (TryGetWallSegmentData(line, out WallSegmentData data))
                         {
-                            if (existingLine.StartPoint.DistanceTo(existingLine.EndPoint) <= Tolerance) continue;
-                            intersections.Add(new IntersectionInfo { ExistingLineId = objId });
+                            candidate.Wall = data;
+                            tagged.Add(candidate);
+                        }
+                        else
+                        {
+                            legacy.Add(candidate);
                         }
                     }
+
+                    foreach (IGrouping<string, WallLineCandidate> group in tagged.GroupBy(x => x.Wall.SegmentId))
+                    {
+                        WallSegmentData existingWall = group.First().Wall;
+                        if (!WallFootprintsOverlap(newWall, existingWall)) continue;
+
+                        bool isEndJunction = TryFindEndpointConnection(
+                            newWall, existingWall,
+                            out _, out bool existingAtStart);
+
+                        List<WallLineCandidate> local = group
+                            .Where(x => SegmentTouchesWallFootprint(x.Line.StartPoint, x.Line.EndPoint, newWall) ||
+                                        (isEndJunction && LineBelongsToEndpoint(x.Line, existingWall, existingAtStart)))
+                            .ToList();
+
+                        // Trường hợp đoạn mới nằm hoàn toàn trong footprint tường cũ: vẫn cần
+                        // chạy CSG để xóa hai biên mới, dù không có cạnh nào cắt trực tiếp.
+                        if (local.Count == 0)
+                        {
+                            WallLineCandidate nearest = group
+                                .OrderBy(x => DistancePointToSegment(newWall.CenterStart, x.Line.StartPoint, x.Line.EndPoint))
+                                .First();
+                            local.Add(nearest);
+                        }
+
+                        intersections.AddRange(local.Select(x => new IntersectionInfo { ExistingLineId = x.LineId }));
+                    }
+
+                    // Bản vẽ cũ chưa có XData chỉ được xử lý khi line thực sự cắt footprint.
+                    // Không suy đoán cặp mặt bằng khoảng cách vì đó là nguồn gây ghép nhầm.
+                    foreach (WallLineCandidate candidate in legacy)
+                    {
+                        if (SegmentTouchesWallFootprint(candidate.Line.StartPoint, candidate.Line.EndPoint, newWall))
+                            intersections.Add(new IntersectionInfo { ExistingLineId = candidate.LineId });
+                    }
+
                     tr.Commit();
                 }
                 catch (Exception ex) { tr.Abort(); throw new Exception($"Error finding intersections: {ex.Message}", ex); }
             }
-            return intersections;
+
+            return intersections
+                .GroupBy(x => x.ExistingLineId)
+                .Select(x => x.First())
+                .ToList();
         }
 
-        private class MatchData
+        private sealed class WallLineCandidate
         {
-            public Point3d Intersection;
-            public ObjectId TargetId;
-            public bool IsCorner;
-            public double Score;
+            public ObjectId LineId;
+            public Line Line = null!;
+            public WallSegmentData Wall = null!;
         }
 
         public static void CleanupIntersections(
@@ -303,111 +530,143 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (intersections == null || intersections.Count == 0 || newWallLineIds.Count < 2) return;
 
-            double maxRadius = Math.Max(400.0, thickness * 6.0);
-
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 try
                 {
-                    BlockTable blockTable = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-                    BlockTableRecord modelSpace = tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                    BlockTable blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+                    BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(
+                        blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                    List<Line> newLines = newWallLineIds.Select(id => tr.GetObject(id, OpenMode.ForWrite) as Line).Where(l => l != null).ToList();
-                    List<Line> exLines = intersections.Select(i => tr.GetObject(i.ExistingLineId, OpenMode.ForWrite) as Line).Distinct().Where(l => l != null).ToList();
+                    List<Line> newLines = newWallLineIds
+                        .Select(id => tr.GetObject(id, OpenMode.ForWrite) as Line)
+                        .OfType<Line>()
+                        .Where(line => !line.IsErased)
+                        .ToList();
+                    List<Line> existingLines = intersections
+                        .Select(i => tr.GetObject(i.ExistingLineId, OpenMode.ForWrite) as Line)
+                        .OfType<Line>()
+                        .Where(line => !line.IsErased && !IsWallCap(line))
+                        .GroupBy(line => line.ObjectId)
+                        .Select(g => g.First())
+                        .ToList();
 
-                    List<Line> allLines = new List<Line>();
-                    allLines.AddRange(newLines);
-                    allLines.AddRange(exLines);
-
-                    // Đọc XData 1 lần cho mỗi line, tránh đọc lặp lại trong vòng lặp lồng nhau bên dưới
-                    Dictionary<ObjectId, string> sideMap = allLines.ToDictionary(l => l.ObjectId, l => GetWallSideMarker(l));
-
-                    // PHASE 1: SMART SNAP (Chữa lành Góc chữ L và điểm dừng của Ngã 3)
-
-                    switch (alignment)
+                    if (newLines.Count < 2 || !TryGetWallSegmentData(newLines[0], out WallSegmentData newWall))
                     {
-                        case WallAlignment.Center:
-                            SnapCornersCenter(newLines, allLines, sideMap, maxRadius);
-                            break;
-                        case WallAlignment.Left:
-                            SnapCornersLeft(newLines, allLines, sideMap, maxRadius);
-                            break;
-                        case WallAlignment.Right:
-                            SnapCornersRight(newLines, allLines, sideMap, maxRadius);
-                            break;
-                        default:
-                            SnapCornersCenter(newLines, allLines, sideMap, maxRadius);
-                            break;
+                        tr.Commit();
+                        return;
                     }
 
-                    // PHASE 2 & 3: TÌM VẾT CẮT THỰC TẾ VÀ ĐỤC LỖ RỖNG BẰNG TOÁN CSG
-                    Dictionary<ObjectId, List<Point3d>> lineCuts = new Dictionary<ObjectId, List<Point3d>>();
-                    foreach (var l in allLines) lineCuts[l.ObjectId] = new List<Point3d>();
+                    Dictionary<string, WallSegmentData> wallData = new Dictionary<string, WallSegmentData>
+                    {
+                        [newWall.SegmentId] = newWall
+                    };
+
+                    foreach (Line line in existingLines)
+                    {
+                        if (TryGetWallSegmentData(line, out WallSegmentData data))
+                            wallData[data.SegmentId] = data;
+                    }
+
+                    // Chỉ junction endpoint-endpoint mới được miter. T và X giữ nguyên
+                    // endpoint; phần giao được giải quyết bởi local CSG phía dưới.
+                    foreach (WallSegmentData targetWall in wallData.Values.Where(x => x.SegmentId != newWall.SegmentId))
+                    {
+                        if (TryFindEndpointConnection(
+                            newWall, targetWall,
+                            out bool newAtStart, out bool targetAtStart))
+                        {
+                            MiterEndpointJunction(
+                                newLines, existingLines,
+                                newWall, targetWall,
+                                newAtStart, targetAtStart);
+                        }
+                    }
+
+                    // Xử lý line hiện hữu trước để khi hai đoạn đồng tuyến chồng nhau,
+                    // phần trùng giữ metadata cũ ổn định thay vì đổi chủ sở hữu tùy lượt vẽ.
+                    List<Line> allLines = existingLines
+                        .Concat(newLines)
+                        .GroupBy(l => l.ObjectId)
+                        .Select(g => g.First())
+                        .ToList();
+
+                    Dictionary<ObjectId, string> ownerMap = new Dictionary<ObjectId, string>();
+                    foreach (Line line in allLines)
+                    {
+                        ownerMap[line.ObjectId] = TryGetWallSegmentData(line, out WallSegmentData data)
+                            ? data.SegmentId
+                            : $"LEGACY_{line.ObjectId}";
+                    }
+
+                    Dictionary<ObjectId, List<Point3d>> lineCuts = allLines
+                        .ToDictionary(line => line.ObjectId, line => new List<Point3d>());
 
                     for (int i = 0; i < allLines.Count; i++)
                     {
                         for (int j = i + 1; j < allLines.Count; j++)
                         {
-                            Line L1 = allLines[i]; Line L2 = allLines[j];
-                            Vector3d dir1 = (L1.EndPoint - L1.StartPoint).GetNormal();
-                            Vector3d dir2 = (L2.EndPoint - L2.StartPoint).GetNormal();
-                            if (Math.Abs(dir1.DotProduct(dir2)) > 0.99) continue;
+                            Line first = allLines[i];
+                            Line second = allLines[j];
+                            if (ownerMap[first.ObjectId] == ownerMap[second.ObjectId]) continue;
 
-                            if (GetTrueIntersection(L1.StartPoint, L1.EndPoint, L2.StartPoint, L2.EndPoint, out Point3d I))
+                            if (TryGetFiniteIntersection(
+                                first.StartPoint, first.EndPoint,
+                                second.StartPoint, second.EndPoint,
+                                out Point3d intersection))
                             {
-                                if (IsPointOnSegment(I, L1.StartPoint, L1.EndPoint, 1.0) && IsPointOnSegment(I, L2.StartPoint, L2.EndPoint, 1.0))
-                                {
-                                    lineCuts[L1.ObjectId].Add(I);
-                                    lineCuts[L2.ObjectId].Add(I);
-                                }
+                                lineCuts[first.ObjectId].Add(intersection);
+                                lineCuts[second.ObjectId].Add(intersection);
+                            }
+                            else
+                            {
+                                AddSharedCollinearCuts(first, second, lineCuts);
                             }
                         }
                     }
 
-                    List<ObjectId> toErase = new List<ObjectId>();
+                    List<(Point3d Start, Point3d End)> createdSegments =
+                        new List<(Point3d Start, Point3d End)>();
 
-                    foreach (var line in allLines)
+                    foreach (Line line in allLines)
                     {
-                        var cuts = lineCuts[line.ObjectId];
+                        List<Point3d> cuts = lineCuts[line.ObjectId];
                         cuts.Add(line.StartPoint);
                         cuts.Add(line.EndPoint);
 
-                        var sortedCuts = cuts.OrderBy(p => p.DistanceTo(line.StartPoint)).ToList();
-                        var uniqueCuts = new List<Point3d>();
-                        foreach (var c in sortedCuts)
-                        {
-                            if (uniqueCuts.Count == 0 || uniqueCuts.Last().DistanceTo(c) > Tolerance)
-                                uniqueCuts.Add(c);
-                        }
+                        List<Point3d> uniqueCuts = cuts
+                            .OrderBy(p => p.DistanceTo(line.StartPoint))
+                            .Aggregate(new List<Point3d>(), (result, point) =>
+                            {
+                                if (result.Count == 0 || result.Last().DistanceTo(point) > Tolerance)
+                                    result.Add(point);
+                                return result;
+                            });
 
                         for (int i = 0; i < uniqueCuts.Count - 1; i++)
                         {
-                            Point3d p1 = uniqueCuts[i];
-                            Point3d p2 = uniqueCuts[i + 1];
-                            if (p1.DistanceTo(p2) < Tolerance) continue;
+                            Point3d first = uniqueCuts[i];
+                            Point3d second = uniqueCuts[i + 1];
+                            if (first.DistanceTo(second) <= Tolerance) continue;
 
-                            Point3d mid = new Point3d((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2, (p1.Z + p2.Z) / 2);
+                            Point3d midpoint = MidPoint(first, second);
+                            string ownerId = ownerMap[line.ObjectId];
 
-                            // BỘ LỌC ĐỤC LỖ: CSG Boolean
-                            if (!IsInsideAnyWall(mid, allLines, line.ObjectId, thickness))
-                            {
-                                Line newSeg = new Line(p1, p2) { LayerId = line.LayerId };
-                                modelSpace.AppendEntity(newSeg);
-                                tr.AddNewlyCreatedDBObject(newSeg, true);
+                            if (IsInsideAnotherWall(midpoint, ownerId, wallData.Values)) continue;
+                            if (createdSegments.Any(segment => SameUndirectedSegment(
+                                first, second, segment.Start, segment.End))) continue;
 
-                                // Giữ nguyên tag Side của line gốc cho đoạn mới, nếu không
-                                // đoạn này sẽ thành "vô danh" và Phase 1 của lần vẽ tiếp theo
-                                // lại có thể ghép nhầm mặt như trước khi fix.
-                                CopyWallMetadata(tr, db, line, newSeg);
-                            }
+                            Line replacement = new Line(first, second) { LayerId = line.LayerId };
+                            modelSpace.AppendEntity(replacement);
+                            tr.AddNewlyCreatedDBObject(replacement, true);
+                            CopyWallMetadata(tr, db, line, replacement);
+                            createdSegments.Add((first, second));
                         }
-                        toErase.Add(line.ObjectId);
                     }
 
-                    foreach (var id in toErase)
+                    foreach (Line line in allLines)
                     {
-                        DBObject obj = tr.GetObject(id, OpenMode.ForWrite);
-                        if (obj != null && !obj.IsErased) obj.Erase();
+                        if (!line.IsErased) line.Erase();
                     }
 
                     tr.Commit();
@@ -416,146 +675,286 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void SnapCornersCenter(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
+        private static void MiterEndpointJunction(
+            List<Line> newLines,
+            List<Line> existingLines,
+            WallSegmentData newWall,
+            WallSegmentData targetWall,
+            bool newAtStart,
+            bool targetAtStart)
         {
-            foreach (Line newLine in newLines)
-                ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: false);
-        }
+            bool preservePhysicalSide = newAtStart != targetAtStart;
+            string[] sides = { SideA, SideB };
 
-        private static void SnapCornersLeft(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
-        {
-            foreach (Line newLine in newLines)
-                ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: true);
-        }
-
-
-        private static void SnapCornersRight(List<Line> newLines, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius)
-        {
-            foreach (Line newLine in newLines)
-                ProcessLineEndpoints(newLine, allLines, sideMap, maxRadius, restrictCornerToSameSide: true);
-        }
-
-        private static void ProcessLineEndpoints(Line newLine, List<Line> allLines, Dictionary<ObjectId, string> sideMap, double maxRadius, bool restrictCornerToSameSide)
-        {
-            string sideN = sideMap.ContainsKey(newLine.ObjectId) ? sideMap[newLine.ObjectId] : null;
-            Point3d[] endpoints = { newLine.StartPoint, newLine.EndPoint };
-
-            for (int e = 0; e < 2; e++)
+            foreach (string newSide in sides)
             {
-                Point3d P = endpoints[e];
-                Point3d otherPt = (e == 0) ? newLine.EndPoint : newLine.StartPoint;
-                MatchData bestCorner = null;
-                MatchData bestT = null;
+                bool newSideIsLeft = IsBoundaryOnLeft(newWall, newSide);
+                bool targetMustBeLeft = preservePhysicalSide
+                    ? newSideIsLeft
+                    : !newSideIsLeft;
+                string targetSide = sides.First(side =>
+                    IsBoundaryOnLeft(targetWall, side) == targetMustBeLeft);
 
-                foreach (Line target in allLines)
+                newWall.GetBoundary(newSide, out Point3d newBoundaryStart, out Point3d newBoundaryEnd);
+                targetWall.GetBoundary(targetSide, out Point3d targetBoundaryStart, out Point3d targetBoundaryEnd);
+
+                if (!GetTrueIntersection(
+                    newBoundaryStart, newBoundaryEnd,
+                    targetBoundaryStart, targetBoundaryEnd,
+                    out Point3d intersection))
                 {
-                    if (target.ObjectId == newLine.ObjectId) continue;
-
-                    Vector3d dirN = (newLine.EndPoint - newLine.StartPoint).GetNormal();
-                    Vector3d dirT = (target.EndPoint - target.StartPoint).GetNormal();
-                    if (Math.Abs(dirN.DotProduct(dirT)) > 0.99) continue;
-
-                    if (GetTrueIntersection(newLine.StartPoint, newLine.EndPoint, target.StartPoint, target.EndPoint, out Point3d I))
-                    {
-                        double dA = P.DistanceTo(I);
-                        if (dA > maxRadius) continue;
-
-                        double dB_start = I.DistanceTo(target.StartPoint);
-                        double dB_end = I.DistanceTo(target.EndPoint);
-                        double dB = Math.Min(dB_start, dB_end);
-
-                        bool onSegmentB = IsPointOnSegment(I, target.StartPoint, target.EndPoint, 1.0);
-
-                        if (dB < maxRadius)
-                        {
-                            if (restrictCornerToSameSide)
-                            {
-                                string sideT = sideMap.ContainsKey(target.ObjectId) ? sideMap[target.ObjectId] : null;
-                                if (sideN != null && sideT != null && sideN != sideT) continue;
-                            }
-
-                            // Góc L: Ép khép góc Ngoài-Ngoài, Trong-Trong bằng tổng khoảng cách ngắn nhất
-                            double score = dA + dB;
-                            if (bestCorner == null || score < bestCorner.Score)
-                                bestCorner = new MatchData { Intersection = I, TargetId = target.ObjectId, IsCorner = true, Score = score };
-                        }
-                        else if (onSegmentB)
-                        {
-                            // DEEP FIX T-JUNCTION: Bắt buộc đâm tới Mép Xa (Far Face)
-                            // Bằng cách chọn giao điểm làm cho độ dài đoạn thẳng là DÀI NHẤT
-                            double score = -I.DistanceTo(otherPt);
-
-                            if (bestT == null || score < bestT.Score)
-                                bestT = new MatchData { Intersection = I, TargetId = target.ObjectId, IsCorner = false, Score = score };
-                        }
-                    }
+                    continue;
                 }
 
-                MatchData bestMatch = bestCorner ?? bestT; // Ưu tiên Góc L hơn Ngã 3
+                newWall.GetEndpointFace(newAtStart, out Point3d newAEnd, out Point3d newBEnd);
+                targetWall.GetEndpointFace(targetAtStart, out Point3d targetAEnd, out Point3d targetBEnd);
+                Point3d expectedNewEnd = newSide == SideA ? newAEnd : newBEnd;
+                Point3d expectedTargetEnd = targetSide == SideA ? targetAEnd : targetBEnd;
 
-                if (bestMatch != null)
+                double miterLimit = Math.Max(newWall.Width, targetWall.Width) * 10.0 + 1.0;
+                if (intersection.DistanceTo(expectedNewEnd) > miterLimit ||
+                    intersection.DistanceTo(expectedTargetEnd) > miterLimit)
                 {
-                    if (e == 0) newLine.StartPoint = bestMatch.Intersection;
-                    else newLine.EndPoint = bestMatch.Intersection;
+                    continue;
+                }
 
-                    if (bestMatch.IsCorner)
-                    {
-                        Line targetLine = allLines.First(l => l.ObjectId == bestMatch.TargetId);
-                        if (bestMatch.Intersection.DistanceTo(targetLine.StartPoint) < bestMatch.Intersection.DistanceTo(targetLine.EndPoint))
-                            targetLine.StartPoint = bestMatch.Intersection;
-                        else
-                            targetLine.EndPoint = bestMatch.Intersection;
-                    }
+                Line newLine = newLines.FirstOrDefault(line => GetWallSideMarker(line) == newSide);
+                Line targetLine = existingLines
+                    .Where(line => GetWallSegmentId(line) == targetWall.SegmentId &&
+                                   GetWallSideMarker(line) == targetSide)
+                    .OrderBy(line => Math.Min(
+                        line.StartPoint.DistanceTo(expectedTargetEnd),
+                        line.EndPoint.DistanceTo(expectedTargetEnd)))
+                    .FirstOrDefault();
+
+                if (newLine == null || targetLine == null) continue;
+
+                if (newAtStart) newLine.StartPoint = intersection;
+                else newLine.EndPoint = intersection;
+
+                if (targetLine.StartPoint.DistanceTo(expectedTargetEnd) <=
+                    targetLine.EndPoint.DistanceTo(expectedTargetEnd))
+                    targetLine.StartPoint = intersection;
+                else
+                    targetLine.EndPoint = intersection;
+            }
+        }
+
+        private static bool TryFindEndpointConnection(
+            WallSegmentData first,
+            WallSegmentData second,
+            out bool firstAtStart,
+            out bool secondAtStart)
+        {
+            firstAtStart = false;
+            secondAtStart = false;
+            double bestScore = double.MaxValue;
+            bool found = false;
+
+            for (int firstEnd = 0; firstEnd < 2; firstEnd++)
+            {
+                for (int secondEnd = 0; secondEnd < 2; secondEnd++)
+                {
+                    bool firstStart = firstEnd == 0;
+                    bool secondStart = secondEnd == 0;
+                    first.GetEndpointFace(firstStart, out Point3d firstA, out Point3d firstB);
+                    second.GetEndpointFace(secondStart, out Point3d secondA, out Point3d secondB);
+
+                    if (!SegmentsIntersectInclusive(firstA, firstB, secondA, secondB)) continue;
+
+                    double score = MidPoint(firstA, firstB).DistanceTo(MidPoint(secondA, secondB));
+                    if (score >= bestScore) continue;
+
+                    bestScore = score;
+                    firstAtStart = firstStart;
+                    secondAtStart = secondStart;
+                    found = true;
                 }
             }
+
+            return found;
+        }
+
+        private static bool LineBelongsToEndpoint(Line line, WallSegmentData wall, bool atStart)
+        {
+            wall.GetEndpointFace(atStart, out Point3d sideA, out Point3d sideB);
+            double localRadius = Math.Max(wall.Width * 10.0 + 1.0, 1.0);
+
+            return Math.Min(line.StartPoint.DistanceTo(sideA), line.EndPoint.DistanceTo(sideA)) <= localRadius ||
+                   Math.Min(line.StartPoint.DistanceTo(sideB), line.EndPoint.DistanceTo(sideB)) <= localRadius;
+        }
+
+        private static bool IsBoundaryOnLeft(WallSegmentData wall, string side)
+        {
+            wall.GetBoundary(side, out Point3d boundaryStart, out Point3d boundaryEnd);
+            Vector3d direction = wall.CenterEnd - wall.CenterStart;
+            Point3d centerMidpoint = MidPoint(wall.CenterStart, wall.CenterEnd);
+            Point3d boundaryMidpoint = MidPoint(boundaryStart, boundaryEnd);
+            Vector3d offset = boundaryMidpoint - centerMidpoint;
+            return direction.X * offset.Y - direction.Y * offset.X > 0.0;
+        }
+
+        private static void AddSharedCollinearCuts(
+            Line first,
+            Line second,
+            Dictionary<ObjectId, List<Point3d>> lineCuts)
+        {
+            if (Math.Abs(Cross2d(first.StartPoint, first.EndPoint, second.StartPoint)) > Tolerance ||
+                Math.Abs(Cross2d(first.StartPoint, first.EndPoint, second.EndPoint)) > Tolerance)
+            {
+                return;
+            }
+
+            Point3d[] endpoints =
+            {
+                first.StartPoint,
+                first.EndPoint,
+                second.StartPoint,
+                second.EndPoint
+            };
+
+            foreach (Point3d endpoint in endpoints)
+            {
+                if (!IsPointOnSegment2d(endpoint, first.StartPoint, first.EndPoint) ||
+                    !IsPointOnSegment2d(endpoint, second.StartPoint, second.EndPoint))
+                {
+                    continue;
+                }
+
+                lineCuts[first.ObjectId].Add(endpoint);
+                lineCuts[second.ObjectId].Add(endpoint);
+            }
+        }
+
+        private static bool SameUndirectedSegment(
+            Point3d firstStart,
+            Point3d firstEnd,
+            Point3d secondStart,
+            Point3d secondEnd)
+        {
+            return (firstStart.DistanceTo(secondStart) <= Tolerance &&
+                    firstEnd.DistanceTo(secondEnd) <= Tolerance) ||
+                   (firstStart.DistanceTo(secondEnd) <= Tolerance &&
+                    firstEnd.DistanceTo(secondStart) <= Tolerance);
+        }
+
+        private static bool IsInsideAnotherWall(
+            Point3d point,
+            string ownerSegmentId,
+            IEnumerable<WallSegmentData> walls)
+        {
+            foreach (WallSegmentData wall in walls)
+            {
+                if (wall.SegmentId == ownerSegmentId) continue;
+                if (IsPointInPolygon(point, wall.Outline, includeBoundary: false)) return true;
+            }
+
+            return false;
         }
         #endregion
 
         #region 3. HÀM TOÁN HỌC HỖ TRỢ (MATH UTILS)
-        private static bool IsInsideAnyWall(Point3d pt, List<Line> allLines, ObjectId selfId, double thickness)
+        private static bool WallFootprintsOverlap(WallSegmentData first, WallSegmentData second)
         {
-            double minW = Math.Min(5.0, thickness * 0.2);
-            double maxW = Math.Max(600.0, thickness * 4.0);
+            Point3d[] firstOutline = first.Outline;
+            Point3d[] secondOutline = second.Outline;
 
-            for (int i = 0; i < allLines.Count; i++)
+            for (int i = 0; i < firstOutline.Length; i++)
             {
-                for (int j = i + 1; j < allLines.Count; j++)
+                Point3d firstStart = firstOutline[i];
+                Point3d firstEnd = firstOutline[(i + 1) % firstOutline.Length];
+
+                for (int j = 0; j < secondOutline.Length; j++)
                 {
-                    Line e1 = allLines[i]; Line e2 = allLines[j];
-                    if (e1.ObjectId == selfId || e2.ObjectId == selfId) continue;
-
-                    Vector3d dir1 = (e1.EndPoint - e1.StartPoint).GetNormal();
-                    Vector3d dir2 = (e2.EndPoint - e2.StartPoint).GetNormal();
-
-                    if (Math.Abs(dir1.DotProduct(dir2)) > 0.99)
-                    {
-                        double w = DistanceLineToLine(e1, e2);
-                        if (w > minW && w < maxW)
-                        {
-                            double d1 = DistancePointToLine(pt, e1);
-                            double d2 = DistancePointToLine(pt, e2);
-
-                            if (Math.Abs((d1 + d2) - w) < 2.0)
-                            {
-                                if (IsPointStrictlyOnSegment(GetProjectedPoint(pt, e1), e1.StartPoint, e1.EndPoint, 5.0) &&
-                                    IsPointStrictlyOnSegment(GetProjectedPoint(pt, e2), e2.StartPoint, e2.EndPoint, 5.0))
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                    Point3d secondStart = secondOutline[j];
+                    Point3d secondEnd = secondOutline[(j + 1) % secondOutline.Length];
+                    if (SegmentsIntersectInclusive(firstStart, firstEnd, secondStart, secondEnd)) return true;
                 }
             }
+
+            return IsPointInPolygon(firstOutline[0], secondOutline, includeBoundary: true) ||
+                   IsPointInPolygon(secondOutline[0], firstOutline, includeBoundary: true);
+        }
+
+        private static bool SegmentTouchesWallFootprint(Point3d start, Point3d end, WallSegmentData wall)
+        {
+            Point3d[] outline = wall.Outline;
+            for (int i = 0; i < outline.Length; i++)
+            {
+                if (SegmentsIntersectInclusive(start, end, outline[i], outline[(i + 1) % outline.Length]))
+                    return true;
+            }
+
+            return IsPointInPolygon(start, outline, includeBoundary: true) ||
+                   IsPointInPolygon(end, outline, includeBoundary: true) ||
+                   IsPointInPolygon(MidPoint(start, end), outline, includeBoundary: true);
+        }
+
+        private static bool IsPointInPolygon(Point3d point, Point3d[] polygon, bool includeBoundary)
+        {
+            bool inside = false;
+
+            for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
+            {
+                Point3d first = polygon[j];
+                Point3d second = polygon[i];
+
+                if (IsPointOnSegment2d(point, first, second)) return includeBoundary;
+
+                bool crossesRay = (second.Y > point.Y) != (first.Y > point.Y);
+                if (!crossesRay) continue;
+
+                double xAtPointY =
+                    (first.X - second.X) * (point.Y - second.Y) /
+                    (first.Y - second.Y) + second.X;
+                if (point.X < xAtPointY) inside = !inside;
+            }
+
+            return inside;
+        }
+
+        private static bool SegmentsIntersectInclusive(Point3d p1, Point3d p2, Point3d p3, Point3d p4)
+        {
+            double c1 = Cross2d(p1, p2, p3);
+            double c2 = Cross2d(p1, p2, p4);
+            double c3 = Cross2d(p3, p4, p1);
+            double c4 = Cross2d(p3, p4, p2);
+
+            bool properIntersection =
+                ((c1 > Tolerance && c2 < -Tolerance) || (c1 < -Tolerance && c2 > Tolerance)) &&
+                ((c3 > Tolerance && c4 < -Tolerance) || (c3 < -Tolerance && c4 > Tolerance));
+            if (properIntersection) return true;
+
+            if (Math.Abs(c1) <= Tolerance && IsPointOnSegment2d(p3, p1, p2)) return true;
+            if (Math.Abs(c2) <= Tolerance && IsPointOnSegment2d(p4, p1, p2)) return true;
+            if (Math.Abs(c3) <= Tolerance && IsPointOnSegment2d(p1, p3, p4)) return true;
+            if (Math.Abs(c4) <= Tolerance && IsPointOnSegment2d(p2, p3, p4)) return true;
+
             return false;
         }
 
-        private static bool IsPointStrictlyOnSegment(Point3d pt, Point3d start, Point3d end, double padding)
+        private static bool IsPointOnSegment2d(Point3d point, Point3d start, Point3d end)
         {
-            if (!IsPointOnSegment(pt, start, end, 1.0)) return false;
-            if (pt.DistanceTo(start) < padding) return false;
-            if (pt.DistanceTo(end) < padding) return false;
-            return true;
+            if (Math.Abs(Cross2d(start, end, point)) > Tolerance) return false;
+
+            return point.X >= Math.Min(start.X, end.X) - Tolerance &&
+                   point.X <= Math.Max(start.X, end.X) + Tolerance &&
+                   point.Y >= Math.Min(start.Y, end.Y) - Tolerance &&
+                   point.Y <= Math.Max(start.Y, end.Y) + Tolerance;
+        }
+
+        private static double Cross2d(Point3d start, Point3d end, Point3d point)
+        {
+            return (end.X - start.X) * (point.Y - start.Y) -
+                   (end.Y - start.Y) * (point.X - start.X);
+        }
+
+        private static bool TryGetFiniteIntersection(
+            Point3d p1, Point3d p2, Point3d p3, Point3d p4, out Point3d intersection)
+        {
+            return GetTrueIntersection(p1, p2, p3, p4, out intersection) &&
+                   IsPointOnSegment(intersection, p1, p2, 0.01) &&
+                   IsPointOnSegment(intersection, p3, p4, 0.01);
         }
 
         private static bool GetTrueIntersection(Point3d p1, Point3d p2, Point3d p3, Point3d p4, out Point3d intersection)
@@ -577,22 +976,19 @@ namespace Tools.VinaCad.Helper.Helper
             return Math.Abs((pt.DistanceTo(start) + pt.DistanceTo(end)) - start.DistanceTo(end)) <= tolerance;
         }
 
-        private static double DistancePointToLine(Point3d pt, Line line)
+        private static double DistancePointToSegment(Point3d point, Point3d start, Point3d end)
         {
-            Vector3d dir = (line.EndPoint - line.StartPoint).GetNormal();
-            Vector3d v = pt - line.StartPoint;
-            return (v - dir * v.DotProduct(dir)).Length;
+            Vector3d segment = end - start;
+            double lengthSquared = segment.DotProduct(segment);
+            if (lengthSquared <= Tolerance * Tolerance) return point.DistanceTo(start);
+
+            Vector3d fromStart = point - start;
+            double ratio = fromStart.DotProduct(segment) / lengthSquared;
+            ratio = Math.Max(0.0, Math.Min(1.0, ratio));
+            Point3d projected = start + segment * ratio;
+            return point.DistanceTo(projected);
         }
 
-        private static Point3d GetProjectedPoint(Point3d pt, Line line)
-        {
-            Vector3d dir = (line.EndPoint - line.StartPoint).GetNormal();
-            Vector3d v = pt - line.StartPoint;
-            double projLen = v.DotProduct(dir);
-            return line.StartPoint + dir * projLen;
-        }
-
-        private static double DistanceLineToLine(Line l1, Line l2) { return DistancePointToLine(l1.StartPoint, l2); }
         public static Point2d ToPoint2d(Point3d pt) { return new Point2d(pt.X, pt.Y); }
         public static Point3d ToPoint3d(Point2d pt) { return new Point3d(pt.X, pt.Y, 0); }
         #endregion
@@ -600,7 +996,7 @@ namespace Tools.VinaCad.Helper.Helper
         #region 4. BO ĐẦU TƯỜNG (END CAP)
         public static void CapFreeEnd(Database db, Point3d vertex, double thickness, string wallLayerName)
         {
-            double searchRadius = Math.Max(thickness, 1.0) + 5.0;
+            double pickTolerance = Math.Max(1.0, thickness * 0.01);
 
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -613,66 +1009,80 @@ namespace Tools.VinaCad.Helper.Helper
                     if (!layerTable.Has(wallLayerName)) { tr.Commit(); return; }
                     ObjectId targetLayerId = layerTable[wallLayerName];
 
-                    // Thu thập các đầu mút (kèm line sở hữu) nằm trong bán kính quanh vertex
-                    List<EndPointInfo> nearEnds = new List<EndPointInfo>();
+                    List<Line> wallLines = new List<Line>();
+                    List<Line> caps = new List<Line>();
+                    Dictionary<string, WallSegmentData> wallData = new Dictionary<string, WallSegmentData>();
 
                     foreach (ObjectId objId in modelSpace)
                     {
                         DBObject obj = tr.GetObject(objId, OpenMode.ForRead);
-                        if (obj is Line ln && ln.LayerId == targetLayerId)
-                        {
-                            if (ln.StartPoint.DistanceTo(ln.EndPoint) <= Tolerance) continue;
-                            Vector3d dir = (ln.EndPoint - ln.StartPoint).GetNormal();
+                        if (!(obj is Line line) || line.LayerId != targetLayerId) continue;
+                        if (line.StartPoint.DistanceTo(line.EndPoint) <= Tolerance) continue;
 
-                            if (ln.StartPoint.DistanceTo(vertex) <= searchRadius)
-                                nearEnds.Add(new EndPointInfo { Pt = ln.StartPoint, LineId = objId, Dir = dir });
-                            if (ln.EndPoint.DistanceTo(vertex) <= searchRadius)
-                                nearEnds.Add(new EndPointInfo { Pt = ln.EndPoint, LineId = objId, Dir = dir });
+                        if (IsWallCap(line))
+                        {
+                            caps.Add(line);
+                            continue;
+                        }
+
+                        wallLines.Add(line);
+                        if (TryGetWallSegmentData(line, out WallSegmentData data))
+                            wallData[data.SegmentId] = data;
+                    }
+
+                    WallSegmentData selectedWall = null;
+                    bool selectedAtStart = false;
+                    double bestDistance = double.MaxValue;
+
+                    foreach (WallSegmentData data in wallData.Values)
+                    {
+                        for (int endpoint = 0; endpoint < 2; endpoint++)
+                        {
+                            bool atStart = endpoint == 0;
+                            data.GetEndpointFace(atStart, out Point3d sideA, out Point3d sideB);
+                            double distance = DistancePointToSegment(vertex, sideA, sideB);
+                            if (distance > pickTolerance || distance >= bestDistance) continue;
+
+                            selectedWall = data;
+                            selectedAtStart = atStart;
+                            bestDistance = distance;
                         }
                     }
 
-                    // Gom theo line (mỗi line chỉ tính 1 đầu mút gần vertex nhất, phòng khi
-                    // line rất ngắn và cả 2 đầu đều lọt vào bán kính tìm kiếm)
-                    var byLine = nearEnds
-                        .GroupBy(x => x.LineId)
-                        .Select(g => g.OrderBy(x => x.Pt.DistanceTo(vertex)).First())
-                        .ToList();
-
-                    // Đúng 2 đường hội tụ tại đây => đầu tường tự do => bo đầu.
-                    // Khác 2 (1, 3, 4...) => không phải đầu tự do đơn lẻ, bỏ qua.
-                    if (byLine.Count == 2)
+                    if (selectedWall == null ||
+                        IsEndpointConnectedToAnotherWall(selectedWall, selectedAtStart, wallData.Values))
                     {
-                        var a = byLine[0];
-                        var b = byLine[1];
+                        tr.Commit();
+                        return;
+                    }
 
-                        // Chỉ bo khi 2 đường này gần như song song (đúng là cặp biên của
-                        // CÙNG một bức tường), tránh bo nhầm ở góc/ngã ba lệch tâm.
-                        bool roughlyParallel = Math.Abs(a.Dir.DotProduct(b.Dir)) > 0.9;
-                        double gap = a.Pt.DistanceTo(b.Pt);
+                    selectedWall.GetEndpointFace(selectedAtStart, out Point3d expectedA, out Point3d expectedB);
+                    Line sideALine = FindLineAtEndpoint(wallLines, selectedWall.SegmentId, SideA, expectedA);
+                    Line sideBLine = FindLineAtEndpoint(wallLines, selectedWall.SegmentId, SideB, expectedB);
 
-                        if (roughlyParallel && gap > Tolerance)
-                        {
-                            // Tránh tạo trùng nếu đã có sẵn 1 đường nối y hệt (gọi lại nhiều lần)
-                            bool alreadyCapped = false;
-                            foreach (var e in byLine)
-                            {
-                                DBObject o = tr.GetObject(e.LineId, OpenMode.ForRead);
-                                if (o is Line l &&
-                                    ((l.StartPoint.DistanceTo(a.Pt) <= Tolerance && l.EndPoint.DistanceTo(b.Pt) <= Tolerance) ||
-                                     (l.StartPoint.DistanceTo(b.Pt) <= Tolerance && l.EndPoint.DistanceTo(a.Pt) <= Tolerance)))
-                                {
-                                    alreadyCapped = true;
-                                }
-                            }
+                    if (sideALine == null || sideBLine == null)
+                    {
+                        tr.Commit();
+                        return;
+                    }
 
-                            if (!alreadyCapped)
-                            {
-                                Line cap = new Line(a.Pt, b.Pt) { LayerId = targetLayerId };
-                                modelSpace.AppendEntity(cap);
-                                tr.AddNewlyCreatedDBObject(cap, true);
-                                TagAsCap(tr, db, cap);
-                            }
-                        }
+                    Point3d actualA = sideALine.StartPoint.DistanceTo(expectedA) <= sideALine.EndPoint.DistanceTo(expectedA)
+                        ? sideALine.StartPoint
+                        : sideALine.EndPoint;
+                    Point3d actualB = sideBLine.StartPoint.DistanceTo(expectedB) <= sideBLine.EndPoint.DistanceTo(expectedB)
+                        ? sideBLine.StartPoint
+                        : sideBLine.EndPoint;
+
+                    bool alreadyCapped = caps.Any(cap =>
+                        (cap.StartPoint.DistanceTo(actualA) <= Tolerance && cap.EndPoint.DistanceTo(actualB) <= Tolerance) ||
+                        (cap.StartPoint.DistanceTo(actualB) <= Tolerance && cap.EndPoint.DistanceTo(actualA) <= Tolerance));
+
+                    if (!alreadyCapped && actualA.DistanceTo(actualB) > Tolerance)
+                    {
+                        Line cap = new Line(actualA, actualB) { LayerId = targetLayerId };
+                        modelSpace.AppendEntity(cap);
+                        tr.AddNewlyCreatedDBObject(cap, true);
+                        TagAsCap(tr, db, cap);
                     }
 
                     tr.Commit();
@@ -681,15 +1091,39 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private class EndPointInfo
+        private static Line FindLineAtEndpoint(
+            IEnumerable<Line> lines,
+            string segmentId,
+            string side,
+            Point3d expectedEndpoint)
         {
-            public Point3d Pt;
-            public ObjectId LineId;
-            public Vector3d Dir;
+            return lines
+                .Where(line => GetWallSegmentId(line) == segmentId && GetWallSideMarker(line) == side)
+                .OrderBy(line => Math.Min(
+                    line.StartPoint.DistanceTo(expectedEndpoint),
+                    line.EndPoint.DistanceTo(expectedEndpoint)))
+                .FirstOrDefault();
         }
+
+        private static bool IsEndpointConnectedToAnotherWall(
+            WallSegmentData owner,
+            bool atStart,
+            IEnumerable<WallSegmentData> walls)
+        {
+            owner.GetEndpointFace(atStart, out Point3d sideA, out Point3d sideB);
+
+            foreach (WallSegmentData wall in walls)
+            {
+                if (wall.SegmentId == owner.SegmentId) continue;
+                if (SegmentTouchesWallFootprint(sideA, sideB, wall)) return true;
+            }
+
+            return false;
+        }
+
         public static void RemoveCapAt(Database db, Point3d vertex, double thickness, string wallLayerName)
         {
-            double searchRadius = Math.Max(thickness, 1.0) + 5.0;
+            double pickTolerance = Math.Max(1.0, thickness * 0.01);
 
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -708,7 +1142,7 @@ namespace Tools.VinaCad.Helper.Helper
                         DBObject obj = tr.GetObject(objId, OpenMode.ForRead);
                         if (obj is Line ln && ln.LayerId == targetLayerId && IsWallCap(ln))
                         {
-                            if (ln.StartPoint.DistanceTo(vertex) <= searchRadius || ln.EndPoint.DistanceTo(vertex) <= searchRadius)
+                            if (DistancePointToSegment(vertex, ln.StartPoint, ln.EndPoint) <= pickTolerance)
                                 toErase.Add(objId);
                         }
                     }
