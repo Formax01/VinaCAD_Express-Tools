@@ -38,7 +38,7 @@ namespace Tools.VinaCad.Action.Actions
                     FileName = defaultFileName,
                     Filter = "CSV (*.csv)|*.csv",
                     OverwritePrompt = true,
-                    Title = "エンティティプロパティのエクスポート",
+                    Title = "Export Entity Properties",
                 };
 
                 string? drawingDirectory = Path.GetDirectoryName(document.Name);
@@ -49,7 +49,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (saveDialog.ShowDialog() != true || string.IsNullOrWhiteSpace(saveDialog.FileName))
                 {
-                    document.Editor.WriteMessage("\nCSV エクスポートをキャンセルしました。");
+                    document.Editor.WriteMessage("\nCSV export canceled.");
                     return;
                 }
 
@@ -58,13 +58,13 @@ namespace Tools.VinaCad.Action.Actions
                     File.Exists(filePath))
                 {
                     MessageBoxResult overwriteResult = MessageBox.Show(
-                        $"ファイルは既に存在します:\n{filePath}\n\n上書きしますか？",
-                        "CSV エクスポート",
+                        $"The file already exists:\n{filePath}\n\nDo you want to overwrite it?",
+                        "CSV Export",
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
                     if (overwriteResult != MessageBoxResult.Yes)
                     {
-                        document.Editor.WriteMessage("\nCSV エクスポートをキャンセルしました。");
+                        document.Editor.WriteMessage("\nCSV export canceled.");
                         return;
                     }
                 }
@@ -84,7 +84,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 catch (OperationCanceledException)
                 {
-                    document.Editor.WriteMessage("\nCSV エクスポートをキャンセルしました。");
+                    document.Editor.WriteMessage("\nCSV export canceled.");
                     return;
                 }
                 finally
@@ -92,7 +92,7 @@ namespace Tools.VinaCad.Action.Actions
                     progressWindow.CloseAfterExport();
                 }
 
-                document.Editor.WriteMessage($"\nCSV をエクスポートしました: {filePath}");
+                document.Editor.WriteMessage($"\nCSV exported: {filePath}");
                 OpenCsvFile(filePath);
             }
             catch (Exception ex)

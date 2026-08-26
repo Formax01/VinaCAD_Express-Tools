@@ -549,7 +549,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, "エラー");
+                MessageBox.Show(ex.Message, "Error");
                 Logger.Info(nameof(ExportEntityPropertiesCommand), ex);
             }
         }

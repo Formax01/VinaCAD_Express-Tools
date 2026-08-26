@@ -17,7 +17,7 @@ namespace Tools.View.UI
         {
             InitializeComponent();
             _cancelAction = cancelAction ?? throw new ArgumentNullException(nameof(cancelAction));
-            txtFileName.Text = $"エクスポート中のファイル: {Path.GetFileName(filePath)}";
+            txtFileName.Text = $"Exporting file: {Path.GetFileName(filePath)}";
             txtFileName.ToolTip = filePath;
             Closing += Window_Closing;
         }
@@ -34,7 +34,7 @@ namespace Tools.View.UI
             progressBar.IsIndeterminate = progress.IsIndeterminate;
             progressBar.Value = progress.Percentage;
             txtPercentage.Text = progress.IsIndeterminate
-                ? "処理中..."
+                ? "Processing..."
                 : $"{progress.Percentage:N1}%";
 
             if (progress.TotalObjectCount > 0 &&
@@ -75,8 +75,8 @@ namespace Tools.View.UI
             }
 
             _cancelRequested = true;
-            txtStage.Text = "CSV エクスポートをキャンセルしています...";
-            txtPercentage.Text = "キャンセル中...";
+            txtStage.Text = "Canceling CSV export...";
+            txtPercentage.Text = "Canceling...";
             _cancelAction();
         }
     }

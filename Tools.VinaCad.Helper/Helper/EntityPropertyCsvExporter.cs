@@ -34,7 +34,7 @@ namespace Tools.VinaCad.Helper.Helper
 
     public sealed class EntityPropertyCsvExporter
     {
-        private const string UnreadableValue = "<読み取り不可>";
+        private const string UnreadableValue = "<Unreadable>";
 
         private static readonly string[] PropertiesPaletteOrder =
         {
@@ -95,13 +95,13 @@ namespace Tools.VinaCad.Helper.Helper
 
             EntityPropertyExportResult result = new();
 
-            ReportProgress(progressCallback, "エンティティをスキャンしています...", string.Empty, 0, 0, 0);
+            ReportProgress(progressCallback, "Scanning entities...", string.Empty, 0, 0, 0);
             cancellationToken.ThrowIfCancellationRequested();
 
             using Transaction transaction = database.TransactionManager.StartOpenCloseTransaction();
             BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
             List<EntityIdentity> exportObjects = GetSortedExportObjects(transaction, blockTable, result, progressCallback, cancellationToken);
-            ReportProgress(progressCallback, "CSV ファイルを準備しています...", string.Empty, 0, exportObjects.Count, 0);
+            ReportProgress(progressCallback, "Preparing CSV file...", string.Empty, 0, exportObjects.Count, 0);
 
             string fullFilePath = Path.GetFullPath(filePath);
             bool isReplacingExistingFile = File.Exists(fullFilePath);
@@ -139,7 +139,7 @@ namespace Tools.VinaCad.Helper.Helper
                                 entity = transaction.GetObject(identity.ObjectId, OpenMode.ForRead, false) as Entity;
                                 if (entity is null)
                                 {
-                                    throw new InvalidOperationException("オブジェクトはエンティティではありません。");
+                                    throw new InvalidOperationException("The object is not an entity.");
                                 }
                             }
                             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace Tools.VinaCad.Helper.Helper
                             if (progressStopwatch.ElapsedMilliseconds >= 100 ||
                                 processedObjectCount == exportObjects.Count)
                             {
-                                ReportProgress(progressCallback, "CSV をエクスポートしています...", $"{identity.LayerName} — {identity.EntityName} ({identity.Handle})", processedObjectCount, exportObjects.Count, result.PropertyCount);
+                                ReportProgress(progressCallback, "Exporting CSV...", $"{identity.LayerName} — {identity.EntityName} ({identity.Handle})", processedObjectCount, exportObjects.Count, result.PropertyCount);
                                 progressStopwatch.Restart();
                             }
                         }
@@ -166,7 +166,7 @@ namespace Tools.VinaCad.Helper.Helper
                     writer.Flush();
                 }
 
-                ReportProgress(progressCallback, "CSV ファイルを完了処理しています...", string.Empty, exportObjects.Count, exportObjects.Count, result.PropertyCount);
+                ReportProgress(progressCallback, "Finalizing CSV file...", string.Empty, exportObjects.Count, exportObjects.Count, result.PropertyCount);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (isReplacingExistingFile)
@@ -175,7 +175,7 @@ namespace Tools.VinaCad.Helper.Helper
                 }
                 workingFilePath = string.Empty;
 
-                ReportProgress(progressCallback, "完了しました。", string.Empty, exportObjects.Count, exportObjects.Count, result.PropertyCount);
+                ReportProgress(progressCallback, "Completed.", string.Empty, exportObjects.Count, exportObjects.Count, result.PropertyCount);
             }
             catch (OperationCanceledException)
             {
@@ -195,8 +195,8 @@ namespace Tools.VinaCad.Helper.Helper
                 }
                 string partialMessage = partialFilePath is null
                     ? string.Empty
-                    : $" 部分的なデータを次の場所に保存しました: {partialFilePath}";
-                throw new IOException($"CSV ファイルを完了できませんでした。{partialMessage}", ex);
+                    : $" Partial data was saved to: {partialFilePath}";
+                throw new IOException($"The CSV file could not be completed.{partialMessage}", ex);
             }
             finally
             {
@@ -260,7 +260,7 @@ namespace Tools.VinaCad.Helper.Helper
                     cancellationToken.ThrowIfCancellationRequested();
                     if (scanProgressStopwatch.ElapsedMilliseconds >= 100)
                     {
-                        ReportProgress(progressCallback, "エンティティをスキャンしています...", string.Empty, 0, 0, 0);
+                        ReportProgress(progressCallback, "Scanning entities...", string.Empty, 0, 0, 0);
                         scanProgressStopwatch.Restart();
                     }
 
@@ -281,8 +281,8 @@ namespace Tools.VinaCad.Helper.Helper
                     catch (Exception ex)
                     {
                         string handle = TryGetHandle(objectId);
-                        result.AddError("Entity", string.Empty, "<開けません>", handle, string.Empty, ex);
-                        entities.Add(new EntityIdentity(objectId, string.Empty, "<開けません>", handle, false));
+                        result.AddError("Entity", string.Empty, "<Cannot open>", handle, string.Empty, ex);
+                        entities.Add(new EntityIdentity(objectId, string.Empty, "<Cannot open>", handle, false));
                     }
                 }
             }
@@ -670,7 +670,7 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (!visitedCollections.Add(enumerable))
             {
-                return "<循環参照>";
+                return "<Circular reference>";
             }
 
             List<string> items = new();
@@ -779,7 +779,7 @@ namespace Tools.VinaCad.Helper.Helper
         private static string CreateTemporaryFilePath(string targetFilePath)
         {
             string directory = Path.GetDirectoryName(targetFilePath)
-                ?? throw new InvalidOperationException("CSV 出力フォルダーを特定できません。");
+                ?? throw new InvalidOperationException("The CSV output folder could not be determined.");
             return Path.Combine(directory, $".{Path.GetFileName(targetFilePath)}.{Guid.NewGuid():N}.tmp");
         }
 
