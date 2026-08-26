@@ -15,11 +15,11 @@ namespace Tools.Resources.Definitions
         public static readonly string RIBBON_ID = "SAMPLE";
         public static readonly string RIBBON_PANEL_SETTING = "Setting";
 
-        public static readonly string EXCSV_HEADER_LAYER_NAME = "レイヤー名";
-        public static readonly string EXCSV_HEADER_ENTITY = "エンティティ";
+        public static readonly string EXCSV_HEADER_LAYER_NAME = "Layer name";
+        public static readonly string EXCSV_HEADER_ENTITY = "Entity";
         public static readonly string EXCSV_HEADER_ID = "ID";
-        public static readonly string EXCSV_HEADER_PROPERTY_NAME = "プロパティ名";
-        public static readonly string EXCSV_HEADER_PROPERTY_VALUE = "プロパティ値";
+        public static readonly string EXCSV_HEADER_PROPERTY_NAME = "Property name";
+        public static readonly string EXCSV_HEADER_PROPERTY_VALUE = "Property value";
 
         public static readonly string BlockTemplates = "TemplateBlocks.dwg";
         public static readonly string PDFAboutTools = "Express Tools.pdf";
