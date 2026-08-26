@@ -550,11 +550,7 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-<<<<<<<<< Temporary merge branch 1
-                Logger.Info(nameof(TrimFixWallCommand), ex);
-=========
                 Logger.Info(nameof(ChangeWallThicknessCommand), ex);
->>>>>>>>> Temporary merge branch 2
             }
         }
     }
