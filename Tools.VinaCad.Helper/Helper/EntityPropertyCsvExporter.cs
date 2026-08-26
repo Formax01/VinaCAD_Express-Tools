@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Definitions;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -188,7 +189,7 @@ namespace Tools.VinaCad.Helper.Helper
                         TryHideFile(workingFilePath);
                     }
 
-                    WriteCsvRow(writer, "レイヤー名", "エンティティ", "ID", "プロパティ名", "プロパティ値");
+                    WriteCsvRow(writer, StringDefinition.EXCSV_HEADER_LAYER_NAME, StringDefinition.EXCSV_HEADER_ENTITY, StringDefinition.EXCSV_HEADER_ID, StringDefinition.EXCSV_HEADER_PROPERTY_NAME, StringDefinition.EXCSV_HEADER_PROPERTY_VALUE);
                     writer.Flush();
 
                     long propertyCountAtLastFlush = 0;
@@ -347,8 +348,8 @@ namespace Tools.VinaCad.Helper.Helper
                         {
                             continue;
                         }
-
-                        entities.Add(new EntityIdentity(objectId, entity.Layer ?? string.Empty, GetEntityName(entity), entity.Handle.ToString(), true));
+                        //TryGetHandle(objectId) tự bắt lỗi và trả về string.Empty.Nếu không đọc được Handle, chỉ cột ID bị rỗng; các property khác vẫn được xuất, giúp hạn chế mất dữ liệu
+                        entities.Add(new EntityIdentity(objectId, entity.Layer ?? string.Empty, GetEntityName(entity), TryGetHandle(objectId), true));
                     }
                     catch (Exception ex)
                     {
