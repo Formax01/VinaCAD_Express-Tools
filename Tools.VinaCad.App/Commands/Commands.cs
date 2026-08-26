@@ -523,7 +523,6 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
-
         [CommandMethod("WWT")]
         public void ChangeWallThicknessCommand()
         {
@@ -536,6 +535,21 @@ namespace Tools.VinaCAD.App.Commands
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(ChangeWallThicknessCommand), ex);
+            }
+        }
+
+        [CommandMethod("WWO")]
+        public void OffsetWallCommand()
+        {
+            try
+            {
+                OffsetWallAction action = new OffsetWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OffsetWallCommand), ex);
             }
         }
 
