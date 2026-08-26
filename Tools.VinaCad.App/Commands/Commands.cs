@@ -538,5 +538,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
+
+        [CommandMethod("EXCSV")]
+        public void ExportEntityPropertiesCommand()
+        {
+            try
+            {
+                ExportEntityPropertiesAction action = new ExportEntityPropertiesAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "エラー");
+                Logger.Info(nameof(ExportEntityPropertiesCommand), ex);
+            }
+        }
     }
 }
