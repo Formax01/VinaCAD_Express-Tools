@@ -93,7 +93,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
 
                 document.Editor.WriteMessage($"\nCSV exported: {filePath}");
-                OpenCsvFile(filePath);
+                OpenInFileExplorer(filePath);
             }
             catch (Exception ex)
             {
@@ -102,19 +102,19 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        private static void OpenCsvFile(string filePath)
+        private static void OpenInFileExplorer(string filePath)
         {
             try
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = Path.GetFullPath(filePath),
-                    UseShellExecute = true,
+                    FileName = "explorer.exe",
+                    Arguments = $"/select,\"{Path.GetFullPath(filePath)}\"",
                 });
             }
             catch (Exception ex)
             {
-                Logger.Info(nameof(OpenCsvFile), ex);
+                Logger.Info(nameof(OpenInFileExplorer), ex);
             }
         }
     }
