@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<ApplicationPackage SchemaVersion="1.0" VinaCADProduct="VinaCAD"
-                    ProductType="Application" Name="VinaCAD_ExpressTools"
-                    Description="VinaCAD_ExpressTools"
+<ApplicationPackage SchemaVersion="1.0" VinaCADProduct="ExportCSV"
+                    ProductType="Application" Name="ExportCSV"
+                    Description="ExportCSV"
                     AppVersion="1.0.0" FriendlyVersion="1.0.0">
 
 
@@ -12,12 +12,12 @@
 							           SeriesMin="R26.7"
 							           SeriesMax="R26.12" />
 
-    <ComponentEntry AppName="VinaCAD_ExpressTools" Version="2026.0"
+    <ComponentEntry AppName="ExportCSV" Version="2026.0"
 						        ModuleName="./Contents/Outcome_V2026/ExportCSV.VinaCad.App.dll"
-						        AppDescription="VinaCAD_ExpressTools 2026"
+						        AppDescription="ExportCSV 2026"
                     LoadOnAutoCADStartup="True"/>
   </Components>
   <Components Description="CUI">
-    <ComponentEntry AppName="VinaCAD_ExpressTools cui" ModuleName="./Contents/Outcome_V2026/ExportCSV.cuix"  AppDescription="VinaCAD_ExpressTools cui" />
+    <ComponentEntry AppName="ExportCSV cui" ModuleName="./Contents/Outcome_V2026/ExportCSV.cuix"  AppDescription="ExportCSV cui" />
   </Components>
 </ApplicationPackage>

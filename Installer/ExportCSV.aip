@@ -60,7 +60,7 @@
     <ROW Component="Tools.View.dll" ComponentId="{42A61915-A5DC-427C-B079-9DAF6C49C887}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.View.dll"/>
     <ROW Component="Tools.ViewModel.dll" ComponentId="{A9CC3520-CE6B-4B47-B5BF-75D548D15954}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.ViewModel.dll"/>
     <ROW Component="Tools.VinaCad.Action.dll" ComponentId="{53512200-C4E5-447B-818C-3FCD09F7D681}" Directory_="__1_Dir" Attributes="256" KeyPath="Tools.VinaCad.Action.dll"/>
-    <ROW Component="Tools.VinaCad.App.dll" ComponentId="{009DE2CE-8DE8-41FF-9E9C-A7D8C1AC14F5}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.pdb"/>
+    <ROW Component="Tools.VinaCad.App.dll" ComponentId="{009DE2CE-8DE8-41FF-9E9C-A7D8C1AC14F5}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.pdb" Type="4"/>
     <ROW Component="Tools.VinaCad.App.dll_1" ComponentId="{EA6B5B75-4055-44E1-B652-5ED62887A72B}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.dll"/>
     <ROW Component="Tools.VinaCad.Helper.dll" ComponentId="{BDFBB239-E082-4CDF-A900-32B5224A4BAC}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Helper.dll"/>
     <ROW Component="Tools.VinaCad.Modeling.dll" ComponentId="{BD131F09-E514-4786-AFE1-FEFBBB6DB1AA}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Modeling.dll"/>
@@ -161,6 +161,9 @@
     <ROW File="ExportCSV.VinaCad.App.dll" Component_="ExportCSV.VinaCad.App.dll" FileName="EXPORT~1.DLL|ExportCSV.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.VinaCad.App.dll" SelfReg="false"/>
     <ROW File="ExportCSV.VinaCad.App.pdb" Component_="ExportCSV.VinaCad.App.dll" FileName="EXPORT~1.PDB|ExportCSV.VinaCad.App.pdb" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.VinaCad.App.pdb" SelfReg="false"/>
     <ROW File="Tools.VinaCad.App.dll" Component_="Tools.VinaCad.App.dll_1" FileName="TOOLSV~4.DLL|Tools.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.dll" SelfReg="false"/>
+    <ROW File="exportcsv.bak.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="EXPORT~1.MNR|exportcsv.bak.mnr" Attributes="0" SourcePath="..\Outcome_V2026\exportcsv.bak.mnr" SelfReg="false"/>
+    <ROW File="ExportCSV.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="EXPORT~2.MNR|ExportCSV.mnr" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.mnr" SelfReg="false"/>
+    <ROW File="ExportCSV_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="EXPORT~3.MNR|ExportCSV_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV_light.mnr" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
