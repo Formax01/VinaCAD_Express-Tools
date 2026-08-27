@@ -8,12 +8,12 @@
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="Manufacturer" Value="Formax Technologies"/>
-    <ROW Property="ProductCode" Value="1033:{B16A13CD-98B9-4F7C-A9CF-FB82E688F51F} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{3F450838-711E-4A4E-86EB-F2601A5BC0BB} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Export CSV"/>
     <ROW Property="ProductVersion" Value="1.0.0.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
-    <ROW Property="UpgradeCode" Value="{58E3AEBE-17EC-42B2-985B-2E092053019D}"/>
+    <ROW Property="UpgradeCode" Value="{6CDB521B-D0B9-439C-846C-333F9C653324}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
@@ -25,7 +25,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
-    <ROW Directory="AutoRebar.bundle_Dir" Directory_Parent="APPDIR" DefaultDir="EXPRES~1.BUN|ExpressTools.bundle"/>
+    <ROW Directory="AutoRebar.bundle_Dir" Directory_Parent="APPDIR" DefaultDir="EXPORT~1.BUN|ExportCSV.bundle"/>
     <ROW Directory="Contents_Dir" Directory_Parent="AutoRebar.bundle_Dir" DefaultDir="Contents"/>
     <ROW Directory="Images_Dir" Directory_Parent="Resources_Dir" DefaultDir="Images"/>
     <ROW Directory="Resources_Dir" Directory_Parent="Contents_Dir" DefaultDir="RESOUR~1|Resources"/>
@@ -37,6 +37,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="ACCAMERA_26.12_17.tx" ComponentId="{C88B47E4-8ADF-4A73-A81B-D59EF3ADA18C}" Directory_="__1_Dir" Attributes="256" KeyPath="ACCAMERA_26.12_17.tx" Type="0"/>
     <ROW Component="APPDIR" ComponentId="{DBA6AE8E-707F-4A92-A6B0-723EAE368377}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="ExportCSV.VinaCad.App.dll" ComponentId="{1F992AF8-88C1-496D-8B0E-C76FA8BF2DE4}" Directory_="__1_Dir" Attributes="0" KeyPath="ExportCSV.VinaCad.App.dll"/>
     <ROW Component="PackageContents.xml" ComponentId="{DA68906C-2F40-475C-AE6C-47A3EE349C95}" Directory_="AutoRebar.bundle_Dir" Attributes="0" KeyPath="PackageContents.xml" Type="0"/>
     <ROW Component="PrLogTrackingSystem.dll" ComponentId="{BF932FE7-FE45-47AD-81DD-77B0BE370E46}" Directory_="__1_Dir" Attributes="0" KeyPath="PrLogTrackingSystem.dll"/>
     <ROW Component="PrMVVMCore.dll" ComponentId="{7BC74E9E-9F2C-429E-AA56-604D05D26CB4}" Directory_="__1_Dir" Attributes="0" KeyPath="PrMVVMCore.dll"/>
@@ -59,7 +60,8 @@
     <ROW Component="Tools.View.dll" ComponentId="{42A61915-A5DC-427C-B079-9DAF6C49C887}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.View.dll"/>
     <ROW Component="Tools.ViewModel.dll" ComponentId="{A9CC3520-CE6B-4B47-B5BF-75D548D15954}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.ViewModel.dll"/>
     <ROW Component="Tools.VinaCad.Action.dll" ComponentId="{53512200-C4E5-447B-818C-3FCD09F7D681}" Directory_="__1_Dir" Attributes="256" KeyPath="Tools.VinaCad.Action.dll"/>
-    <ROW Component="Tools.VinaCad.App.dll" ComponentId="{009DE2CE-8DE8-41FF-9E9C-A7D8C1AC14F5}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.dll"/>
+    <ROW Component="Tools.VinaCad.App.dll" ComponentId="{009DE2CE-8DE8-41FF-9E9C-A7D8C1AC14F5}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.pdb"/>
+    <ROW Component="Tools.VinaCad.App.dll_1" ComponentId="{EA6B5B75-4055-44E1-B652-5ED62887A72B}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.App.dll"/>
     <ROW Component="Tools.VinaCad.Helper.dll" ComponentId="{BDFBB239-E082-4CDF-A900-32B5224A4BAC}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Helper.dll"/>
     <ROW Component="Tools.VinaCad.Modeling.dll" ComponentId="{BD131F09-E514-4786-AFE1-FEFBBB6DB1AA}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Modeling.dll"/>
     <ROW Component="VinaCADCoreMgd_Net8.dll" ComponentId="{1184DD2A-40CA-4EA2-AC56-DA9D3B0CE00E}" Directory_="__1_Dir" Attributes="256" KeyPath="VinaCADCoreMgd_Net8.dll"/>
@@ -136,7 +138,6 @@
     <ROW File="Tools.VinaCad.Action.dll" Component_="Tools.VinaCad.Action.dll" FileName="TOOLSV~3.DLL|Tools.VinaCad.Action.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Action.dll" SelfReg="false"/>
     <ROW File="Tools.VinaCad.Action.pdb" Component_="Tools.VinaCad.Action.dll" FileName="TOOLSV~3.PDB|Tools.VinaCad.Action.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Action.pdb" SelfReg="false"/>
     <ROW File="Tools.VinaCad.App.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~4.JSO|Tools.VinaCad.App.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.deps.json" SelfReg="false"/>
-    <ROW File="Tools.VinaCad.App.dll" Component_="Tools.VinaCad.App.dll" FileName="TOOLSV~4.DLL|Tools.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.dll" SelfReg="false"/>
     <ROW File="Tools.VinaCad.App.pdb" Component_="Tools.VinaCad.App.dll" FileName="TOOLSV~4.PDB|Tools.VinaCad.App.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.pdb" SelfReg="false"/>
     <ROW File="Tools.VinaCad.Helper.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~5.JSO|Tools.VinaCad.Helper.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Helper.deps.json" SelfReg="false"/>
     <ROW File="Tools.VinaCad.Helper.dll" Component_="Tools.VinaCad.Helper.dll" FileName="TOOLSV~5.DLL|Tools.VinaCad.Helper.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.Helper.dll" SelfReg="false"/>
@@ -148,7 +149,6 @@
     <ROW File="VinaCADCoreMgd_Net8.pdb" Component_="VinaCADCoreMgd_Net8.dll" FileName="VINACA~1.PDB|VinaCADCoreMgd_Net8.pdb" Attributes="0" SourcePath="..\Outcome_V2026\VinaCADCoreMgd_Net8.pdb" SelfReg="false"/>
     <ROW File="WipeOut_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="WIPEOU~1.TX|WipeOut_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\WipeOut_26.12_17.tx" SelfReg="false"/>
     <ROW File="TemplateBlocks.dwg" Component_="Sample.xlsx_1" FileName="TEMPLA~1.DWG|TemplateBlocks.dwg" Attributes="0" SourcePath="..\Resources\Templates\TemplateBlocks.dwg" SelfReg="false"/>
-    <ROW File="VinaCAD_ExpressTools.cuix" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~1.CUI|VinaCAD_ExpressTools.cuix" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools.cuix" SelfReg="false"/>
     <ROW File="LNEO.png" Component_="Sample_Image.png" FileName="LNEO.png" Attributes="0" SourcePath="..\Resources\Images\LNEO.png" SelfReg="false"/>
     <ROW File="LNOI.png" Component_="Sample_Image.png" FileName="LNOI.png" Attributes="0" SourcePath="..\Resources\Images\LNOI.png" SelfReg="false"/>
     <ROW File="ExpressTools.pdf" Component_="Sample.xlsx_1" FileName="EXPRES~1.PDF|Express Tools.pdf" Attributes="0" SourcePath="..\Resources\Templates\Express Tools.pdf" SelfReg="false"/>
@@ -156,12 +156,17 @@
     <ROW File="VinaCAD_ExpressToolsCopy_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~2.MNR|VinaCAD_ExpressTools - Copy_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools - Copy_light.mnr" SelfReg="false"/>
     <ROW File="vinacad_expresstools.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~3.MNR|vinacad_expresstools.mnr" Attributes="0" SourcePath="..\Outcome_V2026\vinacad_expresstools.mnr" SelfReg="false"/>
     <ROW File="vinacad_expresstools_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~4.MNR|vinacad_expresstools_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\vinacad_expresstools_light.mnr" SelfReg="false"/>
+    <ROW File="ExportCSV.cuix" Component_="ACCAMERA_26.12_17.tx" FileName="EXPORT~1.CUI|ExportCSV.cuix" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.cuix" SelfReg="false"/>
+    <ROW File="ExportCSV.VinaCad.App.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="EXPORT~1.JSO|ExportCSV.VinaCad.App.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.VinaCad.App.deps.json" SelfReg="false"/>
+    <ROW File="ExportCSV.VinaCad.App.dll" Component_="ExportCSV.VinaCad.App.dll" FileName="EXPORT~1.DLL|ExportCSV.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.VinaCad.App.dll" SelfReg="false"/>
+    <ROW File="ExportCSV.VinaCad.App.pdb" Component_="ExportCSV.VinaCad.App.dll" FileName="EXPORT~1.PDB|ExportCSV.VinaCad.App.pdb" Attributes="0" SourcePath="..\Outcome_V2026\ExportCSV.VinaCad.App.pdb" SelfReg="false"/>
+    <ROW File="Tools.VinaCad.App.dll" Component_="Tools.VinaCad.App.dll_1" FileName="TOOLSV~4.DLL|Tools.VinaCad.App.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.VinaCad.App.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFileName="VinaCAD_ExpressTools_v[|ProductVersion]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFileName="ExportCSV_v[|ProductVersion]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildEventsComponent">
     <ROW EventId="0" EventRun="D:\01-Workplace\01-SourceCode\03-BIMfan_AutoRebar\Installer\rename_msiname_with_date.bat" EventCmdLine="[|ProductVersion]" EventOrder="1" EventType="2" EventInterupt="false" EventEnabled="false" EventPrecompression="false" RollbackEvent="false" EventBuild="DefaultBuild"/>
@@ -171,7 +176,7 @@
     <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DynamicPropertyComponent">
-    <ROW Property="ProductVersion" Type="10" SourcePath="Tools.VinaCad.App.dll"/>
+    <ROW Property="ProductVersion" Type="10" SourcePath="ExportCSV.VinaCad.App.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
@@ -263,6 +268,8 @@
     <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Helper.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Modeling.dll"/>
     <ROW Feature_="MainFeature" Component_="VinaCADCoreMgd_Net8.dll"/>
+    <ROW Feature_="MainFeature" Component_="ExportCSV.VinaCad.App.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.VinaCad.App.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>

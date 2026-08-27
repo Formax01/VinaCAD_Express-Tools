@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.7.11811.120
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VinaCad", "VinaCad", "{48DFE769-B008-41AE-AFBD-1F2C7EA99D52}"
 EndProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVVM", "MVVM", "{A9C7D138-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resource", "Resource", "{94BCF6BC-5BA2-413E-9C6F-17ACC2FEC91E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools.VinaCad.App", "Tools.VinaCad.App\Tools.VinaCad.App.csproj", "{CBDD8D3D-B4CD-72A6-C659-A175F7DEFFC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportCSV.VinaCad.App", "Tools.VinaCad.App\ExportCSV.VinaCad.App.csproj", "{CBDD8D3D-B4CD-72A6-C659-A175F7DEFFC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools.Model", "Tools.Model\Tools.Model.csproj", "{89D55760-C853-4B57-9FF9-1D8FB612CC1D}"
 EndProject

@@ -13,11 +13,11 @@
 							           SeriesMax="R26.12" />
 
     <ComponentEntry AppName="VinaCAD_ExpressTools" Version="2026.0"
-						        ModuleName="./Contents/Outcome_V2026/Tools.VinaCad.App.dll"
+						        ModuleName="./Contents/Outcome_V2026/ExportCSV.VinaCad.App.dll"
 						        AppDescription="VinaCAD_ExpressTools 2026"
                     LoadOnAutoCADStartup="True"/>
   </Components>
   <Components Description="CUI">
-    <ComponentEntry AppName="VinaCAD_ExpressTools cui" ModuleName="./Contents/Outcome_V2026/VinaCAD_ExpressTools.cuix"  AppDescription="VinaCAD_ExpressTools cui" />
+    <ComponentEntry AppName="VinaCAD_ExpressTools cui" ModuleName="./Contents/Outcome_V2026/ExportCSV.cuix"  AppDescription="VinaCAD_ExpressTools cui" />
   </Components>
 </ApplicationPackage>

@@ -11,7 +11,7 @@ using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Action.Actions;
 
-namespace Tools.VinaCAD.App.Commands
+namespace ExportCSV.VinaCad.App.Commands
 {
     public class Commands
     {
