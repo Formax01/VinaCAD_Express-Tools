@@ -152,6 +152,10 @@
     <ROW File="LNEO.png" Component_="Sample_Image.png" FileName="LNEO.png" Attributes="0" SourcePath="..\Resources\Images\LNEO.png" SelfReg="false"/>
     <ROW File="LNOI.png" Component_="Sample_Image.png" FileName="LNOI.png" Attributes="0" SourcePath="..\Resources\Images\LNOI.png" SelfReg="false"/>
     <ROW File="ExpressTools.pdf" Component_="Sample.xlsx_1" FileName="EXPRES~1.PDF|Express Tools.pdf" Attributes="0" SourcePath="..\Resources\Templates\Express Tools.pdf" SelfReg="false"/>
+    <ROW File="VinaCAD_ExpressToolsCopy.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~1.MNR|VinaCAD_ExpressTools - Copy.mnr" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools - Copy.mnr" SelfReg="false"/>
+    <ROW File="VinaCAD_ExpressToolsCopy_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~2.MNR|VinaCAD_ExpressTools - Copy_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools - Copy_light.mnr" SelfReg="false"/>
+    <ROW File="vinacad_expresstools.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~3.MNR|vinacad_expresstools.mnr" Attributes="0" SourcePath="..\Outcome_V2026\vinacad_expresstools.mnr" SelfReg="false"/>
+    <ROW File="vinacad_expresstools_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~4.MNR|vinacad_expresstools_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\vinacad_expresstools_light.mnr" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
