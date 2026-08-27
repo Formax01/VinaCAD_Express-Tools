@@ -11,12 +11,11 @@ namespace Tools.VinaCad.Helper.Helper
     {
         private const double MinimumConnectionTolerance = 0.0001;
         private const double ParallelDotTolerance = 0.002;
-        private const double MaximumWallWidthFactor = 50.0;
+        private const double MaximumWallWidthFactor = 20.0;
+        private const double CapPerpendicularDotTolerance = 0.2;
+        private const double MiterLimitFactor = 10.0;
 
-        public static string EnsureLayer(
-            Database database,
-            string requestedLayerName,
-            short colorIndex)
+        public static string EnsureLayer(Database database, string requestedLayerName, short colorIndex)
         {
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
@@ -48,12 +47,7 @@ namespace Tools.VinaCad.Helper.Helper
             return actualLayerName;
         }
 
-        public static int CreateStuccoForBoundary(
-            Database database,
-            ObjectId[] boundaryIds,
-            Point3d interiorPoint,
-            double thickness,
-            string targetLayerName)
+        public static int CreateStuccoForBoundary(Database database, ObjectId[] boundaryIds, Point3d interiorPoint, double thickness, string targetLayerName)
         {
             ValidateArguments(database, thickness, targetLayerName);
             if (boundaryIds == null || boundaryIds.Length == 0)
@@ -61,141 +55,271 @@ namespace Tools.VinaCad.Helper.Helper
 
             using Transaction transaction = database.TransactionManager.StartTransaction();
             ObjectId targetLayerId = GetTargetLayerId(transaction, database, targetLayerName);
-            BlockTableRecord ownerSpace = (BlockTableRecord)transaction.GetObject(
-                database.CurrentSpaceId,
-                OpenMode.ForWrite);
-
+            BlockTableRecord ownerSpace = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
             HashSet<ObjectId> boundaryIdSet = new HashSet<ObjectId>(boundaryIds);
-            double maximumWallWidth = Math.Max(
-                MinimumConnectionTolerance * 1000.0,
-                Math.Abs(thickness) * MaximumWallWidthFactor);
-            double boundaryMatchDistance = Math.Max(
-                MinimumConnectionTolerance * 100.0,
-                Math.Abs(thickness) * 0.5);
-            List<Line> transientBoundarySegments = new List<Line>();
-            List<Line> transientWallLines = new List<Line>();
-            List<Line> transientOppositeLines = new List<Line>();
             List<ObjectId> createdIds = new List<ObjectId>();
+            int createdCount = 0;
 
+            foreach (ObjectId boundaryId in boundaryIds)
+            {
+                if (boundaryId.IsNull || !boundaryId.IsValid)
+                    continue;
+                if (transaction.GetObject(boundaryId, OpenMode.ForRead) is not Curve boundaryCurve)
+                    continue;
+
+                if (boundaryCurve is Polyline boundaryPolyline && CanOffsetBySegments(boundaryPolyline))
+                    createdCount += AppendPolylineSegmentOffsets(boundaryPolyline, interiorPoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+                else
+                    createdCount += AppendOffsetOnSide(boundaryCurve, interiorPoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+            }
+
+            if (createdCount == 0)
+                throw new InvalidOperationException("Không thể tạo vữa mặt trong.");
+
+            CleanupStuccoGeometry(transaction, ownerSpace, boundaryIdSet, createdIds, targetLayerId, thickness);
+            transaction.Commit();
+            return createdCount;
+        }
+
+        private static bool CanOffsetBySegments(Polyline polyline)
+        {
+            if (!polyline.Closed || polyline.NumberOfVertices < 3)
+                return false;
+
+            for (int index = 0; index < polyline.NumberOfVertices; index++)
+            {
+                if (Math.Abs(polyline.GetBulgeAt(index)) > 1e-10)
+                    return false;
+            }
+
+            return Math.Abs(GetPolylineSignedArea(polyline)) > MinimumConnectionTolerance;
+        }
+
+        private static int AppendPolylineSegmentOffsets(Polyline polyline, Point3d roomPoint, double thickness, Database database, Transaction transaction, BlockTableRecord ownerSpace, ObjectId targetLayerId, List<ObjectId> createdIds)
+        {
+            bool roomIsInside = IsPointInsidePolyline(polyline, roomPoint);
+            bool polygonInteriorIsLeft = GetPolylineSignedArea(polyline) > 0.0;
+            double guideDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
+            Line?[] offsetLines = new Line?[polyline.NumberOfVertices];
+            int createdCount = 0;
+
+            for (int index = 0; index < polyline.NumberOfVertices; index++)
+            {
+                Point3d start = polyline.GetPoint3dAt(index);
+                Point3d end = polyline.GetPoint3dAt((index + 1) % polyline.NumberOfVertices);
+                Vector3d vector = end - start;
+                if (vector.Length <= MinimumConnectionTolerance)
+                    continue;
+
+                Vector3d direction = vector.GetNormal();
+                Vector3d leftNormal = new Vector3d(-direction.Y, direction.X, 0.0);
+                Vector3d targetNormal = polygonInteriorIsLeft ? leftNormal : -leftNormal;
+                if (!roomIsInside)
+                    targetNormal = -targetNormal;
+
+                Point3d midpoint = start + vector * 0.5;
+                Point3d guidePoint = midpoint + targetNormal * guideDistance;
+                using Line segment = new Line(start, end);
+                int firstCreatedIndex = createdIds.Count;
+                createdCount += AppendOffsetOnSide(segment, guidePoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+                for (int createdIndex = firstCreatedIndex; createdIndex < createdIds.Count; createdIndex++)
+                {
+                    if (transaction.GetObject(createdIds[createdIndex], OpenMode.ForWrite) is Line offsetLine)
+                    {
+                        offsetLines[index] = offsetLine;
+                        break;
+                    }
+                }
+            }
+
+            MiterClosedOffsetLoop(polyline, offsetLines, thickness);
+            return createdCount;
+        }
+
+        private static void MiterClosedOffsetLoop(Polyline source, Line?[] offsetLines, double thickness)
+        {
+            double miterLimit = Math.Max(MinimumConnectionTolerance * 1000.0, Math.Abs(thickness) * MiterLimitFactor + 1.0);
+            for (int index = 0; index < offsetLines.Length; index++)
+            {
+                Line? first = offsetLines[index];
+                Line? second = offsetLines[(index + 1) % offsetLines.Length];
+                if (first == null || second == null || !TryGetLineIntersection(first, second, out Point3d intersection, out _, out _))
+                    continue;
+
+                Point3d sourceCorner = source.GetPoint3dAt((index + 1) % source.NumberOfVertices);
+                if (intersection.DistanceTo(sourceCorner) > miterLimit)
+                    continue;
+
+                MoveNearestEndpoint(first, sourceCorner, intersection);
+                MoveNearestEndpoint(second, sourceCorner, intersection);
+            }
+        }
+
+        private static void MoveNearestEndpoint(Line line, Point3d expectedEndpoint, Point3d intersection)
+        {
+            if (line.StartPoint.DistanceTo(expectedEndpoint) <= line.EndPoint.DistanceTo(expectedEndpoint))
+                line.StartPoint = intersection;
+            else
+                line.EndPoint = intersection;
+        }
+
+        private static double GetPolylineSignedArea(Polyline polyline)
+        {
+            double area = 0.0;
+            for (int index = 0; index < polyline.NumberOfVertices; index++)
+            {
+                Point3d current = polyline.GetPoint3dAt(index);
+                Point3d next = polyline.GetPoint3dAt((index + 1) % polyline.NumberOfVertices);
+                area += current.X * next.Y - next.X * current.Y;
+            }
+
+            return area * 0.5;
+        }
+
+        private static bool IsPointInsidePolyline(Polyline polyline, Point3d point)
+        {
+            bool inside = false;
+            int previousIndex = polyline.NumberOfVertices - 1;
+            for (int index = 0; index < polyline.NumberOfVertices; index++)
+            {
+                Point3d current = polyline.GetPoint3dAt(index);
+                Point3d previous = polyline.GetPoint3dAt(previousIndex);
+                bool crossesRay = (current.Y > point.Y) != (previous.Y > point.Y);
+                if (crossesRay)
+                {
+                    double intersectionX = (previous.X - current.X) *
+                                           (point.Y - current.Y) /
+                                           (previous.Y - current.Y) +
+                                           current.X;
+                    if (point.X < intersectionX)
+                        inside = !inside;
+                }
+
+                previousIndex = index;
+            }
+
+            return inside;
+        }
+
+        public static int CreateStuccoForSelection(Database database, ObjectId[] sourceIds, Point3d sidePoint, double thickness, string targetLayerName)
+        {
+            ValidateArguments(database, thickness, targetLayerName);
+            if (sourceIds == null || sourceIds.Length == 0)
+                throw new ArgumentException("Chưa chọn đường bao mặt ngoài.", nameof(sourceIds));
+
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            ObjectId targetLayerId = GetTargetLayerId(transaction, database, targetLayerName);
+            BlockTableRecord ownerSpace = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+            HashSet<ObjectId> sourceIdSet = new HashSet<ObjectId>(sourceIds);
+            List<ObjectId> createdIds = new List<ObjectId>();
+            List<StuccoModel.LineSegment> lineSegments = new List<StuccoModel.LineSegment>();
+            int createdCount = 0;
+
+            foreach (ObjectId sourceId in sourceIds)
+            {
+                if (sourceId.IsNull || !sourceId.IsValid)
+                    continue;
+                if (transaction.GetObject(sourceId, OpenMode.ForRead) is not Curve sourceCurve)
+                    continue;
+
+                if (sourceCurve is Line line)
+                    lineSegments.Add(new StuccoModel.LineSegment(line.StartPoint, line.EndPoint));
+                else
+                    createdCount += AppendOffsetOnSide(sourceCurve, sidePoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+            }
+
+            double connectionTolerance = Math.Max(MinimumConnectionTolerance * 100.0, Math.Abs(thickness) * 0.01);
+            List<Polyline> linePaths = BuildSelectedLinePaths(lineSegments, connectionTolerance);
             try
             {
-                List<StuccoModel.WallEdge> wallEdges = CollectWallEdges(
-                    transaction,
-                    ownerSpace,
-                    boundaryIdSet,
-                    targetLayerId,
-                    transientWallLines);
-
-                int createdCount = 0;
-                foreach (ObjectId boundaryId in boundaryIds)
-                {
-                    if (boundaryId.IsNull || !boundaryId.IsValid)
-                        continue;
-
-                    DBObject boundaryObject = transaction.GetObject(boundaryId, OpenMode.ForRead);
-                    if (boundaryObject is not Curve boundaryCurve)
-                        continue;
-
-                    createdCount += AppendOffsetOnSide(
-                        boundaryCurve,
-                        interiorPoint,
-                        thickness,
-                        database,
-                        transaction,
-                        ownerSpace,
-                        targetLayerId,
-                        createdIds);
-
-                    if (boundaryCurve is Polyline boundaryPolyline)
-                        CollectBoundaryLineSegments(boundaryPolyline, transientBoundarySegments);
-                }
-
-                int oppositeCreatedCount = 0;
-                foreach (Line boundarySegment in transientBoundarySegments)
-                {
-                    StuccoModel.WallEdge? innerEdge = FindBoundarySourceEdge(
-                        boundarySegment,
-                        wallEdges,
-                        boundaryMatchDistance);
-                    if (!innerEdge.HasValue)
-                        continue;
-
-                    StuccoModel.WallEdge? oppositeEdge = FindOppositeWallEdge(
-                        boundarySegment,
-                        innerEdge.Value,
-                        wallEdges,
-                        interiorPoint,
-                        maximumWallWidth);
-                    if (!oppositeEdge.HasValue)
-                        continue;
-
-                    Line oppositeLine;
-                    if (oppositeEdge.Value.IsClosedBoundary)
-                    {
-                        oppositeLine = new Line(
-                            oppositeEdge.Value.Geometry.StartPoint,
-                            oppositeEdge.Value.Geometry.EndPoint);
-                    }
-                    else if (!TryClipLineToOverlap(
-                                 boundarySegment,
-                                 oppositeEdge.Value.Geometry,
-                                 out oppositeLine))
-                    {
-                        continue;
-                    }
-
-                    transientOppositeLines.Add(oppositeLine);
-                    Point3d outsidePoint = GetPointAwayFromOtherFace(
-                        oppositeLine,
-                        boundarySegment,
-                        thickness);
-                    oppositeCreatedCount += AppendOffsetOnSide(
-                        oppositeLine,
-                        outsidePoint,
-                        thickness,
-                        database,
-                        transaction,
-                        ownerSpace,
-                        targetLayerId,
-                        createdIds);
-                }
+                foreach (Polyline path in linePaths)
+                    createdCount += AppendOffsetOnSide(path, sidePoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
 
                 if (createdCount == 0)
-                    throw new InvalidOperationException("Không thể tạo vữa mặt trong.");
-                if (oppositeCreatedCount == 0)
-                    throw new InvalidOperationException(
-                        "Không tìm thấy mặt tường đối diện để tạo vữa mặt ngoài.");
+                    throw new InvalidOperationException("Các đường đã chọn không thể tạo vữa mặt ngoài.");
 
-                createdCount += oppositeCreatedCount;
-
-                CleanupStuccoGeometry(
-                    transaction,
-                    ownerSpace,
-                    boundaryIdSet,
-                    createdIds,
-                    targetLayerId,
-                    thickness);
+                CleanupStuccoGeometry(transaction, ownerSpace, sourceIdSet, createdIds, targetLayerId, thickness);
                 transaction.Commit();
                 return createdCount;
             }
             finally
             {
-                foreach (Line segment in transientBoundarySegments)
-                    segment.Dispose();
-                foreach (Line line in transientWallLines)
-                    line.Dispose();
-                foreach (Line line in transientOppositeLines)
-                    line.Dispose();
+                foreach (Polyline path in linePaths)
+                    path.Dispose();
             }
         }
 
-        private static void CleanupStuccoGeometry(
-            Transaction transaction,
-            BlockTableRecord currentSpace,
-            HashSet<ObjectId> excludedIds,
-            List<ObjectId> createdIds,
-            ObjectId targetLayerId,
-            double thickness)
+        private static List<Polyline> BuildSelectedLinePaths(List<StuccoModel.LineSegment> segments, double tolerance)
+        {
+            List<Polyline> paths = new List<Polyline>();
+            bool[] used = new bool[segments.Count];
+
+            for (int seedIndex = 0; seedIndex < segments.Count; seedIndex++)
+            {
+                if (used[seedIndex])
+                    continue;
+
+                used[seedIndex] = true;
+                List<Point3d> points = new List<Point3d> { segments[seedIndex].Start, segments[seedIndex].End };
+                while (TryExtendSelectedPath(points, segments, used, true, tolerance) || TryExtendSelectedPath(points, segments, used, false, tolerance))
+                {
+                }
+
+                bool closed = points.Count > 2 && points[0].DistanceTo(points[^1]) <= tolerance;
+                if (closed)
+                    points.RemoveAt(points.Count - 1);
+
+                Polyline path = new Polyline(points.Count) { Elevation = points[0].Z, Closed = closed };
+                for (int index = 0; index < points.Count; index++)
+                    path.AddVertexAt(index, new Point2d(points[index].X, points[index].Y), 0.0, 0.0, 0.0);
+                paths.Add(path);
+            }
+
+            return paths;
+        }
+
+        private static bool TryExtendSelectedPath(List<Point3d> points, List<StuccoModel.LineSegment> segments, bool[] used, bool extendEnd, double tolerance)
+        {
+            Point3d endpoint = extendEnd ? points[^1] : points[0];
+            int bestIndex = -1;
+            bool matchedStart = true;
+            double bestDistance = double.PositiveInfinity;
+
+            for (int index = 0; index < segments.Count; index++)
+            {
+                if (used[index])
+                    continue;
+
+                double startDistance = endpoint.DistanceTo(segments[index].Start);
+                if (startDistance <= tolerance && startDistance < bestDistance)
+                {
+                    bestIndex = index;
+                    matchedStart = true;
+                    bestDistance = startDistance;
+                }
+
+                double endDistance = endpoint.DistanceTo(segments[index].End);
+                if (endDistance <= tolerance && endDistance < bestDistance)
+                {
+                    bestIndex = index;
+                    matchedStart = false;
+                    bestDistance = endDistance;
+                }
+            }
+
+            if (bestIndex < 0)
+                return false;
+
+            used[bestIndex] = true;
+            Point3d nextPoint = matchedStart ? segments[bestIndex].End : segments[bestIndex].Start;
+            if (extendEnd)
+                points.Add(nextPoint);
+            else
+                points.Insert(0, nextPoint);
+            return true;
+        }
+
+        private static void CleanupStuccoGeometry(Transaction transaction, BlockTableRecord currentSpace, HashSet<ObjectId> excludedIds, List<ObjectId> createdIds, ObjectId targetLayerId, double thickness)
         {
             List<Line> stuccoLines = new List<Line>();
             List<Line> polylineSegments = new List<Line>();
@@ -250,6 +374,28 @@ namespace Tools.VinaCad.Helper.Helper
                     mergeTolerance);
                 stuccoLines.RemoveAll(line => line.IsErased);
                 RemoveDuplicateStuccoLines(stuccoLines, mergeTolerance);
+                stuccoLines.RemoveAll(line => line.IsErased);
+
+                List<Curve> sourceCurves = GetSourceCurves(transaction, excludedIds);
+
+                CreateStuccoEndCaps(
+                    transaction,
+                    currentSpace,
+                    sourceCurves,
+                    targetLayerId,
+                    stuccoLines,
+                    polylineSegments,
+                    thickness,
+                    mergeTolerance);
+                stuccoLines.RemoveAll(line => line.IsErased);
+
+                SplitLinesAtIntersections(
+                    transaction,
+                    currentSpace,
+                    stuccoLines,
+                    polylineSegments,
+                    sourceCurves,
+                    mergeTolerance);
             }
             finally
             {
@@ -258,14 +404,123 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void CollectStuccoEntity(
-            Transaction transaction,
-            ObjectId objectId,
-            HashSet<ObjectId> excludedIds,
-            ObjectId targetLayerId,
-            HashSet<ObjectId> collectedIds,
-            List<Line> stuccoLines,
-            List<Line> polylineSegments)
+        private static List<Curve> GetSourceCurves(Transaction transaction, HashSet<ObjectId> ids)
+        {
+            List<Curve> curves = new List<Curve>();
+            foreach (ObjectId id in ids)
+            {
+                if (id.IsNull || !id.IsValid)
+                    continue;
+                if (transaction.GetObject(id, OpenMode.ForRead) is Curve curve && !curve.IsErased)
+                    curves.Add(curve);
+            }
+
+            return curves;
+        }
+
+        private static void CreateStuccoEndCaps(Transaction transaction, BlockTableRecord ownerSpace, List<Curve> sourceCurves, ObjectId targetLayerId, List<Line> lines, List<Line> references, double thickness, double tolerance)
+        {
+            if (sourceCurves.Count == 0)
+                return;
+
+            List<Line> allSegments = new List<Line>();
+            allSegments.AddRange(lines);
+            allSegments.AddRange(references);
+            List<Line> caps = new List<Line>();
+            double maximumCapLength = Math.Max(MinimumConnectionTolerance * 1000.0, Math.Abs(thickness) * 2.5);
+            double connectionTolerance = Math.Max(tolerance, Math.Abs(thickness) * 0.1);
+
+            foreach (Line segment in allSegments)
+            {
+                if (segment.IsErased)
+                    continue;
+
+                TryAppendEndCap(segment.StartPoint, segment, allSegments, sourceCurves, caps, transaction, ownerSpace, targetLayerId, maximumCapLength, connectionTolerance);
+                TryAppendEndCap(segment.EndPoint, segment, allSegments, sourceCurves, caps, transaction, ownerSpace, targetLayerId, maximumCapLength, connectionTolerance);
+            }
+
+            lines.AddRange(caps);
+        }
+
+        private static void TryAppendEndCap(Point3d endpoint, Line ownerSegment, List<Line> allSegments, List<Curve> sourceCurves, List<Line> caps, Transaction transaction, BlockTableRecord ownerSpace, ObjectId targetLayerId, double maximumCapLength, double tolerance)
+        {
+            if (IsEndpointConnected(endpoint, ownerSegment, allSegments, tolerance))
+                return;
+
+            Point3d closestPoint = Point3d.Origin;
+            double closestDistance = double.PositiveInfinity;
+            foreach (Curve sourceCurve in sourceCurves)
+            {
+                try
+                {
+                    Point3d candidate = sourceCurve.GetClosestPointTo(endpoint, false);
+                    double distance = endpoint.DistanceTo(candidate);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestPoint = candidate;
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            if (closestDistance <= tolerance || closestDistance > maximumCapLength)
+                return;
+
+            Vector3d ownerVector = ownerSegment.EndPoint - ownerSegment.StartPoint;
+            Vector3d capVector = closestPoint - endpoint;
+            if (ownerVector.Length <= tolerance ||
+                capVector.Length <= tolerance ||
+                Math.Abs(ownerVector.GetNormal().DotProduct(capVector.GetNormal())) > CapPerpendicularDotTolerance)
+            {
+                return;
+            }
+
+            Line cap = new Line(endpoint, closestPoint)
+            {
+                LayerId = targetLayerId,
+                ColorIndex = 256
+            };
+            if (caps.Exists(existing => SameUndirectedSegment(existing, cap, tolerance)))
+            {
+                cap.Dispose();
+                return;
+            }
+
+            ownerSpace.AppendEntity(cap);
+            transaction.AddNewlyCreatedDBObject(cap, true);
+            caps.Add(cap);
+        }
+
+        private static bool IsEndpointConnected(Point3d endpoint, Line ownerSegment, List<Line> segments, double tolerance)
+        {
+            foreach (Line segment in segments)
+            {
+                if (ReferenceEquals(segment, ownerSegment) || segment.IsErased)
+                    continue;
+                if (DistanceToLineSegment(endpoint, segment) <= tolerance)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static double DistanceToLineSegment(Point3d point, Line segment)
+        {
+            Vector3d vector = segment.EndPoint - segment.StartPoint;
+            double lengthSquared = vector.DotProduct(vector);
+            if (lengthSquared <= MinimumConnectionTolerance * MinimumConnectionTolerance)
+                return point.DistanceTo(segment.StartPoint);
+
+            double parameter = (point - segment.StartPoint).DotProduct(vector) / lengthSquared;
+            parameter = Math.Max(0.0, Math.Min(1.0, parameter));
+            Point3d projection = segment.StartPoint + vector * parameter;
+            return point.DistanceTo(projection);
+        }
+
+        private static void CollectStuccoEntity(Transaction transaction, ObjectId objectId, HashSet<ObjectId> excludedIds, ObjectId targetLayerId, HashSet<ObjectId> collectedIds, List<Line> stuccoLines, List<Line> polylineSegments)
         {
             if (objectId.IsNull ||
                 !objectId.IsValid ||
@@ -292,9 +547,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void CollectStraightPolylineSegments(
-            Polyline polyline,
-            List<Line> segments)
+        private static void CollectStraightPolylineSegments(Polyline polyline, List<Line> segments)
         {
             int segmentCount = polyline.Closed
                 ? polyline.NumberOfVertices
@@ -311,10 +564,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void RemoveLinesCoveredByPolylineSegments(
-            List<Line> lines,
-            List<Line> references,
-            double tolerance)
+        private static void RemoveLinesCoveredByPolylineSegments(List<Line> lines, List<Line> references, double tolerance)
         {
             foreach (Line line in lines)
             {
@@ -326,10 +576,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static double GetCoveredLength(
-            Line line,
-            List<Line> references,
-            double tolerance)
+        private static double GetCoveredLength(Line line, List<Line> references, double tolerance)
         {
             Vector3d lineVector = line.EndPoint - line.StartPoint;
             if (lineVector.Length <= tolerance)
@@ -384,10 +631,7 @@ namespace Tools.VinaCad.Helper.Helper
             return coveredLength + currentEnd - currentStart;
         }
 
-        private static void ConnectLineEndpointsToReferences(
-            List<Line> lines,
-            List<Line> references,
-            double thickness)
+        private static void ConnectLineEndpointsToReferences(List<Line> lines, List<Line> references, double thickness)
         {
             if (lines.Count == 0 || references.Count == 0)
                 return;
@@ -449,9 +693,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void RemoveDuplicateStuccoLines(
-            List<Line> lines,
-            double tolerance)
+        private static void RemoveDuplicateStuccoLines(List<Line> lines, double tolerance)
         {
             for (int firstIndex = 0; firstIndex < lines.Count; firstIndex++)
             {
@@ -468,11 +710,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void MergeCollinearLineGaps(
-            List<Line> lines,
-            List<Line> references,
-            double thickness,
-            double tolerance)
+        private static void MergeCollinearLineGaps(List<Line> lines, List<Line> references, double thickness, double tolerance)
         {
             double maximumGap = Math.Max(
                 tolerance,
@@ -533,14 +771,7 @@ namespace Tools.VinaCad.Helper.Helper
             while (merged);
         }
 
-        private static bool TryGetCollinearUnion(
-            Line first,
-            Line second,
-            double tolerance,
-            out Point3d unionStart,
-            out Point3d unionEnd,
-            out double gapStart,
-            out double gapEnd)
+        private static bool TryGetCollinearUnion(Line first, Line second, double tolerance, out Point3d unionStart, out Point3d unionEnd, out double gapStart, out double gapEnd)
         {
             unionStart = Point3d.Origin;
             unionEnd = Point3d.Origin;
@@ -597,15 +828,7 @@ namespace Tools.VinaCad.Helper.Helper
             return true;
         }
 
-        private static bool HasPerpendicularBlocker(
-            Line first,
-            Line second,
-            List<Line> lines,
-            List<Line> references,
-            double gapStart,
-            double gapEnd,
-            double maximumJoinDistance,
-            double tolerance)
+        private static bool HasPerpendicularBlocker(Line first, Line second, List<Line> lines, List<Line> references, double gapStart, double gapEnd, double maximumJoinDistance, double tolerance)
         {
             foreach (Line candidate in lines)
             {
@@ -645,13 +868,7 @@ namespace Tools.VinaCad.Helper.Helper
             return false;
         }
 
-        private static bool CanBlockCollinearGap(
-            Line gapLine,
-            Line candidate,
-            double gapStart,
-            double gapEnd,
-            double maximumJoinDistance,
-            double tolerance)
+        private static bool CanBlockCollinearGap(Line gapLine, Line candidate, double gapStart, double gapEnd, double maximumJoinDistance, double tolerance)
         {
             if (!TryGetLineIntersection(
                     gapLine,
@@ -678,10 +895,7 @@ namespace Tools.VinaCad.Helper.Helper
                        candidate.EndPoint.DistanceTo(intersection)) <= maximumJoinDistance;
         }
 
-        private static bool SameUndirectedSegment(
-            Line first,
-            Line second,
-            double tolerance)
+        private static bool SameUndirectedSegment(Line first, Line second, double tolerance)
         {
             return
                 (first.StartPoint.DistanceTo(second.StartPoint) <= tolerance &&
@@ -690,323 +904,172 @@ namespace Tools.VinaCad.Helper.Helper
                  first.EndPoint.DistanceTo(second.StartPoint) <= tolerance);
         }
 
-        private static List<StuccoModel.WallEdge> CollectWallEdges(
-            Transaction transaction,
-            BlockTableRecord currentSpace,
-            HashSet<ObjectId> excludedIds,
-            ObjectId targetLayerId,
-            List<Line> transientLines)
+        private static void SplitLinesAtIntersections(Transaction transaction, BlockTableRecord ownerSpace, List<Line> lines, List<Line> references, List<Curve> sourceCurves, double tolerance)
         {
-            List<StuccoModel.WallEdge> edges = new List<StuccoModel.WallEdge>();
-
-            foreach (ObjectId objectId in currentSpace)
+            Dictionary<Line, List<double>> cutParameters = new Dictionary<Line, List<double>>();
+            foreach (Line line in lines)
             {
-                if (excludedIds.Contains(objectId))
+                if (!line.IsErased)
+                    cutParameters[line] = new List<double> { 0.0, 1.0 };
+            }
+
+            for (int firstIndex = 0; firstIndex < lines.Count; firstIndex++)
+            {
+                Line first = lines[firstIndex];
+                if (first.IsErased)
                     continue;
 
-                DBObject source = transaction.GetObject(objectId, OpenMode.ForRead);
-                if (source is Line line &&
-                    !line.IsErased &&
-                    line.LayerId != targetLayerId &&
-                    !DrawWallHelper.IsWallCap(line))
+                for (int secondIndex = firstIndex + 1; secondIndex < lines.Count; secondIndex++)
                 {
-                    AddWallEdge(
-                        line.LayerId,
-                        line.StartPoint,
-                        line.EndPoint,
-                        false,
-                        edges,
-                        transientLines);
-                }
-                else if (source is Polyline polyline &&
-                         !polyline.IsErased &&
-                         polyline.LayerId != targetLayerId)
-                {
-                    int segmentCount = polyline.Closed
-                        ? polyline.NumberOfVertices
-                        : Math.Max(0, polyline.NumberOfVertices - 1);
-                    for (int index = 0; index < segmentCount; index++)
+                    Line second = lines[secondIndex];
+                    if (second.IsErased ||
+                        !TryGetLineIntersection(
+                            first,
+                            second,
+                            out _,
+                            out double firstParameter,
+                            out double secondParameter) ||
+                        !IsParameterOnSegment(firstParameter) ||
+                        !IsParameterOnSegment(secondParameter))
                     {
-                        if (Math.Abs(polyline.GetBulgeAt(index)) > 1e-10)
-                            continue;
+                        continue;
+                    }
 
-                        AddWallEdge(
-                            polyline.LayerId,
-                            polyline.GetPoint3dAt(index),
-                            polyline.GetPoint3dAt((index + 1) % polyline.NumberOfVertices),
-                            polyline.Closed,
-                            edges,
-                            transientLines);
+                    AddInteriorCutParameter(
+                        cutParameters[first],
+                        firstParameter,
+                        first.StartPoint.DistanceTo(first.EndPoint),
+                        tolerance);
+                    AddInteriorCutParameter(
+                        cutParameters[second],
+                        secondParameter,
+                        second.StartPoint.DistanceTo(second.EndPoint),
+                        tolerance);
+                }
+            }
+
+            foreach (Line line in lines)
+            {
+                if (line.IsErased)
+                    continue;
+                if (!cutParameters.TryGetValue(line, out List<double>? parameters))
+                    continue;
+
+                parameters.Sort();
+                if (parameters.Count <= 2)
+                    continue;
+
+                Point3d originalStart = line.StartPoint;
+                Point3d originalEnd = line.EndPoint;
+                Vector3d originalVector = originalEnd - originalStart;
+                double lineLength = originalVector.Length;
+                if (lineLength <= tolerance)
+                    continue;
+
+                double parameterTolerance = tolerance / lineLength;
+                bool wroteFirst = false;
+
+                for (int index = 0; index < parameters.Count - 1; index++)
+                {
+                    double startParameter = parameters[index];
+                    double endParameter = parameters[index + 1];
+                    Point3d start = originalStart + originalVector * startParameter;
+                    Point3d end = originalStart + originalVector * endParameter;
+                    if (start.DistanceTo(end) <= tolerance)
+                        continue;
+
+                    bool startIsOriginalEndpoint = startParameter <= parameterTolerance;
+                    bool endIsOriginalEndpoint = endParameter >= 1.0 - parameterTolerance;
+
+                    if (startIsOriginalEndpoint ^ endIsOriginalEndpoint)
+                    {
+                        Point3d freeEndpoint = startIsOriginalEndpoint ? start : end;
+                        if (!IsPointAnchored(freeEndpoint, line, lines, references, sourceCurves, tolerance))
+                            continue;
+                    }
+
+                    if (!wroteFirst)
+                    {
+                        line.StartPoint = start;
+                        line.EndPoint = end;
+                        wroteFirst = true;
+                    }
+                    else
+                    {
+                        Line piece = new Line(start, end)
+                        {
+                            LayerId = line.LayerId,
+                            Color = line.Color,
+                            LineWeight = line.LineWeight,
+                            LinetypeId = line.LinetypeId,
+                            LinetypeScale = line.LinetypeScale,
+                            Transparency = line.Transparency
+                        };
+                        ownerSpace.AppendEntity(piece);
+                        transaction.AddNewlyCreatedDBObject(piece, true);
                     }
                 }
-            }
 
-            return edges;
+                if (!wroteFirst)
+                    line.Erase(true);
+            }
         }
 
-        private static void AddWallEdge(
-            ObjectId layerId,
-            Point3d start,
-            Point3d end,
-            bool isClosedBoundary,
-            List<StuccoModel.WallEdge> edges,
-            List<Line> transientLines)
+        private static bool IsPointAnchored(Point3d point, Line owner, List<Line> lines, List<Line> references, List<Curve> sourceCurves, double tolerance)
         {
-            if (start.DistanceTo(end) <= MinimumConnectionTolerance)
+            foreach (Line candidate in lines)
+            {
+                if (ReferenceEquals(candidate, owner) || candidate.IsErased)
+                    continue;
+                if (point.DistanceTo(candidate.StartPoint) <= tolerance ||
+                    point.DistanceTo(candidate.EndPoint) <= tolerance)
+                {
+                    return true;
+                }
+            }
+
+            foreach (Line reference in references)
+            {
+                if (DistanceToLineSegment(point, reference) <= tolerance)
+                    return true;
+            }
+
+            foreach (Curve sourceCurve in sourceCurves)
+            {
+                try
+                {
+                    if (point.DistanceTo(sourceCurve.GetClosestPointTo(point, false)) <= tolerance)
+                        return true;
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
+        private static void AddInteriorCutParameter(List<double> parameters, double parameter, double lineLength, double tolerance)
+        {
+            if (lineLength <= tolerance)
                 return;
 
-            Line geometry = new Line(start, end);
-            transientLines.Add(geometry);
-            edges.Add(new StuccoModel.WallEdge(
-                layerId,
-                geometry,
-                isClosedBoundary));
+            double parameterTolerance = tolerance / lineLength;
+            if (parameter <= parameterTolerance || parameter >= 1.0 - parameterTolerance)
+                return;
+            if (parameters.Exists(value => Math.Abs(value - parameter) <= parameterTolerance))
+                return;
+
+            parameters.Add(Math.Max(0.0, Math.Min(1.0, parameter)));
         }
 
-        private static void CollectBoundaryLineSegments(
-            Polyline boundary,
-            List<Line> segments)
-        {
-            int segmentCount = boundary.Closed
-                ? boundary.NumberOfVertices
-                : Math.Max(0, boundary.NumberOfVertices - 1);
-            for (int index = 0; index < segmentCount; index++)
-            {
-                if (Math.Abs(boundary.GetBulgeAt(index)) > 1e-10)
-                    continue;
-
-                Point3d start = boundary.GetPoint3dAt(index);
-                Point3d end = boundary.GetPoint3dAt((index + 1) % boundary.NumberOfVertices);
-                if (start.DistanceTo(end) > MinimumConnectionTolerance)
-                    segments.Add(new Line(start, end));
-            }
-        }
-
-        private static StuccoModel.WallEdge? FindBoundarySourceEdge(
-            Line boundarySegment,
-            List<StuccoModel.WallEdge> candidates,
-            double maximumMatchDistance)
-        {
-            Vector3d boundaryVector = boundarySegment.EndPoint - boundarySegment.StartPoint;
-            if (boundaryVector.Length <= MinimumConnectionTolerance)
-                return null;
-
-            Vector3d direction = boundaryVector.GetNormal();
-            StuccoModel.WallEdge? bestCandidate = null;
-            double bestDistance = double.PositiveInfinity;
-            double bestOverlap = 0.0;
-            foreach (StuccoModel.WallEdge candidate in candidates)
-            {
-                if (!TryGetLineOverlap(
-                        boundarySegment,
-                        candidate.Geometry,
-                        out double overlapStart,
-                        out double overlapEnd))
-                    continue;
-
-                double distance = DistanceToInfiniteLine(
-                    candidate.Geometry.StartPoint,
-                    boundarySegment.StartPoint,
-                    direction);
-                double overlap = overlapEnd - overlapStart;
-                if (distance > maximumMatchDistance ||
-                    distance > bestDistance + MinimumConnectionTolerance ||
-                    (Math.Abs(distance - bestDistance) <= MinimumConnectionTolerance &&
-                     overlap <= bestOverlap))
-                {
-                    continue;
-                }
-
-                bestDistance = distance;
-                bestOverlap = overlap;
-                bestCandidate = candidate;
-            }
-
-            return bestCandidate;
-        }
-
-        private static StuccoModel.WallEdge? FindOppositeWallEdge(
-            Line boundarySegment,
-            StuccoModel.WallEdge innerEdge,
-            List<StuccoModel.WallEdge> candidates,
-            Point3d interiorPoint,
-            double maximumWallWidth)
-        {
-            Vector3d direction = (boundarySegment.EndPoint - boundarySegment.StartPoint).GetNormal();
-            double interiorSide = GetSignedSide(
-                interiorPoint,
-                boundarySegment.StartPoint,
-                direction);
-            StuccoModel.WallEdge? bestCandidate = null;
-            double bestDistance = double.PositiveInfinity;
-            double bestOverlap = 0.0;
-            bool bestMatchesBoundaryKind = false;
-
-            foreach (StuccoModel.WallEdge candidate in candidates)
-            {
-                if (candidate.LayerId != innerEdge.LayerId ||
-                    !TryGetLineOverlap(
-                        boundarySegment,
-                        candidate.Geometry,
-                        out double overlapStart,
-                        out double overlapEnd))
-                {
-                    continue;
-                }
-
-                double distance = DistanceToInfiniteLine(
-                    candidate.Geometry.StartPoint,
-                    innerEdge.Geometry.StartPoint,
-                    direction);
-                Point3d candidateMidpoint = new Point3d(
-                    (candidate.Geometry.StartPoint.X + candidate.Geometry.EndPoint.X) * 0.5,
-                    (candidate.Geometry.StartPoint.Y + candidate.Geometry.EndPoint.Y) * 0.5,
-                    (candidate.Geometry.StartPoint.Z + candidate.Geometry.EndPoint.Z) * 0.5);
-                double candidateSide = GetSignedSide(
-                    candidateMidpoint,
-                    boundarySegment.StartPoint,
-                    direction);
-                double overlap = overlapEnd - overlapStart;
-                bool matchesBoundaryKind =
-                    candidate.IsClosedBoundary == innerEdge.IsClosedBoundary;
-                if (distance <= MinimumConnectionTolerance ||
-                    distance > maximumWallWidth ||
-                    (Math.Abs(interiorSide) > MinimumConnectionTolerance &&
-                     interiorSide * candidateSide >= 0.0))
-                {
-                    continue;
-                }
-
-                if (bestCandidate.HasValue &&
-                    ((bestMatchesBoundaryKind && !matchesBoundaryKind) ||
-                     (bestMatchesBoundaryKind == matchesBoundaryKind &&
-                      (distance > bestDistance + MinimumConnectionTolerance ||
-                       (Math.Abs(distance - bestDistance) <= MinimumConnectionTolerance &&
-                        overlap <= bestOverlap)))))
-                {
-                    continue;
-                }
-
-                bestDistance = distance;
-                bestOverlap = overlap;
-                bestMatchesBoundaryKind = matchesBoundaryKind;
-                bestCandidate = candidate;
-            }
-
-            return bestCandidate;
-        }
-
-        private static double GetSignedSide(
-            Point3d point,
-            Point3d linePoint,
-            Vector3d normalizedDirection)
-        {
-            Vector3d offset = point - linePoint;
-            return normalizedDirection.X * offset.Y -
-                   normalizedDirection.Y * offset.X;
-        }
-
-        private static bool TryClipLineToOverlap(
-            Line reference,
-            Line candidate,
-            out Line clippedLine)
-        {
-            clippedLine = null;
-            if (!TryGetLineOverlap(reference, candidate, out double overlapStart, out double overlapEnd))
-                return false;
-
-            Vector3d referenceDirection = (reference.EndPoint - reference.StartPoint).GetNormal();
-            Vector3d candidateDirection = (candidate.EndPoint - candidate.StartPoint).GetNormal();
-            double candidateStartProjection =
-                (candidate.StartPoint - reference.StartPoint).DotProduct(referenceDirection);
-            double directionFactor = candidateDirection.DotProduct(referenceDirection);
-            if (Math.Abs(directionFactor) <= MinimumConnectionTolerance)
-                return false;
-
-            Point3d start = candidate.StartPoint +
-                            candidateDirection * ((overlapStart - candidateStartProjection) / directionFactor);
-            Point3d end = candidate.StartPoint +
-                          candidateDirection * ((overlapEnd - candidateStartProjection) / directionFactor);
-            if (start.DistanceTo(end) <= MinimumConnectionTolerance)
-                return false;
-
-            clippedLine = new Line(start, end);
-            return true;
-        }
-
-        private static bool TryGetLineOverlap(
-            Line reference,
-            Line candidate,
-            out double overlapStart,
-            out double overlapEnd)
-        {
-            overlapStart = 0.0;
-            overlapEnd = 0.0;
-
-            Vector3d referenceVector = reference.EndPoint - reference.StartPoint;
-            Vector3d candidateVector = candidate.EndPoint - candidate.StartPoint;
-            if (referenceVector.Length <= MinimumConnectionTolerance ||
-                candidateVector.Length <= MinimumConnectionTolerance)
-            {
-                return false;
-            }
-
-            Vector3d direction = referenceVector.GetNormal();
-            if (Math.Abs(direction.DotProduct(candidateVector.GetNormal())) <
-                1.0 - ParallelDotTolerance)
-            {
-                return false;
-            }
-
-            double candidateStart =
-                (candidate.StartPoint - reference.StartPoint).DotProduct(direction);
-            double candidateEnd =
-                (candidate.EndPoint - reference.StartPoint).DotProduct(direction);
-            overlapStart = Math.Max(0.0, Math.Min(candidateStart, candidateEnd));
-            overlapEnd = Math.Min(referenceVector.Length, Math.Max(candidateStart, candidateEnd));
-            return overlapEnd - overlapStart > MinimumConnectionTolerance;
-        }
-
-        private static double DistanceToInfiniteLine(
-            Point3d point,
-            Point3d linePoint,
-            Vector3d normalizedDirection)
+        private static double DistanceToInfiniteLine(Point3d point, Point3d linePoint, Vector3d normalizedDirection)
         {
             Vector3d offset = point - linePoint;
             return Math.Abs(offset.X * normalizedDirection.Y - offset.Y * normalizedDirection.X);
         }
 
-        private static Point3d GetPointAwayFromOtherFace(
-            Line face,
-            Line otherFace,
-            double thickness)
-        {
-            Point3d otherMidpoint = new Point3d(
-                (otherFace.StartPoint.X + otherFace.EndPoint.X) * 0.5,
-                (otherFace.StartPoint.Y + otherFace.EndPoint.Y) * 0.5,
-                (otherFace.StartPoint.Z + otherFace.EndPoint.Z) * 0.5);
-            Point3d facePoint = face.GetClosestPointTo(otherMidpoint, false);
-            Point3d otherPoint = otherFace.GetClosestPointTo(facePoint, false);
-            Vector3d awayVector = facePoint - otherPoint;
-            if (awayVector.Length <= MinimumConnectionTolerance)
-            {
-                Vector3d direction = (face.EndPoint - face.StartPoint).GetNormal();
-                awayVector = new Vector3d(-direction.Y, direction.X, 0.0);
-            }
-
-            double guideDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
-            return facePoint + awayVector.GetNormal() * guideDistance;
-        }
-
-        private static int AppendOffsetOnSide(
-            Curve sourceCurve,
-            Point3d sidePoint,
-            double thickness,
-            Database database,
-            Transaction transaction,
-            BlockTableRecord ownerSpace,
-            ObjectId targetLayerId,
-            List<ObjectId> createdIds)
+        private static int AppendOffsetOnSide(Curve sourceCurve, Point3d sidePoint, double thickness, Database database, Transaction transaction, BlockTableRecord ownerSpace, ObjectId targetLayerId, List<ObjectId> createdIds)
         {
             List<Entity> positiveOffsets = TryCreateOffsets(sourceCurve, thickness, out Exception? positiveError);
             List<Entity> negativeOffsets = TryCreateOffsets(sourceCurve, -thickness, out Exception? negativeError);
@@ -1056,9 +1119,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void TrimOffsetLineIntersections(
-            List<Line> lines,
-            double thickness)
+        private static void TrimOffsetLineIntersections(List<Line> lines, double thickness)
         {
             if (lines.Count < 2)
                 return;
@@ -1070,7 +1131,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             double cornerJoinDistance = Math.Max(
                 MinimumConnectionTolerance * 1000.0,
-                Math.Abs(thickness) * MaximumWallWidthFactor);
+                Math.Abs(thickness) * MiterLimitFactor + 1.0);
             double branchJoinDistance = Math.Max(
                 MinimumConnectionTolerance * 1000.0,
                 Math.Abs(thickness) * 2.0);
@@ -1162,12 +1223,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static bool TryGetLineIntersection(
-            Line first,
-            Line second,
-            out Point3d intersection,
-            out double firstParameter,
-            out double secondParameter)
+        private static bool TryGetLineIntersection(Line first, Line second, out Point3d intersection, out double firstParameter, out double secondParameter)
         {
             intersection = Point3d.Origin;
             firstParameter = double.NaN;
@@ -1206,10 +1262,7 @@ namespace Tools.VinaCad.Helper.Helper
                    parameter <= 1.0 + parameterTolerance;
         }
 
-        private static bool IsIntersectionNearEndpoint(
-            Line line,
-            Point3d intersection,
-            double maximumJoinDistance)
+        private static bool IsIntersectionNearEndpoint(Line line, Point3d intersection, double maximumJoinDistance)
         {
             double endpointDistance = Math.Min(
                 line.StartPoint.DistanceTo(intersection),
@@ -1218,13 +1271,7 @@ namespace Tools.VinaCad.Helper.Helper
             return endpointDistance <= GetEndpointJoinAllowance(lineLength, maximumJoinDistance);
         }
 
-        private static void StoreTrimCandidate(
-            Line line,
-            int lineIndex,
-            Point3d intersection,
-            double maximumJoinDistance,
-            Point3d?[] snappedPoints,
-            double[] bestDistances)
+        private static void StoreTrimCandidate(Line line, int lineIndex, Point3d intersection, double maximumJoinDistance, Point3d?[] snappedPoints, double[] bestDistances)
         {
             double startDistance = line.StartPoint.DistanceTo(intersection);
             double endDistance = line.EndPoint.DistanceTo(intersection);
@@ -1244,10 +1291,7 @@ namespace Tools.VinaCad.Helper.Helper
                 bestDistances);
         }
 
-        private static ObjectId GetTargetLayerId(
-            Transaction transaction,
-            Database database,
-            string targetLayerName)
+        private static ObjectId GetTargetLayerId(Transaction transaction, Database database, string targetLayerName)
         {
             LayerTable layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
             if (!layerTable.Has(targetLayerName))
@@ -1271,12 +1315,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Math.Max(maximumJoinDistance * 0.5, lineLength * 0.35));
         }
 
-        private static void StoreNearestSnap(
-            int endpointIndex,
-            Point3d candidate,
-            double distance,
-            Point3d?[] snappedPoints,
-            double[] bestDistances)
+        private static void StoreNearestSnap(int endpointIndex, Point3d candidate, double distance, Point3d?[] snappedPoints, double[] bestDistances)
         {
             if (distance >= bestDistances[endpointIndex])
                 return;
@@ -1337,10 +1376,7 @@ namespace Tools.VinaCad.Helper.Helper
             return score;
         }
 
-        private static void ValidateArguments(
-            Database database,
-            double thickness,
-            string targetLayerName)
+        private static void ValidateArguments(Database database, double thickness, string targetLayerName)
         {
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
@@ -1353,8 +1389,7 @@ namespace Tools.VinaCad.Helper.Helper
         private static void DisposeTransientEntities(IEnumerable<Entity> entities)
         {
             foreach (Entity entity in entities)
-                entity?.Dispose();
+                entity.Dispose();
         }
-
     }
 }

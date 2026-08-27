@@ -2,7 +2,7 @@ using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
-using System.Windows;
+using System.Collections.Generic;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
@@ -48,11 +48,13 @@ namespace Tools.VinaCad.Action.Actions
             int processedCount = 0;
             int createdCount = 0;
             int failedCount = 0;
+            bool hasInteriorPoint = false;
             WriteSettings(settings);
 
             while (true)
             {
-                PromptPointOptions pointOptions = new PromptPointOptions("\nChọn điểm trong phòng hoặc [S] Settings <Kết thúc>: ")
+                string defaultAction = hasInteriorPoint ? "Kết thúc" : "Chọn tường mặt ngoài";
+                PromptPointOptions pointOptions = new PromptPointOptions($"\nChọn điểm trong phòng hoặc [S] <{defaultAction}>: ")
                 {
                     AllowNone = true,
                     AppendKeywordsToMessage = false
@@ -67,20 +69,43 @@ namespace Tools.VinaCad.Action.Actions
                     {
                         settings = updatedSettings;
                         EnsureTargetLayer(settings);
-                        _sessionSettings = settings.Clone();
                         WriteSettings(settings);
                     }
 
                     continue;
                 }
 
-                if (pointResult.Status == PromptStatus.None ||
-                    pointResult.Status == PromptStatus.Cancel)
+                if (pointResult.Status == PromptStatus.Cancel)
                     break;
+
+                if (pointResult.Status == PromptStatus.None)
+                {
+                    if (hasInteriorPoint)
+                        break;
+
+                    try
+                    {
+                        int outsideCount = DrawExteriorSelection(settings);
+                        if (outsideCount > 0)
+                        {
+                            createdCount += outsideCount;
+                            processedCount++;
+                            _editor.UpdateScreen();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Info(nameof(DrawStucco), ex);
+                        failedCount++;
+                    }
+
+                    break;
+                }
 
                 if (pointResult.Status != PromptStatus.OK)
                     continue;
 
+                hasInteriorPoint = true;
                 try
                 {
                     createdCount += DrawInteriorBoundary(pointResult.Value, settings);
@@ -89,12 +114,39 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 catch (Exception ex)
                 {
-                    ReportBoundaryError(ex);
+                    Logger.Info(nameof(DrawStucco), ex);
                     failedCount++;
                 }
             }
 
             _editor.WriteMessage($"\nFN: {processedCount} vùng, {createdCount} đối tượng vữa, {failedCount} lỗi.");
+        }
+
+        private int DrawExteriorSelection(StuccoSetting settings)
+        {
+            TypedValue[] filterValues =
+            {
+                new TypedValue((int)DxfCode.Start, "LINE,LWPOLYLINE,POLYLINE,ARC,CIRCLE,SPLINE,ELLIPSE")
+            };
+            PromptSelectionOptions selectionOptions = new PromptSelectionOptions
+            {
+                MessageForAdding = "\nChọn các đường bao mặt ngoài: "
+            };
+            PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
+            if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
+                return 0;
+
+            PromptPointOptions sideOptions = new PromptPointOptions("\nChọn điểm phía ngoài để xác định hướng vữa: ");
+            PromptPointResult sideResult = _editor.GetPoint(sideOptions);
+            if (sideResult.Status != PromptStatus.OK)
+                return 0;
+
+            return StuccoHelper.CreateStuccoForSelection(
+                _database,
+                selectionResult.Value.GetObjectIds(),
+                ToWorldPoint(sideResult.Value),
+                settings.Thickness,
+                settings.LayerName);
         }
 
         private int DrawInteriorBoundary(Point3d interiorPoint, StuccoSetting settings)
@@ -103,44 +155,16 @@ namespace Tools.VinaCad.Action.Actions
             try
             {
                 _editor.Regen();
-                temporaryBoundaryIds = CreateBoundaryWithCoreCommand(
-                    interiorPoint,
-                    settings.Thickness);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(
-                    $"Bước tạo biên kín bằng -BOUNDARY thất bại: {ex.Message}",
-                    ex);
-            }
+                temporaryBoundaryIds = CreateBoundaryWithCoreCommand(interiorPoint, settings.Thickness);
+                if (temporaryBoundaryIds.Length == 0)
+                    throw new InvalidOperationException("Không tìm thấy biên kín quanh điểm đã chọn. Hãy kiểm tra khe hở và bảo đảm toàn bộ biên phòng đang hiển thị trên màn hình.");
 
-            if (temporaryBoundaryIds.Length == 0)
-                throw new InvalidOperationException("Không tìm thấy biên kín quanh điểm đã chọn. Hãy kiểm tra khe hở và bảo đảm toàn bộ biên phòng đang hiển thị trên màn hình.");
-
-            try
-            {
-                Point3d sidePointWcs = ToWorldPoint(interiorPoint);
-                try
-                {
-                    int count = StuccoHelper.CreateStuccoForBoundary(
-                        _database,
-                        temporaryBoundaryIds,
-                        sidePointWcs,
-                        settings.Thickness,
-                        settings.LayerName);
-
-                    if (count == 0)
-                        throw new InvalidOperationException($"Biên tìm được ({GetEntityTypeSummary(temporaryBoundaryIds)}) không thể tạo đường vữa.");
-
-                    return count;
-                }
-                catch (Exception ex)
-                {
-                    string boundaryTypes = GetEntityTypeSummary(temporaryBoundaryIds);
-                    throw new InvalidOperationException(
-                        $"Bước tạo và nối vữa ({boundaryTypes}) thất bại: {ex.Message}",
-                        ex);
-                }
+                return StuccoHelper.CreateStuccoForBoundary(
+                    _database,
+                    temporaryBoundaryIds,
+                    ToWorldPoint(interiorPoint),
+                    settings.Thickness,
+                    settings.LayerName);
             }
             finally
             {
@@ -169,9 +193,7 @@ namespace Tools.VinaCad.Action.Actions
                 $"chiều dày={settings.Thickness:0.###}.");
         }
 
-        private bool TryEditSettings(
-            StuccoSetting initialSettings,
-            out StuccoSetting acceptedSettings)
+        private bool TryEditSettings(StuccoSetting initialSettings, out StuccoSetting acceptedSettings)
         {
             StuccoSetting workingSettings = initialSettings.Clone();
 
@@ -227,8 +249,6 @@ namespace Tools.VinaCad.Action.Actions
             short pickedColorIndex = layer.Color.ColorIndex;
             if (pickedColorIndex >= 1 && pickedColorIndex <= 255)
                 settings.LayerColorIndex = pickedColorIndex;
-
-            transaction.Commit();
         }
 
         private void MeasureThickness(StuccoSetting settings)
@@ -241,23 +261,22 @@ namespace Tools.VinaCad.Action.Actions
             settings.Thickness = result.Value;
         }
 
-        private void ReportBoundaryError(Exception ex)
+        private ObjectId[] CreateBoundaryWithCoreCommand(Point3d interiorPointInCurrentUcs, double thickness)
         {
-            Logger.Info(nameof(DrawStucco), ex);
-        }
-
-        private ObjectId[] CreateBoundaryWithCoreCommand(
-            Point3d interiorPointInCurrentUcs,
-            double thickness)
-        {
-            System.Collections.Generic.HashSet<ObjectId> idsBefore = GetCurrentSpaceObjectIds();
-            object previousHpBound = TryGetSystemVariable("HPBOUND", 1);
-            object previousHpBoundRetain = TryGetSystemVariable("HPBOUNDRETAIN", 1);
-            object previousCommandEcho = TryGetSystemVariable("CMDECHO", 1);
-            object previousNoMutt = TryGetSystemVariable("NOMUTT", 0);
-            object previousOsMode = TryGetSystemVariable("OSMODE", 0);
-            object previousAutoSnap = TryGetSystemVariable("AUTOSNAP", 0);
-            object previousOsnapCoord = TryGetSystemVariable("OSNAPCOORD", 0);
+            HashSet<ObjectId> idsBefore = GetCurrentSpaceObjectIds();
+            (string Name, object Value)[] boundaryVariables =
+            {
+                ("HPBOUND", 1),
+                ("HPBOUNDRETAIN", 1),
+                ("HPISLANDDETECTIONMODE", 1),
+                ("HPISLANDDETECTION", 0),
+                ("CMDECHO", 0),
+                ("NOMUTT", 1),
+                ("OSMODE", 0),
+                ("AUTOSNAP", 0),
+                ("OSNAPCOORD", 1)
+            };
+            object[] previousValues = new object[boundaryVariables.Length];
 
             double retryOffset = Math.Max(0.0001, Math.Abs(thickness) * 0.01);
             Point3d[] seedPoints =
@@ -269,13 +288,11 @@ namespace Tools.VinaCad.Action.Actions
 
             try
             {
-                TrySetSystemVariable("HPBOUND", 1);
-                TrySetSystemVariable("HPBOUNDRETAIN", 1);
-                TrySetSystemVariable("CMDECHO", 0);
-                TrySetSystemVariable("NOMUTT", 1);
-                TrySetSystemVariable("OSMODE", 0);
-                TrySetSystemVariable("AUTOSNAP", 0);
-                TrySetSystemVariable("OSNAPCOORD", 1);
+                for (int index = 0; index < boundaryVariables.Length; index++)
+                {
+                    previousValues[index] = TryGetSystemVariable(boundaryVariables[index].Name, boundaryVariables[index].Value);
+                    TrySetSystemVariable(boundaryVariables[index].Name, boundaryVariables[index].Value);
+                }
 
                 foreach (Point3d seedPoint in seedPoints)
                 {
@@ -287,23 +304,16 @@ namespace Tools.VinaCad.Action.Actions
             }
             finally
             {
-                TrySetSystemVariable("HPBOUND", previousHpBound);
-                TrySetSystemVariable("HPBOUNDRETAIN", previousHpBoundRetain);
-                TrySetSystemVariable("CMDECHO", previousCommandEcho);
-                TrySetSystemVariable("NOMUTT", previousNoMutt);
-                TrySetSystemVariable("OSMODE", previousOsMode);
-                TrySetSystemVariable("AUTOSNAP", previousAutoSnap);
-                TrySetSystemVariable("OSNAPCOORD", previousOsnapCoord);
+                for (int index = 0; index < boundaryVariables.Length; index++)
+                    TrySetSystemVariable(boundaryVariables[index].Name, previousValues[index]);
             }
 
             return Array.Empty<ObjectId>();
         }
 
-        private ObjectId[] GetNewCurrentSpaceCurveIds(
-            System.Collections.Generic.HashSet<ObjectId> idsBefore)
+        private ObjectId[] GetNewCurrentSpaceCurveIds(HashSet<ObjectId> idsBefore)
         {
-            System.Collections.Generic.List<ObjectId> newCurveIds =
-                new System.Collections.Generic.List<ObjectId>();
+            List<ObjectId> newCurveIds = new List<ObjectId>();
             using Transaction transaction = _database.TransactionManager.StartTransaction();
             BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(
                 _database.CurrentSpaceId,
@@ -318,7 +328,6 @@ namespace Tools.VinaCad.Action.Actions
                     newCurveIds.Add(objectId);
             }
 
-            transaction.Commit();
             return newCurveIds.ToArray();
         }
 
@@ -327,10 +336,9 @@ namespace Tools.VinaCad.Action.Actions
             return pointInCurrentUcs.TransformBy(_editor.CurrentUserCoordinateSystem);
         }
 
-        private System.Collections.Generic.HashSet<ObjectId> GetCurrentSpaceObjectIds()
+        private HashSet<ObjectId> GetCurrentSpaceObjectIds()
         {
-            System.Collections.Generic.HashSet<ObjectId> objectIds =
-                new System.Collections.Generic.HashSet<ObjectId>();
+            HashSet<ObjectId> objectIds = new HashSet<ObjectId>();
             using Transaction transaction = _database.TransactionManager.StartTransaction();
             BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(
                 _database.CurrentSpaceId,
@@ -339,31 +347,12 @@ namespace Tools.VinaCad.Action.Actions
             foreach (ObjectId objectId in currentSpace)
                 objectIds.Add(objectId);
 
-            transaction.Commit();
             return objectIds;
-        }
-
-        private string GetEntityTypeSummary(ObjectId[] objectIds)
-        {
-            System.Collections.Generic.HashSet<string> typeNames =
-                new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
-            using Transaction transaction = _database.TransactionManager.StartTransaction();
-
-            foreach (ObjectId objectId in objectIds)
-            {
-                if (!objectId.IsNull && objectId.IsValid &&
-                    transaction.GetObject(objectId, OpenMode.ForRead) is DBObject entity)
-                {
-                    typeNames.Add(entity.GetType().Name);
-                }
-            }
-
-            return typeNames.Count == 0 ? "không rõ kiểu" : string.Join(", ", typeNames);
         }
 
         private void EraseTemporaryEntities(ObjectId[] objectIds)
         {
-            if (objectIds == null || objectIds.Length == 0)
+            if (objectIds.Length == 0)
                 return;
 
             try
@@ -407,8 +396,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 object currentValue = Application.GetSystemVariable(name);
                 object compatibleValue = value;
-                if (currentValue != null && value != null &&
-                    currentValue.GetType() != value.GetType())
+                if (currentValue != null && currentValue.GetType() != value.GetType())
                 {
                     compatibleValue = Convert.ChangeType(value, currentValue.GetType());
                 }

@@ -1,25 +1,19 @@
-using Teigha.DatabaseServices;
 using Teigha.Geometry;
 
 namespace Tools.Model
 {
     public static class StuccoModel
     {
-        public readonly struct WallEdge
+        public readonly struct LineSegment
         {
-            public WallEdge(
-                ObjectId layerId,
-                Line geometry,
-                bool isClosedBoundary)
+            public LineSegment(Point3d start, Point3d end)
             {
-                LayerId = layerId;
-                Geometry = geometry;
-                IsClosedBoundary = isClosedBoundary;
+                Start = start;
+                End = end;
             }
 
-            public ObjectId LayerId { get; }
-            public Line Geometry { get; }
-            public bool IsClosedBoundary { get; }
+            public Point3d Start { get; }
+            public Point3d End { get; }
         }
     }
 }
