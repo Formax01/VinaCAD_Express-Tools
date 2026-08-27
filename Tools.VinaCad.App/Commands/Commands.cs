@@ -523,5 +523,11 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
+        [CommandMethod("FN")]
+        public void StuccoCommand()
+        {
+            new StuccoAction().Execute();
+        }
     }
 }
