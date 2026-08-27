@@ -523,7 +523,51 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+        [CommandMethod("WWT")]
+        public void ChangeWallThicknessCommand()
+        {
+            try
+            {
+                ChangeWallThicknessAction action = new ChangeWallThicknessAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ChangeWallThicknessCommand), ex);
+            }
+        }
 
+        [CommandMethod("WWO")]
+        public void OffsetWallCommand()
+        {
+            try
+            {
+                OffsetWallAction action = new OffsetWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OffsetWallCommand), ex);
+            }
+        }
+
+        [CommandMethod("TW")]
+        public void TrimFixWallCommand()
+        {
+            try
+            {
+                TrimFixWallAction action = new TrimFixWallAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(TrimFixWallCommand), ex);
+            }
+        }
+        
         [CommandMethod("FN")]
         public void StuccoCommand()
         {
