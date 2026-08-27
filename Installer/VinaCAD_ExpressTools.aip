@@ -8,12 +8,12 @@
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="Manufacturer" Value="Formax Technologies"/>
-    <ROW Property="ProductCode" Value="1033:{080873A1-9D82-4BB0-BB48-D2B28AD0430F} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{B16A13CD-98B9-4F7C-A9CF-FB82E688F51F} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
-    <ROW Property="ProductName" Value="VinaCAD_ExpressTools"/>
+    <ROW Property="ProductName" Value="Export CSV"/>
     <ROW Property="ProductVersion" Value="1.0.0.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
-    <ROW Property="UpgradeCode" Value="{4005BA50-D5AB-4AB5-A590-4C893DB29184}"/>
+    <ROW Property="UpgradeCode" Value="{58E3AEBE-17EC-42B2-985B-2E092053019D}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
