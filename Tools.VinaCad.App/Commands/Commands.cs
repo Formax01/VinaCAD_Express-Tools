@@ -571,7 +571,16 @@ namespace Tools.VinaCAD.App.Commands
         [CommandMethod("FN")]
         public void StuccoCommand()
         {
-            new StuccoAction().Execute();
+            try
+            {
+                 StuccoAction action = new StuccoAction();
+                 action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StuccoCommand), ex);
+            }
         }
     }
 }
