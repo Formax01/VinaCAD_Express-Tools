@@ -53,19 +53,40 @@ namespace Tools.VinaCad.Action.Actions
 
             while (true)
             {
-                string defaultAction = hasInteriorPoint ? "Kết thúc" : "Chọn tường mặt ngoài";
-                PromptPointOptions pointOptions = new PromptPointOptions($"\nChọn điểm trong phòng hoặc [S] <{defaultAction}>: ")
+                string defaultAction = hasInteriorPoint ? "Kết thúc" : "Chọn cạnh mặt ngoài";
+                PromptPointOptions pointOptions = new PromptPointOptions($"\nChọn điểm trong phòng hoặc [S - Settings / O - Open] <{defaultAction}>: ")
                 {
                     AllowNone = true,
                     AppendKeywordsToMessage = false
                 };
                 pointOptions.Keywords.Add("S", "Settings", "Settings");
+                pointOptions.Keywords.Add("O", "Open", "Open");
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
 
                 if (pointResult.Status == PromptStatus.Keyword)
                 {
-                    if (TryEditSettings(settings, out StuccoSetting updatedSettings))
+                    if (string.Equals(pointResult.StringResult, "O", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(pointResult.StringResult, "Open", StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            int openWallCount = DrawOpenWallSelection(settings);
+                            if (openWallCount > 0)
+                            {
+                                createdCount += openWallCount;
+                                processedCount++;
+                                hasInteriorPoint = true;
+                                _editor.UpdateScreen();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Info(nameof(DrawStucco), ex);
+                            failedCount++;
+                        }
+                    }
+                    else if (TryEditSettings(settings, out StuccoSetting updatedSettings))
                     {
                         settings = updatedSettings;
                         EnsureTargetLayer(settings);
@@ -149,6 +170,27 @@ namespace Tools.VinaCad.Action.Actions
                 settings.LayerName);
         }
 
+        private int DrawOpenWallSelection(StuccoSetting settings)
+        {
+            TypedValue[] filterValues =
+            {
+                new TypedValue((int)DxfCode.Start, "LINE,LWPOLYLINE,POLYLINE")
+            };
+            PromptSelectionOptions selectionOptions = new PromptSelectionOptions
+            {
+                MessageForAdding = "\nQuét chọn các đường của tường hở: "
+            };
+            PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
+            if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
+                return 0;
+
+            return StuccoHelper.CreateStuccoForOpenWalls(
+                _database,
+                selectionResult.Value.GetObjectIds(),
+                settings.Thickness,
+                settings.LayerName);
+        }
+
         private int DrawInteriorBoundary(Point3d interiorPoint, StuccoSetting settings)
         {
             ObjectId[] temporaryBoundaryIds = Array.Empty<ObjectId>();
@@ -188,9 +230,7 @@ namespace Tools.VinaCad.Action.Actions
 
         private void WriteSettings(StuccoSetting settings)
         {
-            _editor.WriteMessage(
-                $"\nFN: Layer={settings.LayerName}, ACI={settings.LayerColorIndex}, " +
-                $"chiều dày={settings.Thickness:0.###}.");
+            _editor.WriteMessage($"\nFN: Layer={settings.LayerName}, ACI={settings.LayerColorIndex}, " +$"chiều dày={settings.Thickness:0.###}.");
         }
 
         private bool TryEditSettings(StuccoSetting initialSettings, out StuccoSetting acceptedSettings)

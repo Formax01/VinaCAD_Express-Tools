@@ -12,6 +12,8 @@ namespace Tools.VinaCad.Helper.Helper
         private const double MinimumConnectionTolerance = 0.0001;
         private const double ParallelDotTolerance = 0.002;
         private const double MaximumWallWidthFactor = 20.0;
+        private const double MaximumOpenWallWidthFactor = 50.0;
+        private const double MinimumWallFaceOverlapRatio = 0.25;
         private const double CapPerpendicularDotTolerance = 0.2;
         private const double MiterLimitFactor = 10.0;
 
@@ -246,6 +248,440 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 foreach (Polyline path in linePaths)
                     path.Dispose();
+            }
+        }
+
+        public static int CreateStuccoForOpenWalls(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName)
+        {
+            ValidateArguments(database, thickness, targetLayerName);
+            if (sourceIds == null || sourceIds.Length == 0)
+                throw new ArgumentException("Chưa quét chọn tường hở.", nameof(sourceIds));
+
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            ObjectId targetLayerId = GetTargetLayerId(transaction, database, targetLayerName);
+            BlockTableRecord ownerSpace = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+            HashSet<ObjectId> sourceIdSet = new HashSet<ObjectId>(sourceIds);
+            List<ObjectId> createdIds = new List<ObjectId>();
+            List<Line> wallFaces = new List<Line>();
+            List<Line> wallCaps = new List<Line>();
+            List<Line> transientFaces = new List<Line>();
+            List<StuccoModel.WallStrip> wallStrips = new List<StuccoModel.WallStrip>();
+            int createdCount = 0;
+
+            try
+            {
+                foreach (ObjectId sourceId in sourceIds)
+                {
+                    if (sourceId.IsNull || !sourceId.IsValid)
+                        continue;
+                    if (transaction.GetObject(sourceId, OpenMode.ForRead) is not Curve sourceCurve || sourceCurve.LayerId == targetLayerId)
+                        continue;
+
+                    if (sourceCurve is Line line)
+                    {
+                        if (DrawWallHelper.IsWallCap(line))
+                            wallCaps.Add(line);
+                        else if (line.StartPoint.DistanceTo(line.EndPoint) > MinimumConnectionTolerance)
+                            wallFaces.Add(line);
+                    }
+                    else if (sourceCurve is Polyline polyline)
+                    {
+                        CollectStraightPolylineSegments(polyline, transientFaces);
+                    }
+                }
+
+                wallFaces.AddRange(transientFaces);
+                foreach (Line face in wallFaces)
+                {
+                    Line? oppositeFace = FindOppositeOpenWallFace(face, wallFaces, thickness);
+                    if (oppositeFace == null)
+                        continue;
+
+                    AddOpenWallStrip(face, oppositeFace, wallStrips, thickness);
+                    Point3d guidePoint = GetPointAwayFromOppositeFace(face, oppositeFace, thickness);
+                    createdCount += AppendOffsetOnSide(face, guidePoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+                }
+
+                foreach (Line cap in wallCaps)
+                {
+                    if (TryGetOpenWallCapGuidePoint(cap, wallFaces, thickness, out Point3d guidePoint))
+                        createdCount += AppendOffsetOnSide(cap, guidePoint, thickness, database, transaction, ownerSpace, targetLayerId, createdIds);
+                }
+
+                if (createdCount == 0)
+                    throw new InvalidOperationException("Không tìm thấy cặp mặt tường hở hợp lệ trong vùng chọn.");
+
+                TrimStuccoInsideWallIntersections(transaction, ownerSpace, createdIds, targetLayerId, wallStrips, thickness);
+                CleanupStuccoGeometry(transaction, ownerSpace, sourceIdSet, createdIds, targetLayerId, thickness);
+                transaction.Commit();
+                return createdCount;
+            }
+            finally
+            {
+                foreach (Line face in transientFaces)
+                    face.Dispose();
+            }
+        }
+
+        private static Line? FindOppositeOpenWallFace(Line face, List<Line> candidates, double thickness)
+        {
+            string? segmentId = DrawWallHelper.GetWallSegmentId(face);
+            string? side = DrawWallHelper.GetWallSideMarker(face);
+            Line? bestTagged = null;
+            Line? bestGeometry = null;
+            double bestTaggedDistance = double.PositiveInfinity;
+            double bestTaggedOverlap = 0.0;
+            double bestGeometryDistance = double.PositiveInfinity;
+            double bestGeometryOverlap = 0.0;
+            double maximumWidth = Math.Max(MinimumConnectionTolerance * 1000.0, Math.Abs(thickness) * MaximumOpenWallWidthFactor);
+
+            foreach (Line candidate in candidates)
+            {
+                if (ReferenceEquals(candidate, face) || !TryGetParallelWallFaceRelation(face, candidate, maximumWidth, out double distance, out double overlap))
+                    continue;
+
+                StoreWallFaceCandidate(candidate, distance, overlap, ref bestGeometry, ref bestGeometryDistance, ref bestGeometryOverlap);
+                if (string.IsNullOrEmpty(segmentId) || !string.Equals(segmentId, DrawWallHelper.GetWallSegmentId(candidate), StringComparison.Ordinal))
+                    continue;
+
+                string? candidateSide = DrawWallHelper.GetWallSideMarker(candidate);
+                if (!string.IsNullOrEmpty(side) && string.Equals(side, candidateSide, StringComparison.Ordinal))
+                    continue;
+
+                StoreWallFaceCandidate(candidate, distance, overlap, ref bestTagged, ref bestTaggedDistance, ref bestTaggedOverlap);
+            }
+
+            return bestTagged ?? bestGeometry;
+        }
+
+        private static bool TryGetParallelWallFaceRelation(Line first, Line second, double maximumWidth, out double distance, out double overlap)
+        {
+            distance = double.PositiveInfinity;
+            overlap = 0.0;
+            Vector3d firstVector = first.EndPoint - first.StartPoint;
+            Vector3d secondVector = second.EndPoint - second.StartPoint;
+            double firstLength = firstVector.Length;
+            double secondLength = secondVector.Length;
+            if (firstLength <= MinimumConnectionTolerance || secondLength <= MinimumConnectionTolerance)
+                return false;
+
+            Vector3d direction = firstVector.GetNormal();
+            if (Math.Abs(direction.DotProduct(secondVector.GetNormal())) < 1.0 - ParallelDotTolerance)
+                return false;
+
+            double startDistance = DistanceToInfiniteLine(second.StartPoint, first.StartPoint, direction);
+            double endDistance = DistanceToInfiniteLine(second.EndPoint, first.StartPoint, direction);
+            distance = (startDistance + endDistance) * 0.5;
+            if (distance <= MinimumConnectionTolerance || distance > maximumWidth)
+                return false;
+
+            double firstProjection = (second.StartPoint - first.StartPoint).DotProduct(direction);
+            double secondProjection = (second.EndPoint - first.StartPoint).DotProduct(direction);
+            double overlapStart = Math.Max(0.0, Math.Min(firstProjection, secondProjection));
+            double overlapEnd = Math.Min(firstLength, Math.Max(firstProjection, secondProjection));
+            overlap = Math.Max(0.0, overlapEnd - overlapStart);
+            double minimumOverlap = Math.Max(MinimumConnectionTolerance * 100.0, Math.Min(firstLength, secondLength) * MinimumWallFaceOverlapRatio);
+            return overlap >= minimumOverlap;
+        }
+
+        private static void StoreWallFaceCandidate(Line candidate, double distance, double overlap, ref Line? best, ref double bestDistance, ref double bestOverlap)
+        {
+            if (distance > bestDistance + MinimumConnectionTolerance ||
+                (Math.Abs(distance - bestDistance) <= MinimumConnectionTolerance && overlap <= bestOverlap))
+            {
+                return;
+            }
+
+            best = candidate;
+            bestDistance = distance;
+            bestOverlap = overlap;
+        }
+
+        private static Point3d GetPointAwayFromOppositeFace(Line face, Line oppositeFace, double thickness)
+        {
+            Vector3d faceVector = face.EndPoint - face.StartPoint;
+            Vector3d oppositeVector = oppositeFace.EndPoint - oppositeFace.StartPoint;
+            Point3d midpoint = face.StartPoint + faceVector * 0.5;
+            Vector3d oppositeDirection = oppositeVector.GetNormal();
+            Point3d projection = oppositeFace.StartPoint + oppositeDirection * (midpoint - oppositeFace.StartPoint).DotProduct(oppositeDirection);
+            Vector3d awayVector = midpoint - projection;
+            if (awayVector.Length <= MinimumConnectionTolerance)
+            {
+                Vector3d direction = faceVector.GetNormal();
+                awayVector = new Vector3d(-direction.Y, direction.X, 0.0);
+            }
+
+            double guideDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
+            return midpoint + awayVector.GetNormal() * guideDistance;
+        }
+
+        private static bool TryGetOpenWallCapGuidePoint(Line cap, List<Line> wallFaces, double thickness, out Point3d guidePoint)
+        {
+            guidePoint = Point3d.Origin;
+            double tolerance = Math.Max(MinimumConnectionTolerance * 100.0, Math.Abs(thickness) * 0.1);
+            if (!TryGetWallFaceInwardDirection(cap.StartPoint, wallFaces, null, tolerance, out Line? firstFace, out Vector3d firstInward) ||
+                !TryGetWallFaceInwardDirection(cap.EndPoint, wallFaces, firstFace, tolerance, out _, out Vector3d secondInward) ||
+                firstInward.GetNormal().DotProduct(secondInward.GetNormal()) < 1.0 - ParallelDotTolerance)
+            {
+                return false;
+            }
+
+            Vector3d inward = firstInward.GetNormal() + secondInward.GetNormal();
+            if (inward.Length <= MinimumConnectionTolerance)
+                return false;
+
+            Point3d midpoint = cap.StartPoint + (cap.EndPoint - cap.StartPoint) * 0.5;
+            double guideDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
+            guidePoint = midpoint - inward.GetNormal() * guideDistance;
+            return true;
+        }
+
+        private static bool TryGetWallFaceInwardDirection(Point3d endpoint, List<Line> wallFaces, Line? excludedFace, double tolerance, out Line? connectedFace, out Vector3d inward)
+        {
+            connectedFace = null;
+            inward = new Vector3d(0.0, 0.0, 0.0);
+            double bestDistance = double.PositiveInfinity;
+
+            foreach (Line face in wallFaces)
+            {
+                if (ReferenceEquals(face, excludedFace))
+                    continue;
+
+                double startDistance = endpoint.DistanceTo(face.StartPoint);
+                double endDistance = endpoint.DistanceTo(face.EndPoint);
+                double distance = Math.Min(startDistance, endDistance);
+                if (distance > tolerance || distance >= bestDistance)
+                    continue;
+
+                Vector3d candidate = startDistance <= endDistance
+                    ? face.EndPoint - face.StartPoint
+                    : face.StartPoint - face.EndPoint;
+                if (candidate.Length <= MinimumConnectionTolerance)
+                    continue;
+
+                connectedFace = face;
+                inward = candidate;
+                bestDistance = distance;
+            }
+
+            return connectedFace != null;
+        }
+
+        private static void AddOpenWallStrip(Line firstFace, Line secondFace, List<StuccoModel.WallStrip> strips, double thickness)
+        {
+            Vector3d faceVector = firstFace.EndPoint - firstFace.StartPoint;
+            if (faceVector.Length <= MinimumConnectionTolerance)
+                return;
+
+            Point3d origin = firstFace.StartPoint;
+            Vector3d direction = faceVector.GetNormal();
+            Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
+            Point3d[] points = { firstFace.StartPoint, firstFace.EndPoint, secondFace.StartPoint, secondFace.EndPoint };
+            double minimumAlong = double.PositiveInfinity;
+            double maximumAlong = double.NegativeInfinity;
+            double minimumAcross = double.PositiveInfinity;
+            double maximumAcross = double.NegativeInfinity;
+
+            foreach (Point3d point in points)
+            {
+                Vector3d offset = point - origin;
+                double along = offset.DotProduct(direction);
+                double across = offset.DotProduct(normal);
+                minimumAlong = Math.Min(minimumAlong, along);
+                maximumAlong = Math.Max(maximumAlong, along);
+                minimumAcross = Math.Min(minimumAcross, across);
+                maximumAcross = Math.Max(maximumAcross, across);
+            }
+
+            StuccoModel.WallStrip strip = new StuccoModel.WallStrip(origin, direction, normal, minimumAlong, maximumAlong, minimumAcross, maximumAcross);
+            double tolerance = Math.Max(MinimumConnectionTolerance * 100.0, Math.Abs(thickness) * 0.01);
+            if (!strips.Exists(existing => SameWallStrip(existing, strip, tolerance)))
+                strips.Add(strip);
+        }
+
+        private static bool SameWallStrip(StuccoModel.WallStrip first, StuccoModel.WallStrip second, double tolerance)
+        {
+            return first.Center.DistanceTo(second.Center) <= tolerance &&
+                   Math.Abs(first.Length - second.Length) <= tolerance &&
+                   Math.Abs(first.Width - second.Width) <= tolerance &&
+                   Math.Abs(first.Direction.DotProduct(second.Direction)) >= 1.0 - ParallelDotTolerance;
+        }
+
+        private static void TrimStuccoInsideWallIntersections(Transaction transaction, BlockTableRecord ownerSpace, List<ObjectId> createdIds, ObjectId targetLayerId, List<StuccoModel.WallStrip> strips, double thickness)
+        {
+            if (strips.Count < 2)
+                return;
+
+            double finish = Math.Abs(thickness);
+            double tolerance = Math.Max(MinimumConnectionTolerance * 100.0, finish * 0.001);
+            ObjectId[] originalIds = createdIds.ToArray();
+            foreach (ObjectId objectId in originalIds)
+            {
+                if (objectId.IsNull || !objectId.IsValid ||
+                    transaction.GetObject(objectId, OpenMode.ForWrite) is not Line line ||
+                    line.IsErased || line.LayerId != targetLayerId)
+                {
+                    continue;
+                }
+
+                int ownerIndex = FindOwningWallStrip(line, strips, finish, tolerance);
+                if (ownerIndex < 0)
+                    continue;
+
+                Vector3d originalVector = line.EndPoint - line.StartPoint;
+                double lineLength = originalVector.Length;
+                if (lineLength <= tolerance)
+                    continue;
+
+                List<int> trimmingStripIndexes = new List<int>();
+                List<double> cutParameters = new List<double> { 0.0, 1.0 };
+                for (int stripIndex = 0; stripIndex < strips.Count; stripIndex++)
+                {
+                    if (stripIndex == ownerIndex ||
+                        Math.Abs(strips[ownerIndex].Direction.DotProduct(strips[stripIndex].Direction)) >= 1.0 - ParallelDotTolerance)
+                    {
+                        continue;
+                    }
+
+                    int previousCutCount = cutParameters.Count;
+                    AddWallStripCutParameters(line, strips[stripIndex], finish, tolerance, cutParameters);
+                    if (cutParameters.Count > previousCutCount || IsPointInsideExpandedWallStrip(line.StartPoint + originalVector * 0.5, strips[stripIndex], finish, tolerance))
+                        trimmingStripIndexes.Add(stripIndex);
+                }
+
+                if (trimmingStripIndexes.Count == 0)
+                    continue;
+
+                cutParameters.Sort();
+                List<(Point3d Start, Point3d End)> keptSegments = new List<(Point3d Start, Point3d End)>();
+                for (int index = 0; index < cutParameters.Count - 1; index++)
+                {
+                    double startParameter = cutParameters[index];
+                    double endParameter = cutParameters[index + 1];
+                    Point3d start = line.StartPoint + originalVector * startParameter;
+                    Point3d end = line.StartPoint + originalVector * endParameter;
+                    if (start.DistanceTo(end) <= tolerance)
+                        continue;
+
+                    Point3d midpoint = start + (end - start) * 0.5;
+                    if (!trimmingStripIndexes.Exists(indexToTest => IsPointInsideExpandedWallStrip(midpoint, strips[indexToTest], finish, tolerance)))
+                        keptSegments.Add((start, end));
+                }
+
+                ReplaceLineWithSegments(transaction, ownerSpace, line, keptSegments, createdIds);
+            }
+        }
+
+        private static int FindOwningWallStrip(Line line, List<StuccoModel.WallStrip> strips, double finish, double tolerance)
+        {
+            Vector3d lineVector = line.EndPoint - line.StartPoint;
+            if (lineVector.Length <= tolerance)
+                return -1;
+
+            Vector3d lineDirection = lineVector.GetNormal();
+            Point3d midpoint = line.StartPoint + lineVector * 0.5;
+            double boundaryTolerance = Math.Max(tolerance * 10.0, finish * 0.25);
+            int bestIndex = -1;
+            double bestDistance = double.PositiveInfinity;
+
+            for (int index = 0; index < strips.Count; index++)
+            {
+                StuccoModel.WallStrip strip = strips[index];
+                Vector3d offset = midpoint - strip.Origin;
+                double along = offset.DotProduct(strip.Direction);
+                double across = offset.DotProduct(strip.Normal);
+                double parallelDot = Math.Abs(lineDirection.DotProduct(strip.Direction));
+                double distance;
+
+                if (parallelDot >= 1.0 - ParallelDotTolerance && along >= strip.MinimumAlong - finish - tolerance && along <= strip.MaximumAlong + finish + tolerance)
+                {
+                    distance = Math.Min(Math.Abs(across - (strip.MinimumAcross - finish)), Math.Abs(across - (strip.MaximumAcross + finish)));
+                }
+                else if (parallelDot <= ParallelDotTolerance && across >= strip.MinimumAcross - finish - tolerance && across <= strip.MaximumAcross + finish + tolerance)
+                {
+                    distance = Math.Min(Math.Abs(along - (strip.MinimumAlong - finish)), Math.Abs(along - (strip.MaximumAlong + finish)));
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (distance <= boundaryTolerance && distance < bestDistance)
+                {
+                    bestIndex = index;
+                    bestDistance = distance;
+                }
+            }
+
+            return bestIndex;
+        }
+
+        private static void AddWallStripCutParameters(Line line, StuccoModel.WallStrip strip, double finish, double tolerance, List<double> parameters)
+        {
+            Point3d[] corners = GetExpandedWallStripCorners(strip, finish);
+            double lineLength = line.StartPoint.DistanceTo(line.EndPoint);
+            for (int edgeIndex = 0; edgeIndex < corners.Length; edgeIndex++)
+            {
+                using Line edge = new Line(corners[edgeIndex], corners[(edgeIndex + 1) % corners.Length]);
+                if (TryGetLineIntersection(line, edge, out _, out double lineParameter, out double edgeParameter) &&
+                    IsParameterOnSegment(lineParameter) && IsParameterOnSegment(edgeParameter))
+                {
+                    AddInteriorCutParameter(parameters, lineParameter, lineLength, tolerance);
+                }
+            }
+        }
+
+        private static Point3d[] GetExpandedWallStripCorners(StuccoModel.WallStrip strip, double finish)
+        {
+            return new[]
+            {
+                GetWallStripPoint(strip, strip.MinimumAlong - finish, strip.MinimumAcross - finish),
+                GetWallStripPoint(strip, strip.MaximumAlong + finish, strip.MinimumAcross - finish),
+                GetWallStripPoint(strip, strip.MaximumAlong + finish, strip.MaximumAcross + finish),
+                GetWallStripPoint(strip, strip.MinimumAlong - finish, strip.MaximumAcross + finish)
+            };
+        }
+
+        private static Point3d GetWallStripPoint(StuccoModel.WallStrip strip, double along, double across)
+        {
+            return strip.Origin + strip.Direction * along + strip.Normal * across;
+        }
+
+        private static bool IsPointInsideExpandedWallStrip(Point3d point, StuccoModel.WallStrip strip, double finish, double tolerance)
+        {
+            Vector3d offset = point - strip.Origin;
+            double along = offset.DotProduct(strip.Direction);
+            double across = offset.DotProduct(strip.Normal);
+            return along > strip.MinimumAlong - finish + tolerance &&
+                   along < strip.MaximumAlong + finish - tolerance &&
+                   across > strip.MinimumAcross - finish + tolerance &&
+                   across < strip.MaximumAcross + finish - tolerance;
+        }
+
+        private static void ReplaceLineWithSegments(Transaction transaction, BlockTableRecord ownerSpace, Line line, List<(Point3d Start, Point3d End)> segments, List<ObjectId> createdIds)
+        {
+            if (segments.Count == 0)
+            {
+                line.Erase(true);
+                return;
+            }
+
+            line.StartPoint = segments[0].Start;
+            line.EndPoint = segments[0].End;
+            for (int index = 1; index < segments.Count; index++)
+            {
+                Line piece = new Line(segments[index].Start, segments[index].End)
+                {
+                    LayerId = line.LayerId,
+                    Color = line.Color,
+                    LineWeight = line.LineWeight,
+                    LinetypeId = line.LinetypeId,
+                    LinetypeScale = line.LinetypeScale,
+                    Transparency = line.Transparency
+                };
+                ownerSpace.AppendEntity(piece);
+                transaction.AddNewlyCreatedDBObject(piece, true);
+                createdIds.Add(piece.ObjectId);
             }
         }
 
