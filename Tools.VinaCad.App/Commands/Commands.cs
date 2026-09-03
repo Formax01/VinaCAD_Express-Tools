@@ -567,5 +567,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
+
+        [CommandMethod("BBE")]
+        public void BlockEraseCommand()
+        {
+            try
+            {
+                BlockEraseAction action = new BlockEraseAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BlockEraseCommand), ex);
+            }
+        }
     }
 }
