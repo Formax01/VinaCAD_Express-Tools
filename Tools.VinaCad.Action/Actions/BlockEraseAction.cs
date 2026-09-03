@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Teigha.DatabaseServices;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -11,6 +12,11 @@ namespace Tools.VinaCad.Action.Actions
 {
     public class BlockEraseAction
     {
+        private const int VirtualKeyEscape = 0x1B;
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int virtualKey);
+
         public void Execute()
         {
             Document? document = Application.DocumentManager.MdiActiveDocument;
@@ -22,29 +28,31 @@ namespace Tools.VinaCad.Action.Actions
 
             try
             {
-                int erasedCount;
+                InteractiveEraseResult result;
+                bool committed = false;
 
                 using (Transaction transaction = database.TransactionManager.StartTransaction())
                 {
                     HashSet<ObjectId> dynamicDefinitionIds = new HashSet<ObjectId>();
-                    erasedCount = EraseInteractively(editor,transaction,dynamicDefinitionIds);
+                    result = EraseInteractively(editor,transaction,dynamicDefinitionIds);
 
-                    if (erasedCount > 0)
+                    // Enter hoặc Space: lưu thay đổi. Esc: transaction tự rollback.
+                    if (!result.Cancelled && result.ErasedCount > 0)
                     {
                         BlockEraseHelper.UpdateDynamicDefinitions(transaction, dynamicDefinitionIds);
                         transaction.Commit();
+                        committed = true;
                     }
                 }
 
                 editor.Regen();
 
-                if (erasedCount == 0)
-                {
-                    editor.WriteMessage("\nBBE: Không có đối tượng nào được xóa.");
-                    return;
-                }
-
-                editor.WriteMessage($"\nBBE: Đã xóa {erasedCount} đối tượng khỏi block. " +"Các block reference dùng chung definition đã được cập nhật.");
+                if (result.Cancelled)
+                    editor.WriteMessage("\nBBE: Đã hủy; không có thay đổi.");
+                else if (committed)
+                    editor.WriteMessage($"\nBBE: Đã xóa {result.ErasedCount} đối tượng.");
+                else
+                    editor.WriteMessage("\nBBE: Chưa chọn đối tượng nào.");
             }
             catch (Exception ex)
             {
@@ -54,52 +62,129 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        private static int EraseInteractively(Editor editor,Transaction transaction,HashSet<ObjectId> dynamicDefinitionIds)
+        private readonly struct InteractiveEraseResult
+        {
+            public int ErasedCount { get; init; }
+            public bool Cancelled { get; init; }
+        }
+
+        private static InteractiveEraseResult EraseInteractively(Editor editor,Transaction transaction,HashSet<ObjectId> dynamicDefinitionIds)
         {
             int erasedCount = 0;
+            Dictionary<string, object> originalSystemVariables = new Dictionary<string, object>();
 
-            editor.WriteMessage("\nBBE: Chọn các đối tượng bên trong block cần xóa; " +"nhấn Enter, Space hoặc gõ Xong để kết thúc.");
+            editor.WriteMessage("\nBBE: Chọn đối tượng con | Enter/Space: Xóa | Esc: Hủy");
 
-            while (true)
+            // VinaCAD tự echo điểm click của GetNestedEntity. Tạm tắt toàn bộ
+            // các kênh ghi prompt/input rồi khôi phục nguyên trạng khi BBE kết thúc.
+            TrySetSystemVariable(originalSystemVariables, "CMDECHO", (short)0);
+            TrySetSystemVariable(originalSystemVariables, "INPUTHISTORYMODE", (short)0);
+            TrySetSystemVariable(originalSystemVariables, "CLIPROMPTUPDATE", (short)0);
+
+            try
             {
-                PromptNestedEntityOptions options = new PromptNestedEntityOptions($"\nChọn đối tượng trong block [{erasedCount} đã chọn]: ");
-                options.AllowNone = true;
-                options.Keywords.Add("Xong");
-                options.AppendKeywordsToMessage = true;
-
-                PromptNestedEntityResult result = editor.GetNestedEntity(options);
-
-                if (result.Status == PromptStatus.Keyword &&
-                    string.Equals(result.StringResult, "Xong", StringComparison.OrdinalIgnoreCase))
-                    return erasedCount;
-
-                if (result.Status == PromptStatus.None)
-                    return erasedCount;
-
-                if (result.Status == PromptStatus.Cancel)
-                    return erasedCount;
-
-                if (result.Status != PromptStatus.OK)
+                while (true)
                 {
-                    editor.WriteMessage("\nBBE: Đã dừng nhận lựa chọn và lưu các đối tượng đã xóa.");
-                    return erasedCount;
+                    // Mỗi lần chọn chỉ dùng một dòng. Số trong ngoặc vuông là
+                    // thứ tự đối tượng đang chọn; VinaCAD tự nối tọa độ phía sau.
+                    string prompt = $"\nBBE : Đã chọn {erasedCount + 1} đối tượng";
+
+                    PromptNestedEntityOptions options = new PromptNestedEntityOptions(prompt)
+                    {
+                        AllowNone = true,
+                        AppendKeywordsToMessage = false
+                    };
+
+                    PromptNestedEntityResult result = editor.GetNestedEntity(options);
+
+                    if (result.Status == PromptStatus.Cancel)
+                    {
+                        return new InteractiveEraseResult
+                        {
+                            ErasedCount = erasedCount,
+                            Cancelled = WasEscapePressed()
+                        };
+                    }
+
+                    if (result.Status == PromptStatus.None)
+                    {
+                        return new InteractiveEraseResult
+                        {
+                            ErasedCount = erasedCount,
+                            Cancelled = false
+                        };
+                    }
+
+                    if (result.Status != PromptStatus.OK)
+                    {
+                        return new InteractiveEraseResult
+                        {
+                            ErasedCount = erasedCount,
+                            Cancelled = WasEscapePressed()
+                        };
+                    }
+
+                    BlockEraseHelper.EraseResult eraseResult = BlockEraseHelper.TryEraseSingleEntity(transaction,result.ObjectId,result.GetContainers());
+                    if (!eraseResult.Succeeded)
+                    {
+                        Logger.Info($"{nameof(BlockEraseAction)}.RejectedSelection",new InvalidOperationException(eraseResult.RejectionReason ?? "Không xác định được lý do từ chối."));
+                        continue;
+                    }
+
+                    if (!eraseResult.DynamicDefinitionId.IsNull)
+                        dynamicDefinitionIds.Add(eraseResult.DynamicDefinitionId);
+
+                    erasedCount++;
+                    editor.Regen();
                 }
+            }
+            finally
+            {
+                RestoreSystemVariables(originalSystemVariables);
+            }
+        }
 
-                BlockEraseHelper.EraseResult eraseResult = BlockEraseHelper.TryEraseSingleEntity(transaction,result.ObjectId,result.GetContainers());
+        private static bool WasEscapePressed()
+        {
+            try
+            {
+                // Prompt vừa kết thúc ngay tại thời điểm KeyDown, vì vậy chỉ kiểm tra
+                // bit "đang giữ phím" để không nhầm với một lần nhấn Esc cũ.
+                return (GetAsyncKeyState(VirtualKeyEscape) & 0x8000) != 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Info($"{nameof(BlockEraseAction)}.GetEscapeState", ex);
+                return false;
+            }
+        }
 
-                if (!eraseResult.Succeeded)
+        private static void TrySetSystemVariable(Dictionary<string, object> originalValues,string name,object temporaryValue)
+        {
+            try
+            {
+                object originalValue = Application.GetSystemVariable(name);
+                Application.SetSystemVariable(name, temporaryValue);
+                originalValues[name] = originalValue;
+            }
+            catch (Exception ex)
+            {
+                Logger.Info($"{nameof(BlockEraseAction)}.{name}", ex);
+            }
+        }
+
+        private static void RestoreSystemVariables(Dictionary<string, object> originalValues)
+        {
+            foreach (KeyValuePair<string, object> item in originalValues)
+            {
+                try
                 {
-                    editor.WriteMessage($"\nBBE: {eraseResult.RejectionReason}");
-                    continue;
+                    Application.SetSystemVariable(item.Key, item.Value);
                 }
-
-                if (!eraseResult.DynamicDefinitionId.IsNull) dynamicDefinitionIds.Add(eraseResult.DynamicDefinitionId);
-
-                erasedCount++;
-
-                // Làm mới toàn bộ hình ảnh sau mỗi lần xóa để đối tượng biến mất
-                // ngay trên mọi block reference. Sau đó lệnh tiếp tục chờ lần click kế tiếp.
-                editor.Regen();
+                catch (Exception ex)
+                {
+                    Logger.Info($"{nameof(BlockEraseAction)}.Restore{item.Key}", ex);
+                }
             }
         }
     }
