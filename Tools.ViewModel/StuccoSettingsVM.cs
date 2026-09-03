@@ -1,6 +1,8 @@
 using PrMVVMCore;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Media;
 using Tools.VinaCad.Modeling;
 
@@ -12,6 +14,9 @@ namespace Tools.ViewModel
         private string _layerColorIndexText;
         private string _thicknessText;
         private Brush _layerColorPreview;
+        private readonly Dictionary<string, short> _availableLayers;
+
+        public List<string> LayerNames { get; }
 
         public string LayerName
         {
@@ -21,6 +26,10 @@ namespace Tools.ViewModel
                 if (_layerName == value) return;
                 _layerName = value;
                 OnPropertyChanged(nameof(LayerName));
+
+                string normalizedName = value?.Trim() ?? string.Empty;
+                if (_availableLayers.TryGetValue(normalizedName, out short colorIndex))
+                    LayerColorIndexText = colorIndex.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -60,11 +69,20 @@ namespace Tools.ViewModel
             }
         }
 
-        public StuccoSettingRequest RequestedAction { get; private set; }
-
-        public StuccoSettingsVM(StuccoSetting settings)
+        public StuccoSettingsVM(StuccoSetting settings, IDictionary<string, short> availableLayers)
         {
             StuccoSetting source = settings ?? new StuccoSetting();
+            _availableLayers = new Dictionary<string, short>(StringComparer.OrdinalIgnoreCase);
+            if (availableLayers != null)
+            {
+                foreach (KeyValuePair<string, short> layer in availableLayers)
+                    _availableLayers[layer.Key] = layer.Value;
+            }
+
+            if (!_availableLayers.ContainsKey(source.LayerName))
+                _availableLayers[source.LayerName] = source.LayerColorIndex;
+
+            LayerNames = _availableLayers.Keys.OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase).ToList();
             _layerName = source.LayerName;
             _layerColorIndexText = source.LayerColorIndex.ToString(CultureInfo.InvariantCulture);
             _thicknessText = source.Thickness.ToString(CultureInfo.CurrentCulture);
@@ -107,18 +125,7 @@ namespace Tools.ViewModel
                 LayerColorIndex = colorIndex,
                 Thickness = thickness
             };
-            RequestedAction = StuccoSettingRequest.Accept;
             return true;
-        }
-
-        public void RequestPickLayer()
-        {
-            RequestedAction = StuccoSettingRequest.PickLayer;
-        }
-
-        public void RequestMeasureThickness()
-        {
-            RequestedAction = StuccoSettingRequest.MeasureThickness;
         }
 
         public void ResetDefaults()
@@ -127,7 +134,6 @@ namespace Tools.ViewModel
             LayerName = defaults.LayerName;
             LayerColorIndexText = defaults.LayerColorIndex.ToString(CultureInfo.InvariantCulture);
             ThicknessText = defaults.Thickness.ToString(CultureInfo.CurrentCulture);
-            RequestedAction = StuccoSettingRequest.None;
         }
 
         private static bool ContainsInvalidLayerNameCharacter(string layerName)

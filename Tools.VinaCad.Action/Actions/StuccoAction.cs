@@ -48,45 +48,51 @@ namespace Tools.VinaCad.Action.Actions
             int processedCount = 0;
             int createdCount = 0;
             int failedCount = 0;
-            bool hasInteriorPoint = false;
             WriteSettings(settings);
 
             while (true)
             {
-                string defaultAction = hasInteriorPoint ? "Kết thúc" : "Chọn cạnh mặt ngoài";
-                PromptPointOptions pointOptions = new PromptPointOptions($"\nChọn điểm trong phòng hoặc [S - Settings / O - Open] <{defaultAction}>: ")
+                PromptPointOptions pointOptions = new PromptPointOptions
+                    ("\nFN - Chọn điểm trong phòng hoặc [O] Quét chọn tường | [E] Mặt ngoài | [S] Cài đặt <Kết thúc>: ")
                 {
                     AllowNone = true,
+  //                AllowArbitraryInput = false,
                     AppendKeywordsToMessage = false
                 };
-                pointOptions.Keywords.Add("S", "Settings", "Settings");
-                pointOptions.Keywords.Add("O", "Open", "Open");
+                pointOptions.Keywords.Add("O");
+                pointOptions.Keywords.Add("E");
+                pointOptions.Keywords.Add("S");
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
-
-                if (pointResult.Status == PromptStatus.Keyword)
+                if (pointResult.Status == PromptStatus.Cancel || pointResult.Status == PromptStatus.None)
+                    break;
+                if (pointResult.Status == PromptStatus.OK)
                 {
-                    if (string.Equals(pointResult.StringResult, "O", StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(pointResult.StringResult, "Open", StringComparison.OrdinalIgnoreCase))
+                    try
                     {
-                        try
-                        {
-                            int openWallCount = DrawOpenWallSelection(settings);
-                            if (openWallCount > 0)
-                            {
-                                createdCount += openWallCount;
-                                processedCount++;
-                                hasInteriorPoint = true;
-                                _editor.UpdateScreen();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Info(nameof(DrawStucco), ex);
-                            failedCount++;
-                        }
+                        int operationCount = DrawInteriorBoundary(pointResult.Value, settings);
+                        if (operationCount <= 0)
+                            continue;
+
+                        createdCount += operationCount;
+                        processedCount++;
+                        _editor.UpdateScreen();
                     }
-                    else if (TryEditSettings(settings, out StuccoSetting updatedSettings))
+                    catch (Exception ex)
+                    {
+                        Logger.Info(nameof(DrawStucco), ex);
+                        failedCount++;
+                    }
+
+                    continue;
+                }
+                if (pointResult.Status != PromptStatus.Keyword)
+                    continue;
+
+                string selectedMode = pointResult.StringResult;
+                if (IsMode(selectedMode, "Settings", "S"))
+                {
+                    if (TryEditSettings(settings, out StuccoSetting updatedSettings))
                     {
                         settings = updatedSettings;
                         EnsureTargetLayer(settings);
@@ -96,51 +102,34 @@ namespace Tools.VinaCad.Action.Actions
                     continue;
                 }
 
-                if (pointResult.Status == PromptStatus.Cancel)
-                    break;
-
-                if (pointResult.Status == PromptStatus.None)
-                {
-                    if (hasInteriorPoint)
-                        break;
-
-                    try
-                    {
-                        int outsideCount = DrawExteriorSelection(settings);
-                        if (outsideCount > 0)
-                        {
-                            createdCount += outsideCount;
-                            processedCount++;
-                            _editor.UpdateScreen();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Info(nameof(DrawStucco), ex);
-                        failedCount++;
-                    }
-
-                    break;
-                }
-
-                if (pointResult.Status != PromptStatus.OK)
-                    continue;
-
-                hasInteriorPoint = true;
                 try
                 {
-                    createdCount += DrawInteriorBoundary(pointResult.Value, settings);
-                    processedCount++;
-                    _editor.UpdateScreen();
+                    int operationCount = IsMode(selectedMode, "Open", "O")
+                        ? DrawOpenWallSelection(settings)
+                        : DrawExteriorSelection(settings);
+                    if (operationCount > 0)
+                    {
+                        createdCount += operationCount;
+                        processedCount++;
+                        _editor.UpdateScreen();
+                    }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(nameof(DrawStucco), ex);
                     failedCount++;
                 }
+
+                break;
             }
 
             _editor.WriteMessage($"\nFN: {processedCount} vùng, {createdCount} đối tượng vữa, {failedCount} lỗi.");
+        }
+
+        private static bool IsMode(string value, string globalName, string shortcut)
+        {
+            return string.Equals(value, globalName, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(value, shortcut, StringComparison.OrdinalIgnoreCase);
         }
 
         private int DrawExteriorSelection(StuccoSetting settings)
@@ -151,7 +140,7 @@ namespace Tools.VinaCad.Action.Actions
             };
             PromptSelectionOptions selectionOptions = new PromptSelectionOptions
             {
-                MessageForAdding = "\nChọn các đường bao mặt ngoài: "
+                MessageForAdding = "\nChọn các cạnh liên tiếp của mặt ngoài, nhấn Enter để xác nhận: "
             };
             PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
             if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
@@ -178,7 +167,7 @@ namespace Tools.VinaCad.Action.Actions
             };
             PromptSelectionOptions selectionOptions = new PromptSelectionOptions
             {
-                MessageForAdding = "\nQuét chọn các đường của tường hở: "
+                MessageForAdding = "\nQuét chọn toàn bộ hai mặt của các tường hở, nhấn Enter để xác nhận: "
             };
             PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
             if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
@@ -235,70 +224,33 @@ namespace Tools.VinaCad.Action.Actions
 
         private bool TryEditSettings(StuccoSetting initialSettings, out StuccoSetting acceptedSettings)
         {
-            StuccoSetting workingSettings = initialSettings.Clone();
-
-            while (true)
+            StuccoSettingsWindow window = new StuccoSettingsWindow(initialSettings.Clone(), GetAvailableLayerColors());
+            Application.ShowModalWindow(window);
+            if (window.DialogResult == true && window.AcceptedSettings != null)
             {
-                StuccoSettingsWindow window = new StuccoSettingsWindow(workingSettings);
-                Application.ShowModalWindow(window);
-
-                if (window.DialogResult != true)
-                {
-                    acceptedSettings = initialSettings;
-                    return false;
-                }
-
-                if (window.AcceptedSettings != null)
-                    workingSettings = window.AcceptedSettings.Clone();
-
-                switch (window.RequestedAction)
-                {
-                    case StuccoSettingRequest.PickLayer:
-                        PickLayerFromDrawing(workingSettings);
-                        break;
-
-                    case StuccoSettingRequest.MeasureThickness:
-                        MeasureThickness(workingSettings);
-                        break;
-
-                    case StuccoSettingRequest.Accept:
-                        acceptedSettings = workingSettings;
-                        return true;
-
-                    default:
-                        acceptedSettings = initialSettings;
-                        return false;
-                }
+                acceptedSettings = window.AcceptedSettings.Clone();
+                return true;
             }
+
+            acceptedSettings = initialSettings;
+            return false;
         }
 
-        private void PickLayerFromDrawing(StuccoSetting settings)
+        private Dictionary<string, short> GetAvailableLayerColors()
         {
-            PromptEntityOptions options = new PromptEntityOptions("\nFN - Chọn đối tượng để lấy layer và màu: ");
-            PromptEntityResult result = _editor.GetEntity(options);
-            if (result.Status != PromptStatus.OK)
-                return;
-
+            Dictionary<string, short> layers = new Dictionary<string, short>(StringComparer.OrdinalIgnoreCase);
             using Transaction transaction = _database.TransactionManager.StartTransaction();
-            if (transaction.GetObject(result.ObjectId, OpenMode.ForRead) is not Entity entity)
-                return;
+            LayerTable layerTable = (LayerTable)transaction.GetObject(_database.LayerTableId, OpenMode.ForRead);
+            foreach (ObjectId layerId in layerTable)
+            {
+                LayerTableRecord layer = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForRead);
+                short colorIndex = layer.Color.ColorIndex;
+                layers[layer.Name] = colorIndex >= 1 && colorIndex <= 255
+                    ? colorIndex
+                    : StuccoSetting.DefaultLayerColorIndex;
+            }
 
-            LayerTableRecord layer = (LayerTableRecord)transaction.GetObject(entity.LayerId, OpenMode.ForRead);
-            settings.LayerName = layer.Name;
-
-            short pickedColorIndex = layer.Color.ColorIndex;
-            if (pickedColorIndex >= 1 && pickedColorIndex <= 255)
-                settings.LayerColorIndex = pickedColorIndex;
-        }
-
-        private void MeasureThickness(StuccoSetting settings)
-        {
-            PromptDistanceOptions options = new PromptDistanceOptions("\nFN - Chọn hai điểm để đo chiều dày vữa: ");
-            PromptDoubleResult result = _editor.GetDistance(options);
-            if (result.Status != PromptStatus.OK || result.Value <= 0.0)
-                return;
-
-            settings.Thickness = result.Value;
+            return layers;
         }
 
         private ObjectId[] CreateBoundaryWithCoreCommand(Point3d interiorPointInCurrentUcs, double thickness)

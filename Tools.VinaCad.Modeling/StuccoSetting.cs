@@ -20,12 +20,4 @@ namespace Tools.VinaCad.Modeling
             };
         }
     }
-
-    public enum StuccoSettingRequest
-    {
-        None = 0,
-        Accept = 1,
-        PickLayer = 2,
-        MeasureThickness = 3
-    }
 }
