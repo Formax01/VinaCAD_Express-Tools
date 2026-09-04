@@ -25,6 +25,7 @@
       <HintPath>..\Lib\PR\2026\PrMVVMCore.dll</HintPath>
     </Reference>
     <ProjectReference Include="..\Tools.Model\Tools.Model.csproj" />
+    <ProjectReference Include="..\Tools.VinaCad.Modeling\Tools.VinaCad.Modeling.csproj" />
   </ItemGroup>
 
 </Project>

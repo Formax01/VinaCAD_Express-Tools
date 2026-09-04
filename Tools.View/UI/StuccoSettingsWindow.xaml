@@ -1,0 +1,134 @@
+<Window x:Class="Tools.VinaCAD.UI.StuccoSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
+        Title="Cài Đặt Vữa"
+        Width="300"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        Background="#F2F2F2"
+        FontFamily="Segoe UI"
+        FontSize="12"
+        Foreground="#202020"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True"
+        FocusManager.FocusedElement="{Binding ElementName=CmbLayerName}">
+    <Window.Resources>
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Padding" Value="5,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#9A9A9A" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Padding" Value="5,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#9A9A9A" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Background" Value="#E4E4E4" />
+            <Setter Property="BorderBrush" Value="#A5A5A5" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="Layer Vữa :" />
+        <ComboBox x:Name="CmbLayerName"
+                  Grid.Row="0" Grid.Column="1"
+                  Style="{StaticResource ComboBoxStyle}"
+                  IsEditable="True"
+                  IsTextSearchEnabled="True"
+                  ItemsSource="{Binding LayerNames}"
+                  Text="{Binding LayerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  ToolTip="Gõ tên layer mới hoặc chọn một layer có sẵn"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="Màu Layer :" />
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="44" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="TxtLayerColor"
+                     Grid.Column="0"
+                     Style="{StaticResource InputStyle}"
+                     HorizontalContentAlignment="Right"
+                     behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                     ToolTip="Mã màu (ACI): 1–255"
+                     Text="{Binding LayerColorIndexText, UpdateSourceTrigger=PropertyChanged}"
+                     PreviewTextInput="IntegerTextBox_PreviewTextInput" />
+            <Border Grid.Column="2"
+                    Height="26"
+                    VerticalAlignment="Center"
+                    Background="{Binding LayerColorPreview}"
+                    BorderBrush="#9A9A9A"
+                    BorderThickness="1"
+                    ToolTip="Layer color preview" />
+        </Grid>
+
+        <TextBlock Grid.Row="4" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="Độ Dày Vữa :" />
+        <TextBox x:Name="TxtThickness"
+                 Grid.Row="4" Grid.Column="1"
+                 Style="{StaticResource InputStyle}"
+                 HorizontalContentAlignment="Right"
+                 behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                 Text="{Binding ThicknessText, UpdateSourceTrigger=PropertyChanged}"
+                 PreviewTextInput="DecimalTextBox_PreviewTextInput" />
+
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                Style="{StaticResource ButtonStyle}"
+                Content="Đặt Lại Giá Trị Mặc Định"
+                Click="BtnReset_Click" />
+
+        <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Width="72"
+                    Margin="0,0,10,0" 
+                    Style="{StaticResource ButtonStyle}"
+                    IsDefault="True"
+                    Content="OK"
+                    Click="BtnOk_Click" />
+            <Button Width="72"
+                    Style="{StaticResource ButtonStyle}"
+                    IsCancel="True"
+                    Content="Hủy"
+                    Click="BtnCancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

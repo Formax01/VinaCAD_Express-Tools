@@ -567,5 +567,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
+        
+        [CommandMethod("FN")]
+        public void StuccoCommand()
+        {
+            try
+            {
+                 StuccoAction action = new StuccoAction();
+                 action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StuccoCommand), ex);
+            }
+        }
     }
 }
