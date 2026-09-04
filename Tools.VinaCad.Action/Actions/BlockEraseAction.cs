@@ -87,7 +87,7 @@ namespace Tools.VinaCad.Action.Actions
                 {
                     // Mỗi lần chọn chỉ dùng một dòng. Số trong ngoặc vuông là
                     // thứ tự đối tượng đang chọn; VinaCAD tự nối tọa độ phía sau.
-                    string prompt = $"\nBBE : Đã chọn {erasedCount + 1} đối tượng";
+                    string prompt = $"\nBBE : Chọn đối tượng";
 
                     PromptNestedEntityOptions options = new PromptNestedEntityOptions(prompt)
                     {
