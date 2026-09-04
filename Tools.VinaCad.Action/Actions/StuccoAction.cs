@@ -52,16 +52,16 @@ namespace Tools.VinaCad.Action.Actions
 
             while (true)
             {
-                PromptPointOptions pointOptions = new PromptPointOptions
-                    ("\nFN - Chọn điểm trong phòng hoặc [O] Quét chọn tường | [E] Mặt ngoài | [S] Cài đặt <Kết thúc>: ")
+                PromptPointOptions pointOptions = new PromptPointOptions(
+                    "\nFN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] : ")
                 {
                     AllowNone = true,
-  //                AllowArbitraryInput = false,
+                    AllowArbitraryInput = false,
                     AppendKeywordsToMessage = false
                 };
-                pointOptions.Keywords.Add("O");
-                pointOptions.Keywords.Add("E");
-                pointOptions.Keywords.Add("S");
+                pointOptions.Keywords.Add("Open", "O", "Quét chọn tường");
+                pointOptions.Keywords.Add("Exterior", "E", "Mặt ngoài");
+                pointOptions.Keywords.Add("Settings", "S", "Cài đặt");
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
                 if (pointResult.Status == PromptStatus.Cancel || pointResult.Status == PromptStatus.None)
