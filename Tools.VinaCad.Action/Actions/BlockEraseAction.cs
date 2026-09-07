@@ -48,7 +48,7 @@ namespace Tools.VinaCad.Action.Actions
                 editor.Regen();
 
                 if (result.Cancelled)
-                    editor.WriteMessage("\nBBE: Đã hủy; không có thay đổi.");
+                    editor.WriteMessage("\nBBE: Đã hủy, bản vẽ không thay đổi.");
                 else if (committed)
                     editor.WriteMessage($"\nBBE: Đã xóa {result.ErasedCount} đối tượng.");
                 else
@@ -73,7 +73,7 @@ namespace Tools.VinaCad.Action.Actions
             int erasedCount = 0;
             Dictionary<string, object> originalSystemVariables = new Dictionary<string, object>();
 
-            editor.WriteMessage("\nBBE: Chọn đối tượng con | Enter/Space: Xóa | Esc: Hủy");
+            editor.WriteMessage("\nBBE: Chọn đối tượng con cần xóa | Enter/Space: Xóa | Esc: Hủy/Hoàn tác");
 
             // VinaCAD tự echo điểm click của GetNestedEntity. Tạm tắt toàn bộ
             // các kênh ghi prompt/input rồi khôi phục nguyên trạng khi BBE kết thúc.
@@ -87,7 +87,7 @@ namespace Tools.VinaCad.Action.Actions
                 {
                     // Mỗi lần chọn chỉ dùng một dòng. Số trong ngoặc vuông là
                     // thứ tự đối tượng đang chọn; VinaCAD tự nối tọa độ phía sau.
-                    string prompt = $"\nBBE : Chọn đối tượng";
+                    string prompt = $"\nChọn đối tượng";
 
                     PromptNestedEntityOptions options = new PromptNestedEntityOptions(prompt)
                     {
