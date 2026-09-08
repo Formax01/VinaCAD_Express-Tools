@@ -102,23 +102,31 @@ namespace Tools.VinaCad.Action.Actions
                 Point3d PointAt(double x, double y) => _origin + axisX * x + axisY * y;
 
                 foreach (double x in _xStations)
-                    DrawDashedLine(draw, PointAt(x, -extension),
-                        PointAt(x, maxY + extension), 1, dashLength);
+                    DrawDashedLine(draw, PointAt(x, 0),
+                        PointAt(x, maxY), 1, dashLength);
 
                 foreach (double y in _yStations)
-                    DrawDashedLine(draw, PointAt(-extension, y),
-                        PointAt(maxX + extension, y), 1, dashLength);
+                    DrawDashedLine(draw, PointAt(0, y),
+                        PointAt(maxX, y), 1, dashLength);
 
                 if (_input.DrawAnnotations)
                 {
                     foreach (double x in _xStations)
                     {
+                        DrawLine(draw, PointAt(x, 0),
+                            PointAt(x, -extension + _metrics.BubbleRadius), 3);
+                        DrawLine(draw, PointAt(x, maxY),
+                            PointAt(x, maxY + extension - _metrics.BubbleRadius), 3);
                         DrawCircle(draw, PointAt(x, -extension), normal, _metrics.BubbleRadius, 3);
                         DrawCircle(draw, PointAt(x, maxY + extension), normal, _metrics.BubbleRadius, 3);
                     }
 
                     foreach (double y in _yStations)
                     {
+                        DrawLine(draw, PointAt(0, y),
+                            PointAt(-extension + _metrics.BubbleRadius, y), 3);
+                        DrawLine(draw, PointAt(maxX, y),
+                            PointAt(maxX + extension - _metrics.BubbleRadius, y), 3);
                         DrawCircle(draw, PointAt(-extension, y), normal, _metrics.BubbleRadius, 3);
                         DrawCircle(draw, PointAt(maxX + extension, y), normal, _metrics.BubbleRadius, 3);
                     }

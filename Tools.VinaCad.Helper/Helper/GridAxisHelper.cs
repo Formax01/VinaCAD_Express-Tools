@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teigha.Colors;
@@ -15,6 +15,7 @@ namespace Tools.VinaCad.Helper.Helper
         public const string SymbolLayerName = "AXIS-SYMBOL";
         public const string DimensionLayerName = "AXIS-DIM";
         public const string AxisLinetypeName = "ZXW-DASHED";
+        //public const string AxisLinetypeName = "VCAD_POLAR";
 
         public sealed class AnnotationMetrics
         {
@@ -46,6 +47,7 @@ namespace Tools.VinaCad.Helper.Helper
                 BlockTableRecord owner = (BlockTableRecord)transaction.GetObject(
                     database.CurrentSpaceId, OpenMode.ForWrite);
 
+                /*ObjectId axisLinetypeId = GetAxisLinetype(database, transaction);*/
                 ObjectId axisLinetypeId = EnsureAxisLinetype(database, transaction);
                 ObjectId axisLayerId = EnsureLayer(
                     database, transaction, AxisLayerName, 1, axisLinetypeId);
@@ -57,16 +59,12 @@ namespace Tools.VinaCad.Helper.Helper
                 double maxX = input.TotalWidth;
                 double minY = 0;
                 double maxY = input.TotalDepth;
-                double axisMinX = input.DrawAnnotations ? -metrics.BubbleOffset : minX;
-                double axisMaxX = input.DrawAnnotations ? maxX + metrics.BubbleOffset : maxX;
-                double axisMinY = input.DrawAnnotations ? -metrics.BubbleOffset : minY;
-                double axisMaxY = input.DrawAnnotations ? maxY + metrics.BubbleOffset : maxY;
 
                 Point3d PointAt(double x, double y) => origin + axisX * x + axisY * y;
 
                 foreach (double x in xStations)
                 {
-                    Append(owner, transaction, new Line(PointAt(x, axisMinY), PointAt(x, axisMaxY))
+                    Append(owner, transaction, new Line(PointAt(x, minY), PointAt(x, maxY))
                     {
                         LayerId = axisLayerId
                     });
@@ -75,7 +73,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                 foreach (double y in yStations)
                 {
-                    Append(owner, transaction, new Line(PointAt(axisMinX, y), PointAt(axisMaxX, y))
+                    Append(owner, transaction, new Line(PointAt(minX, y), PointAt(maxX, y))
                     {
                         LayerId = axisLayerId
                     });
@@ -87,21 +85,45 @@ namespace Tools.VinaCad.Helper.Helper
                     for (int i = 0; i < xStations.Count; i++)
                     {
                         string label = (i + 1).ToString();
+                        Append(owner, transaction, new Line(
+                            PointAt(xStations[i], minY),
+                            PointAt(xStations[i], -metrics.BubbleOffset + metrics.BubbleRadius))
+                        {
+                            LayerId = dimensionLayerId
+                        });
+                        Append(owner, transaction, new Line(
+                            PointAt(xStations[i], maxY),
+                            PointAt(xStations[i], maxY + metrics.BubbleOffset - metrics.BubbleRadius))
+                        {
+                            LayerId = dimensionLayerId
+                        });
                         AddBubble(owner, transaction, PointAt(xStations[i], -metrics.BubbleOffset),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
                         AddBubble(owner, transaction, PointAt(xStations[i], maxY + metrics.BubbleOffset),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
-                        entityCount += 4;
+                        entityCount += 6;
                     }
 
                     for (int i = 0; i < yStations.Count; i++)
                     {
                         string label = GridAxisDataHelper.ToAlphabeticLabel(i);
+                        Append(owner, transaction, new Line(
+                            PointAt(minX, yStations[i]),
+                            PointAt(-metrics.BubbleOffset + metrics.BubbleRadius, yStations[i]))
+                        {
+                            LayerId = dimensionLayerId
+                        });
+                        Append(owner, transaction, new Line(
+                            PointAt(maxX, yStations[i]),
+                            PointAt(maxX + metrics.BubbleOffset - metrics.BubbleRadius, yStations[i]))
+                        {
+                            LayerId = dimensionLayerId
+                        });
                         AddBubble(owner, transaction, PointAt(-metrics.BubbleOffset, yStations[i]),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
                         AddBubble(owner, transaction, PointAt(maxX + metrics.BubbleOffset, yStations[i]),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
-                        entityCount += 4;
+                        entityCount += 6;
                     }
 
                     entityCount += AddHorizontalDimensions(owner, transaction, database, xStations,
@@ -267,6 +289,19 @@ namespace Tools.VinaCad.Helper.Helper
             transaction.AddNewlyCreatedDBObject(linetype, true);
             return id;
         }
+
+
+        /*private static ObjectId GetAxisLinetype(Database database, Transaction transaction)
+        {
+            var linetypeTable = (LinetypeTable)transaction.GetObject(
+                database.LinetypeTableId, OpenMode.ForRead);
+
+            // VinaCAD đã cung cấp sẵn linetype DASH, không tạo LinetypeTableRecord mới.
+            if (!linetypeTable.Has(AxisLinetypeName))
+                throw new InvalidOperationException("Không tìm thấy linetype DASH trong bản vẽ VinaCAD.");
+
+            return linetypeTable[AxisLinetypeName];
+        }*/
 
         private static void AddBubble(
             BlockTableRecord owner,
