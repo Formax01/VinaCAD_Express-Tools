@@ -113,9 +113,9 @@ namespace Tools.VinaCad.Action.Actions
                 {
                     foreach (double x in _xStations)
                     {
-                        DrawLine(draw, PointAt(x, 0),
+                        DrawLine(draw, PointAt(x, -_metrics.ExtensionLineOffset),
                             PointAt(x, -extension + _metrics.BubbleRadius), 3);
-                        DrawLine(draw, PointAt(x, maxY),
+                        DrawLine(draw, PointAt(x, maxY + _metrics.ExtensionLineOffset),
                             PointAt(x, maxY + extension - _metrics.BubbleRadius), 3);
                         DrawCircle(draw, PointAt(x, -extension), normal, _metrics.BubbleRadius, 3);
                         DrawCircle(draw, PointAt(x, maxY + extension), normal, _metrics.BubbleRadius, 3);
@@ -123,9 +123,9 @@ namespace Tools.VinaCad.Action.Actions
 
                     foreach (double y in _yStations)
                     {
-                        DrawLine(draw, PointAt(0, y),
+                        DrawLine(draw, PointAt(-_metrics.ExtensionLineOffset, y),
                             PointAt(-extension + _metrics.BubbleRadius, y), 3);
-                        DrawLine(draw, PointAt(maxX, y),
+                        DrawLine(draw, PointAt(maxX + _metrics.ExtensionLineOffset, y),
                             PointAt(maxX + extension - _metrics.BubbleRadius, y), 3);
                         DrawCircle(draw, PointAt(-extension, y), normal, _metrics.BubbleRadius, 3);
                         DrawCircle(draw, PointAt(maxX + extension, y), normal, _metrics.BubbleRadius, 3);

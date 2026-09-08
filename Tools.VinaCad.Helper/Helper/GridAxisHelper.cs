@@ -86,13 +86,13 @@ namespace Tools.VinaCad.Helper.Helper
                     {
                         string label = (i + 1).ToString();
                         Append(owner, transaction, new Line(
-                            PointAt(xStations[i], minY),
+                            PointAt(xStations[i], minY - metrics.ExtensionLineOffset),
                             PointAt(xStations[i], -metrics.BubbleOffset + metrics.BubbleRadius))
                         {
                             LayerId = dimensionLayerId
                         });
                         Append(owner, transaction, new Line(
-                            PointAt(xStations[i], maxY),
+                            PointAt(xStations[i], maxY + metrics.ExtensionLineOffset),
                             PointAt(xStations[i], maxY + metrics.BubbleOffset - metrics.BubbleRadius))
                         {
                             LayerId = dimensionLayerId
@@ -108,13 +108,13 @@ namespace Tools.VinaCad.Helper.Helper
                     {
                         string label = GridAxisDataHelper.ToAlphabeticLabel(i);
                         Append(owner, transaction, new Line(
-                            PointAt(minX, yStations[i]),
+                            PointAt(minX - metrics.ExtensionLineOffset, yStations[i]),
                             PointAt(-metrics.BubbleOffset + metrics.BubbleRadius, yStations[i]))
                         {
                             LayerId = dimensionLayerId
                         });
                         Append(owner, transaction, new Line(
-                            PointAt(maxX, yStations[i]),
+                            PointAt(maxX + metrics.ExtensionLineOffset, yStations[i]),
                             PointAt(maxX + metrics.BubbleOffset - metrics.BubbleRadius, yStations[i]))
                         {
                             LayerId = dimensionLayerId
@@ -221,12 +221,15 @@ namespace Tools.VinaCad.Helper.Helper
             double bubbleGap = Math.Max(
                 bubbleRadius * 2,
                 typicalBay * Math.Max(0, GridAxisSetting.BubbleGapToBayRatio));
+            double axisToDimensionGap = Math.Max(
+                textHeight * 0.75,
+                typicalBay * Math.Max(0, GridAxisSetting.AxisToDimensionGapToBayRatio));
 
             return new AnnotationMetrics
             {
                 TextHeight = textHeight,
                 ArrowSize = textHeight * 0.8,
-                ExtensionLineOffset = textHeight * 0.25,
+                ExtensionLineOffset = axisToDimensionGap,
                 ExtensionBeyondDimension = textHeight * 0.5,
                 BubbleRadius = bubbleRadius,
                 InnerDimensionOffset = innerDimensionOffset,

@@ -13,5 +13,6 @@ namespace Tools.VinaCad.Modeling
         public static double InnerDimensionOffsetToBayRatio { get; set; } = 0.20;
         public static double DimensionLineGapToBayRatio { get; set; } = 0.15;
         public static double BubbleGapToBayRatio { get; set; } = 0.18;
+        public static double AxisToDimensionGapToBayRatio { get; set; } = 0.05;
     }
 }
