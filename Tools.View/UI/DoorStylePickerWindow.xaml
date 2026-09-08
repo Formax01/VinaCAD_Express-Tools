@@ -1,0 +1,92 @@
+<Window x:Class="Tools.View.UI.DoorStylePickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Tools.View.Controls"
+        Title="[VinaCAD]-Chọn loại cửa mặc định"
+        Width="690"
+        Height="620"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        Background="#F3F3F3">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="StyleList"
+                 ItemsSource="{Binding Styles}"
+                 SelectedItem="{Binding SelectedStyle, Mode=TwoWay}"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 PreviewMouseLeftButtonUp="StyleList_PreviewMouseLeftButtonUp">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" Rows="4" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="3" />
+                    <Setter Property="Padding" Value="2" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="Border"
+                                        BorderBrush="#A7A7A7"
+                                        BorderThickness="1"
+                                        Background="White">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#007ACC" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#007ACC" />
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="3" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="22" />
+                        </Grid.RowDefinitions>
+                        <controls:DoorStylePreview DoorStyle="{Binding}" />
+                        <TextBlock Grid.Row="1"
+                                   Margin="2,2,2,0"
+                                   Text="{Binding DisplayName}"
+                                   Foreground="#303030"
+                                   TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <DockPanel Grid.Row="1" Margin="4,6,4,0">
+            <Button DockPanel.Dock="Left" Width="76" Height="28" Click="Cancel_Click" Content="Hủy" />
+            <StackPanel DockPanel.Dock="Left" Margin="55,0,0,0" Orientation="Horizontal">
+                <Button Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&lt;&lt;" />
+                <TextBlock Width="48" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
+                <Button Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&gt;&gt;" />
+            </StackPanel>
+            <TextBlock Margin="12,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="#555"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding AssetsPath, StringFormat=PATH: {0}}" />
+        </DockPanel>
+    </Grid>
+</Window>
