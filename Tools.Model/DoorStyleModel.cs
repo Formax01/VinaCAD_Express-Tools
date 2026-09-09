@@ -20,6 +20,8 @@ namespace Tools.Model
         public string DisplayName { get; set; } = string.Empty;
         public string AssetPath { get; set; } = string.Empty;
         public List<DoorPreviewPrimitive> PreviewGeometry { get; set; } = new List<DoorPreviewPrimitive>();
+        public double OpeningMinimumX { get; set; }
+        public double OpeningMaximumX { get; set; }
         public double DefaultWidth { get; set; } = 900;
         public double DefaultHeight { get; set; } = 2200;
     }

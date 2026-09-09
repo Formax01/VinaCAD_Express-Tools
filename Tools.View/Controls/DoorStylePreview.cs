@@ -33,10 +33,19 @@ namespace Tools.View.Controls
             IReadOnlyList<DoorPreviewPrimitive>? geometry = DoorStyle?.PreviewGeometry;
             if (geometry == null || geometry.Count == 0) return;
 
-            double minX = geometry.Min(item => item.MinX);
+            bool hasOpeningBounds = DoorStyle!.OpeningMaximumX - DoorStyle.OpeningMinimumX > 1e-6;
+            double minX = hasOpeningBounds ? DoorStyle.OpeningMinimumX : geometry.Min(item => item.MinX);
             double minY = geometry.Min(item => item.MinY);
-            double maxX = geometry.Max(item => item.MaxX);
+            double maxX = hasOpeningBounds ? DoorStyle.OpeningMaximumX : geometry.Max(item => item.MaxX);
             double maxY = geometry.Max(item => item.MaxY);
+            if (hasOpeningBounds)
+            {
+                IReadOnlyList<DoorPreviewPrimitive> visible = geometry
+                    .Where(item => item.MaxX >= minX && item.MinX <= maxX)
+                    .ToList();
+                minY = visible.Min(item => item.MinY);
+                maxY = visible.Max(item => item.MaxY);
+            }
             double naturalWidth = Math.Max(maxX - minX, 1e-6);
             double naturalHeight = Math.Max(maxY - minY, 1e-6);
             double minimumSpan = Math.Max(naturalWidth, naturalHeight) * 0.08;

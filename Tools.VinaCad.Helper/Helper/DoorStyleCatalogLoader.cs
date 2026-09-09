@@ -27,13 +27,15 @@ namespace Tools.VinaCad.Helper.Helper
             foreach (string file in files)
             {
                 string name = Path.GetFileNameWithoutExtension(file);
-                catalog.Styles.Add(new DoorStyleModel
+                DoorStyleModel style = new DoorStyleModel
                 {
                     Id = name,
                     DisplayName = name,
                     AssetPath = file,
                     PreviewGeometry = ReadPreviewGeometry(file)
-                });
+                };
+                SetOpeningBounds(style);
+                catalog.Styles.Add(style);
             }
             _cachedCatalog = catalog;
             return catalog;
@@ -181,6 +183,26 @@ namespace Tools.VinaCad.Helper.Helper
                 }
             }
             return primitive;
+        }
+
+        private static void SetOpeningBounds(DoorStyleModel style)
+        {
+            List<DoorPreviewPrimitive> curves = style.PreviewGeometry
+                .Where(item => item.Kind != DoorPreviewPrimitiveKind.Line)
+                .ToList();
+            IEnumerable<DoorPreviewPrimitive> candidates = curves.Count > 0
+                ? curves
+                : style.PreviewGeometry.Where(item =>
+                    Math.Abs(item.EndY - item.StartY) > Math.Abs(item.EndX - item.StartX) * 0.05);
+            List<DoorPreviewPrimitive> detail = candidates.ToList();
+            if (detail.Count == 0) detail = style.PreviewGeometry;
+            if (detail.Count == 0) return;
+
+            double minimumX = detail.Min(item => item.MinX);
+            double maximumX = detail.Max(item => item.MaxX);
+            if (maximumX - minimumX <= 1e-6) return;
+            style.OpeningMinimumX = minimumX;
+            style.OpeningMaximumX = maximumX;
         }
 
         private static string NaturalSortKey(string path)
