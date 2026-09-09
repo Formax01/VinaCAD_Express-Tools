@@ -15,6 +15,7 @@ namespace Tools.VinaCad.Helper.Helper
         private const double ParallelDotTolerance = 0.002;
         private const string DoorAppName = "VINACAD_WALL_DOOR";
         private const string DoorLayerName = "Door";
+        private const string DoorAttributeTag = "A";
 
         public static ObjectId CreateOpening(Database database, ObjectId selectedWallId, Point3d pickedPoint, DoorStyleSelection selection)
         {
@@ -96,20 +97,23 @@ namespace Tools.VinaCad.Helper.Helper
                 out double sourceMinX,
                 out double sourceMaxX,
                 out double sourceWidth,
-                out double anchorY);
+                out double? sourceHingeY,
+                out double sourceLabelY);
+            AttributeDefinition doorAttribute = EnsureDoorAttributeDefinition(
+                transaction,
+                blockDefinitionId,
+                string.Empty,
+                new Point3d((sourceMinX + sourceMaxX) * 0.5, sourceLabelY, 0.0),
+                sourceWidth * 0.08);
             double assetScale = selection.Width / sourceWidth;
             double scaleX = selection.ReverseAlongWall ? -assetScale : assetScale;
             double scaleY = selection.MirrorAcrossWall ? -assetScale : assetScale;
-            // FIX: normal = phương vuông góc với tường (trục Y cục bộ của block sau khi xoay).
-            // Trước đây code chỉ bù theo "direction" (dọc tường) bằng sourceMinX/sourceMaxX,
-            // bỏ qua hoàn toàn phần Y cục bộ của mốc bản lề (anchorY). Nếu anchorY != 0 (rất
-            // hay gặp vì file asset hiếm khi được vẽ với bản lề đúng gốc 0,0), phần dư này
-            // (anchorY * scaleY) không được trừ đi -> toàn bộ block bị dạt vào trong phòng
-            // theo phương vuông góc tường, đúng như lỗi trong ảnh chụp.
             Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
-            Point3d insertionPoint = selection.ReverseAlongWall
-                ? centerStart + direction * (sourceMaxX * assetScale) - normal * (anchorY * scaleY)
-                : centerStart - direction * (sourceMinX * assetScale) - normal * (anchorY * scaleY);
+            Point3d targetRoot = centerStart;
+            double sourceRootX = selection.ReverseAlongWall ? sourceMaxX : sourceMinX;
+            Point3d insertionPoint = targetRoot
+                - direction * (sourceRootX * scaleX)
+                - normal * (sourceHingeY.GetValueOrDefault() * scaleY);
             BlockReference blockReference = new BlockReference(insertionPoint, blockDefinitionId)
             {
                 LayerId = doorLayerId,
@@ -119,6 +123,7 @@ namespace Tools.VinaCad.Helper.Helper
             };
             currentSpace.AppendEntity(blockReference);
             transaction.AddNewlyCreatedDBObject(blockReference, true);
+            AddDoorAttribute(transaction, blockReference, doorAttribute, string.Empty);
             TagOpening(transaction, database, blockReference, segmentId, selection, centerStart, centerEnd);
 
             selectedWall.UpgradeOpen();
@@ -554,7 +559,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (style == null || string.IsNullOrWhiteSpace(style.AssetPath) || !File.Exists(style.AssetPath))
                 throw new FileNotFoundException("Không tìm thấy bản vẽ cửa đã chọn.", style?.AssetPath);
             string safeName = new string(style.Id.Select(character => char.IsLetterOrDigit(character) ? character : '_').ToArray());
-            string blockName = "VC_DOOR_ASSET_" + safeName;
+            string blockName = "DOOR_ASSET_" + safeName;
 
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
@@ -582,17 +587,41 @@ namespace Tools.VinaCad.Helper.Helper
             out double minimumX,
             out double maximumX,
             out double width,
-            out double anchorY)
+            out double? sourceHingeY,
+            out double sourceLabelY)
         {
             BlockTableRecord definition = (BlockTableRecord)transaction.GetObject(blockDefinitionId, OpenMode.ForRead);
-            List<Extents3d> curves = new List<Extents3d>();
+            List<(Extents3d Bounds, double? HingeY)> curves = new List<(Extents3d, double?)>();
             List<Extents3d> details = new List<Extents3d>();
             foreach (ObjectId objectId in definition)
             {
                 if (transaction.GetObject(objectId, OpenMode.ForRead) is not Entity entity) continue;
                 CollectDoorAssetBounds(entity, curves, details, 0);
             }
-            IReadOnlyList<Extents3d> bounds = curves.Count > 0 ? curves : details;
+            List<(Extents3d Bounds, double? HingeY)> significantCurves = new List<(Extents3d, double?)>();
+            if (curves.Count > 0)
+            {
+                double largestSpan = curves.Max(item => Math.Max(
+                    item.Bounds.MaxPoint.X - item.Bounds.MinPoint.X,
+                    item.Bounds.MaxPoint.Y - item.Bounds.MinPoint.Y));
+                significantCurves = curves.Where(item => Math.Max(
+                    item.Bounds.MaxPoint.X - item.Bounds.MinPoint.X,
+                    item.Bounds.MaxPoint.Y - item.Bounds.MinPoint.Y) >= largestSpan * 0.45).ToList();
+            }
+            List<Extents3d> bounds = significantCurves.Select(item => item.Bounds).ToList();
+            if (bounds.Count > 0)
+            {
+                double curveMinimumX = bounds.Min(item => item.MinPoint.X);
+                double curveMaximumX = bounds.Max(item => item.MaxPoint.X);
+                double nearbyDistance = (curveMaximumX - curveMinimumX) * 0.25;
+                bounds.AddRange(details.Where(item =>
+                    item.MaxPoint.X >= curveMinimumX - nearbyDistance &&
+                    item.MinPoint.X <= curveMaximumX + nearbyDistance));
+            }
+            else
+            {
+                bounds.AddRange(details);
+            }
             if (bounds.Count == 0)
                 throw new InvalidOperationException("Asset cửa không có cung hoặc hình học cánh cửa hợp lệ.");
 
@@ -602,28 +631,34 @@ namespace Tools.VinaCad.Helper.Helper
             if (double.IsInfinity(minimumX) || double.IsNaN(width) || width <= Tolerance)
                 throw new InvalidOperationException("Asset cửa không có hình học hợp lệ theo trục X.");
 
-            // FIX: mốc "tim tường" của asset KHÔNG được giả định là Y=0 cục bộ (điều này
-            // chỉ đúng nếu người vẽ asset luôn đặt bản lề đúng gốc toạ độ). Với cung xoay
-            // cửa được vẽ theo quy ước chuẩn (tâm cung = bản lề, quét 0°->90°, mở về phía
-            // +Y vào trong phòng), cạnh dưới cùng (MinPoint.Y) của bounding box đúng bằng
-            // toạ độ Y của bản lề/tim tường trong hệ toạ độ cục bộ của block — bất kể asset
-            // được vẽ ở đâu trên mặt phẳng. Lấy giá trị này để bù trừ khi tính insertionPoint,
-            // thay vì luôn coi Y cục bộ = 0 là tim tường.
-            anchorY = bounds.Min(item => item.MinPoint.Y);
+            List<double> hingeCoordinates = significantCurves
+                .Where(item => item.HingeY.HasValue)
+                .Select(item => item.HingeY!.Value)
+                .ToList();
+            sourceHingeY = hingeCoordinates.Count > 0 ? hingeCoordinates.Average() : null;
+            sourceLabelY = significantCurves.Count > 0
+                ? (significantCurves.Min(item => item.Bounds.MinPoint.Y) +
+                   significantCurves.Max(item => item.Bounds.MaxPoint.Y)) * 0.5
+                : 0.0;
         }
 
         private static void CollectDoorAssetBounds(
             Entity entity,
-            List<Extents3d> curves,
+            List<(Extents3d Bounds, double? HingeY)> curves,
             List<Extents3d> details,
             int depth)
         {
             try
             {
                 Extents3d extents = entity.GeometricExtents;
-                if (entity is Arc || entity is Circle || HasCurvedSegments(entity))
+                if (entity is Arc arc)
                 {
-                    curves.Add(extents);
+                    curves.Add((extents, arc.Center.Y));
+                    return;
+                }
+                if (entity is Circle)
+                {
+                    curves.Add((extents, null));
                     return;
                 }
                 if (entity is Line line &&
@@ -662,16 +697,6 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static bool HasCurvedSegments(Entity entity)
-        {
-            if (entity is not Polyline polyline) return false;
-            for (int index = 0; index < polyline.NumberOfVertices; index++)
-            {
-                if (Math.Abs(polyline.GetBulgeAt(index)) > Tolerance) return true;
-            }
-            return false;
-        }
-
         private static ObjectId EnsureDoorLayer(Transaction transaction, Database database)
         {
             LayerTable table = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
@@ -708,6 +733,58 @@ namespace Tools.VinaCad.Helper.Helper
                     entity.ColorIndex = 0;
                 }
             }
+        }
+
+        private static AttributeDefinition EnsureDoorAttributeDefinition(
+            Transaction transaction,
+            ObjectId blockDefinitionId,
+            string defaultValue,
+            Point3d position,
+            double height)
+        {
+            BlockTableRecord definition = (BlockTableRecord)transaction.GetObject(blockDefinitionId, OpenMode.ForRead);
+            foreach (ObjectId objectId in definition)
+            {
+                if (transaction.GetObject(objectId, OpenMode.ForRead) is AttributeDefinition existing &&
+                    string.Equals(existing.Tag, DoorAttributeTag, StringComparison.OrdinalIgnoreCase))
+                {
+                    existing.UpgradeOpen();
+                    existing.Invisible = false;
+                    existing.TextString = defaultValue;
+                    existing.Position = position;
+                    existing.Height = height;
+                    return existing;
+                }
+            }
+
+            definition.UpgradeOpen();
+            AttributeDefinition attribute = new AttributeDefinition
+            {
+                Position = position,
+                Tag = DoorAttributeTag,
+                TextString = defaultValue,
+                Height = height,
+                Invisible = false,
+                Constant = false
+            };
+            attribute.SetDatabaseDefaults(definition.Database);
+            definition.AppendEntity(attribute);
+            transaction.AddNewlyCreatedDBObject(attribute, true);
+            return attribute;
+        }
+
+        private static void AddDoorAttribute(
+            Transaction transaction,
+            BlockReference blockReference,
+            AttributeDefinition definition,
+            string value)
+        {
+            AttributeReference attribute = new AttributeReference();
+            attribute.SetAttributeFromBlock(definition, blockReference.BlockTransform);
+            attribute.TextString = value;
+            attribute.Invisible = false;
+            blockReference.AttributeCollection.AppendAttribute(attribute);
+            transaction.AddNewlyCreatedDBObject(attribute, true);
         }
 
         private static void EnsureRegApp(Transaction transaction, Database database)
