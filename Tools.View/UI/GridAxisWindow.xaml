@@ -1,6 +1,7 @@
 <Window x:Class="Tools.VinaCAD.UI.GridAxisWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
         Title="Cài đặt Lưới Trục"
         Height="500" Width="400"
         MinHeight="300" MinWidth="200"
@@ -36,6 +37,7 @@
             <TextBlock Grid.Column="0" Text="Chiều Rộng:" VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
                      x:Name="BreadthsTextBox"
+                     behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                      Text="{Binding BreadthsText, UpdateSourceTrigger=PropertyChanged}"
                      ToolTip="Nhịp theo X, ví dụ: 4200 2500 4300 hoặc 4x3600"/>
         </Grid>
@@ -48,6 +50,7 @@
             <TextBlock Grid.Column="0" Text="Chiều Sâu:" VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
                      x:Name="DepthsTextBox"
+                     behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                      Text="{Binding DepthsText, UpdateSourceTrigger=PropertyChanged}"
                      ToolTip="Nhịp theo Y, nhập từ dưới lên trên"/>
         </Grid>
