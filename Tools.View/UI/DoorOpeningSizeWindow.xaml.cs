@@ -22,8 +22,12 @@ namespace Tools.View.UI
         public double DoorHeight { get; private set; }
         public double WallThickness { get; private set; }
         public bool PlaceAtWallCenter => MiddleWallCheck.IsChecked == true;
-        public bool ReverseAlongWall => ReverseAlongWallCheck.IsChecked == true;
-        public bool MirrorAcrossWall => MirrorAcrossWallCheck.IsChecked == true;
+        public bool IsPocketWidth => PocketWidthCheck.IsChecked == true;
+        public bool ReverseAlongWall { get; }
+        public bool MirrorAcrossWall { get; }
+        public bool MeasureHoleRequested { get; private set; }
+        public bool MeasurePierRequested { get; private set; }
+        public bool PickExistingDoorWidthRequested { get; private set; }
 
         public DoorOpeningSizeWindow(
             DoorStyleSelection? initialSelection,
@@ -40,16 +44,19 @@ namespace Tools.View.UI
                 ? initialSelection.WallThickness
                 : defaultWallThickness;
             double pierWidth = initialSelection?.UseEdgeDistance == true ? initialSelection.EdgeDistance : 200;
+            HoleWidth = holeWidth;
+            PierWidth = pierWidth;
+            DoorHeight = doorHeight;
+            WallThickness = wallThickness;
+            ReverseAlongWall = initialSelection?.ReverseAlongWall == true;
+            MirrorAcrossWall = initialSelection?.MirrorAcrossWall == true;
             HoleWidthText.Text = Format(holeWidth);
             PierWidthText.Text = Format(pierWidth);
-            DoorHeightText.Text = Format(doorHeight);
-            WallThicknessText.Text = Format(wallThickness);
             HoleWidthList.SelectedItem = holeWidth;
             PierWidthList.SelectedItem = pierWidth;
             MiddleWallCheck.IsChecked = initialSelection?.PlaceAtWallCenter == true;
-            ReverseAlongWallCheck.IsChecked = initialSelection?.ReverseAlongWall == true;
-            MirrorAcrossWallCheck.IsChecked = initialSelection?.MirrorAcrossWall == true;
-            MiddleWallCheck_Changed(this, new RoutedEventArgs());
+            PocketWidthCheck.IsChecked = initialSelection == null || initialSelection.UseEdgeDistance;
+            UpdatePierInputs();
         }
 
         private void HoleWidthList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,13 +69,49 @@ namespace Tools.View.UI
             if (PierWidthList.SelectedItem is double value) PierWidthText.Text = Format(value);
         }
 
-        private void SameWidth_Click(object sender, RoutedEventArgs e) => PierWidthText.Text = HoleWidthText.Text;
-
-        private void MiddleWallCheck_Changed(object sender, RoutedEventArgs e)
+        private void PlacementMode_Changed(object sender, RoutedEventArgs e)
         {
-            bool enabled = MiddleWallCheck.IsChecked != true;
+            if (sender == MiddleWallCheck && MiddleWallCheck.IsChecked == true)
+                PocketWidthCheck.IsChecked = false;
+            else if (sender == PocketWidthCheck && PocketWidthCheck.IsChecked == true)
+                MiddleWallCheck.IsChecked = false;
+
+            UpdatePierInputs();
+        }
+
+        private void UpdatePierInputs()
+        {
+            bool enabled = IsPocketWidth && !PlaceAtWallCenter;
             PierWidthList.IsEnabled = enabled;
             PierWidthText.IsEnabled = enabled;
+            MeasurePierButton.IsEnabled = enabled;
+        }
+
+        private void MeasureHole_Click(object sender, RoutedEventArgs e) => RequestMeasurement(true);
+
+        private void MeasurePier_Click(object sender, RoutedEventArgs e) => RequestMeasurement(false);
+
+        private void PickExistingDoorWidth_Click(object sender, RoutedEventArgs e)
+        {
+            CaptureCurrentValues();
+            PickExistingDoorWidthRequested = true;
+            DialogResult = true;
+        }
+
+        private void RequestMeasurement(bool hole)
+        {
+            CaptureCurrentValues();
+            MeasureHoleRequested = hole;
+            MeasurePierRequested = !hole;
+            DialogResult = true;
+        }
+
+        private void CaptureCurrentValues()
+        {
+            if (TryParse(HoleWidthText.Text, out double holeWidth) && holeWidth > 0)
+                HoleWidth = holeWidth;
+            if (TryParse(PierWidthText.Text, out double pierWidth) && pierWidth >= 0)
+                PierWidth = pierWidth;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
@@ -79,26 +122,15 @@ namespace Tools.View.UI
                 return;
             }
             double pierWidth = 0;
-            if (!PlaceAtWallCenter && (!TryParse(PierWidthText.Text, out pierWidth) || pierWidth < 0))
+            if (IsPocketWidth && !PlaceAtWallCenter &&
+                (!TryParse(PierWidthText.Text, out pierWidth) || pierWidth < 0))
             {
-                ShowValidation("Chiều rộng trụ tường phải là số không âm.");
-                return;
-            }
-            if (!TryParse(DoorHeightText.Text, out double doorHeight) || doorHeight <= 0)
-            {
-                ShowValidation("Chiều cao cửa phải là số lớn hơn 0.");
-                return;
-            }
-            if (!TryParse(WallThicknessText.Text, out double wallThickness) || wallThickness <= 0)
-            {
-                ShowValidation("Chiều dày tường phải là số lớn hơn 0.");
+                ShowValidation("Khoảng cách trụ phải là số không âm.");
                 return;
             }
 
             HoleWidth = holeWidth;
-            PierWidth = PlaceAtWallCenter ? 0 : pierWidth;
-            DoorHeight = doorHeight;
-            WallThickness = wallThickness;
+            PierWidth = IsPocketWidth && !PlaceAtWallCenter ? pierWidth : 0;
             DialogResult = true;
         }
 

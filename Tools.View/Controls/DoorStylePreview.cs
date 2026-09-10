@@ -10,7 +10,7 @@ namespace Tools.View.Controls
     public sealed class DoorStylePreview : FrameworkElement
     {
         private static readonly Brush Background = CreateBrush(31, 38, 48);
-        private static readonly Pen GeometryPen = CreatePen(CreateBrush(0, 190, 198), 2.0);
+        private static readonly Pen GeometryPen = CreatePen(CreateBrush(51, 255, 51), 1.5);
 
         public static readonly DependencyProperty DoorStyleProperty = DependencyProperty.Register(
             nameof(DoorStyle),

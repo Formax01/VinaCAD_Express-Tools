@@ -49,9 +49,8 @@ namespace Tools.VinaCAD.Action.Actions
 
         private static PromptEntityOptions CreateWallPrompt(DoorStyleSelection selection)
         {
-            string placement = selection.PlaceAtWallCenter
-                ? "Giữa"
-                : $"Pier={selection.EdgeDistance:0.##}";
+            string placement = selection.PlaceAtWallCenter ? "Giữa" : $"Pier={selection.EdgeDistance:0.##}";
+
             string orientation = (selection.ReverseAlongWall ? ", Đảo" : string.Empty) +
                                  (selection.MirrorAcrossWall ? ", Lật" : string.Empty);
             PromptEntityOptions options = new PromptEntityOptions(

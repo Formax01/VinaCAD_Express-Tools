@@ -114,6 +114,9 @@ namespace Tools.VinaCad.Helper.Helper
             Point3d insertionPoint = targetRoot
                 - direction * (sourceRootX * scaleX)
                 - normal * (sourceHingeY.GetValueOrDefault() * scaleY);
+
+
+
             BlockReference blockReference = new BlockReference(insertionPoint, blockDefinitionId)
             {
                 LayerId = doorLayerId,
@@ -121,6 +124,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Rotation = Math.Atan2(direction.Y, direction.X),
                 ScaleFactors = new Scale3d(scaleX, scaleY, assetScale)
             };
+
             currentSpace.AppendEntity(blockReference);
             transaction.AddNewlyCreatedDBObject(blockReference, true);
             AddDoorAttribute(transaction, blockReference, doorAttribute, string.Empty);
@@ -132,6 +136,34 @@ namespace Tools.VinaCad.Helper.Helper
             pairedWall.Erase();
             transaction.Commit();
             return blockReference.ObjectId;
+        }
+
+        public static bool TryGetDoorWidth(Database database, ObjectId blockId, out double width)
+        {
+            width = 0;
+            if (database == null || blockId.IsNull || !blockId.IsValid || blockId.IsErased) return false;
+
+            try
+            {
+                using Transaction transaction = database.TransactionManager.StartTransaction();
+                if (transaction.GetObject(blockId, OpenMode.ForRead) is not BlockReference blockReference)
+                    return false;
+
+                ResultBuffer buffer = blockReference.GetXDataForApplication(DoorAppName);
+                if (buffer == null) return false;
+                foreach (TypedValue value in buffer)
+                {
+                    if (value.TypeCode != (int)DxfCode.ExtendedDataReal) continue;
+                    width = Convert.ToDouble(value.Value, CultureInfo.InvariantCulture);
+                    return width > Tolerance;
+                }
+            }
+            catch
+            {
+                width = 0;
+            }
+
+            return false;
         }
 
         private static void ResolveOpeningInterval(
@@ -745,8 +777,7 @@ namespace Tools.VinaCad.Helper.Helper
             BlockTableRecord definition = (BlockTableRecord)transaction.GetObject(blockDefinitionId, OpenMode.ForRead);
             foreach (ObjectId objectId in definition)
             {
-                if (transaction.GetObject(objectId, OpenMode.ForRead) is AttributeDefinition existing &&
-                    string.Equals(existing.Tag, DoorAttributeTag, StringComparison.OrdinalIgnoreCase))
+                if (transaction.GetObject(objectId, OpenMode.ForRead) is AttributeDefinition existing && string.Equals(existing.Tag, DoorAttributeTag, StringComparison.OrdinalIgnoreCase))
                 {
                     existing.UpgradeOpen();
                     existing.Invisible = false;
