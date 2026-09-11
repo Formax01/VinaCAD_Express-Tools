@@ -49,8 +49,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                 /*ObjectId axisLinetypeId = GetAxisLinetype(database, transaction);*/
                 ObjectId axisLinetypeId = EnsureAxisLinetype(database, transaction);
-                ObjectId axisLayerId = EnsureLayer(
-                    database, transaction, AxisLayerName, 1, axisLinetypeId);
+                ObjectId axisLayerId = EnsureLayer(database, transaction, AxisLayerName, 1, axisLinetypeId);
                 ObjectId symbolLayerId = EnsureLayer(database, transaction, SymbolLayerName, 3);
                 ObjectId dimensionLayerId = EnsureLayer(database, transaction, DimensionLayerName, 3);
                 AnnotationMetrics metrics = GetAnnotationMetrics(database, transaction, input);
@@ -66,7 +65,8 @@ namespace Tools.VinaCad.Helper.Helper
                 {
                     Append(owner, transaction, new Line(PointAt(x, minY), PointAt(x, maxY))
                     {
-                        LayerId = axisLayerId
+                        LayerId = axisLayerId,
+                        LinetypeScale = Math.Max(1, metrics.TextHeight * 0.25)
                     });
                     entityCount++;
                 }
@@ -75,7 +75,8 @@ namespace Tools.VinaCad.Helper.Helper
                 {
                     Append(owner, transaction, new Line(PointAt(minX, y), PointAt(maxX, y))
                     {
-                        LayerId = axisLayerId
+                        LayerId = axisLayerId,
+                        LinetypeScale = Math.Max(1, metrics.TextHeight * 0.25)
                     });
                     entityCount++;
                 }
@@ -222,13 +223,13 @@ namespace Tools.VinaCad.Helper.Helper
                 bubbleRadius * 2,
                 typicalBay * Math.Max(0, GridAxisSetting.BubbleGapToBayRatio));
             double axisToDimensionGap = Math.Max(
-                textHeight * 0.75,
+                textHeight * 0.5,
                 typicalBay * Math.Max(0, GridAxisSetting.AxisToDimensionGapToBayRatio));
 
             return new AnnotationMetrics
             {
                 TextHeight = textHeight,
-                ArrowSize = textHeight * 0.8,
+                ArrowSize = textHeight * 0.3,
                 ExtensionLineOffset = axisToDimensionGap,
                 ExtensionBeyondDimension = textHeight * 0.5,
                 BubbleRadius = bubbleRadius,
@@ -412,14 +413,24 @@ namespace Tools.VinaCad.Helper.Helper
             double rotation,
             ObjectId layerId)
         {
-            var dimension = new RotatedDimension(
-                rotation, first, second, dimensionLinePoint, "<>", database.Dimstyle)
+            Color byLayer = Color.FromColorIndex(ColorMethod.ByLayer, 256);
+            var dimension = new RotatedDimension(rotation, first, second, dimensionLinePoint, "<>", database.Dimstyle)
             {
                 LayerId = layerId,
                 Dimscale = 1,
                 Dimtxt = metrics.TextHeight,
                 Dimasz = metrics.ArrowSize,
+                Dimtsz = metrics.ArrowSize,
                 Dimdec = 0,
+                Dimclrd = byLayer,
+                Dimclre = byLayer,
+                Dimclrt = Color.FromColorIndex(ColorMethod.ByAci, 7),
+                Dimtad = 1,
+                Dimtih = false,
+                Dimtoh = false,
+                Dimgap = metrics.TextHeight * 0.5,
+                Dimlwd = LineWeight.LineWeight050,
+                Dimlwe = LineWeight.LineWeight050,
                 Dimexo = metrics.ExtensionLineOffset,
                 Dimexe = metrics.ExtensionBeyondDimension
             };
