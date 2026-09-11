@@ -15,6 +15,7 @@ namespace Tools.VinaCad.Helper.Helper
         public const string SymbolLayerName = "AXIS-SYMBOL";
         public const string DimensionLayerName = "AXIS-DIM";
         public const string AxisLinetypeName = "ZXW-DASHED";
+        private const string DimensionTickBlockName = "ZXW-DIM-TICK";
         //public const string AxisLinetypeName = "VCAD_POLAR";
 
         public sealed class AnnotationMetrics
@@ -52,6 +53,7 @@ namespace Tools.VinaCad.Helper.Helper
                 ObjectId axisLayerId = EnsureLayer(database, transaction, AxisLayerName, 1, axisLinetypeId);
                 ObjectId symbolLayerId = EnsureLayer(database, transaction, SymbolLayerName, 3);
                 ObjectId dimensionLayerId = EnsureLayer(database, transaction, DimensionLayerName, 3);
+                ObjectId dimensionTickBlockId = EnsureDimensionTickBlock(database, transaction);
                 AnnotationMetrics metrics = GetAnnotationMetrics(database, transaction, input);
 
                 double minX = 0;
@@ -128,9 +130,9 @@ namespace Tools.VinaCad.Helper.Helper
                     }
 
                     entityCount += AddHorizontalDimensions(owner, transaction, database, xStations,
-                        minY, maxY, metrics, PointAt, rotation, dimensionLayerId);
+                        minY, maxY, metrics, PointAt, rotation, dimensionLayerId, dimensionTickBlockId);
                     entityCount += AddVerticalDimensions(owner, transaction, database, yStations,
-                        minX, maxX, metrics, PointAt, rotation + Math.PI / 2, dimensionLayerId);
+                        minX, maxX, metrics, PointAt, rotation + Math.PI / 2, dimensionLayerId, dimensionTickBlockId);
                 }
 
                 transaction.Commit();
@@ -294,6 +296,65 @@ namespace Tools.VinaCad.Helper.Helper
             return id;
         }
 
+        private static ObjectId EnsureDimensionTickBlock(Database database, Transaction transaction)
+        {
+            var blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
+            if (blockTable.Has(DimensionTickBlockName))
+            {
+                ObjectId existingId = blockTable[DimensionTickBlockName];
+                var existingBlock = (BlockTableRecord)transaction.GetObject(existingId, OpenMode.ForWrite);
+                bool hasBridge = false;
+                foreach (ObjectId entityId in existingBlock)
+                {
+                    DBObject entity = transaction.GetObject(entityId, OpenMode.ForWrite);
+                    if (entity is Polyline existingTick)
+                        existingTick.ConstantWidth = 0.20;
+                    else if (entity is Solid existingBridge)
+                    {
+                        existingBridge.SetPointAt(0, new Point3d(-1.0, -0.03, 0));
+                        existingBridge.SetPointAt(1, new Point3d(1.0, -0.03, 0));
+                        existingBridge.SetPointAt(2, new Point3d(-1.0, 0.03, 0));
+                        existingBridge.SetPointAt(3, new Point3d(1.0, 0.03, 0));
+                        hasBridge = true;
+                    }
+                }
+                if (!hasBridge)
+                    AddDimensionTickBridge(existingBlock, transaction);
+                return existingId;
+            }
+
+            blockTable.UpgradeOpen();
+            var block = new BlockTableRecord { Name = DimensionTickBlockName };
+            ObjectId blockId = blockTable.Add(block);
+            transaction.AddNewlyCreatedDBObject(block, true);
+
+            var tick = new Polyline(2)
+            {
+                ConstantWidth = 0.20,
+                Color = Color.FromColorIndex(ColorMethod.ByBlock, 0)
+            };
+            tick.AddVertexAt(0, new Point2d(-0.5, -0.5), 0, 0.20, 0.20);
+            tick.AddVertexAt(1, new Point2d(0.5, 0.5), 0, 0.20, 0.20);
+            block.AppendEntity(tick);
+            transaction.AddNewlyCreatedDBObject(tick, true);
+            AddDimensionTickBridge(block, transaction);
+            return blockId;
+        }
+
+        private static void AddDimensionTickBridge(BlockTableRecord block, Transaction transaction)
+        {
+            var bridge = new Solid(
+                new Point3d(-1.0, -0.03, 0),
+                new Point3d(1.0, -0.03, 0),
+                new Point3d(-1.0, 0.03, 0),
+                new Point3d(1.0, 0.03, 0))
+            {
+                Color = Color.FromColorIndex(ColorMethod.ByBlock, 0)
+            };
+            block.AppendEntity(bridge);
+            transaction.AddNewlyCreatedDBObject(bridge, true);
+        }
+
 
         /*private static ObjectId GetAxisLinetype(Database database, Transaction transaction)
         {
@@ -348,25 +409,26 @@ namespace Tools.VinaCad.Helper.Helper
             AnnotationMetrics metrics,
             Func<double, double, Point3d> pointAt,
             double rotation,
-            ObjectId layerId)
+            ObjectId layerId,
+            ObjectId tickBlockId)
         {
             int count = 0;
             for (int i = 0; i < stations.Count - 1; i++)
             {
                 count += AddDimension(owner, transaction, database,
                     pointAt(stations[i], minY), pointAt(stations[i + 1], minY),
-                    pointAt(stations[i], minY - metrics.InnerDimensionOffset), metrics, rotation, layerId);
+                    pointAt(stations[i], minY - metrics.InnerDimensionOffset), metrics, rotation, layerId, tickBlockId);
                 count += AddDimension(owner, transaction, database,
                     pointAt(stations[i], maxY), pointAt(stations[i + 1], maxY),
-                    pointAt(stations[i], maxY + metrics.InnerDimensionOffset), metrics, rotation, layerId);
+                    pointAt(stations[i], maxY + metrics.InnerDimensionOffset), metrics, rotation, layerId, tickBlockId);
             }
 
             count += AddDimension(owner, transaction, database,
                 pointAt(stations[0], minY), pointAt(stations[^1], minY),
-                pointAt(stations[0], minY - metrics.OuterDimensionOffset), metrics, rotation, layerId);
+                pointAt(stations[0], minY - metrics.OuterDimensionOffset), metrics, rotation, layerId, tickBlockId);
             count += AddDimension(owner, transaction, database,
                 pointAt(stations[0], maxY), pointAt(stations[^1], maxY),
-                pointAt(stations[0], maxY + metrics.OuterDimensionOffset), metrics, rotation, layerId);
+                pointAt(stations[0], maxY + metrics.OuterDimensionOffset), metrics, rotation, layerId, tickBlockId);
             return count;
         }
 
@@ -380,25 +442,26 @@ namespace Tools.VinaCad.Helper.Helper
             AnnotationMetrics metrics,
             Func<double, double, Point3d> pointAt,
             double rotation,
-            ObjectId layerId)
+            ObjectId layerId,
+            ObjectId tickBlockId)
         {
             int count = 0;
             for (int i = 0; i < stations.Count - 1; i++)
             {
                 count += AddDimension(owner, transaction, database,
                     pointAt(minX, stations[i]), pointAt(minX, stations[i + 1]),
-                    pointAt(minX - metrics.InnerDimensionOffset, stations[i]), metrics, rotation, layerId);
+                    pointAt(minX - metrics.InnerDimensionOffset, stations[i]), metrics, rotation, layerId, tickBlockId);
                 count += AddDimension(owner, transaction, database,
                     pointAt(maxX, stations[i]), pointAt(maxX, stations[i + 1]),
-                    pointAt(maxX + metrics.InnerDimensionOffset, stations[i]), metrics, rotation, layerId);
+                    pointAt(maxX + metrics.InnerDimensionOffset, stations[i]), metrics, rotation, layerId, tickBlockId);
             }
 
             count += AddDimension(owner, transaction, database,
                 pointAt(minX, stations[0]), pointAt(minX, stations[^1]),
-                pointAt(minX - metrics.OuterDimensionOffset, stations[0]), metrics, rotation, layerId);
+                pointAt(minX - metrics.OuterDimensionOffset, stations[0]), metrics, rotation, layerId, tickBlockId);
             count += AddDimension(owner, transaction, database,
                 pointAt(maxX, stations[0]), pointAt(maxX, stations[^1]),
-                pointAt(maxX + metrics.OuterDimensionOffset, stations[0]), metrics, rotation, layerId);
+                pointAt(maxX + metrics.OuterDimensionOffset, stations[0]), metrics, rotation, layerId, tickBlockId);
             return count;
         }
 
@@ -411,7 +474,8 @@ namespace Tools.VinaCad.Helper.Helper
             Point3d dimensionLinePoint,
             AnnotationMetrics metrics,
             double rotation,
-            ObjectId layerId)
+            ObjectId layerId,
+            ObjectId tickBlockId)
         {
             Color byLayer = Color.FromColorIndex(ColorMethod.ByLayer, 256);
             var dimension = new RotatedDimension(rotation, first, second, dimensionLinePoint, "<>", database.Dimstyle)
@@ -419,8 +483,10 @@ namespace Tools.VinaCad.Helper.Helper
                 LayerId = layerId,
                 Dimscale = 1,
                 Dimtxt = metrics.TextHeight,
-                Dimasz = metrics.ArrowSize,
-                Dimtsz = metrics.ArrowSize,
+                Dimasz = metrics.ArrowSize * 1.3,
+                Dimtsz = 0,
+                Dimsah = false,
+                Dimblk = tickBlockId,
                 Dimdec = 0,
                 Dimclrd = byLayer,
                 Dimclre = byLayer,
@@ -428,9 +494,10 @@ namespace Tools.VinaCad.Helper.Helper
                 Dimtad = 1,
                 Dimtih = false,
                 Dimtoh = false,
-                Dimgap = metrics.TextHeight * 0.5,
-                Dimlwd = LineWeight.LineWeight050,
-                Dimlwe = LineWeight.LineWeight050,
+                Dimgap = metrics.TextHeight * 0.3,
+                Dimlwd = LineWeight.LineWeight200,
+                Dimlwe = LineWeight.LineWeight200,
+                Dimdle = metrics.ArrowSize * 0.5,
                 Dimexo = metrics.ExtensionLineOffset,
                 Dimexe = metrics.ExtensionBeyondDimension
             };
