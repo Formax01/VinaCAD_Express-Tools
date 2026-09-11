@@ -14,7 +14,7 @@ namespace Tools.VinaCad.Helper.Helper
         public const string AxisLayerName = "AXIS";
         public const string SymbolLayerName = "AXIS-SYMBOL";
         public const string DimensionLayerName = "AXIS-DIM";
-        public const string AxisLinetypeName = "ZXW-DASHED";
+        public const string AxisLinetypeName = "ZXW-LONG-SHORT";
         private const string DimensionTickBlockName = "ZXW-DIM-TICK";
         //public const string AxisLinetypeName = "VCAD_POLAR";
 
@@ -284,12 +284,14 @@ namespace Tools.VinaCad.Helper.Helper
             var linetype = new LinetypeTableRecord
             {
                 Name = AxisLinetypeName,
-                AsciiDescription = "ZXW dashed axis",
-                PatternLength = 6.0,
-                NumDashes = 2
+                AsciiDescription = "LONG-SHORT DASH",
+                PatternLength = 14.0,
+                NumDashes = 4
             };
-            linetype.SetDashLengthAt(0, 4.0);
-            linetype.SetDashLengthAt(1, -2.0);
+            linetype.SetDashLengthAt(0, 8.0);   // Đoạn dài
+            linetype.SetDashLengthAt(1, -2.0);  // Khoảng trống
+            linetype.SetDashLengthAt(2, 2.0);   // Đoạn ngắn
+            linetype.SetDashLengthAt(3, -2.0);  // Khoảng trống
 
             ObjectId id = linetypeTable.Add(linetype);
             transaction.AddNewlyCreatedDBObject(linetype, true);
