@@ -11,6 +11,21 @@ namespace Tools.VinaCAD.Action.Actions
 {
     public sealed class DoorStylePickerAction
     {
+        public DoorStyleSelection CreateDefaultSelection()
+        {
+            DoorStyleCatalog catalog = DoorStyleCatalogLoader.LoadDefault();
+            DoorStyleModel style = catalog.Styles[0];
+            return new DoorStyleSelection
+            {
+                Style = style,
+                Width = style.DefaultWidth,
+                Height = style.DefaultHeight,
+                WallThickness = catalog.DefaultWallThickness > 0 ? catalog.DefaultWallThickness : 200,
+                UseEdgeDistance = true,
+                EdgeDistance = 200
+            };
+        }
+
         public DoorStyleSelection? Execute(DoorStyleSelection? initialSelection = null)
         {
             DoorStyleCatalog catalog = DoorStyleCatalogLoader.LoadDefault();
@@ -24,6 +39,16 @@ namespace Tools.VinaCAD.Action.Actions
         public DoorStyleSelection? EditParameters(DoorStyleSelection selection)
         {
             return ShowParameters(selection.Style, selection, selection.WallThickness);
+        }
+
+        public bool SelectStyle(DoorStyleSelection selection)
+        {
+            DoorStyleCatalog catalog = DoorStyleCatalogLoader.LoadDefault();
+            DoorStylePickerWindow styleWindow = new DoorStylePickerWindow(catalog, selection.Style);
+            Application.ShowModalWindow(styleWindow);
+            if (styleWindow.DialogResult != true || styleWindow.SelectedStyle == null) return false;
+            selection.Style = styleWindow.SelectedStyle;
+            return true;
         }
 
         private static DoorStyleSelection? ShowParameters(

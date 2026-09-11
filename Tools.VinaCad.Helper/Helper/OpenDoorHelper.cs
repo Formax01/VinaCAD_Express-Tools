@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
@@ -17,7 +18,11 @@ namespace Tools.VinaCad.Helper.Helper
         private const string DoorLayerName = "Door";
         private const string DoorAttributeTag = "A";
 
-        public static ObjectId CreateOpening(Database database, ObjectId selectedWallId, Point3d pickedPoint, DoorStyleSelection selection)
+        public static ObjectId CreateOpening(
+            Database database,
+            ObjectId selectedWallId,
+            Point3d pickedPoint,
+            DoorStyleSelection selection)
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
             if (selection == null || selection.Style == null) throw new ArgumentNullException(nameof(selection));
@@ -45,6 +50,7 @@ namespace Tools.VinaCad.Helper.Helper
             Vector3d direction = selectedWall.EndPoint - selectedWall.StartPoint;
             if (direction.Length <= Tolerance) throw new InvalidOperationException("Đoạn tường được chọn quá ngắn.");
             direction = direction.GetNormal();
+            Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
             Point3d origin = selectedWall.StartPoint;
 
             GetStationInterval(selectedWall, origin, direction, out double selectedStart, out double selectedEnd);
@@ -108,7 +114,6 @@ namespace Tools.VinaCad.Helper.Helper
             double assetScale = selection.Width / sourceWidth;
             double scaleX = selection.ReverseAlongWall ? -assetScale : assetScale;
             double scaleY = selection.MirrorAcrossWall ? -assetScale : assetScale;
-            Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
             Point3d targetRoot = centerStart;
             double sourceRootX = selection.ReverseAlongWall ? sourceMaxX : sourceMinX;
             Point3d insertionPoint = targetRoot
@@ -136,6 +141,184 @@ namespace Tools.VinaCad.Helper.Helper
             pairedWall.Erase();
             transaction.Commit();
             return blockReference.ObjectId;
+        }
+
+        public static PromptStatus JigDoorDirection(
+            Editor editor,
+            Database database,
+            ObjectId doorId,
+            DoorStyleSelection selection)
+        {
+            DoorDirectionJig jig;
+            using (Transaction transaction = database.TransactionManager.StartTransaction())
+            {
+                if (transaction.GetObject(doorId, OpenMode.ForWrite) is not BlockReference blockReference ||
+                    !TryReadOpening(blockReference, out _, out Point3d centerStart, out Point3d centerEnd))
+                    throw new InvalidOperationException("Không đọc được dữ liệu vị trí cửa.");
+                GetAssetHorizontalBounds(
+                    transaction,
+                    blockReference.BlockTableRecord,
+                    out double sourceMinX,
+                    out double sourceMaxX,
+                    out double sourceWidth,
+                    out double? sourceHingeY,
+                    out double sourceLabelY);
+                jig = new DoorDirectionJig(
+                    (BlockReference)blockReference.Clone(),
+                    centerStart,
+                    centerEnd,
+                    sourceMinX,
+                    sourceMaxX,
+                    sourceWidth,
+                    sourceHingeY.GetValueOrDefault(),
+                    sourceLabelY,
+                    selection);
+                blockReference.Visible = false;
+                transaction.Commit();
+            }
+
+            PromptResult result;
+            try
+            {
+                result = editor.Drag(jig);
+                ApplyJigResult(database, doorId, jig, selection, result.Status == PromptStatus.OK);
+            }
+            catch
+            {
+                SetDoorVisible(database, doorId);
+                throw;
+            }
+            finally
+            {
+                jig.Preview.Dispose();
+            }
+            return result.Status;
+        }
+
+        private static void ApplyJigResult(
+            Database database,
+            ObjectId doorId,
+            DoorDirectionJig jig,
+            DoorStyleSelection selection,
+            bool accepted)
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            BlockReference blockReference = (BlockReference)transaction.GetObject(doorId, OpenMode.ForWrite);
+            blockReference.Visible = true;
+            if (!accepted)
+            {
+                transaction.Commit();
+                return;
+            }
+            if (!TryReadOpening(blockReference, out string segmentId, out Point3d centerStart, out Point3d centerEnd))
+                throw new InvalidOperationException("Không đọc được dữ liệu vị trí cửa.");
+
+            selection.ReverseAlongWall = jig.ReverseAlongWall;
+            selection.MirrorAcrossWall = jig.MirrorAcrossWall;
+            blockReference.Position = jig.Preview.Position;
+            blockReference.Rotation = jig.Preview.Rotation;
+            blockReference.ScaleFactors = jig.Preview.ScaleFactors;
+            AttributeDefinition doorAttribute = EnsureDoorAttributeDefinition(
+                transaction,
+                blockReference.BlockTableRecord,
+                string.Empty,
+                new Point3d((jig.SourceMinimumX + jig.SourceMaximumX) * 0.5, jig.SourceLabelY, 0.0),
+                jig.SourceWidth * 0.08);
+            UpdateDoorAttributes(transaction, blockReference, doorAttribute);
+            TagOpening(transaction, database, blockReference, segmentId, selection, centerStart, centerEnd);
+            transaction.Commit();
+        }
+
+        private static void SetDoorVisible(Database database, ObjectId doorId)
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            if (transaction.GetObject(doorId, OpenMode.ForWrite) is BlockReference blockReference)
+                blockReference.Visible = true;
+            transaction.Commit();
+        }
+
+        private sealed class DoorDirectionJig : EntityJig
+        {
+            private readonly Point3d _centerStart;
+            private readonly Point3d _center;
+            private readonly Vector3d _direction;
+            private readonly Vector3d _normal;
+            private readonly double _sourceHingeY;
+            private readonly double _assetScale;
+
+            public BlockReference Preview => (BlockReference)Entity;
+            public double SourceMinimumX { get; }
+            public double SourceMaximumX { get; }
+            public double SourceWidth { get; }
+            public double SourceLabelY { get; }
+            public bool ReverseAlongWall { get; private set; }
+            public bool MirrorAcrossWall { get; private set; }
+
+            public DoorDirectionJig(
+                BlockReference preview,
+                Point3d centerStart,
+                Point3d centerEnd,
+                double sourceMinimumX,
+                double sourceMaximumX,
+                double sourceWidth,
+                double sourceHingeY,
+                double sourceLabelY,
+                DoorStyleSelection selection)
+                : base(preview)
+            {
+                Vector3d direction = centerEnd - centerStart;
+                if (direction.Length <= Tolerance)
+                    throw new InvalidOperationException("Dữ liệu chiều rộng cửa không hợp lệ.");
+                _centerStart = centerStart;
+                _center = MidPoint(centerStart, centerEnd);
+                _direction = direction.GetNormal();
+                _normal = new Vector3d(-_direction.Y, _direction.X, 0.0);
+                _sourceHingeY = sourceHingeY;
+                _assetScale = selection.Width / sourceWidth;
+                SourceMinimumX = sourceMinimumX;
+                SourceMaximumX = sourceMaximumX;
+                SourceWidth = sourceWidth;
+                SourceLabelY = sourceLabelY;
+                ReverseAlongWall = selection.ReverseAlongWall;
+                MirrorAcrossWall = selection.MirrorAcrossWall;
+            }
+
+            protected override SamplerStatus Sampler(JigPrompts prompts)
+            {
+                JigPromptPointOptions options = new JigPromptPointOptions
+                {
+                    Message = "\nDi chuyển chuột vào góc muốn mở cửa rồi click: ",
+                    BasePoint = _center,
+                    UseBasePoint = true,
+                    UserInputControls = UserInputControls.Accept3dCoordinates |
+                                        UserInputControls.NoZeroResponseAccepted
+                };
+                PromptPointResult result = prompts.AcquirePoint(options);
+                if (result.Status != PromptStatus.OK) return SamplerStatus.Cancel;
+
+                Vector3d mouseDirection = result.Value - _center;
+                if (mouseDirection.Length <= Tolerance) return SamplerStatus.NoChange;
+                bool reverse = mouseDirection.DotProduct(_direction) < 0.0;
+                bool mirror = mouseDirection.DotProduct(_normal) < 0.0;
+                if (reverse == ReverseAlongWall && mirror == MirrorAcrossWall)
+                    return SamplerStatus.NoChange;
+                ReverseAlongWall = reverse;
+                MirrorAcrossWall = mirror;
+                return SamplerStatus.OK;
+            }
+
+            protected override bool Update()
+            {
+                double scaleX = ReverseAlongWall ? -_assetScale : _assetScale;
+                double scaleY = MirrorAcrossWall ? -_assetScale : _assetScale;
+                double sourceRootX = ReverseAlongWall ? SourceMaximumX : SourceMinimumX;
+                Preview.Position = _centerStart
+                    - _direction * (sourceRootX * scaleX)
+                    - _normal * (_sourceHingeY * scaleY);
+                Preview.Rotation = Math.Atan2(_direction.Y, _direction.X);
+                Preview.ScaleFactors = new Scale3d(scaleX, scaleY, _assetScale);
+                return true;
+            }
         }
 
         public static bool TryGetDoorWidth(Database database, ObjectId blockId, out double width)
@@ -816,6 +999,21 @@ namespace Tools.VinaCad.Helper.Helper
             attribute.Invisible = false;
             blockReference.AttributeCollection.AppendAttribute(attribute);
             transaction.AddNewlyCreatedDBObject(attribute, true);
+        }
+
+        private static void UpdateDoorAttributes(
+            Transaction transaction,
+            BlockReference blockReference,
+            AttributeDefinition definition)
+        {
+            foreach (ObjectId attributeId in blockReference.AttributeCollection)
+            {
+                if (transaction.GetObject(attributeId, OpenMode.ForWrite) is not AttributeReference attribute)
+                    continue;
+                string value = attribute.TextString;
+                attribute.SetAttributeFromBlock(definition, blockReference.BlockTransform);
+                attribute.TextString = value;
+            }
         }
 
         private static void EnsureRegApp(Transaction transaction, Database database)
