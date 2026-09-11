@@ -485,7 +485,7 @@ namespace Tools.VinaCad.Helper.Helper
                 LayerId = layerId,
                 Dimscale = 1,
                 Dimtxt = metrics.TextHeight,
-                Dimasz = metrics.ArrowSize * 1.3,
+                Dimasz = metrics.ArrowSize * 3,
                 Dimtsz = 0,
                 Dimsah = false,
                 Dimblk = tickBlockId,
