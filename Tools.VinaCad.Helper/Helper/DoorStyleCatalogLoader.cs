@@ -187,19 +187,9 @@ namespace Tools.VinaCad.Helper.Helper
 
         private static void SetOpeningBounds(DoorStyleModel style)
         {
-            List<DoorPreviewPrimitive> curves = style.PreviewGeometry
-                .Where(item => item.Kind != DoorPreviewPrimitiveKind.Line)
-                .ToList();
-            IEnumerable<DoorPreviewPrimitive> candidates = curves.Count > 0
-                ? curves
-                : style.PreviewGeometry.Where(item =>
-                    Math.Abs(item.EndY - item.StartY) > Math.Abs(item.EndX - item.StartX) * 0.05);
-            List<DoorPreviewPrimitive> detail = candidates.ToList();
-            if (detail.Count == 0) detail = style.PreviewGeometry;
-            if (detail.Count == 0) return;
-
-            double minimumX = detail.Min(item => item.MinX);
-            double maximumX = detail.Max(item => item.MaxX);
+            if (style.PreviewGeometry.Count == 0) return;
+            double minimumX = style.PreviewGeometry.Min(item => item.MinX);
+            double maximumX = style.PreviewGeometry.Max(item => item.MaxX);
             if (maximumX - minimumX <= 1e-6) return;
             style.OpeningMinimumX = minimumX;
             style.OpeningMaximumX = maximumX;

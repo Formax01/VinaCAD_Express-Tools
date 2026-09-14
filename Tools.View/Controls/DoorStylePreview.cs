@@ -32,6 +32,7 @@ namespace Tools.View.Controls
 
             IReadOnlyList<DoorPreviewPrimitive>? geometry = DoorStyle?.PreviewGeometry;
             if (geometry == null || geometry.Count == 0) return;
+            drawingContext.PushClip(new RectangleGeometry(viewport));
 
             bool hasOpeningBounds = DoorStyle!.OpeningMaximumX - DoorStyle.OpeningMinimumX > 1e-6;
             double minX = hasOpeningBounds ? DoorStyle.OpeningMinimumX : geometry.Min(item => item.MinX);
@@ -79,6 +80,7 @@ namespace Tools.View.Controls
                     DrawArc(drawingContext, item, scale, Map);
                 }
             }
+            drawingContext.Pop();
         }
 
         private static void ExpandBounds(ref double minimum, ref double maximum, double minimumSpan)
