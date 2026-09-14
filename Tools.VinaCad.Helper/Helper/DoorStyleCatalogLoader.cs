@@ -190,9 +190,10 @@ namespace Tools.VinaCad.Helper.Helper
             if (style.PreviewGeometry.Count == 0) return;
             double minimumX = style.PreviewGeometry.Min(item => item.MinX);
             double maximumX = style.PreviewGeometry.Max(item => item.MaxX);
-            if (maximumX - minimumX <= 1e-6) return;
-            style.OpeningMinimumX = minimumX;
-            style.OpeningMaximumX = maximumX;
+            double halfWidth = Math.Max(Math.Abs(minimumX), Math.Abs(maximumX));
+            if (halfWidth <= 1e-6) return;
+            style.OpeningMinimumX = -halfWidth;
+            style.OpeningMaximumX = halfWidth;
         }
 
         private static string NaturalSortKey(string path)

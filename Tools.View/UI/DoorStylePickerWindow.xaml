@@ -76,11 +76,11 @@
         </ListBox>
 
         <DockPanel Grid.Row="1" Margin="4,6,4,0">
-            <Button DockPanel.Dock="Left" Width="76" Height="28" Click="Cancel_Click" Content="Hủy" />
-            <StackPanel DockPanel.Dock="Left" Margin="55,0,0,0" Orientation="Horizontal">
-                <Button Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&lt;&lt;" />
-                <TextBlock Width="48" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
-                <Button Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&gt;&gt;" />
+            <Button DockPanel.Dock="Right" Width="76" Height="28" Click="Cancel_Click" Content="Hủy" />
+            <StackPanel DockPanel.Dock="Right" Margin="50,0,50,0" Orientation="Horizontal">
+                <Button Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
+                <TextBlock Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
+                <Button Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&#8594;" />
             </StackPanel>
             <TextBlock Margin="12,0,0,0"
                        VerticalAlignment="Center"

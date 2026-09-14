@@ -806,110 +806,36 @@ namespace Tools.VinaCad.Helper.Helper
             out double sourceLabelY)
         {
             BlockTableRecord definition = (BlockTableRecord)transaction.GetObject(blockDefinitionId, OpenMode.ForRead);
-            List<(Extents3d Bounds, double? HingeY)> curves = new List<(Extents3d, double?)>();
-            List<Extents3d> details = new List<Extents3d>();
+            List<Extents3d> allBounds = new List<Extents3d>();
             foreach (ObjectId objectId in definition)
             {
                 if (transaction.GetObject(objectId, OpenMode.ForRead) is not Entity entity) continue;
-                CollectDoorAssetBounds(entity, curves, details, 0);
-            }
-            List<(Extents3d Bounds, double? HingeY)> significantCurves = new List<(Extents3d, double?)>();
-            if (curves.Count > 0)
-            {
-                double largestSpan = curves.Max(item => Math.Max(
-                    item.Bounds.MaxPoint.X - item.Bounds.MinPoint.X,
-                    item.Bounds.MaxPoint.Y - item.Bounds.MinPoint.Y));
-                significantCurves = curves.Where(item => Math.Max(
-                    item.Bounds.MaxPoint.X - item.Bounds.MinPoint.X,
-                    item.Bounds.MaxPoint.Y - item.Bounds.MinPoint.Y) >= largestSpan * 0.45).ToList();
-            }
-            List<Extents3d> bounds = significantCurves.Select(item => item.Bounds).ToList();
-            if (bounds.Count > 0)
-            {
-                double curveMinimumX = bounds.Min(item => item.MinPoint.X);
-                double curveMaximumX = bounds.Max(item => item.MaxPoint.X);
-                double nearbyDistance = (curveMaximumX - curveMinimumX) * 0.25;
-                bounds.AddRange(details.Where(item =>
-                    item.MaxPoint.X >= curveMinimumX - nearbyDistance &&
-                    item.MinPoint.X <= curveMaximumX + nearbyDistance));
-            }
-            else
-            {
-                bounds.AddRange(details);
-            }
-            if (bounds.Count == 0)
-                throw new InvalidOperationException("Asset cửa không có cung hoặc hình học cánh cửa hợp lệ.");
-
-            minimumX = bounds.Min(item => item.MinPoint.X);
-            maximumX = bounds.Max(item => item.MaxPoint.X);
-            width = maximumX - minimumX;
-            if (double.IsInfinity(minimumX) || double.IsNaN(width) || width <= Tolerance)
-                throw new InvalidOperationException("Asset cửa không có hình học hợp lệ theo trục X.");
-
-            List<double> hingeCoordinates = significantCurves
-                .Where(item => item.HingeY.HasValue)
-                .Select(item => item.HingeY!.Value)
-                .ToList();
-            sourceHingeY = hingeCoordinates.Count > 0 ? hingeCoordinates.Average() : null;
-            sourceLabelY = significantCurves.Count > 0
-                ? (significantCurves.Min(item => item.Bounds.MinPoint.Y) +
-                   significantCurves.Max(item => item.Bounds.MaxPoint.Y)) * 0.5
-                : 0.0;
-        }
-
-        private static void CollectDoorAssetBounds(
-            Entity entity,
-            List<(Extents3d Bounds, double? HingeY)> curves,
-            List<Extents3d> details,
-            int depth)
-        {
-            try
-            {
-                Extents3d extents = entity.GeometricExtents;
-                if (entity is Arc arc)
-                {
-                    curves.Add((extents, arc.Center.Y));
-                    return;
-                }
-                if (entity is Circle)
-                {
-                    curves.Add((extents, null));
-                    return;
-                }
-                if (entity is Line line &&
-                    Math.Abs(line.EndPoint.Y - line.StartPoint.Y) >
-                    Math.Abs(line.EndPoint.X - line.StartPoint.X) * 0.05)
-                {
-                    details.Add(extents);
-                    return;
-                }
-            }
-            catch
-            {
-                return;
-            }
-
-            if (depth >= 4) return;
-            DBObjectCollection exploded = new DBObjectCollection();
-            try
-            {
-                entity.Explode(exploded);
-            }
-            catch
-            {
-                return;
-            }
-            foreach (DBObject item in exploded)
-            {
                 try
                 {
-                    if (item is Entity child) CollectDoorAssetBounds(child, curves, details, depth + 1);
+                    allBounds.Add(entity.GeometricExtents);
                 }
-                finally
+                catch
                 {
-                    item.Dispose();
+                    // Proxy/annotation entities without extents do not define the door.
                 }
             }
+            if (allBounds.Count == 0)
+                throw new InvalidOperationException("Asset cửa không có hình học hợp lệ.");
+
+            double rawMinimumX = allBounds.Min(item => item.MinPoint.X);
+            double rawMaximumX = allBounds.Max(item => item.MaxPoint.X);
+            if (rawMinimumX > Tolerance || rawMaximumX < -Tolerance)
+                throw new InvalidOperationException("Asset cửa phải được vẽ quanh gốc X=0.");
+            double halfWidth = Math.Max(Math.Abs(rawMinimumX), Math.Abs(rawMaximumX));
+            if (double.IsInfinity(halfWidth) || double.IsNaN(halfWidth) || halfWidth <= Tolerance)
+                throw new InvalidOperationException("Asset cửa không có hình học hợp lệ theo trục X.");
+
+            minimumX = -halfWidth;
+            maximumX = halfWidth;
+            width = halfWidth * 2.0;
+            sourceHingeY = 0.0;
+            sourceLabelY = (allBounds.Min(item => item.MinPoint.Y) +
+                            allBounds.Max(item => item.MaxPoint.Y)) * 0.5;
         }
 
         private static ObjectId EnsureDoorLayer(Transaction transaction, Database database)
