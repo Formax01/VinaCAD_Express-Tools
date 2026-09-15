@@ -244,7 +244,7 @@ namespace Tools.VinaCad.Helper.Helper
             transaction.Commit();
         }
 
-        private sealed class WindowDirectionJig : EntityJig
+        /*private sealed class WindowDirectionJig : EntityJig
         {
             private readonly Point3d _centerStart;
             private readonly Point3d _center;
@@ -328,7 +328,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Preview.ScaleFactors = new Scale3d(scaleX, scaleY, _assetScaleX);
                 return true;
             }
-        }
+        }*/
 
         public static bool TryGetWindowWidth(Database database, ObjectId blockId, out double width)
         {
