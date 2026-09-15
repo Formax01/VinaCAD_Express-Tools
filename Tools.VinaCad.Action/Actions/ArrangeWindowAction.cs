@@ -48,7 +48,7 @@ namespace Tools.VinaCAD.Action.Actions
                     continue;
                 }
 
-                try
+                /*try
                 {
                     PromptStatus directionStatus = WindowOpeningHelper.JigWindowDirection(
                         editor,
@@ -61,7 +61,7 @@ namespace Tools.VinaCAD.Action.Actions
                 catch (Exception exception)
                 {
                     editor.WriteMessage($"\nAW: Không thể đổi hướng cửa sổ: {exception.Message}");
-                }
+                }*/
             }
 
             editor.WriteMessage($"\nAW: đã tạo {createdCount} cửa sổ.");

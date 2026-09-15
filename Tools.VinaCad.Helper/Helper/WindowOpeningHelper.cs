@@ -148,7 +148,9 @@ namespace Tools.VinaCad.Helper.Helper
             return blockReference.ObjectId;
         }
 
-        public static PromptStatus JigWindowDirection(
+
+        //jig để chỉnh hướng cửa sổ sau khi tạo
+        /*public static PromptStatus JigWindowDirection(
             Editor editor,
             Database database,
             ObjectId windowId,
@@ -232,7 +234,7 @@ namespace Tools.VinaCad.Helper.Helper
             UpdateWindowAttributes(transaction, blockReference, windowAttribute);
             TagOpening(transaction, database, blockReference, segmentId, selection, centerStart, centerEnd);
             transaction.Commit();
-        }
+        }*/
 
         private static void SetWindowVisible(Database database, ObjectId windowId)
         {
