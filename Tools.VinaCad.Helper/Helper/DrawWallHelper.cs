@@ -257,7 +257,7 @@ namespace Tools.VinaCad.Helper.Helper
             return true;
         }
 
-        private static void TagAsCap(Transaction tr, Database db, Line line)
+        public static void TagAsCap(Transaction tr, Database db, Line line)
         {
             EnsureRegApp(tr, db, CapAppName);
             ResultBuffer rb = new ResultBuffer(
