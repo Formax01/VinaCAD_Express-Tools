@@ -24,7 +24,9 @@ namespace Tools.View.UI
             DependencyObject? element = e.OriginalSource as DependencyObject;
             while (element != null && element is not ListBoxItem)
                 element = VisualTreeHelper.GetParent(element);
-            if (element is not ListBoxItem item || item.DataContext is not WindowStyleModel style) return;
+            if (element is not ListBoxItem item ||
+                item.DataContext is not WindowStyleModel style ||
+                string.IsNullOrEmpty(style.AssetPath)) return;
             ViewModel.SelectedStyle = style;
             DialogResult = true;
         }
