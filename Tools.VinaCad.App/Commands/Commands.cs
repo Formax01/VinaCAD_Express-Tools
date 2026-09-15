@@ -567,5 +567,20 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
+
+        [CommandMethod("LTP")]
+        public void StaircaseSectionCommand()
+        {
+            try
+            {
+                StaircaseSectionAction action = new StaircaseSectionAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StaircaseSectionCommand), ex);
+            }
+        }
     }
 }
