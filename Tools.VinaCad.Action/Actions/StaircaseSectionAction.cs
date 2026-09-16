@@ -34,16 +34,19 @@ namespace Tools.VinaCad.Action.Actions
                 //#if DEBUG
                 //                StaircaseSectionGeometry.SelfCheck();
                 //#endif
-                double unitsPerMillimetre = StaircaseDrawingUnits.GetUnitsPerMillimetre();
-                StaircaseSectionModel defaults = StaircaseSectionSetting.CreateDefault(unitsPerMillimetre);
+                StaircaseSectionModel initialSettings =
+                    StaircaseSectionSetting.CreateInitial();
                 var settingsStore = new StaircaseSectionSettingsStore();
-                StaircaseSectionModel settings = settingsStore.LoadOrDefault(unitsPerMillimetre, defaults);
+                StaircaseSectionModel settings = settingsStore.LoadOrDefault(initialSettings);
+                StaircaseSectionSetting.LoadFrom(settings);
 
                 var dialogService = new StaircaseSectionDialogService(document.Editor);
-                StaircaseSectionModel? configuredSettings = dialogService.Show(settings, defaults);
+                StaircaseSectionModel? configuredSettings = dialogService.Show(
+                    StaircaseSectionSetting.ToModel(), initialSettings);
                 if (configuredSettings == null) return;
-                settings = configuredSettings;
-                settingsStore.Save(settings, unitsPerMillimetre);
+                StaircaseSectionSetting.LoadFrom(configuredSettings);
+                settings = StaircaseSectionSetting.ToModel();
+                settingsStore.Save(settings);
 
                 PromptPointResult pointResult = document.Editor.GetPoint(InsertionPointPrompt);
                 if (pointResult.Status != PromptStatus.OK) return;
@@ -81,14 +84,16 @@ namespace Tools.VinaCad.Action.Actions
             _editor = editor;
         }
 
-        public StaircaseSectionModel? Show(StaircaseSectionModel settings,StaircaseSectionModel defaults)
+        public StaircaseSectionModel? Show(
+            StaircaseSectionModel settings,
+            StaircaseSectionModel initialSettings)
         {
             StaircaseSectionModel currentSettings = settings;
 
             while (true)
             {
                 StaircaseSectionVM viewModel = CreateViewModel(currentSettings);
-                StaircaseSectionWindow view = CreateView(viewModel, defaults);
+                StaircaseSectionWindow view = CreateView(viewModel, initialSettings);
                 Application.ShowModalWindow(view);
                 currentSettings = viewModel.Settings;
 
@@ -106,13 +111,14 @@ namespace Tools.VinaCad.Action.Actions
 
         private static StaircaseSectionWindow CreateView(
             StaircaseSectionVM viewModel,
-            StaircaseSectionModel defaults)
+            StaircaseSectionModel initialSettings)
         {
             var view = new StaircaseSectionWindow { DataContext = viewModel };
 
             viewModel.AcceptCmd = new RelayCommand(() => Accept(view, viewModel));
             viewModel.CancelCmd = new RelayCommand(() => view.DialogResult = false);
-            viewModel.ResetCmd = new RelayCommand(() => viewModel.Reset(defaults.Copy()));
+            viewModel.ResetCmd = new RelayCommand(
+                () => viewModel.Reset(initialSettings.Copy()));
 
             viewModel.MeasureStoreyHeightCmd = CreateMeasurementCommand(
                 view, viewModel, StaircaseMeasurement.StoreyHeight);
@@ -196,6 +202,7 @@ namespace Tools.VinaCad.Action.Actions
     {
         private const string GroupDictionaryKey = "*A";
         private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
+        private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
 
         public int Draw(
             Database database,
@@ -238,10 +245,11 @@ namespace Tools.VinaCad.Action.Actions
             Point3d insertionPoint,
             IReadOnlyList<StaircaseSegment> segments)
         {
+            ObjectId layerId = GetOrCreateSectionLayer(database, transaction);
             var entityIds = new ObjectIdCollection();
             foreach (StaircaseSegment segment in segments)
             {
-                Line line = CreateLine(database, insertionPoint, segment);
+                Line line = CreateLine(database, insertionPoint, segment, layerId);
                 modelSpace.AppendEntity(line);
                 transaction.AddNewlyCreatedDBObject(line, true);
                 entityIds.Add(line.ObjectId);
@@ -253,13 +261,38 @@ namespace Tools.VinaCad.Action.Actions
         private static Line CreateLine(
             Database database,
             Point3d insertionPoint,
-            StaircaseSegment segment)
+            StaircaseSegment segment,
+            ObjectId layerId)
         {
             var line = new Line(
                 ToPoint3d(insertionPoint, segment.Start),
                 ToPoint3d(insertionPoint, segment.End));
             line.SetDatabaseDefaults(database);
+            line.LayerId = layerId;
             return line;
+        }
+
+        private static ObjectId GetOrCreateSectionLayer(
+            Database database,
+            Transaction transaction)
+        {
+            // B1: Lấy tên layer đã khai báo tập trung trong Setting.
+            string layerName = StaircaseSectionSetting.LayerName;
+            if (string.IsNullOrWhiteSpace(layerName))
+                throw new InvalidOperationException(InvalidLayerNameMessage);
+
+            // B2: Dùng lại layer hiện có hoặc tạo mới ngay trong transaction vẽ.
+            var layers = (LayerTable)transaction.GetObject(
+                database.LayerTableId, OpenMode.ForRead);
+            if (layers.Has(layerName)) return layers[layerName];
+
+            layers.UpgradeOpen();
+            var layer = new LayerTableRecord { Name = layerName };
+            ObjectId layerId = layers.Add(layer);
+            transaction.AddNewlyCreatedDBObject(layer, true);
+
+            // B3: Trả ObjectId để tất cả đường mặt cắt dùng chung layer.
+            return layerId;
         }
 
         private static Point3d ToPoint3d(Point3d insertionPoint, StaircasePoint point)

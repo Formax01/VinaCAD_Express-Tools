@@ -6,7 +6,6 @@ using System.Security;
 using System.Text.Json;
 using Tools.Model;
 using Tools.VinaCad.Modeling;
-using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -14,9 +13,10 @@ namespace Tools.VinaCad.Helper.Helper
     {
         private const double CoordinateTolerance = 1e-9;
         private const double SelfCheckTolerance = 1e-7;
-        private const double SelfCheckUnitsPerMillimetre = 1.0;
         private const int SelfCheckStoreyNumber = 2;
         private const string InvalidStepHeightMessage = "Sai công thức tính chiều cao cổ bậc LTP.";
+        private const string InvalidSettingsMappingMessage =
+            "StaircaseSectionSetting chưa đồng bộ đầy đủ với StaircaseSectionModel.";
         private const string EmptyGeometryMessageFormat = "Kiểu cầu thang {0} không sinh hình học.";
         private const string InvalidCoordinateMessageFormat = "Kiểu cầu thang {0} sinh tọa độ không hợp lệ.";
 
@@ -60,10 +60,10 @@ namespace Tools.VinaCad.Helper.Helper
         public static void SelfCheck()
         {
             // B1: Chuẩn bị bộ dữ liệu nhỏ, không phụ thuộc framework kiểm thử.
-            StaircaseSectionModel settings = StaircaseSectionSetting.CreateDefault(
-                SelfCheckUnitsPerMillimetre);
+            StaircaseSectionModel settings = StaircaseSectionSetting.CreateInitial();
             settings.StoreyNumber = SelfCheckStoreyNumber;
             EnsureStepHeightIsValid(settings);
+            EnsureSettingsMappingIsValid(settings);
 
             // B2: Kiểm tra mọi builder sinh ít nhất một đoạn với tọa độ hữu hạn.
             foreach (StaircaseSectionType type in Enum.GetValues<StaircaseSectionType>())
@@ -80,6 +80,16 @@ namespace Tools.VinaCad.Helper.Helper
             double calculatedHeight = settings.CurrentStepHeight * settings.StepNumber;
             if (Math.Abs(calculatedHeight - settings.StoreyHeight) > SelfCheckTolerance)
                 throw new InvalidOperationException(InvalidStepHeightMessage);
+        }
+
+        private static void EnsureSettingsMappingIsValid(StaircaseSectionModel settings)
+        {
+            StaircaseSectionSetting.LoadFrom(settings);
+            StaircaseSectionModel mappedSettings = StaircaseSectionSetting.ToModel();
+            string source = JsonSerializer.Serialize(settings);
+            string mapped = JsonSerializer.Serialize(mappedSettings);
+            if (!string.Equals(source, mapped, StringComparison.Ordinal))
+                throw new InvalidOperationException(InvalidSettingsMappingMessage);
         }
 
         private static void EnsureSegmentsExist(
@@ -405,50 +415,8 @@ namespace Tools.VinaCad.Helper.Helper
         }
     }
 
-    internal enum CadInsertionUnit : short
-    {
-        Unitless = 0,
-        Inch = 1,
-        Foot = 2,
-        Mile = 3,
-        Millimetre = 4,
-        Centimetre = 5,
-        Metre = 6,
-        Kilometre = 7
-    }
-
-    public static class StaircaseDrawingUnits
-    {
-        private const double MillimetresPerInch = 25.4;
-        private const double MillimetresPerFoot = 304.8;
-        private const double MillimetresPerMile = 1_609_344.0;
-        private const double MillimetresPerCentimetre = 10.0;
-        private const double MillimetresPerMetre = 1_000.0;
-        private const double MillimetresPerKilometre = 1_000_000.0;
-        private const string InsertionUnitsVariable = "INSUNITS";
-
-        public static double GetUnitsPerMillimetre()
-        {
-            // B1: Đọc và chuyển mã hệ thống sang enum có nghĩa.
-            short unitCode = Convert.ToInt16(Application.GetSystemVariable(InsertionUnitsVariable));
-            var unit = (CadInsertionUnit)unitCode;
-
-            // B2/B3: Quy đổi và trả số đơn vị bản vẽ tương ứng một milimét.
-            return unit switch
-            {
-                CadInsertionUnit.Inch => 1.0 / MillimetresPerInch,
-                CadInsertionUnit.Foot => 1.0 / MillimetresPerFoot,
-                CadInsertionUnit.Mile => 1.0 / MillimetresPerMile,
-                CadInsertionUnit.Centimetre => 1.0 / MillimetresPerCentimetre,
-                CadInsertionUnit.Metre => 1.0 / MillimetresPerMetre,
-                CadInsertionUnit.Kilometre => 1.0 / MillimetresPerKilometre,
-                _ => 1.0
-            };
-        }
-    }
-
     /// <summary>
-    /// Đọc, ghi và quy đổi đơn vị cho cấu hình LTP đã lưu.
+    /// Đọc và ghi cấu hình LTP theo milimét.
     /// </summary>
     public sealed class StaircaseSectionSettingsStore
     {
@@ -456,9 +424,7 @@ namespace Tools.VinaCad.Helper.Helper
         private const string ToolDirectoryName = "ExpressTools";
         private const string SettingsFileName = "ltp-settings.json";
 
-        public StaircaseSectionModel LoadOrDefault(
-            double unitsPerMillimetre,
-            StaircaseSectionModel defaults)
+        public StaircaseSectionModel LoadOrDefault(StaircaseSectionModel defaults)
         {
             // B1: Kiểm tra file cấu hình trước khi đọc.
             string settingsPath = GetSettingsPath();
@@ -466,13 +432,16 @@ namespace Tools.VinaCad.Helper.Helper
 
             try
             {
-                // B2: Đọc dữ liệu và quy đổi về đơn vị của bản vẽ hiện hành.
-                SettingsEnvelope? envelope = JsonSerializer.Deserialize<SettingsEnvelope>(
-                    File.ReadAllText(settingsPath));
+                // B2: Bỏ cấu hình cũ có quy đổi đơn vị; dữ liệu mới luôn là milimét.
+                string json = File.ReadAllText(settingsPath);
+                using JsonDocument document = JsonDocument.Parse(json);
+                if (document.RootElement.TryGetProperty("UnitsPerMillimetre", out _))
+                    return defaults.Copy();
+
+                SettingsEnvelope? envelope = JsonSerializer.Deserialize<SettingsEnvelope>(json);
                 if (!IsValid(envelope)) return defaults.Copy();
 
                 StaircaseSectionModel settings = envelope!.Settings!;
-                ScaleLengths(settings, unitsPerMillimetre / envelope.UnitsPerMillimetre);
 
                 // B3: Chỉ trả cấu hình hợp lệ; nếu không dùng giá trị mặc định an toàn.
                 return settings.TryValidate(out _) ? settings : defaults.Copy();
@@ -484,7 +453,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        public void Save(StaircaseSectionModel settings, double unitsPerMillimetre)
+        public void Save(StaircaseSectionModel settings)
         {
             try
             {
@@ -493,7 +462,6 @@ namespace Tools.VinaCad.Helper.Helper
                 string? directory = Path.GetDirectoryName(settingsPath);
                 var envelope = new SettingsEnvelope
                 {
-                    UnitsPerMillimetre = unitsPerMillimetre,
                     Settings = settings
                 };
 
@@ -510,7 +478,7 @@ namespace Tools.VinaCad.Helper.Helper
 
         private static bool IsValid(SettingsEnvelope? envelope)
         {
-            return envelope?.Settings != null && envelope.UnitsPerMillimetre > 0;
+            return envelope?.Settings != null;
         }
 
         private static bool IsSettingsException(Exception exception)
@@ -531,23 +499,8 @@ namespace Tools.VinaCad.Helper.Helper
                 SettingsFileName);
         }
 
-        private static void ScaleLengths(StaircaseSectionModel settings, double factor)
-        {
-            settings.StoreyHeight *= factor;
-            settings.TreadRun *= factor;
-            settings.Landing1Width *= factor;
-            settings.Landing2Width *= factor;
-            settings.GirderHeight *= factor;
-            settings.GirderWidth *= factor;
-            settings.BeamHeight *= factor;
-            settings.BeamWidth *= factor;
-            settings.BoardThickness *= factor;
-            settings.RailingHeight *= factor;
-        }
-
         private sealed class SettingsEnvelope
         {
-            public double UnitsPerMillimetre { get; set; }
             public StaircaseSectionModel? Settings { get; set; }
         }
     }
