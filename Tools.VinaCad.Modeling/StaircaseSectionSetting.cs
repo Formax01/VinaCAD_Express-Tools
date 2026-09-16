@@ -9,6 +9,7 @@ namespace Tools.VinaCad.Modeling
         public const StaircaseSectionType DefaultType = StaircaseSectionType.DoubleFlight;
         public const bool DefaultFirstRunRightward = true;
         public const string DefaultLayerName = "Slice_Stair";
+        public const string DefaultSecondaryLayerName = "Slice_Stair_Secondary";
 
         public const int DefaultStoreyNumber = 5;
         public const int DefaultStepNumber = 18;
@@ -33,6 +34,7 @@ namespace Tools.VinaCad.Modeling
         public static StaircaseSectionType Type { get; set; } = DefaultType;
         public static bool FirstRunRightward { get; set; } = DefaultFirstRunRightward;
         public static string LayerName { get; set; } = DefaultLayerName;
+        public static string SecondaryLayerName { get; set; } = DefaultSecondaryLayerName;
         public static int StoreyNumber { get; set; } = DefaultStoreyNumber;
         public static double StoreyHeight { get; set; } = DefaultStoreyHeightMillimetres;
         public static double TreadRun { get; set; } = DefaultTreadRunMillimetres;

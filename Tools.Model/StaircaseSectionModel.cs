@@ -107,15 +107,26 @@ namespace Tools.Model
         public double Y { get; }
     }
 
+    public enum StaircaseSegmentStyle
+    {
+        Primary,
+        Secondary
+    }
+
     public readonly struct StaircaseSegment
     {
-        public StaircaseSegment(StaircasePoint start, StaircasePoint end)
+        public StaircaseSegment(
+            StaircasePoint start,
+            StaircasePoint end,
+            StaircaseSegmentStyle style = StaircaseSegmentStyle.Primary)
         {
             Start = start;
             End = end;
+            Style = style;
         }
 
         public StaircasePoint Start { get; }
         public StaircasePoint End { get; }
+        public StaircaseSegmentStyle Style { get; }
     }
 }

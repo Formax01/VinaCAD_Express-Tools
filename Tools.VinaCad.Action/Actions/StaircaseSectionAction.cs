@@ -31,11 +31,10 @@ namespace Tools.VinaCad.Action.Actions
 
             try
             {
-                //#if DEBUG
-                //                StaircaseSectionGeometry.SelfCheck();
-                //#endif
-                StaircaseSectionModel initialSettings =
-                    StaircaseSectionSetting.CreateInitial();
+#if DEBUG
+                StaircaseSectionGeometry.SelfCheck();
+#endif
+                StaircaseSectionModel initialSettings =StaircaseSectionSetting.CreateInitial();
                 var settingsStore = new StaircaseSectionSettingsStore();
                 StaircaseSectionModel settings = settingsStore.LoadOrDefault(initialSettings);
                 StaircaseSectionSetting.LoadFrom(settings);
@@ -92,7 +91,7 @@ namespace Tools.VinaCad.Action.Actions
 
             while (true)
             {
-                StaircaseSectionVM viewModel = CreateViewModel(currentSettings);
+                var viewModel = new StaircaseSectionVM(currentSettings);
                 StaircaseSectionWindow view = CreateView(viewModel, initialSettings);
                 Application.ShowModalWindow(view);
                 currentSettings = viewModel.Settings;
@@ -102,11 +101,6 @@ namespace Tools.VinaCad.Action.Actions
 
                 TryApplyMeasurement(currentSettings, viewModel.MeasurementRequest);
             }
-        }
-
-        private static StaircaseSectionVM CreateViewModel(StaircaseSectionModel settings)
-        {
-            return new StaircaseSectionVM(settings);
         }
 
         private static StaircaseSectionWindow CreateView(
@@ -200,6 +194,9 @@ namespace Tools.VinaCad.Action.Actions
 
     internal sealed class StaircaseSectionDrawingService
     {
+        private const short PrimaryColorIndex = 7;
+        private const short SecondaryColorIndex = 2;
+        private const short ByLayerColorIndex = 256;
         private const string GroupDictionaryKey = "*A";
         private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
         private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
@@ -245,10 +242,16 @@ namespace Tools.VinaCad.Action.Actions
             Point3d insertionPoint,
             IReadOnlyList<StaircaseSegment> segments)
         {
-            ObjectId layerId = GetOrCreateSectionLayer(database, transaction);
+            ObjectId primaryLayerId = GetOrCreateSectionLayer(
+                database, transaction, StaircaseSectionSetting.LayerName, PrimaryColorIndex);
+            ObjectId secondaryLayerId = GetOrCreateSectionLayer(
+                database, transaction, StaircaseSectionSetting.SecondaryLayerName, SecondaryColorIndex);
             var entityIds = new ObjectIdCollection();
             foreach (StaircaseSegment segment in segments)
             {
+                ObjectId layerId = segment.Style == StaircaseSegmentStyle.Secondary
+                    ? secondaryLayerId
+                    : primaryLayerId;
                 Line line = CreateLine(database, insertionPoint, segment, layerId);
                 modelSpace.AppendEntity(line);
                 transaction.AddNewlyCreatedDBObject(line, true);
@@ -269,29 +272,43 @@ namespace Tools.VinaCad.Action.Actions
                 ToPoint3d(insertionPoint, segment.End));
             line.SetDatabaseDefaults(database);
             line.LayerId = layerId;
+            line.ColorIndex = ByLayerColorIndex;
             return line;
         }
 
         private static ObjectId GetOrCreateSectionLayer(
             Database database,
-            Transaction transaction)
+            Transaction transaction,
+            string layerName,
+            short colorIndex)
         {
-            // B1: Lấy tên layer đã khai báo tập trung trong Setting.
-            string layerName = StaircaseSectionSetting.LayerName;
+            // B1: Kiểm tra tên layer đã khai báo tập trung trong Setting.
             if (string.IsNullOrWhiteSpace(layerName))
                 throw new InvalidOperationException(InvalidLayerNameMessage);
 
-            // B2: Dùng lại layer hiện có hoặc tạo mới ngay trong transaction vẽ.
+            // B2: Dùng lại layer hiện có và đồng bộ màu theo cấu hình LTP.
             var layers = (LayerTable)transaction.GetObject(
                 database.LayerTableId, OpenMode.ForRead);
-            if (layers.Has(layerName)) return layers[layerName];
+            if (layers.Has(layerName))
+            {
+                ObjectId existingId = layers[layerName];
+                var existing = (LayerTableRecord)transaction.GetObject(
+                    existingId, OpenMode.ForWrite);
+                existing.Color = Teigha.Colors.Color.FromColorIndex(
+                    Teigha.Colors.ColorMethod.ByAci, colorIndex);
+                return existingId;
+            }
 
+            // B3: Tạo layer mới với màu ACI tương ứng.
             layers.UpgradeOpen();
-            var layer = new LayerTableRecord { Name = layerName };
+            var layer = new LayerTableRecord
+            {
+                Name = layerName,
+                Color = Teigha.Colors.Color.FromColorIndex(
+                    Teigha.Colors.ColorMethod.ByAci, colorIndex)
+            };
             ObjectId layerId = layers.Add(layer);
             transaction.AddNewlyCreatedDBObject(layer, true);
-
-            // B3: Trả ObjectId để tất cả đường mặt cắt dùng chung layer.
             return layerId;
         }
 
