@@ -20,8 +20,7 @@ namespace Tools.View.UI
         private const double DimensionOffset = 34.0;
         private const double DimensionTextGap = 8.0;
         private const string InvalidPreviewMessage = "Thông số chưa hợp lệ";
-        private static readonly Brush DimensionBrush =
-            new SolidColorBrush(Color.FromRgb(51, 165, 28));
+        private static readonly Brush DimensionBrush = new SolidColorBrush(Color.FromRgb(51, 165, 28));
 
         private StaircaseSectionVM? _viewModel;
 
@@ -77,7 +76,7 @@ namespace Tools.View.UI
             // Hình xem trước luôn dùng cấu hình hiện tại nhưng tính riêng cho từng loại thang.
             StaircaseSectionModel preview = source.Copy();
             preview.Type = type;
-            if (!preview.TryValidate(out string message))
+            if (!StaircaseSectionValidator.TryValidate(preview, out string message))
             {
                 ShowPreviewError(canvas, path, summary, message);
                 return;

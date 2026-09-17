@@ -144,39 +144,49 @@
             <Grid Margin="4,3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="66" />
                     <ColumnDefinition Width="66" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="34" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="28" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Chiều cao tầng:" />
                 <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding StoreyHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
                 <Button Grid.Row="0" Grid.Column="2" Command="{Binding MeasureStoreyHeightCmd}" Content="Đo" />
+                
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Số tầng:" />
                 <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding StoreyNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+                
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Chiều rộng mặt bậc:" />
                 <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding TreadRun, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Tổng số bậc:" />
                 <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding StepNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+                
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Số bậc vế thứ nhất:" />
                 <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding FirstFlightStepNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+                
                 <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding CurrentStepHeight, StringFormat=Chiều cao cổ bậc hiện tại: {0:0.####}}" />
+               
                 <TextBlock Grid.Row="6" Grid.Column="0" Text="Chiều dày bản thang:" />
                 <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding BoardThickness, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                
                 <TextBlock Grid.Row="7" Grid.Column="0" Text="Chiều cao lan can:" />
                 <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding RailingHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                
                 <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Content="Tạo nhóm" IsChecked="{Binding CreateGroup}" />
-                <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Height="23" VerticalAlignment="Top" Command="{Binding ResetCmd}" Content="Khôi phục giá trị ban đầu" />
+                
+                <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Height="23" VerticalAlignment="Center" Command="{Binding ResetCmd}" Content="Khôi phục giá trị ban đầu" />
             </Grid>
         </GroupBox>
     </Grid>
