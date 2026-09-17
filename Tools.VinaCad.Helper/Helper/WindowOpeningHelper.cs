@@ -815,7 +815,7 @@ namespace Tools.VinaCad.Helper.Helper
             double[] walls)
         {
             string safeName = new string(styleId.Select(character => char.IsLetterOrDigit(character) ? character : '_').ToArray());
-            string blockName = ReferenceBlockPrefix + safeName; //+ "_V5";
+            string blockName = ReferenceBlockPrefix + safeName;
             using Transaction transaction = database.TransactionManager.StartTransaction();
             BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
             if (blockTable.Has(blockName)) return blockTable[blockName];

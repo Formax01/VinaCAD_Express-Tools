@@ -96,16 +96,18 @@
 
         <Grid Grid.Row="1" Margin="6,6,4,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="76" />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="66" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Width="52" Height="24" Click="Cancel_Click" Content="Cancel" />
-            <Button Grid.Column="1" Width="66" Height="24" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&lt;--" />
-            <Button Grid.Column="3" Width="66" Height="24" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="--&gt;" />
-            <TextBlock Grid.Column="4"
+            <Button Grid.Column="5" Width="66" Height="28" Click="Cancel_Click" Content="Hủy"  />
+            <Button Grid.Column="2" Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
+            <TextBlock Grid.Column="3" Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
+            <Button Grid.Column="4" Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&#8594;" />
+            <TextBlock Grid.Column="0"
                        Margin="12,0,0,0"
                        VerticalAlignment="Center"
                        Foreground="#555"
