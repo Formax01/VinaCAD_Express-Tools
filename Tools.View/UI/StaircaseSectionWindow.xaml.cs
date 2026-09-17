@@ -129,8 +129,7 @@ namespace Tools.View.UI
             }
             else if (settings.Type == StaircaseSectionType.Scissor)
             {
-                landing2 = ProjectWorld(direction * firstRun,
-                    settings.FirstFlightStepNumber * settings.CurrentStepHeight, insertion, scale);
+                landing2 = ProjectWorld(direction * fullRun, 0, insertion, scale);
                 top = ProjectWorld(0, settings.StoreyHeight, insertion, scale);
             }
 
@@ -205,7 +204,10 @@ namespace Tools.View.UI
             }
             if (settings.HasBeam2)
             {
-                var anchor = new Point(landing2.X, landing2.Y + settings.BeamHeight * scale / 2);
+                int direction = settings.FirstRunRightward ? 1 : -1;
+                var anchor = new Point(
+                    landing2.X + direction * settings.BeamWidth * scale / 2,
+                    landing2.Y + settings.BeamHeight * scale / 2);
                 DrawBeamLeader(layer, anchor, "Dầm 2",
                     Math.Clamp(landing2.X + 14, 120, layer.Width - 55),
                     Math.Clamp(landing2.Y + 20, 32, 160));

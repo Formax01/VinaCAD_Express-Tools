@@ -74,8 +74,7 @@ namespace Tools.Model
 
         private bool HasValidFirstFlight()
         {
-            return Type == StaircaseSectionType.SingleFlight
-                || FirstFlightStepNumber >= 1 && FirstFlightStepNumber < StepNumber;
+            return Type != StaircaseSectionType.DoubleFlight || FirstFlightStepNumber >= 1 && FirstFlightStepNumber < StepNumber;
         }
 
         private bool HasValidStructureDimensions()
