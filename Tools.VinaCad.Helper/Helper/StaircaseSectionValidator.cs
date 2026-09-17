@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Tools.Model;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -23,9 +23,7 @@ namespace Tools.VinaCad.Helper.Helper
         private const string InvalidStaircaseTypeMessage =
             "Kiểu cầu thang không hợp lệ.";
 
-        public static bool TryValidate(
-            StaircaseSectionModel settings,
-            out string message)
+        public static bool TryValidate( StaircaseSectionModel settings, out string message)
         {
             ArgumentNullException.ThrowIfNull(settings);
 
@@ -69,8 +67,7 @@ namespace Tools.VinaCad.Helper.Helper
             return true;
         }
 
-        private static bool HasValidPlanDimensions(
-            StaircaseSectionModel settings)
+        private static bool HasValidPlanDimensions( StaircaseSectionModel settings)
         {
             return settings.StoreyHeight > 0
                 && settings.TreadRun > 0
@@ -78,23 +75,20 @@ namespace Tools.VinaCad.Helper.Helper
                 && settings.Landing2Width >= 0;
         }
 
-        private static bool HasValidCounts(
-            StaircaseSectionModel settings)
+        private static bool HasValidCounts( StaircaseSectionModel settings)
         {
             return settings.StoreyNumber >= 1
                 && settings.StepNumber >= 2;
         }
 
-        private static bool HasValidFirstFlight(
-            StaircaseSectionModel settings)
+        private static bool HasValidFirstFlight( StaircaseSectionModel settings)
         {
             return settings.Type != StaircaseSectionType.DoubleFlight
                 || settings.FirstFlightStepNumber >= 1
                 && settings.FirstFlightStepNumber < settings.StepNumber;
         }
 
-        private static bool HasValidStructureDimensions(
-            StaircaseSectionModel settings)
+        private static bool HasValidStructureDimensions( StaircaseSectionModel settings)
         {
             return settings.BoardThickness > 0
                 && settings.RailingHeight >= 0
@@ -104,17 +98,14 @@ namespace Tools.VinaCad.Helper.Helper
                 && settings.BeamWidth >= 0;
         }
 
-        private static bool HasValidEnabledBeams(
-            StaircaseSectionModel settings)
+        private static bool HasValidEnabledBeams( StaircaseSectionModel settings)
         {
             return (!settings.HasBeam1 && !settings.HasBeam2)
                 || settings.BeamHeight > 0
                 && settings.BeamWidth > 0;
         }
 
-        private static bool Fail(
-            string validationMessage,
-            out string message)
+        private static bool Fail( string validationMessage, out string message)
         {
             message = validationMessage;
             return false;

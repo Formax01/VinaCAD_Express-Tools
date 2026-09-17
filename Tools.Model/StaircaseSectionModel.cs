@@ -57,10 +57,7 @@ namespace Tools.Model
 
     public readonly struct StaircaseSegment
     {
-        public StaircaseSegment(
-            StaircasePoint start,
-            StaircasePoint end,
-            StaircaseSegmentStyle style = StaircaseSegmentStyle.Primary)
+        public StaircaseSegment( StaircasePoint start, StaircasePoint end, StaircaseSegmentStyle style = StaircaseSegmentStyle.Primary)
         {
             Start = start;
             End = end;

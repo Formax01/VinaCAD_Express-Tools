@@ -66,12 +66,7 @@ namespace Tools.View.UI
                 ScissorPreviewCanvas, ScissorPreviewPath, ScissorPreviewSummary, settings);
         }
 
-        private void RenderPreview(
-            StaircaseSectionType type,
-            Canvas canvas,
-            Path path,
-            TextBlock summary,
-            StaircaseSectionModel source)
+        private void RenderPreview( StaircaseSectionType type, Canvas canvas, Path path, TextBlock summary, StaircaseSectionModel source)
         {
             // Hình xem trước luôn dùng cấu hình hiện tại nhưng tính riêng cho từng loại thang.
             StaircaseSectionModel preview = source.Copy();
@@ -102,11 +97,7 @@ namespace Tools.View.UI
             }
         }
 
-        private static void DrawDimensions(
-            Canvas canvas,
-            StaircaseSectionModel settings,
-            Point insertion,
-            Point storeyTop)
+        private static void DrawDimensions( Canvas canvas, StaircaseSectionModel settings, Point insertion, Point storeyTop)
         {
             // Đổi tọa độ CAD của tầng đầu tiên sang tọa độ preview để đường DIM bám hình thật.
             Canvas layer = FindDimensionLayer(canvas);
@@ -156,8 +147,7 @@ namespace Tools.View.UI
             return new Point(insertion.X + x * scale, insertion.Y - y * scale);
         }
 
-        private static void DrawVerticalDimension(
-            Canvas layer, Point bottom, Point top, double x, string text)
+        private static void DrawVerticalDimension( Canvas layer, Point bottom, Point top, double x, string text)
         {
             // Đường dóng bắt đầu cách vật thể 4 px; đường kích thước nằm ngoài vật thể 32 px.
             AddDimensionLine(layer, new Point(bottom.X - 4, bottom.Y), new Point(x - 4, bottom.Y));
@@ -171,8 +161,7 @@ namespace Tools.View.UI
             Canvas.SetTop(note, (top.Y + bottom.Y - note.DesiredSize.Height) / 2);
         }
 
-        private static void DrawHorizontalDimension(
-            Canvas layer, Point first, Point second, double offset, string text)
+        private static void DrawHorizontalDimension( Canvas layer, Point first, Point second, double offset, string text)
         {
             double y = first.Y + offset;
             double direction = Math.Sign(offset);
@@ -191,8 +180,7 @@ namespace Tools.View.UI
             AddDimensionText(layer, text, x, y + DimensionTextGap);
         }
 
-        private static void DrawBeamNotes(
-            Canvas layer, StaircaseSectionModel settings, Point insertion, Point landing2, double scale)
+        private static void DrawBeamNotes( Canvas layer, StaircaseSectionModel settings, Point insertion, Point landing2, double scale)
         {
             if (settings.HasBeam1)
             {
@@ -213,8 +201,7 @@ namespace Tools.View.UI
             }
         }
 
-        private static void DrawBeamLeader(
-            Canvas layer, Point anchor, string text, double labelX, double labelY)
+        private static void DrawBeamLeader( Canvas layer, Point anchor, string text, double labelX, double labelY)
         {
             AddDimensionLine(layer, anchor, new Point(labelX + 2, labelY + 6));
             AddDimensionText(layer, text, labelX, labelY);
@@ -283,12 +270,7 @@ namespace Tools.View.UI
             }
         }
 
-        private static Geometry BuildPreviewGeometry(
-            IReadOnlyList<StaircaseSegment> segments,
-            double canvasWidth,
-            double storeyHeight,
-            out Point insertion,
-            out Point storeyTop)
+        private static Geometry BuildPreviewGeometry( IReadOnlyList<StaircaseSegment> segments, double canvasWidth, double storeyHeight, out Point insertion, out Point storeyTop)
         {
             if (segments.Count == 0) throw new InvalidOperationException(InvalidPreviewMessage);
 
@@ -331,12 +313,7 @@ namespace Tools.View.UI
             return geometry;
         }
 
-        private static void IncludePoint(
-            StaircasePoint point,
-            ref double minX,
-            ref double minY,
-            ref double maxX,
-            ref double maxY)
+        private static void IncludePoint( StaircasePoint point, ref double minX, ref double minY, ref double maxX, ref double maxY)
         {
             if (!double.IsFinite(point.X) || !double.IsFinite(point.Y))
                 throw new InvalidOperationException(InvalidPreviewMessage);
@@ -346,9 +323,7 @@ namespace Tools.View.UI
             maxY = Math.Max(maxY, point.Y);
         }
 
-        private static string GetPreviewSummary(
-            StaircaseSectionModel source,
-            StaircaseSectionModel preview)
+        private static string GetPreviewSummary( StaircaseSectionModel source, StaircaseSectionModel preview)
         {
             string storeys = preview.StoreyNumber < source.StoreyNumber
                 ? $"{preview.StoreyNumber}/{source.StoreyNumber} tầng"
@@ -359,9 +334,7 @@ namespace Tools.View.UI
             return $"{storeys} · {steps}";
         }
 
-        private static string GetPreviewToolTip(
-            StaircaseSectionModel source,
-            StaircaseSectionModel preview)
+        private static string GetPreviewToolTip( StaircaseSectionModel source, StaircaseSectionModel preview)
         {
             return $"Hình xem trước: {GetPreviewSummary(source, preview)}\n" +
                 $"Cao tầng: {source.StoreyHeight:0.####}; mặt bậc: {source.TreadRun:0.####}\n" +
