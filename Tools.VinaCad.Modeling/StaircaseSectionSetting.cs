@@ -7,8 +7,8 @@ namespace Tools.VinaCad.Modeling
 
         public const StaircaseSectionType DefaultType = StaircaseSectionType.DoubleFlight;
         public const bool DefaultFirstRunRightward = true;
-        public const string DefaultLayerName = "Slice_Stair";
-        public const string DefaultSecondaryLayerName = "Slice_Stair_Secondary";
+        public const string DefaultLayerName = "STAIR";
+        public const string DefaultSecondaryLayerName = "COLUMN";
 
         public const int DefaultStoreyNumber = 5;
         public const int DefaultStepNumber = 18;
