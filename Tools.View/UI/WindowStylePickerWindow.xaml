@@ -15,14 +15,14 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox x:Name="StyleList"
+        <ListBox x:Name="StyleList" x:FieldModifier="public"
                  ItemsSource="{Binding Styles}"
                  SelectedItem="{Binding SelectedStyle, Mode=TwoWay}"
                  BorderThickness="0"
                  Background="Transparent"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                 PreviewMouseLeftButtonUp="StyleList_PreviewMouseLeftButtonUp">
+                 >
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="4" Rows="4" />
@@ -103,10 +103,10 @@
                 <ColumnDefinition Width="66" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="5" Width="66" Height="28" Click="Cancel_Click" Content="Hủy"  />
-            <Button Grid.Column="2" Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
+            <Button x:Name="CancelButton" x:FieldModifier="public" Grid.Column="5" Width="66" Height="28" Content="Hủy"  />
+            <Button x:Name="PreviousButton" x:FieldModifier="public" Grid.Column="2" Width="66" Height="28" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
             <TextBlock Grid.Column="3" Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
-            <Button Grid.Column="4" Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&#8594;" />
+            <Button x:Name="NextButton" x:FieldModifier="public" Grid.Column="4" Width="66" Height="28" IsEnabled="{Binding CanNext}" Content="&#8594;" />
             <TextBlock Grid.Column="0"
                        Margin="12,0,0,0"
                        VerticalAlignment="Center"
