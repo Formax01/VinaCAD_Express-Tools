@@ -25,7 +25,7 @@
             BorderThickness="1"
             Background="#FFFAFAFA"
             Margin="0,0,0,10">
-            <Canvas x:Name="PreviewCanvas"
+            <Canvas x:Name="PreviewCanvasControl"
                 MinHeight="170"
                 SizeChanged="PreviewCanvas_SizeChanged"/>
         </Border>
@@ -37,7 +37,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Chiều Rộng:" VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
-                 x:Name="BreadthsTextBox"
+                 x:Name="BreadthsTextBoxControl"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding BreadthsText, UpdateSourceTrigger=PropertyChanged}"
                  ToolTip="Nhịp theo X, ví dụ: 4200 2500 4300 hoặc 4x3600"/>
@@ -94,8 +94,7 @@
                 <Button Content="Hủy"
                     Width="80"
                     Height="28"
-                    IsCancel="True"
-                    Click="CancelButton_Click"/>
+                    IsCancel="True"/>
             </StackPanel>
         </Grid>
     </Grid>
