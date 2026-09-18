@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
         Title="Độ Dày Tường" 
-        Height="400" Width="300"
+        Height="450" Width="300"
         WindowStartupLocation="CenterScreen" 
         ResizeMode="NoResize" 
         ShowInTaskbar="False"
@@ -24,13 +24,13 @@
                  Margin="0,0,0,10">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="5,2"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="Padding" Value="0,2,20,2" />
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Grid Grid.Row="2" Margin="0,0,0,15">
+        <Grid Grid.Row="2" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -41,15 +41,15 @@
             <TextBox Grid.Column="1" x:Name="TxtThickness"
                      Text="{Binding ThicknessText, UpdateSourceTrigger=PropertyChanged}"
                      VerticalAlignment="Center" Margin="0,0,10,0" Padding="2"
-                     HorizontalContentAlignment="Left"
+                     HorizontalContentAlignment="Right"
                      PreviewTextInput="TxtThickness_PreviewTextInput"
                      behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
             <Button Grid.Column="2" x:Name="BtnPickUp" Content="Chọn" Width="60" Padding="5,2" Click="BtnPickUp_Click"/>
         </Grid>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="BtnOk" Content="OK" Width="70" Margin="0,0,15,0" Padding="5,2" Click="BtnOk_Click" IsDefault="True"/>
-            <Button x:Name="BtnCancel" Content="Hủy" Width="70" Padding="5,2" Click="BtnCancel_Click" IsCancel="True"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="BtnOk" Content="OK" Width="60" Margin="0,0,15,0" Padding="5,2" Click="BtnOk_Click" IsDefault="True"/>
+            <Button x:Name="BtnCancel" Content="Hủy" Width="60" Padding="5,2" Click="BtnCancel_Click" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>
