@@ -31,17 +31,17 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Danh sách độ rộng" />
-                <ListBox x:Name="HoleWidthList"
+                <ListBox x:Name="HoleWidthList" x:FieldModifier="public"
                          Grid.Row="1"
                          Margin="0,4"
-                         SelectionChanged="HoleWidthList_SelectionChanged" />
+                         />
                 <Grid Grid.Row="2" Margin="0,2,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="Độ rộng:" />
-                    <TextBox x:Name="HoleWidthText"
+                    <TextBox x:Name="HoleWidthText" x:FieldModifier="public"
                              Grid.Column="1"
                              Height="25"
                              Margin="5,0,0,0"
@@ -49,10 +49,9 @@
                              HorizontalContentAlignment="Right"
                              behaviors:TextBoxBehavior.SelectAllTextOnFocus="True" />
                 </Grid>
-                <Button Grid.Row="3"
+                <Button x:Name="MeasureHoleButton" x:FieldModifier="public" Grid.Row="3"
                         Height="25"
                         Margin="0,5,0,0"
-                        Click="MeasureHole_Click"
                         Content="Đo" />
             </Grid>
         </GroupBox>
@@ -66,17 +65,17 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Danh sách khoảng trụ" />
-                <ListBox x:Name="PierWidthList"
+                <ListBox x:Name="PierWidthList" x:FieldModifier="public"
                          Grid.Row="1"
                          Margin="0,4"
-                         SelectionChanged="PierWidthList_SelectionChanged" />
+                         />
                 <Grid Grid.Row="2" Margin="0,2,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="Khoảng trụ:" />
-                    <TextBox x:Name="PierWidthText"
+                    <TextBox x:Name="PierWidthText" x:FieldModifier="public"
                              Grid.Column="1"
                              Height="25"
                              Margin="5,0,0,0"
@@ -84,21 +83,19 @@
                              HorizontalContentAlignment="Right"
                              behaviors:TextBoxBehavior.SelectAllTextOnFocus="True" />
                 </Grid>
-                <Button x:Name="MeasurePierButton"
+                <Button x:Name="MeasurePierButton" x:FieldModifier="public"
                         Grid.Row="3"
                         Height="25"
                         Margin="0,5,0,0"
-                        Click="MeasurePier_Click"
                         Content="Đo" />
             </Grid>
         </GroupBox>
 
-        <Button x:Name="ExistingDoorWidthButton"
+        <Button x:Name="ExistingDoorWidthButton" x:FieldModifier="public"
                 Grid.Row="1"
                 Grid.ColumnSpan="3"
                 Height="25"
                 Margin="2,8,2,0"
-                Click="PickExistingDoorWidth_Click"
                 Content="Lấy độ rộng từ cửa có sẵn" />
 
         <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="2,8,2,0">
@@ -107,16 +104,12 @@
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <CheckBox x:Name="PocketWidthCheck"
+            <CheckBox x:Name="PocketWidthCheck" x:FieldModifier="public"
                       VerticalAlignment="Center"
-                      Checked="PlacementMode_Changed"
-                      Unchecked="PlacementMode_Changed"
                       Content="Đo từ mép tường" />
-            <CheckBox x:Name="MiddleWallCheck"
+            <CheckBox x:Name="MiddleWallCheck" x:FieldModifier="public"
                       Grid.Column="2"
                       VerticalAlignment="Center"
-                      Checked="PlacementMode_Changed"
-                      Unchecked="PlacementMode_Changed"
                       Content="Cửa giữa tường" />
         </Grid>
 
@@ -125,8 +118,8 @@
                     Margin="0,12,0,0"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-            <Button Width="75" Height="28" Margin="0,0,12,0" IsDefault="True" Click="Accept_Click" Content="OK" />
-            <Button Width="75" Height="28" IsCancel="True" Click="Cancel_Click" Content="Hủy" />
+            <Button x:Name="AcceptButton" x:FieldModifier="public" Width="75" Height="28" Margin="0,0,12,0" IsDefault="True" Content="OK" />
+            <Button x:Name="CancelButton" x:FieldModifier="public" Width="75" Height="28" IsCancel="True" Content="Hủy" />
         </StackPanel>
     </Grid>
 </Window>

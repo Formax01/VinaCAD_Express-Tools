@@ -22,7 +22,7 @@
                  Background="Transparent"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                 PreviewMouseLeftButtonUp="StyleList_PreviewMouseLeftButtonUp">
+                 x:FieldModifier="public">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="4" Rows="4" />
@@ -76,11 +76,11 @@
         </ListBox>
 
         <DockPanel Grid.Row="1" Margin="4,6,4,0">
-            <Button DockPanel.Dock="Right" Width="76" Height="28" Click="Cancel_Click" Content="Hủy" />
+            <Button x:Name="CancelButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Content="Hủy" />
             <StackPanel DockPanel.Dock="Right" Margin="50,0,50,0" Orientation="Horizontal">
-                <Button Width="66" Height="28" Click="Previous_Click" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
+                <Button x:Name="PreviousButton" x:FieldModifier="public" Width="66" Height="28" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
                 <TextBlock Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
-                <Button Width="66" Height="28" Click="Next_Click" IsEnabled="{Binding CanNext}" Content="&#8594;" />
+                <Button x:Name="NextButton" x:FieldModifier="public" Width="66" Height="28" IsEnabled="{Binding CanNext}" Content="&#8594;" />
             </StackPanel>
             <TextBlock Margin="12,0,0,0"
                        VerticalAlignment="Center"
