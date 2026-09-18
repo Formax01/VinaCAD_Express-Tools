@@ -582,5 +582,18 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(BlockEraseCommand), ex);
             }
         }
+        [CommandMethod("AD")]
+        public void OpenDoorCommand()
+        {
+            try
+            {
+                new OpenDoorAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OpenDoorCommand), ex);
+            }
+        }
     }
 }
