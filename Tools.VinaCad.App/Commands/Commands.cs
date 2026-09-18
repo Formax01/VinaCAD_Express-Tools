@@ -16,6 +16,21 @@ namespace Tools.VinaCAD.App.Commands
     public class Commands
     {
 
+        [CommandMethod("ZXW")]
+        public void CreateGridAxisCommand()
+        {
+            try
+            {
+                CreateGridAxisAction action = new CreateGridAxisAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
+
         [CommandMethod("Sample")]
         public void SampleCommand()
         {

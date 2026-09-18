@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Tools.Model\Tools.Model.csproj" />
     <ProjectReference Include="..\Tools.ViewModel\Tools.ViewModel.csproj" />
+    <ProjectReference Include="..\Tools.VinaCad.Helper\Tools.VinaCad.Helper.csproj" />
   </ItemGroup>
 
 </Project>
