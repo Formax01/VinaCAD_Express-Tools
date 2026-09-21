@@ -1,9 +1,13 @@
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using System;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using Teigha.DatabaseServices;
 using Tools.Model;
 using Tools.View.UI;
+using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -29,11 +33,11 @@ namespace Tools.VinaCAD.Action.Actions
         public WindowStyleSelection? Execute(WindowStyleSelection? initialSelection = null)
         {
             WindowStyleCatalog catalog = WindowStyleCatalogLoader.LoadDefault();
-            WindowStylePickerWindow styleWindow = new WindowStylePickerWindow(catalog, initialSelection?.Style);
+            WindowStylePickerWindow styleWindow = CreateStyleWindow(catalog, initialSelection?.Style, out WindowStylePickerVM viewModel);
             Application.ShowModalWindow(styleWindow);
-            if (styleWindow.DialogResult != true || styleWindow.SelectedStyle == null) return null;
+            if (styleWindow.DialogResult != true || viewModel.SelectedStyle == null) return null;
 
-            return ShowParameters(styleWindow.SelectedStyle, initialSelection, catalog.DefaultWallThickness);
+            return ShowParameters(viewModel.SelectedStyle, initialSelection, catalog.DefaultWallThickness);
         }
 
         public WindowStyleSelection? EditParameters(WindowStyleSelection selection)
@@ -44,11 +48,47 @@ namespace Tools.VinaCAD.Action.Actions
         public bool SelectStyle(WindowStyleSelection selection)
         {
             WindowStyleCatalog catalog = WindowStyleCatalogLoader.LoadDefault();
-            WindowStylePickerWindow styleWindow = new WindowStylePickerWindow(catalog, selection.Style);
+            WindowStylePickerWindow styleWindow = CreateStyleWindow(catalog, selection.Style, out WindowStylePickerVM viewModel);
             Application.ShowModalWindow(styleWindow);
-            if (styleWindow.DialogResult != true || styleWindow.SelectedStyle == null) return false;
-            selection.Style = styleWindow.SelectedStyle;
+            if (styleWindow.DialogResult != true || viewModel.SelectedStyle == null) return false;
+            selection.Style = viewModel.SelectedStyle;
             return true;
+        }
+
+        private static WindowStylePickerWindow CreateStyleWindow(
+            WindowStyleCatalog catalog,
+            WindowStyleModel? initialStyle,
+            out WindowStylePickerVM viewModel)
+        {
+            WindowStylePickerWindow window = new WindowStylePickerWindow();
+            WindowStylePickerVM model = new WindowStylePickerVM(catalog, initialStyle);
+            viewModel = model;
+            window.DataContext = model;
+            window.StyleList.PreviewMouseLeftButtonUp += (_, e) =>
+            {
+                DependencyObject? element = e.OriginalSource as DependencyObject;
+                while (element != null && element is not System.Windows.Controls.ListBoxItem)
+                    element = VisualTreeHelper.GetParent(element);
+                if (element is System.Windows.Controls.ListBoxItem item &&
+                    item.DataContext is WindowStyleModel style &&
+                    !string.IsNullOrEmpty(style.AssetPath))
+                {
+                    model.SelectedStyle = style;
+                    window.DialogResult = true;
+                }
+            };
+            window.PreviousButton.Click += (_, _) => model.PreviousPage();
+            window.NextButton.Click += (_, _) => model.NextPage();
+            window.CancelButton.Click += (_, _) => window.DialogResult = false;
+            window.PreviewKeyDown += (_, e) =>
+            {
+                if (e.Key == Key.Escape)
+                {
+                    e.Handled = true;
+                    window.DialogResult = false;
+                }
+            };
+            return window;
         }
 
         private static WindowStyleSelection? ShowParameters(
@@ -75,24 +115,23 @@ namespace Tools.VinaCAD.Action.Actions
             Editor? editor = document?.Editor;
             while (true)
             {
-                WindowOpeningSizeWindow window = new WindowOpeningSizeWindow(
+                ArrangeWindowAction.WindowOpeningSizeResult? changed = new ArrangeWindowAction().ShowOpeningSize(
                     result,
                     style.DefaultWidth,
                     style.DefaultHeight,
                     result.WallThickness);
-                Application.ShowModalWindow(window);
-                if (window.DialogResult != true) return null;
+                if (changed == null) return null;
 
-                result.Width = window.HoleWidth;
-                result.Height = window.WindowHeight;
-                result.WallThickness = window.WallThickness;
-                result.UseEdgeDistance = window.IsPocketWidth && !window.PlaceAtWallCenter;
-                result.EdgeDistance = window.PierWidth;
-                result.PlaceAtWallCenter = window.PlaceAtWallCenter;
-                result.ReverseAlongWall = window.ReverseAlongWall;
-                result.MirrorAcrossWall = window.MirrorAcrossWall;
+                result.Width = changed.Width;
+                result.Height = changed.Height;
+                result.WallThickness = changed.WallThickness;
+                result.UseEdgeDistance = changed.UseEdgeDistance;
+                result.EdgeDistance = changed.EdgeDistance;
+                result.PlaceAtWallCenter = changed.PlaceAtWallCenter;
+                result.ReverseAlongWall = changed.ReverseAlongWall;
+                result.MirrorAcrossWall = changed.MirrorAcrossWall;
 
-                if (window.PickExistingWindowWidthRequested)
+                if (changed.PickExistingWindowWidthRequested)
                 {
                     if (editor == null || document == null) continue;
 
@@ -110,16 +149,16 @@ namespace Tools.VinaCAD.Action.Actions
                     continue;
                 }
 
-                if (window.MeasureHoleRequested || window.MeasurePierRequested)
+                if (changed.MeasureHoleRequested || changed.MeasurePierRequested)
                 {
                     if (editor == null) continue;
 
-                    string prompt = window.MeasureHoleRequested? "\nChọn hai điểm đo độ rộng cửa sổ: ": "\nChọn hai điểm đo khoảng cách trụ: ";
+                    string prompt = changed.MeasureHoleRequested ? "\nChọn hai điểm đo độ rộng cửa sổ: " : "\nChọn hai điểm đo khoảng cách trụ: ";
                     PromptDoubleResult measured = editor.GetDistance(new PromptDistanceOptions(prompt));
                     if (measured.Status == PromptStatus.OK && measured.Value > 0)
                     {
                         double value = Math.Round(measured.Value, 2);
-                        if (window.MeasureHoleRequested)
+                        if (changed.MeasureHoleRequested)
                             result.Width = value;
                         else
                         {
