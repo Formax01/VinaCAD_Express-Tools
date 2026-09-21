@@ -568,6 +568,21 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+        [CommandMethod("BBE")]
+        public void BlockEraseCommand()
+        {
+            try
+            {
+                BlockEraseAction action = new BlockEraseAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BlockEraseCommand), ex);
+            }
+        }
+
         [CommandMethod("LTP")]
         public void StaircaseSectionCommand()
         {
