@@ -1,70 +1,84 @@
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
+using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Definitions;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
+using 
 
 namespace Tools.VinaCAD.Action.Actions
 {
     public sealed class OpenDoorAction
     {
+        Editor? editor = null;
         public void Execute()
         {
-            Document? document = Application.DocumentManager.MdiActiveDocument;
-            if (document == null) return;
-
-            DoorStylePickerAction picker = new DoorStylePickerAction();
-            DoorStyleSelection selection = picker.CreateDefaultSelection();
-
-            Editor editor = document.Editor;
-            int createdCount = 0;
-            while (true)
+            try
             {
-                PromptEntityOptions options = CreateWallPrompt(selection);
-                PromptEntityResult result = editor.GetEntity(options);
-                if (result.Status == PromptStatus.Keyword)
-                {
-                    HandleActiveKeyword(editor, picker, result.StringResult, ref selection);
-                    continue;
-                }
-                if (result.Status != PromptStatus.OK) break;
+                Document? document = Application.DocumentManager.MdiActiveDocument;
+                if (document == null) return;
 
-                ObjectId doorId;
-                try
+                DoorStylePickerAction picker = new DoorStylePickerAction();
+                DoorStyleSelection selection = picker.CreateDefaultSelection();
+
+                Editor editor = document.Editor;
+                int createdCount = 0;
+                while (true)
                 {
-                    doorId = OpenDoorHelper.CreateOpening(
-                        document.Database,
-                        result.ObjectId,
-                        result.PickedPoint,
-                        selection);
-                    createdCount++;
-                    editor.UpdateScreen();
-                }
-                catch (Exception exception)
-                {
-                    editor.WriteMessage($"\nAD: {exception.Message} Hãy chọn lại.");
-                    continue;
+                    PromptEntityOptions options = CreateWallPrompt(selection);
+                    PromptEntityResult result = editor.GetEntity(options);
+                    if (result.Status == PromptStatus.Keyword)
+                    {
+                        HandleActiveKeyword(editor, picker, result.StringResult, ref selection);
+                        continue;
+                    }
+                    if (result.Status != PromptStatus.OK) break;
+
+                    ObjectId doorId;
+                    try
+                    {
+                        doorId = OpenDoorHelper.CreateOpening(
+                            document.Database,
+                            result.ObjectId,
+                            result.PickedPoint,
+                            selection);
+                        createdCount++;
+                        editor.UpdateScreen();
+                    }
+                    catch (Exception exception)
+                    {
+                        editor.WriteMessage($"\nAD: {exception.Message} Hãy chọn lại.");
+                        continue;
+                    }
+
+                    try
+                    {
+                        PromptStatus directionStatus = OpenDoorHelper.JigDoorDirection(
+                            editor,
+                            document.Database,
+                            doorId,
+                            selection);
+                        editor.UpdateScreen();
+                        if (directionStatus == PromptStatus.Cancel) break;
+                    }
+                    catch (Exception exception)
+                    {
+                        editor.WriteMessage($"\nAD: Không thể đổi hướng cửa: {exception.Message}");
+                    }
                 }
 
-                try
-                {
-                    PromptStatus directionStatus = OpenDoorHelper.JigDoorDirection(
-                        editor,
-                        document.Database,
-                        doorId,
-                        selection);
-                    editor.UpdateScreen();
-                    if (directionStatus == PromptStatus.Cancel) break;
-                }
-                catch (Exception exception)
-                {
-                    editor.WriteMessage($"\nAD: Không thể đổi hướng cửa: {exception.Message}");
-                }
+                editor.WriteMessage($"\nAD: đã tạo {createdCount} cửa đi.");
             }
+            catch (Exception exception)
+            {
+                Logger.Info("CreateDoorCommand", exception);
 
-            editor.WriteMessage($"\nAD: đã tạo {createdCount} cửa đi.");
+                System.Windows.MessageBox.Show($"Lỗi AD: {exception.Message}",StringDefinition.TITLE_ERROR,MessageBoxButton.OK,MessageBoxImage.Error);
+            }
         }
 
         private static PromptEntityOptions CreateWallPrompt(DoorStyleSelection selection)
