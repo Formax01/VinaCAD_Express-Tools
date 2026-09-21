@@ -8,7 +8,6 @@ using Tools.Model;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
-using 
 
 namespace Tools.VinaCAD.Action.Actions
 {
