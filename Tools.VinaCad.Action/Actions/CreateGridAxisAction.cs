@@ -2,13 +2,21 @@ using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Tools.Model;
+using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCAD.UI;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
+using WpfColor = System.Windows.Media.Color;
+using WpfLine = System.Windows.Shapes.Line;
+using WpfSolidColorBrush = System.Windows.Media.SolidColorBrush;
 
 namespace Tools.VinaCad.Action.Actions
 {
@@ -16,32 +24,43 @@ namespace Tools.VinaCad.Action.Actions
     {
         public void Execute()
         {
-            Document? document = Application.DocumentManager.MdiActiveDocument;
-            if (document == null)
-                throw new InvalidOperationException("Không có bản vẽ đang hoạt động.");
+            Editor? editor = null;
 
-            Editor editor = document.Editor;
-            Database database = document.Database;
-
-            var window = new GridAxisWindow();
-            Application.ShowModalWindow(window);
-
-            if (window.DialogResult != true || window.Input == null)
-                return;
-
-            GridAxisInput input = window.Input;
-            var jig = new GridAxisPlacementJig(database, input);
-            PromptResult placementResult = editor.Drag(jig);
-
-            if (placementResult.Status != PromptStatus.OK)
+            try
             {
-                editor.WriteMessage("\nZXW đã hủy; bản vẽ không thay đổi.");
-                return;
-            }
+                Document? document = Application.DocumentManager.MdiActiveDocument;
+                if (document == null)
+                    throw new InvalidOperationException("Không có bản vẽ đang hoạt động.");
 
-            int entityCount = GridAxisHelper.CreateGrid(database, input, jig.Origin);
-            editor.Regen();
-            editor.WriteMessage($"\nZXW đã tạo lưới {input.Breadths.Count + 1} x {input.Depths.Count + 1} trục ({entityCount} đối tượng). ");
+                editor = document.Editor;
+                Database database = document.Database;
+
+                var window = new GridAxisWindow();
+                ConfigureDialog(window);
+                Application.ShowModalWindow(window);
+
+                if (window.DialogResult != true || window.Input == null)
+                    return;
+
+                GridAxisInput input = window.Input;
+                var jig = new GridAxisPlacementJig(database, input);
+                PromptResult placementResult = editor.Drag(jig);
+
+                if (placementResult.Status != PromptStatus.OK)
+                {
+                    editor.WriteMessage("\nZXW đã hủy; bản vẽ không thay đổi.");
+                    return;
+                }
+
+                int entityCount = GridAxisHelper.CreateGrid(database, input, jig.Origin);
+                editor.Regen();
+                editor.WriteMessage(
+                    $"\nZXW đã tạo lưới {input.Breadths.Count + 1} x {input.Depths.Count + 1} trục ({entityCount} đối tượng).");
+            }
+            catch (Exception ex)
+            {
+                editor?.WriteMessage($"\nZXW lỗi: {ex.Message}");
+            }
         }
 
         private sealed class GridAxisPlacementJig : DrawJig
@@ -202,5 +221,90 @@ namespace Tools.VinaCad.Action.Actions
                 draw.Geometry.Draw(circle);
             }
         }
+
+        private static void ConfigureDialog(GridAxisWindow window)
+        {
+            var viewModel = new GridAxisVM();
+            window.DataContext = viewModel;
+
+            PropertyChangedEventHandler propertyChanged = (_, e) =>
+            {
+                if (e.PropertyName == nameof(GridAxisVM.BreadthsText)
+                    || e.PropertyName == nameof(GridAxisVM.DepthsText))
+                {
+                    DrawPreview(window, viewModel);
+                }
+            };
+            viewModel.PropertyChanged += propertyChanged;
+            window.Loaded += (_, _) => DrawPreview(window, viewModel);
+            window.PreviewSizeChanged += (_, _) => DrawPreview(window, viewModel);
+            window.ResetRequested += (_, _) =>
+            {
+                viewModel.ResetDefaults();
+                window.BreadthsTextBox.Focus();
+                window.BreadthsTextBox.SelectAll();
+            };
+            window.OkRequested += (_, _) =>
+            {
+                if (!viewModel.TryBuildInput(out GridAxisInput? input, out string error) || input == null)
+                {
+                    System.Windows.MessageBox.Show(error, "Dữ liệu lưới trục không hợp lệ",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                window.Input = input;
+                window.DialogResult = true;
+            };
+            window.Closed += (_, _) => viewModel.PropertyChanged -= propertyChanged;
+        }
+
+        private static void DrawPreview(GridAxisWindow window, GridAxisVM viewModel)
+        {
+            var canvas = window.PreviewCanvas;
+            canvas.Children.Clear();
+
+            if (!viewModel.TryGetPreview(out IReadOnlyList<double> breadths, out IReadOnlyList<double> depths))
+                return;
+
+            double width = canvas.ActualWidth;
+            double height = canvas.ActualHeight;
+            if (width <= 1 || height <= 1)
+                return;
+
+            const double margin = 22;
+            double totalWidth = breadths.Sum();
+            double totalDepth = depths.Sum();
+            double scale = Math.Min(
+                Math.Max(1, width - 2 * margin) / totalWidth,
+                Math.Max(1, height - 2 * margin) / totalDepth);
+            double drawnWidth = totalWidth * scale;
+            double drawnHeight = totalDepth * scale;
+            double left = (width - drawnWidth) / 2;
+            double top = (height - drawnHeight) / 2;
+
+            foreach (double station in GridAxisDataHelper.BuildStations(breadths))
+                AddPreviewLine(canvas, left + station * scale, top,
+                    left + station * scale, top + drawnHeight);
+
+            foreach (double station in GridAxisDataHelper.BuildStations(depths))
+                AddPreviewLine(canvas, left, top + drawnHeight - station * scale,
+                    left + drawnWidth, top + drawnHeight - station * scale);
+        }
+
+        private static void AddPreviewLine(Canvas canvas, double x1, double y1, double x2, double y2)
+        {
+            canvas.Children.Add(new WpfLine
+            {
+                X1 = x1,
+                Y1 = y1,
+                X2 = x2,
+                Y2 = y2,
+                Stroke = new WpfSolidColorBrush(WpfColor.FromRgb(235, 82, 82)),
+                StrokeThickness = 1.5,
+                SnapsToDevicePixels = true
+            });
+        }
+
     }
 }
