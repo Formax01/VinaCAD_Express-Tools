@@ -544,7 +544,7 @@ namespace Tools.VinaCad.Action.Actions
         private const short PrimaryColorIndex = 7;
         private const short SecondaryColorIndex = 2;
         private const short ByLayerColorIndex = 256;
-        private const string GroupDictionaryKey = "*A";
+        private const string GroupKeyPrefix = "LTP_STAIR_";
         private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
         private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
 
@@ -654,9 +654,18 @@ namespace Tools.VinaCad.Action.Actions
             var groups = (DBDictionary)transaction.GetObject(
                 database.GroupDictionaryId, OpenMode.ForWrite);
             var group = new Group(GroupDescription, true);
-            groups.SetAt(GroupDictionaryKey, group);
+            groups.SetAt(GetUniqueGroupKey(groups), group);
             transaction.AddNewlyCreatedDBObject(group, true);
             group.Append(entityIds);
+        }
+
+        private static string GetUniqueGroupKey(DBDictionary groups)
+        {
+            for (int index = 1; ; index++)
+            {
+                string key = $"{GroupKeyPrefix}{index}";
+                if (!groups.Contains(key)) return key;
+            }
         }
     }
 }
