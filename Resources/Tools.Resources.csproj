@@ -23,10 +23,14 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Templates\Window Assets\*.dwg">
-    <None Update="Templates\Door Assets\*.dwg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </ItemGroup>
+    <ItemGroup>
+	    <None Update="Templates\Window Assets\*.dwg">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </None>
+
+	    <None Update="Templates\Door Assets\*.dwg">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </None>
+    </ItemGroup>
 
 </Project>
