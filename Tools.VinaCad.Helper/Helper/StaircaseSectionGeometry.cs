@@ -145,6 +145,7 @@ namespace Tools.VinaCad.Helper.Helper
                 AddFlight(segments, start, direction, settings.StepNumber, settings);
                 AddLanding(segments, top, direction, settings.Landing2Width, settings.BoardThickness);
 
+                // Sàn tầng chạy suốt khoảng vế, tô Secondary; không tạo lan can ngang theo sàn.
                 var floorStart = new StaircasePoint(start.X, top.Y);
                 double floorWidth = Math.Abs(top.X - floorStart.X);
                 AddSecondaryLanding(segments, floorStart, direction,
@@ -221,10 +222,11 @@ namespace Tools.VinaCad.Helper.Helper
             double bottomY = 0.0;
             double topY = settings.StoreyNumber * settings.StoreyHeight
                 + settings.RailingHeight;
-            double rightRailX = directionFactor * flightSpan;
+            double leftRailX = -directionFactor * settings.BeamWidth / 2.0;
+            double rightRailX = directionFactor * (flightSpan + settings.BeamWidth / 2.0);
             AddSegment(segments,
-                new StaircasePoint(0.0, bottomY),
-                new StaircasePoint(0.0, topY),
+                new StaircasePoint(leftRailX, bottomY),
+                new StaircasePoint(leftRailX, topY),
                 StaircaseSegmentStyle.Secondary);
             AddSegment(segments,
                 new StaircasePoint(rightRailX, bottomY),
@@ -252,7 +254,7 @@ namespace Tools.VinaCad.Helper.Helper
             AddSteps(segments, start, direction, riserCount, settings);
             StaircasePoint end = GetFlightEnd(start, direction, riserCount, settings);
             AddFlightBoard(segments, start, end, settings);
-            AddRailing(segments, start, end, settings);
+            AddRailing(segments, start, end, direction, settings);
         }
 
         private static void AddHighlightedFlight( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, int riserCount, StaircaseSectionModel settings)
@@ -311,19 +313,28 @@ namespace Tools.VinaCad.Helper.Helper
             AddSegment(segments, start, lowerStart);
         }
 
-        private static void AddRailing( List<StaircaseSegment> segments, StaircasePoint start, StaircasePoint end, StaircaseSectionModel settings)
+        private static void AddRailing( List<StaircaseSegment> segments, StaircasePoint start, StaircasePoint end, HorizontalDirection direction, StaircaseSectionModel settings)
         {
             if (settings.RailingHeight <= 0) return;
 
+            double beamCenterOffset = settings.HasBeam2 ? (int)direction * settings.BeamWidth / 2.0 : 0.0;
+
+            double startBeamCenterOffset = settings.HasBeam1 ? -(int)direction * settings.BeamWidth / 2.0 : 0.0;
+
+            var railingStartBase = new StaircasePoint(
+                start.X + startBeamCenterOffset,
+                start.Y);
+            var railingEndBase = new StaircasePoint(end.X + beamCenterOffset, end.Y);
+
             var railingStart = new StaircasePoint(
-                start.X,
-                start.Y + settings.RailingHeight);
+                railingStartBase.X,
+                railingStartBase.Y + settings.RailingHeight);
             var railingEnd = new StaircasePoint(
-                end.X,
-                end.Y + settings.RailingHeight);
-            AddSegment(segments, start, railingStart, StaircaseSegmentStyle.Secondary);
+                railingEndBase.X,
+                railingEndBase.Y + settings.RailingHeight);
+            AddSegment(segments, railingStartBase, railingStart, StaircaseSegmentStyle.Secondary);
             AddSegment(segments, railingStart, railingEnd, StaircaseSegmentStyle.Secondary);
-            AddSegment(segments, end, railingEnd, StaircaseSegmentStyle.Secondary);
+            AddSegment(segments, railingEndBase, railingEnd, StaircaseSegmentStyle.Secondary);
         }
 
         private static void AddLanding( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, double width, double thickness)
@@ -355,24 +366,17 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (width <= 0 || settings.RailingHeight <= 0) return;
 
-            double endX = start.X + (int)direction * width;
-            var end = new StaircasePoint(endX, start.Y);
-            var railingStart = new StaircasePoint(
-                start.X,
-                start.Y + settings.RailingHeight);
-            var railingEnd = new StaircasePoint(
-                end.X,
-                end.Y + settings.RailingHeight);
-
-            AddSegment(
-                segments, start, railingStart,
-                StaircaseSegmentStyle.Secondary);
-            AddSegment(
-                segments, railingStart, railingEnd,
-                StaircaseSegmentStyle.Secondary);
-            AddSegment(
-                segments, end, railingEnd,
-                StaircaseSegmentStyle.Secondary);
+            int directionFactor = (int)direction;
+            double startX = start.X - (settings.HasBeam1 ? directionFactor * settings.BeamWidth / 2.0 : 0.0);
+            double endX = start.X + directionFactor * width
+                + (settings.HasBeam2 ? directionFactor * settings.BeamWidth / 2.0 : 0.0);
+            var railingStartBase = new StaircasePoint(startX, start.Y);
+            var railingEndBase = new StaircasePoint(endX, start.Y);
+            var railingStart = new StaircasePoint(startX, start.Y + settings.RailingHeight);
+            var railingEnd = new StaircasePoint(endX, start.Y + settings.RailingHeight);
+            AddSegment(segments, railingStartBase, railingStart, StaircaseSegmentStyle.Secondary);
+            AddSegment(segments, railingStart, railingEnd, StaircaseSegmentStyle.Secondary);
+            AddSegment(segments, railingEndBase, railingEnd, StaircaseSegmentStyle.Secondary);
         }
 
         private static void AddSupports( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint first, StaircasePoint second, HorizontalDirection direction)
