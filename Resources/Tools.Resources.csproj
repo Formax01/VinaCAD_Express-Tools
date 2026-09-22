@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <None Update="Templates\Window Assets\*.dwg">
+    <None Update="Templates\Door Assets\*.dwg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
