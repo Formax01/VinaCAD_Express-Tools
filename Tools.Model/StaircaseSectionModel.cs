@@ -27,6 +27,7 @@ namespace Tools.Model
         public double BoardThickness { get; set; }
         public double RailingHeight { get; set; }
         public bool CreateGroup { get; set; }
+        public bool JoinGroupAfterDraw { get; set; }
 
         public double CurrentStepHeight => StepNumber > 0 ? StoreyHeight / StepNumber : 0.0;
 

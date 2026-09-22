@@ -174,6 +174,12 @@ namespace Tools.ViewModel
             set { _settings.CreateGroup = value; OnPropertyChanged(nameof(CreateGroup)); }
         }
 
+        public bool JoinGroupAfterDraw
+        {
+            get => _settings.JoinGroupAfterDraw;
+            set { _settings.JoinGroupAfterDraw = value; OnPropertyChanged(nameof(JoinGroupAfterDraw)); }
+        }
+
         public double CurrentStepHeight => _settings.CurrentStepHeight;
 
         public void Reset(StaircaseSectionModel defaults)

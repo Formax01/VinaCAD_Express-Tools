@@ -187,8 +187,9 @@
                 <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding RailingHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
 
                 <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Content="Tạo nhóm" IsChecked="{Binding CreateGroup}" />
+                <CheckBox Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Content="Ghép nhóm sau khi vẽ" IsChecked="{Binding JoinGroupAfterDraw}" IsEnabled="{Binding CreateGroup}" />
 
-                <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Height="23" VerticalAlignment="Center" Command="{Binding ResetCmd}" Content="Khôi phục giá trị ban đầu" />
+                <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" Height="23" VerticalAlignment="Center" Command="{Binding ResetCmd}" Content="Khôi phục giá trị ban đầu" />
             </Grid>
         </GroupBox>
     </Grid>

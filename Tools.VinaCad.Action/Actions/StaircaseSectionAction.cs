@@ -53,8 +53,25 @@ namespace Tools.VinaCad.Action.Actions
                 PromptPointResult pointResult = (PromptPointResult)document.Editor.Drag(insertionJig);
                 if (pointResult.Status != PromptStatus.OK) return;
 
+                ObjectIdCollection createdEntityIds;
                 int lineCount = new StaircaseSectionDrawingService().Draw(
-                    document.Database, insertionJig.InsertionPoint, settings);
+                    document.Database, insertionJig.InsertionPoint, settings,
+                    out createdEntityIds);
+
+                if (settings.CreateGroup && settings.JoinGroupAfterDraw
+                    && createdEntityIds.Count > 0)
+                {
+                    PromptPointResult baseResult = document.Editor.GetPoint(
+                        new PromptPointOptions("\nChọn điểm gốc trên cầu thang mới: "));
+                    if (baseResult.Status == PromptStatus.OK)
+                    {
+                        StaircaseGroupMoveAction.MoveEntitiesWithJig(
+                            document.Database,
+                            document.Editor,
+                            ToObjectIdList(createdEntityIds),
+                            baseResult.Value);
+                    }
+                }
 
                 // B3: Cập nhật màn hình và trả kết quả cho người dùng.
                 document.Editor.UpdateScreen();
@@ -68,7 +85,107 @@ namespace Tools.VinaCad.Action.Actions
                     StringDefinition.TITLE_ERROR);
             }
         }
+
+        private static IReadOnlyList<ObjectId> ToObjectIdList(ObjectIdCollection entityIds)
+        {
+            var result = new List<ObjectId>(entityIds.Count);
+            foreach (ObjectId entityId in entityIds) result.Add(entityId);
+            return result;
+        }
     }
+
+    internal static class StaircaseGroupMoveAction
+    {
+        public static void MoveEntitiesWithJig(Database database, Editor editor, IReadOnlyList<ObjectId> entityIds, Point3d basePoint)
+        {
+            var jig = new StaircaseGroupMoveJig(database, entityIds, basePoint);
+            PromptResult dragResult = editor.Drag(jig);
+            if (dragResult.Status != PromptStatus.OK) return;
+
+            ApplyDisplacement(database, entityIds, jig.Displacement);
+        }
+
+        private static void ApplyDisplacement(Database database, IReadOnlyList<ObjectId> entityIds, Vector3d displacement)
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            foreach (ObjectId entityId in entityIds)
+            {
+                if (!entityId.IsValid || entityId.IsErased) continue;
+                var entity = transaction.GetObject(entityId, OpenMode.ForWrite) as Entity;
+                entity?.TransformBy(Matrix3d.Displacement(displacement));
+            }
+
+            transaction.Commit();
+        }
+    }
+
+    internal sealed class StaircaseGroupMoveJig : DrawJig
+    {
+        private readonly IReadOnlyList<StaircasePreviewLine> _lines;
+        private readonly Point3d _basePoint;
+        private Point3d _targetPoint;
+
+        public StaircaseGroupMoveJig(Database database, IReadOnlyList<ObjectId> entityIds, Point3d basePoint)
+        {
+            _basePoint = basePoint;
+            _targetPoint = basePoint;
+            _lines = ReadLines(database, entityIds);
+        }
+
+        public Vector3d Displacement => _targetPoint - _basePoint;
+
+        protected override SamplerStatus Sampler(JigPrompts prompts)
+        {
+            var options = new JigPromptPointOptions(
+                "\nChọn điểm đích trên group khác: ")
+            {
+                BasePoint = _basePoint,
+                UseBasePoint = true,
+                UserInputControls = UserInputControls.Accept3dCoordinates
+            };
+            PromptPointResult result = prompts.AcquirePoint(options);
+            if (result.Status != PromptStatus.OK) return SamplerStatus.Cancel;
+            if (result.Value.DistanceTo(_targetPoint) <= 1e-9) return SamplerStatus.NoChange;
+
+            _targetPoint = result.Value;
+            return SamplerStatus.OK;
+        }
+
+        protected override bool WorldDraw(WorldDraw draw)
+        {
+            Vector3d displacement = Displacement;
+            foreach (StaircasePreviewLine line in _lines)
+            {
+                draw.SubEntityTraits.Color = (short)line.ColorIndex;
+                draw.Geometry.WorldLine(
+                    line.Start + displacement,
+                    line.End + displacement);
+            }
+
+            return true;
+        }
+
+        private static IReadOnlyList<StaircasePreviewLine> ReadLines(Database database, IReadOnlyList<ObjectId> entityIds)
+        {
+            var result = new List<StaircasePreviewLine>(entityIds.Count);
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            foreach (ObjectId entityId in entityIds)
+            {
+                if (!entityId.IsValid || entityId.IsErased) continue;
+                if (transaction.GetObject(entityId, OpenMode.ForRead) is not Line line) continue;
+                short colorIndex = (short)(line.Layer.Equals(
+                    StaircaseSectionSetting.SecondaryLayerName,
+                    StringComparison.OrdinalIgnoreCase)
+                    ? 2
+                    : 7);
+                result.Add(new StaircasePreviewLine(line.StartPoint, line.EndPoint, colorIndex));
+            }
+
+            return result;
+        }
+    }
+
+    internal readonly record struct StaircasePreviewLine(Point3d Start, Point3d End, short ColorIndex);
 
     internal sealed class StaircaseSectionInsertionJig : DrawJig
     {
@@ -548,7 +665,7 @@ namespace Tools.VinaCad.Action.Actions
         private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
         private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
 
-        public int Draw( Database database, Point3d insertionPoint, StaircaseSectionModel settings)
+        public int Draw( Database database, Point3d insertionPoint, StaircaseSectionModel settings, out ObjectIdCollection createdEntityIds)
         {
             // B1: Sinh và kiểm tra hình học trước khi mở transaction ghi.
             IReadOnlyList<StaircaseSegment> segments = StaircaseSectionGeometry.Generate(settings);
@@ -558,6 +675,7 @@ namespace Tools.VinaCad.Action.Actions
             BlockTableRecord modelSpace = OpenModelSpace(database, transaction);
             ObjectIdCollection entityIds = DrawSegments(
                 database, transaction, modelSpace, insertionPoint, segments);
+            createdEntityIds = entityIds;
 
             if (settings.CreateGroup && entityIds.Count > 0)
             {
@@ -566,7 +684,20 @@ namespace Tools.VinaCad.Action.Actions
 
             // B3: Commit và trả số đối tượng đã tạo.
             transaction.Commit();
+            if (settings.CreateGroup && entityIds.Count > 0) EnableGroupSelection();
             return entityIds.Count;
+        }
+
+        private static void EnableGroupSelection()
+        {
+            try
+            {
+                Application.SetSystemVariable("PICKSTYLE", (short)3);
+            }
+            catch (Exception exception)
+            {
+                Logger.Info(nameof(EnableGroupSelection), exception);
+            }
         }
 
         private static BlockTableRecord OpenModelSpace( Database database, Transaction transaction)
@@ -654,6 +785,7 @@ namespace Tools.VinaCad.Action.Actions
             var groups = (DBDictionary)transaction.GetObject(
                 database.GroupDictionaryId, OpenMode.ForWrite);
             var group = new Group(GroupDescription, true);
+            group.Selectable = true;
             groups.SetAt(GetUniqueGroupKey(groups), group);
             transaction.AddNewlyCreatedDBObject(group, true);
             group.Append(entityIds);
