@@ -16,6 +16,21 @@ namespace Tools.VinaCAD.App.Commands
     public class Commands
     {
 
+        [CommandMethod("ZXW")]
+        public void CreateGridAxisCommand()
+        {
+            try
+            {
+                CreateGridAxisAction action = new CreateGridAxisAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
+
         [CommandMethod("Sample")]
         public void SampleCommand()
         {
@@ -582,14 +597,12 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(BlockEraseCommand), ex);
             }
         }
-
-        [CommandMethod("LTP")]
-        public void StaircaseSectionCommand()
+        [CommandMethod("AD")]
+        public void OpenDoorCommand()
         {
             try
             {
-                StaircaseSectionAction action = new StaircaseSectionAction();
-                action.Execute();
+                new OpenDoorAction().Execute();
             }
             catch (System.Exception ex)
             {
