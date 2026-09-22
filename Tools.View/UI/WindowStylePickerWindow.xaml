@@ -1,0 +1,118 @@
+<Window x:Class="Tools.View.UI.WindowStylePickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helper="clr-namespace:Tools.VinaCad.Helper.Helper;assembly=Tools.VinaCad.Helper"
+        Title="Chọn loại cửa sổ"
+        Width="535"
+        Height="517"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        Background="#F3F3F3">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="StyleList" x:FieldModifier="public"
+                 ItemsSource="{Binding Styles}"
+                 SelectedItem="{Binding SelectedStyle, Mode=TwoWay}"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 >
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" Rows="4" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="3" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="ItemBorder"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="1"
+                                        Background="Transparent">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#808080" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AssetPath}" Value="">
+                            <Setter Property="Focusable" Value="False" />
+                            <Setter Property="IsHitTestVisible" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="18" />
+                        </Grid.RowDefinitions>
+                        <helper:WindowStylePreview WindowStyle="{Binding}" />
+                        <Rectangle x:Name="SelectionOutline"
+                                   Grid.Row="0"
+                                   Margin="1"
+                                   IsHitTestVisible="False"
+                                   Stroke="White"
+                                   StrokeDashArray="1,1"
+                                   StrokeThickness="1"
+                                   Visibility="Collapsed" />
+                        <Border Grid.Row="1" Background="#F4F4F4">
+                            <TextBlock Margin="1,0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding DisplayName}"
+                                       Foreground="#202020"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Border>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                                     Value="True">
+                            <Setter TargetName="SelectionOutline" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="1" Margin="6,6,4,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CancelButton" x:FieldModifier="public" Grid.Column="5" Width="66" Height="28" Content="Hủy"  />
+            <Button x:Name="PreviousButton" x:FieldModifier="public" Grid.Column="2" Width="66" Height="28" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
+            <TextBlock Grid.Column="3" Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
+            <Button x:Name="NextButton" x:FieldModifier="public" Grid.Column="4" Width="66" Height="28" IsEnabled="{Binding CanNext}" Content="&#8594;" />
+            <TextBlock Grid.Column="0"
+                       Margin="12,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="#555"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding AssetsPath, StringFormat=PATH: {0}}" />
+        </Grid>
+    </Grid>
+</Window>
