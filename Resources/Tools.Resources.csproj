@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\Window Assets\*.dwg">
     <None Update="Templates\Door Assets\*.dwg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

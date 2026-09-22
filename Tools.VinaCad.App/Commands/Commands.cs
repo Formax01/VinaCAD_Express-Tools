@@ -1,4 +1,4 @@
-﻿using Prima.VinaCAD.ApplicationServices;
+using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
@@ -617,7 +617,7 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new OpenDoorAction().Execute();
+                new ArrangeWindowAction().Execute();
             }
             catch (System.Exception ex)
             {
@@ -625,5 +625,19 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
+      
+        [CommandMethod("AW")]
+          public void ArrangeWindowCommand()
+          {
+              try
+              {
+                  new ArrangeWindowAction().Execute();
+              }
+              catch (System.Exception ex)
+              {
+                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                  Logger.Info(nameof(OpenDoorCommand), ex);
+              }
+          }
     }
 }
