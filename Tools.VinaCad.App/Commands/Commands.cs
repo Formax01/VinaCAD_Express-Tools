@@ -582,7 +582,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
-
+        
         [CommandMethod("BBE")]
         public void BlockEraseCommand()
         {
@@ -598,8 +598,22 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("AW")]
-        public void ArrangeWindowCommand()
+        [CommandMethod("FN")]
+        public void StuccoCommand()
+        {
+            try
+            {
+                 StuccoAction action = new StuccoAction();
+                 action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StuccoCommand), ex);
+            }
+        }
+        [CommandMethod("AD")]
+        public void OpenDoorCommand()
         {
             try
             {
@@ -611,5 +625,19 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
+      
+        [CommandMethod("AW")]
+          public void ArrangeWindowCommand()
+          {
+              try
+              {
+                  new ArrangeWindowAction().Execute();
+              }
+              catch (System.Exception ex)
+              {
+                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                  Logger.Info(nameof(OpenDoorCommand), ex);
+              }
+          }
     }
 }
