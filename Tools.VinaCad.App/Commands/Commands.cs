@@ -16,6 +16,21 @@ namespace Tools.VinaCAD.App.Commands
     public class Commands
     {
 
+        [CommandMethod("ZXW")]
+        public void CreateGridAxisCommand()
+        {
+            try
+            {
+                CreateGridAxisAction action = new CreateGridAxisAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
+
         [CommandMethod("Sample")]
         public void SampleCommand()
         {
@@ -568,6 +583,21 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
         
+        [CommandMethod("BBE")]
+        public void BlockEraseCommand()
+        {
+            try
+            {
+                BlockEraseAction action = new BlockEraseAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BlockEraseCommand), ex);
+            }
+        }
+
         [CommandMethod("FN")]
         public void StuccoCommand()
         {
@@ -580,6 +610,19 @@ namespace Tools.VinaCAD.App.Commands
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(StuccoCommand), ex);
+            }
+        }
+        [CommandMethod("AD")]
+        public void OpenDoorCommand()
+        {
+            try
+            {
+                new OpenDoorAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
     }
