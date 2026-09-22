@@ -617,7 +617,7 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new ArrangeWindowAction().Execute();
+                new OpenDoorAction().Execute();
             }
             catch (System.Exception ex)
             {
@@ -636,7 +636,7 @@ namespace Tools.VinaCAD.App.Commands
               catch (System.Exception ex)
               {
                   MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(OpenDoorCommand), ex);
+                  Logger.Info(nameof(ArrangeWindowCommand), ex);
               }
           }
     }
