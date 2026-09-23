@@ -661,6 +661,7 @@ namespace Tools.VinaCad.Action.Actions
         private const short PrimaryColorIndex = 7;
         private const short SecondaryColorIndex = 2;
         private const short ByLayerColorIndex = 256;
+        private const string LtpXDataAppName = "VINACAD_LTP_STAIR";
         private const string GroupKeyPrefix = "LTP_STAIR_";
         private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
         private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
@@ -714,6 +715,7 @@ namespace Tools.VinaCad.Action.Actions
                 database, transaction, StaircaseSectionSetting.LayerName, PrimaryColorIndex);
             ObjectId secondaryLayerId = GetOrCreateSectionLayer(
                 database, transaction, StaircaseSectionSetting.SecondaryLayerName, SecondaryColorIndex);
+            EnsureXDataApplication(database, transaction);
             var entityIds = new ObjectIdCollection();
             foreach (StaircaseSegment segment in segments)
             {
@@ -729,6 +731,18 @@ namespace Tools.VinaCad.Action.Actions
             return entityIds;
         }
 
+        private static void EnsureXDataApplication(Database database, Transaction transaction)
+        {
+            var table = (RegAppTable)transaction.GetObject(
+                database.RegAppTableId, OpenMode.ForRead);
+            if (table.Has(LtpXDataAppName)) return;
+
+            table.UpgradeOpen();
+            var record = new RegAppTableRecord { Name = LtpXDataAppName };
+            table.Add(record);
+            transaction.AddNewlyCreatedDBObject(record, true);
+        }
+
         private static Line CreateLine( Database database, Point3d insertionPoint, StaircaseSegment segment, ObjectId layerId)
         {
             var line = new Line(
@@ -737,6 +751,14 @@ namespace Tools.VinaCad.Action.Actions
             line.SetDatabaseDefaults(database);
             line.LayerId = layerId;
             line.ColorIndex = ByLayerColorIndex;
+            line.XData = new ResultBuffer(
+                new TypedValue((int)DxfCode.ExtendedDataRegAppName, LtpXDataAppName),
+                new TypedValue((int)DxfCode.ExtendedDataAsciiString,
+                    segment.Style == StaircaseSegmentStyle.Secondary ? "Secondary" : "Primary"),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line.StartPoint.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line.StartPoint.Y),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line.EndPoint.X),
+                new TypedValue((int)DxfCode.ExtendedDataReal, line.EndPoint.Y));
             return line;
         }
 

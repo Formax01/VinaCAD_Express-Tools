@@ -44,8 +44,204 @@ namespace Tools.VinaCad.Helper.Helper
                 : HorizontalDirection.Left;
             SectionBuilders[settings.Type](segments, settings, direction);
 
-            return MergeCollinearSegments(segments);
+            return MergeCollinearSegments(TrimExcessSegments(segments, settings));
         }
+
+        private static IReadOnlyList<StaircaseSegment> TrimExcessSegments(
+            IReadOnlyList<StaircaseSegment> source,
+            StaircaseSectionModel settings)
+        {
+            var primary = new List<StaircaseSegment>();
+            foreach (StaircaseSegment segment in source)
+            {
+                if (segment.Style == StaircaseSegmentStyle.Primary)
+                    primary.Add(segment);
+            }
+            IReadOnlyList<LandingBounds> landings = FindLandingBounds(primary, settings.BoardThickness);
+
+            var result = new List<StaircaseSegment>(source.Count);
+            foreach (StaircaseSegment segment in source)
+            {
+                if (segment.Style != StaircaseSegmentStyle.Secondary)
+                {
+                    AddSegment(result, segment.Start, segment.End, segment.Style);
+                    continue;
+                }
+
+                var blocked = new List<(double Start, double End)>();
+                foreach (StaircaseSegment obstacle in primary)
+                {
+                    if (TryGetCollinearOverlap(segment, obstacle, out double start, out double end))
+                        blocked.Add((start, end));
+                }
+                foreach (LandingBounds landing in landings)
+                {
+                    if (TryGetInteriorOverlap(segment, landing, out double start, out double end))
+                        blocked.Add((start, end));
+                }
+
+                if (blocked.Count == 0)
+                {
+                    AddSegment(result, segment.Start, segment.End, segment.Style);
+                    continue;
+                }
+
+                blocked.Sort((first, second) => first.Start.CompareTo(second.Start));
+                double current = 0.0;
+                double finish = 1.0;
+                foreach ((double start, double end) in MergeIntervals(blocked))
+                {
+                    AddSegmentPart(result, segment, current, start);
+                    current = Math.Max(current, end);
+                }
+
+                AddSegmentPart(result, segment, current, finish);
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyList<LandingBounds> FindLandingBounds(
+            IReadOnlyList<StaircaseSegment> primary,
+            double boardThickness)
+        {
+            var horizontals = new List<StaircaseSegment>();
+            foreach (StaircaseSegment segment in primary)
+            {
+                if (Math.Abs(segment.Start.Y - segment.End.Y) <= CoordinateTolerance)
+                    horizontals.Add(segment);
+            }
+
+            var result = new List<LandingBounds>();
+            for (int index = 0; index < horizontals.Count; index++)
+            {
+                StaircaseSegment first = horizontals[index];
+                double firstMinX = Math.Min(first.Start.X, first.End.X);
+                double firstMaxX = Math.Max(first.Start.X, first.End.X);
+                for (int next = index + 1; next < horizontals.Count; next++)
+                {
+                    StaircaseSegment second = horizontals[next];
+                    if (Math.Abs(firstMinX - Math.Min(second.Start.X, second.End.X)) > SelfCheckTolerance
+                        || Math.Abs(firstMaxX - Math.Max(second.Start.X, second.End.X)) > SelfCheckTolerance)
+                        continue;
+
+                    double height = Math.Abs(first.Start.Y - second.Start.Y);
+                    if (height <= CoordinateTolerance || height > boardThickness + SelfCheckTolerance)
+                        continue;
+
+                    result.Add(new LandingBounds(
+                        firstMinX + CoordinateTolerance,
+                        firstMaxX - CoordinateTolerance,
+                        Math.Min(first.Start.Y, second.Start.Y) + CoordinateTolerance,
+                        Math.Max(first.Start.Y, second.Start.Y) - CoordinateTolerance));
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        private static bool TryGetInteriorOverlap(
+            StaircaseSegment segment,
+            LandingBounds bounds,
+            out double start,
+            out double end)
+        {
+            double dx = segment.End.X - segment.Start.X;
+            double dy = segment.End.Y - segment.Start.Y;
+            start = 0.0;
+            end = 1.0;
+            if (!ClipParameter(-dx, segment.Start.X - bounds.MinX, ref start, ref end)
+                || !ClipParameter(dx, bounds.MaxX - segment.Start.X, ref start, ref end)
+                || !ClipParameter(-dy, segment.Start.Y - bounds.MinY, ref start, ref end)
+                || !ClipParameter(dy, bounds.MaxY - segment.Start.Y, ref start, ref end))
+                return false;
+
+            return end - start > CoordinateTolerance;
+        }
+
+        private static bool ClipParameter(double coefficient, double value, ref double start, ref double end)
+        {
+            if (Math.Abs(coefficient) <= CoordinateTolerance) return value >= 0;
+            double parameter = value / coefficient;
+            if (coefficient < 0)
+                start = Math.Max(start, parameter);
+            else
+                end = Math.Min(end, parameter);
+            return start <= end + CoordinateTolerance;
+        }
+
+        private static IEnumerable<(double Start, double End)> MergeIntervals(
+            List<(double Start, double End)> intervals)
+        {
+            double start = intervals[0].Start;
+            double end = intervals[0].End;
+            for (int index = 1; index < intervals.Count; index++)
+            {
+                (double nextStart, double nextEnd) = intervals[index];
+                if (nextStart <= end + CoordinateTolerance)
+                {
+                    end = Math.Max(end, nextEnd);
+                    continue;
+                }
+
+                yield return (start, end);
+                start = nextStart;
+                end = nextEnd;
+            }
+
+            yield return (start, end);
+        }
+
+        private static bool TryGetCollinearOverlap(
+            StaircaseSegment segment,
+            StaircaseSegment obstacle,
+            out double start,
+            out double end)
+        {
+            double dx = segment.End.X - segment.Start.X;
+            double dy = segment.End.Y - segment.Start.Y;
+            double length = Math.Sqrt(dx * dx + dy * dy);
+            start = end = 0.0;
+            if (length <= CoordinateTolerance) return false;
+
+            double obstacleDx = obstacle.End.X - obstacle.Start.X;
+            double obstacleDy = obstacle.End.Y - obstacle.Start.Y;
+            double cross = dx * obstacleDy - dy * obstacleDx;
+            if (Math.Abs(cross) > SelfCheckTolerance * length
+                * Math.Sqrt(obstacleDx * obstacleDx + obstacleDy * obstacleDy))
+                return false;
+
+            double offsetX = obstacle.Start.X - segment.Start.X;
+            double offsetY = obstacle.Start.Y - segment.Start.Y;
+            if (Math.Abs(dx * offsetY - dy * offsetX) > SelfCheckTolerance * length)
+                return false;
+
+            double projectionStart = (offsetX * dx + offsetY * dy) / (length * length);
+            double endOffsetX = obstacle.End.X - segment.Start.X;
+            double endOffsetY = obstacle.End.Y - segment.Start.Y;
+            double projectionEnd = (endOffsetX * dx + endOffsetY * dy) / (length * length);
+            start = Math.Max(0.0, Math.Min(projectionStart, projectionEnd));
+            end = Math.Min(1.0, Math.Max(projectionStart, projectionEnd));
+            return end - start > CoordinateTolerance;
+        }
+
+        private static void AddSegmentPart(
+            List<StaircaseSegment> result,
+            StaircaseSegment source,
+            double start,
+            double end)
+        {
+            if (end - start <= CoordinateTolerance) return;
+            double x = source.End.X - source.Start.X;
+            double y = source.End.Y - source.Start.Y;
+            AddSegment(result,
+                new StaircasePoint(source.Start.X + x * start, source.Start.Y + y * start),
+                new StaircasePoint(source.Start.X + x * end, source.Start.Y + y * end),
+                source.Style);
+        }
+
+        private readonly record struct LandingBounds(double MinX, double MaxX, double MinY, double MaxY);
 
         private static IReadOnlyList<StaircaseSegment> MergeCollinearSegments( IReadOnlyList<StaircaseSegment> source)
         {
