@@ -337,9 +337,9 @@ namespace Tools.VinaCad.Helper.Helper
                 var start = new StaircasePoint(0.0, floor * settings.StoreyHeight);
                 StaircasePoint top = GetFlightEnd(start, direction, settings.StepNumber, settings);
 
-                AddLanding(segments, start, Reverse(direction), settings.Landing1Width, settings.BoardThickness);
+                AddLanding(segments, start, Reverse(direction), settings.Landing1Width, settings.BoardThickness, settings, true);
                 AddFlight(segments, start, direction, settings.StepNumber, settings);
-                AddLanding(segments, top, direction, settings.Landing2Width, settings.BoardThickness);
+                AddLanding(segments, top, direction, settings.Landing2Width, settings.BoardThickness, settings, false);
 
                 // Sàn tầng chạy suốt khoảng vế, tô Secondary; không tạo lan can ngang theo sàn.
                 var floorStart = new StaircasePoint(start.X, top.Y);
@@ -351,7 +351,7 @@ namespace Tools.VinaCad.Helper.Helper
                 if (floor == settings.StoreyNumber - 1)
                 {
                     AddLanding(segments, floorStart, Reverse(direction),
-                        settings.Landing1Width, settings.BoardThickness);
+                        settings.Landing1Width, settings.BoardThickness, settings, true);
                     AddLanding1Supports(segments, settings, floorStart, direction);
                 }
                 AddSupports(segments, settings, start, top, direction);
@@ -372,11 +372,12 @@ namespace Tools.VinaCad.Helper.Helper
                     start, direction, settings.FirstFlightStepNumber, settings);
                 StaircasePoint top = GetFlightEnd(
                     middle, reverse, secondFlightSteps, settings);
-                AddLanding(segments, start, reverse, settings.Landing1Width, settings.BoardThickness);
+
+                AddLanding(segments, start, reverse, settings.Landing1Width, settings.BoardThickness, settings, true);
                 AddFlight(segments, start, direction, settings.FirstFlightStepNumber, settings);
-                AddLanding(segments, middle, direction, settings.Landing2Width, settings.BoardThickness);
+                AddLanding(segments, middle, direction, settings.Landing2Width, settings.BoardThickness, settings, false);
                 AddHighlightedFlight(segments, middle, reverse, secondFlightSteps, settings);
-                AddLanding(segments, top, reverse, settings.Landing1Width, settings.BoardThickness);
+                AddLanding(segments, top, reverse, settings.Landing1Width, settings.BoardThickness, settings, true);
                 AddSupports(segments, settings, start, middle, direction);
                 anchorX = top.X;
                 finalTop = top;
@@ -403,7 +404,9 @@ namespace Tools.VinaCad.Helper.Helper
 
                 AddScissorFlights(segments, settings, lowerLeft, lowerRight, direction);
                 AddScissorTopLandings(segments, settings, topLeft, topRight, direction);
-                AddSupports(segments, settings, lowerLeft, lowerRight, direction);
+
+                bool isGroundRight = floor == 0;
+                AddSupports(segments, settings, lowerLeft, lowerRight, direction, !isGroundRight);
                 AddSupports(segments, settings, topLeft, topRight, direction);
             }
 
@@ -432,8 +435,8 @@ namespace Tools.VinaCad.Helper.Helper
 
         private static void AddScissorFlights( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint left, StaircasePoint right, HorizontalDirection direction)
         {
-            AddLanding(segments, left, Reverse(direction), settings.Landing1Width, settings.BoardThickness);
-            AddLanding(segments, right, direction, settings.Landing2Width, settings.BoardThickness);
+            AddLanding(segments, left, Reverse(direction), settings.Landing1Width, settings.BoardThickness, settings, true);
+            AddLanding(segments, right, direction, settings.Landing2Width, settings.BoardThickness, settings, false);
             AddFlight(segments, left, direction, settings.StepNumber, settings);
             AddHighlightedFlight(
                 segments, right, Reverse(direction), settings.StepNumber, settings);
@@ -441,8 +444,8 @@ namespace Tools.VinaCad.Helper.Helper
 
         private static void AddScissorTopLandings( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint leftLanding, StaircasePoint rightLanding, HorizontalDirection direction)
         {
-            AddLanding(segments, rightLanding, direction, settings.Landing2Width, settings.BoardThickness);
-            AddLanding(segments, leftLanding, Reverse(direction), settings.Landing1Width, settings.BoardThickness);
+            AddLanding(segments, rightLanding, direction, settings.Landing2Width, settings.BoardThickness, settings, false);
+            AddLanding(segments, leftLanding, Reverse(direction), settings.Landing1Width, settings.BoardThickness, settings, true);
         }
 
         private static void AddFlight( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, int riserCount, StaircaseSectionModel settings)
@@ -506,7 +509,6 @@ namespace Tools.VinaCad.Helper.Helper
                 start.X,
                 start.Y - settings.BoardThickness);
             AddSegment(segments, lowerStart, beamConnection);
-            AddSegment(segments, start, lowerStart);
         }
 
         private static void AddRailing( List<StaircaseSegment> segments, StaircasePoint start, StaircasePoint end, HorizontalDirection direction, StaircaseSectionModel settings)
@@ -533,7 +535,7 @@ namespace Tools.VinaCad.Helper.Helper
             AddSegment(segments, railingEndBase, railingEnd, StaircaseSegmentStyle.Secondary);
         }
 
-        private static void AddLanding( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, double width, double thickness)
+        private static void AddLanding( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, double width, double thickness, StaircaseSectionModel settings = null, bool isLanding1 = true)
         {
             if (width <= 0) return;
 
@@ -541,9 +543,33 @@ namespace Tools.VinaCad.Helper.Helper
             var end = new StaircasePoint(endX, start.Y);
             var lowerStart = new StaircasePoint(start.X, start.Y - thickness);
             var lowerEnd = new StaircasePoint(endX, start.Y - thickness);
+
             AddSegment(segments, start, end);
-            AddSegment(segments, lowerStart, lowerEnd);
             AddSegment(segments, end, lowerEnd);
+
+            if (settings == null)
+            {
+                AddSegment(segments, lowerStart, lowerEnd);
+            }
+            else
+            {
+                int dir = (int)direction;
+                bool hasInnerBeam = isLanding1 ? settings.HasBeam1 : settings.HasBeam2;
+                double innerBeamWidth = settings.BeamWidth;
+                bool hasOuterBeam = settings.GirderHeight > 0 && settings.GirderWidth > 0;
+                double outerBeamWidth = settings.GirderWidth;
+
+                double lineStartX = start.X + (hasInnerBeam ? dir * innerBeamWidth : 0);
+                double lineEndX = endX - (hasOuterBeam ? dir * outerBeamWidth : 0);
+
+                if ((dir == 1 && lineStartX < lineEndX - CoordinateTolerance) ||
+                    (dir == -1 && lineStartX > lineEndX + CoordinateTolerance))
+                {
+                    AddSegment(segments,
+                        new StaircasePoint(lineStartX, start.Y - thickness),
+                        new StaircasePoint(lineEndX, start.Y - thickness));
+                }
+            }
         }
 
         private static void AddSecondaryLanding( List<StaircaseSegment> segments, StaircasePoint start, HorizontalDirection direction, double width, double thickness)
@@ -575,10 +601,10 @@ namespace Tools.VinaCad.Helper.Helper
             AddSegment(segments, railingEndBase, railingEnd, StaircaseSegmentStyle.Secondary);
         }
 
-        private static void AddSupports( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint first, StaircasePoint second, HorizontalDirection direction)
+        private static void AddSupports( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint first, StaircasePoint second, HorizontalDirection direction, bool secondHasIncomingFlight = true)
         {
             AddLanding1Supports(segments, settings, first, direction);
-            AddLanding2Support(segments, settings, second, direction);
+            AddLanding2Support(segments, settings, second, direction, secondHasIncomingFlight);
         }
 
         private static void AddLanding1Supports( List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint anchor, HorizontalDirection direction)
@@ -611,19 +637,23 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        private static void AddLanding2Support(List<StaircaseSegment> segments,StaircaseSectionModel settings,StaircasePoint anchor,HorizontalDirection direction)
+        private static void AddLanding2Support(List<StaircaseSegment> segments, StaircaseSectionModel settings, StaircasePoint anchor, HorizontalDirection direction, bool hasIncomingFlight = true)
         {
             int directionFactor = (int)direction;
             if (settings.HasBeam2)
             {
-                var underside1 = new StaircasePoint(
-                    anchor.X,
-                    anchor.Y - settings.BoardThickness);
-                var underside2 = new StaircasePoint(
-                    anchor.X + directionFactor * settings.BeamWidth,
-                    anchor.Y - settings.BoardThickness);
-                double beamBottomY = anchor.Y - settings.BeamHeight;
-                AddDownstand(segments, underside1, underside2, beamBottomY);
+                double connectionY = hasIncomingFlight ? anchor.Y - settings.BeamHeight * 2.0 / 3.0 : anchor.Y - settings.BoardThickness;
+                var innerTop = new StaircasePoint(anchor.X, connectionY);
+                var innerBottom = new StaircasePoint(anchor.X, anchor.Y - settings.BeamHeight);
+                var outerBottom = new StaircasePoint(anchor.X + directionFactor * settings.BeamWidth, anchor.Y - settings.BeamHeight);
+                var outerTop = new StaircasePoint(anchor.X + directionFactor * settings.BeamWidth, anchor.Y - settings.BoardThickness);
+
+                if (connectionY > anchor.Y - settings.BeamHeight + CoordinateTolerance)
+                {
+                    AddSegment(segments, innerTop, innerBottom);
+                }
+                AddSegment(segments, innerBottom, outerBottom);
+                AddSegment(segments, outerBottom, outerTop);
             }
 
             if (settings.GirderHeight <= 0 || settings.GirderWidth <= 0) return;
