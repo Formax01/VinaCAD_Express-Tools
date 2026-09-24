@@ -612,6 +612,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(StuccoCommand), ex);
             }
         }
+      
         [CommandMethod("AD")]
         public void OpenDoorCommand()
         {
@@ -637,6 +638,20 @@ namespace Tools.VinaCAD.App.Commands
               {
                   MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                   Logger.Info(nameof(OpenDoorCommand), ex);
+              }
+          }
+        [CommandMethod("LTP")]
+          public void StaircaseSectionCommand()
+          {
+              try
+              {
+                  StaircaseSectionAction action = new StaircaseSectionAction();
+                  action.Execute();
+              }
+              catch (System.Exception ex)
+              {
+                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                  Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
     }
