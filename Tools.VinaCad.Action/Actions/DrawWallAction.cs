@@ -45,11 +45,11 @@ namespace Tools.VinaCAD.Action.Actions
 
                 SelectWallLayer(showCreatedMessage: true);
 
-                _editor.WriteMessage("\nWW: D = Vẽ tường | S = Cài đặt | Q = Thoát.");
+                _editor.WriteMessage("\nWW: D = Vẽ tường | T = Chiều dày | A = Căn lề | Q = Thoát.");
 
                 while (true)
                 {
-                    PromptStringOptions pso = new PromptStringOptions("\nChọn [D/S/Q] <D>: ")
+                    PromptStringOptions pso = new PromptStringOptions("\nChọn [ D-Vẽ tường / T-Chiều dày / A-Căn lề / Q-Thoát ] : ")
                     {
                         AllowSpaces = false,
                         DefaultValue = "D"
@@ -64,8 +64,11 @@ namespace Tools.VinaCAD.Action.Actions
 
                     switch (choice)
                     {
-                        case "S":
-                            ShowSettingsMenu();
+                        case "T":
+                            ChangeThickness();
+                            break;
+                        case "A":
+                            ChangeAlignment();
                             break;
                         case "D":
                             DrawWalls();
@@ -73,7 +76,7 @@ namespace Tools.VinaCAD.Action.Actions
                         case "Q":
                             return;
                         default:
-                            _editor.WriteMessage("\nChọn D, S hoặc Q.");
+                            _editor.WriteMessage("\nChọn D (Vẽ), T (Chiều dày), A (Căn lề) hoặc Q (Thoát).");
                             break;
                     }
                 }
@@ -85,12 +88,10 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        private void ShowSettingsMenu()
+        private void ChangeThickness()
         {
             if (_editor == null)
                 return;
-
-            _editor.WriteMessage("\nCài đặt: chọn chiều dày và cách căn tường.");
 
             bool showDialog = true;
             while (showDialog)
@@ -110,7 +111,7 @@ namespace Tools.VinaCAD.Action.Actions
                         {
                             _wallModel.Thickness = Math.Round(distRes.Value, 2);
                         }
-                        showDialog = true;
+                        showDialog = true; // Hiện lại bảng để người dùng confirm sau khi pick
                     }
                     else
                     {
@@ -124,8 +125,15 @@ namespace Tools.VinaCAD.Action.Actions
                 }
             }
 
-            // 2. Cài đặt căn lề (Alignment)
-            PromptStringOptions psoAlign = new PromptStringOptions("\nCăn tường [1=Tâm/2=Trái/3=Phải] <1>: ")
+            _editor.WriteMessage($"\nĐã cập nhật chiều dày tường: {_wallModel.Thickness}");
+        }
+
+        private void ChangeAlignment()
+        {
+            if (_editor == null)
+                return;
+
+            PromptStringOptions psoAlign = new PromptStringOptions("\nCăn tường [1=Tâm / 2=Trái / 3=Phải] <1>: ")
             {
                 AllowSpaces = false,
                 DefaultValue = "1"
@@ -138,17 +146,21 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     case "1":
                         _wallModel.Alignment = WallAlignment.Center;
+                        _editor.WriteMessage("\nĐã chọn: Căn Tâm.");
                         break;
                     case "2":
                         _wallModel.Alignment = WallAlignment.Left;
+                        _editor.WriteMessage("\nĐã chọn: Căn Trái.");
                         break;
                     case "3":
                         _wallModel.Alignment = WallAlignment.Right;
+                        _editor.WriteMessage("\nĐã chọn: Căn Phải.");
+                        break;
+                    default:
+                        _editor.WriteMessage("\nLựa chọn không hợp lệ, giữ nguyên căn lề hiện tại.");
                         break;
                 }
             }
-
-            _editor.WriteMessage("\nĐã cập nhật cài đặt.");
         }
 
         private void DrawWalls()
@@ -158,7 +170,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             SelectWallLayer(showCreatedMessage: false);
 
-            _editor.WriteMessage("\nChọn các điểm liên tiếp; nhấn Enter để kết thúc.");
+            _editor.WriteMessage("\nChọn các điểm liên tiếp; nhấn Enter hoặc Esc để kết thúc.");
 
             List<Point3d> wallPoints = new List<Point3d>();
 
@@ -206,7 +218,7 @@ namespace Tools.VinaCAD.Action.Actions
             }
 
             if (wallPoints.Count > 1)
-            {                
+            {
                 try
                 {
                     Point3d firstPoint = wallPoints[0];
