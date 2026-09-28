@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
@@ -34,19 +35,29 @@ namespace Tools.VinaCAD.Action.Actions
 
             try
             {
-                PromptDistanceOptions distanceOptions = new PromptDistanceOptions($"\nKhoảng cách offset tường (tâm-tâm) <{DefaultOffsetDistance:0.##}>: ")
+                PromptStringOptions distanceOptions = new PromptStringOptions($"\nKhoảng cách offset tường (tâm-tâm) <{DefaultOffsetDistance:0.##}>: ")
                 {
-                    AllowNegative = false,
-                    AllowZero = false,
-                    DefaultValue = DefaultOffsetDistance,
-                    UseDefaultValue = true
+                    AllowSpaces = false,
+                    DefaultValue = DefaultOffsetDistance.ToString("0.##", CultureInfo.CurrentCulture)
                 };
-                PromptDoubleResult distanceResult = editor.GetDistance(distanceOptions);
-                if (distanceResult.Status != PromptStatus.OK ||
-                    distanceResult.Value <= Tolerance)
+                PromptResult distanceResult = editor.GetString(distanceOptions);
+                if (distanceResult.Status != PromptStatus.OK && distanceResult.Status != PromptStatus.None)
                     return;
 
-                double offsetDistance = distanceResult.Value;
+                double offsetDistance = DefaultOffsetDistance;
+                if (distanceResult.Status == PromptStatus.OK &&
+                    (!double.TryParse(distanceResult.StringResult, NumberStyles.Float, CultureInfo.CurrentCulture, out offsetDistance) &&
+                     !double.TryParse(distanceResult.StringResult, NumberStyles.Float, CultureInfo.InvariantCulture, out offsetDistance)))
+                {
+                    editor.WriteMessage("\nWWO: Khoảng cách phải là số lớn hơn 0.");
+                    return;
+                }
+
+                if (offsetDistance <= Tolerance)
+                {
+                    editor.WriteMessage("\nWWO: Khoảng cách phải lớn hơn 0.");
+                    return;
+                }
                 PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\nXử lý nút giao [Auto/Giữ] <Auto>: ")
                 {
                     AllowNone = true,
