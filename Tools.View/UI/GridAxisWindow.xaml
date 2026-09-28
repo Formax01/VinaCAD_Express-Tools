@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -43,7 +43,7 @@
                  ToolTip="Nhịp theo X, ví dụ: 4200 2500 4300 hoặc 4x3600"/>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0,0,0,10">
+        <Grid Grid.Row="2" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
@@ -59,13 +59,13 @@
         <CheckBox Grid.Row="3"
               Content="Vẽ ký hiệu trục + Kích thước"
               IsChecked="{Binding DrawAnnotations, Mode=TwoWay}"
-              Margin="0,10,0,0"/>
+              Margin="0,5,0,5"/>
 
         <Button Grid.Row="4"
             Content="Cài Đặt Giá Trị Gốc"
             Height="28"
             HorizontalAlignment="Stretch"
-            Margin="0,0,0,10"
+            Margin="0,5,0,5"
             Click="ResetButton_Click"/>
 
         <Grid Grid.Row="5">
@@ -78,7 +78,7 @@
                    Text="{Binding ValidationMessage}"
                    Foreground="#FFB42318"
                    FontSize="11"
-                   Margin="0,0,10,0"
+                   Margin="0,5,10,0"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"/>
 
@@ -87,13 +87,14 @@
                     Content="OK"
                     Width="80"
                     Height="28"
-                    Margin="0,0,10,0"
+                    Margin="0,5,10,0"
                     IsDefault="True"
                     IsEnabled="{Binding IsValid}"
                     Click="OkButton_Click"/>
                 <Button Content="Hủy"
                     Width="80"
                     Height="28"
+                         Margin="0,5,0,0"
                     IsCancel="True"/>
             </StackPanel>
         </Grid>
