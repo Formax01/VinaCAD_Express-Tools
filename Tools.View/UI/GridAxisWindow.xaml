@@ -12,7 +12,7 @@
         Topmost="True">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -41,7 +41,7 @@
                  x:Name="BreadthsTextBoxControl"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding BreadthsText, UpdateSourceTrigger=PropertyChanged}"
-                 TextAlignment="Right"
+                 TextAlignment="Left"
                  ToolTip="Nhịp theo X, ví dụ: 4200 2500 4300 hoặc 4x3600"/>
         </Grid>
 
@@ -55,7 +55,7 @@
                  x:Name="DepthsTextBox"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding DepthsText, UpdateSourceTrigger=PropertyChanged}"
-                 TextAlignment="Right"
+                 TextAlignment="Left"
                  ToolTip="Nhịp theo Y, nhập từ trên xuống dưới"/>
         </Grid>
 
@@ -73,17 +73,19 @@
             <ComboBox Grid.Row="0" Grid.Column="1" Width="88" Height="25" HorizontalAlignment="Left"
                       ItemsSource="{Binding LabelTypes}"
                       SelectedItem="{Binding VerticalAxisLabelType, Mode=TwoWay}"
-                      HorizontalContentAlignment="Right" Margin="0,5,5,5"/>
-            <TextBox Grid.Row="0" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Right"
+                      HorizontalContentAlignment="Left" Margin="0,5,5,5"/>
+            <TextBox Grid.Row="0" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Left"
                      Text="{Binding VerticalAxisStart, UpdateSourceTrigger=PropertyChanged}"
+                     behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                      ToolTip="Số hoặc chữ bắt đầu của trục tung" Margin="0,5,0,5"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Trục hoành:" VerticalAlignment="Center" TextAlignment="Left"/>
             <ComboBox Grid.Row="1" Grid.Column="1" Width="88" Height="25" HorizontalAlignment="Left"
                       ItemsSource="{Binding LabelTypes}"
                       SelectedItem="{Binding HorizontalAxisLabelType, Mode=TwoWay}"
-                      HorizontalContentAlignment="Right" Margin="0,5,5,5"/>
-            <TextBox Grid.Row="1" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Right"
+                      HorizontalContentAlignment="Left" Margin="0,5,5,5"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Left"
                      Text="{Binding HorizontalAxisStart, UpdateSourceTrigger=PropertyChanged}"
+                     behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                      ToolTip="Số hoặc chữ bắt đầu của trục hoành" Margin="0,5,0,5"/>
         </Grid>
 
