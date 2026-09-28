@@ -74,8 +74,12 @@ namespace Tools.VinaCAD.Action.Actions
                     !string.IsNullOrEmpty(style.AssetPath))
                 {
                     model.SelectedStyle = style;
-                    window.DialogResult = true;
                 }
+            };
+            window.AcceptButton.Click += (_, _) =>
+            {
+                if (model.SelectedStyle != null && !string.IsNullOrEmpty(model.SelectedStyle.AssetPath))
+                    window.DialogResult = true;
             };
             window.PreviousButton.Click += (_, _) => model.PreviousPage();
             window.NextButton.Click += (_, _) => model.NextPage();
