@@ -16,7 +16,7 @@ namespace Tools.VinaCad.Helper.Helper
         public const string DimensionLayerName = "AXIS-DIM";
         public const string AxisLinetypeName = "ZXW-LONG-SHORT";
         private const string DimensionTickBlockName = "ZXW-DIM-TICK";
-        //public const string AxisLinetypeName = "VCAD_POLAR";
+        private const string GridBubbleBlockPrefix = "ZXW-GRID-";
 
         public sealed class AnnotationMetrics
         {
@@ -87,7 +87,7 @@ namespace Tools.VinaCad.Helper.Helper
                 {
                     for (int i = 0; i < xStations.Count; i++)
                     {
-                        string label = (i + 1).ToString();
+                        string label = GetLabel(input.VerticalAxisLabelType, input.VerticalAxisStart, i);
                         Append(owner, transaction, new Line(
                             PointAt(xStations[i], minY - metrics.ExtensionLineOffset),
                             PointAt(xStations[i], -metrics.BubbleOffset + metrics.BubbleRadius))
@@ -100,16 +100,16 @@ namespace Tools.VinaCad.Helper.Helper
                         {
                             LayerId = dimensionLayerId
                         });
-                        AddBubble(owner, transaction, PointAt(xStations[i], -metrics.BubbleOffset),
+                        AddBubble(database, owner, transaction, PointAt(xStations[i], -metrics.BubbleOffset),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
-                        AddBubble(owner, transaction, PointAt(xStations[i], maxY + metrics.BubbleOffset),
+                        AddBubble(database, owner, transaction, PointAt(xStations[i], maxY + metrics.BubbleOffset),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
                         entityCount += 6;
                     }
 
                     for (int i = 0; i < yStations.Count; i++)
                     {
-                        string label = GridAxisDataHelper.ToAlphabeticLabel(i);
+                        string label = GetLabel(input.HorizontalAxisLabelType, input.HorizontalAxisStart, i);
                         Append(owner, transaction, new Line(
                             PointAt(minX - metrics.ExtensionLineOffset, yStations[i]),
                             PointAt(-metrics.BubbleOffset + metrics.BubbleRadius, yStations[i]))
@@ -122,9 +122,9 @@ namespace Tools.VinaCad.Helper.Helper
                         {
                             LayerId = dimensionLayerId
                         });
-                        AddBubble(owner, transaction, PointAt(-metrics.BubbleOffset, yStations[i]),
+                        AddBubble(database, owner, transaction, PointAt(-metrics.BubbleOffset, yStations[i]),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
-                        AddBubble(owner, transaction, PointAt(maxX + metrics.BubbleOffset, yStations[i]),
+                        AddBubble(database, owner, transaction, PointAt(maxX + metrics.BubbleOffset, yStations[i]),
                             label, metrics, normal, rotation, symbolLayerId, database.Textstyle);
                         entityCount += 6;
                     }
@@ -357,20 +357,16 @@ namespace Tools.VinaCad.Helper.Helper
             transaction.AddNewlyCreatedDBObject(bridge, true);
         }
 
-
-        /*private static ObjectId GetAxisLinetype(Database database, Transaction transaction)
+        private static string GetLabel(GridAxisLabelType type, string start, int offset)
         {
-            var linetypeTable = (LinetypeTable)transaction.GetObject(
-                database.LinetypeTableId, OpenMode.ForRead);
+            if (GridAxisDataHelper.TryBuildLabel(type, start, offset, out string label, out string error))
+                return label;
 
-            // VinaCAD đã cung cấp sẵn linetype DASH, không tạo LinetypeTableRecord mới.
-            if (!linetypeTable.Has(AxisLinetypeName))
-                throw new InvalidOperationException("Không tìm thấy linetype DASH trong bản vẽ VinaCAD.");
-
-            return linetypeTable[AxisLinetypeName];
-        }*/
+            throw new InvalidOperationException(error);
+        }
 
         private static void AddBubble(
+            Database database,
             BlockTableRecord owner,
             Transaction transaction,
             Point3d center,
@@ -381,24 +377,117 @@ namespace Tools.VinaCad.Helper.Helper
             ObjectId layerId,
             ObjectId textStyleId)
         {
-            var circle = new Circle(center, normal, metrics.BubbleRadius)
+            ObjectId bubbleBlockId = EnsureGridBubbleBlock(
+                database, transaction, label, metrics, normal, rotation, textStyleId);
+            var reference = new BlockReference(center, bubbleBlockId)
             {
-                LayerId = layerId
+                LayerId = layerId,
+                Normal = normal
             };
-            Append(owner, transaction, circle);
+            Append(owner, transaction, reference);
+            AddGridBubbleAttribute(transaction, reference, bubbleBlockId, label);
+        }
 
-            var text = new MText
+        private static ObjectId EnsureGridBubbleBlock(
+            Database database,
+            Transaction transaction,
+            string label,
+            AnnotationMetrics metrics,
+            Vector3d normal,
+            double rotation,
+            ObjectId textStyleId)
+        {
+            string name = GridBubbleBlockPrefix
+                + SanitizeBlockName(label)
+                + "-"
+                + metrics.TextHeight.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture).Replace('.', '_');
+            BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
+            if (blockTable.Has(name))
             {
-                Location = center,
-                Contents = label,
-                TextHeight = metrics.TextHeight,
-                Attachment = AttachmentPoint.MiddleCenter,
+                ObjectId existingId = blockTable[name];
+                BlockTableRecord existing = (BlockTableRecord)transaction.GetObject(existingId, OpenMode.ForWrite);
+                if (existing.Cast<ObjectId>().Any(id => transaction.GetObject(id, OpenMode.ForRead) is AttributeDefinition))
+                    return existingId;
+
+                foreach (ObjectId entityId in existing.Cast<ObjectId>().ToArray())
+                {
+                    if (transaction.GetObject(entityId, OpenMode.ForWrite) is MText oldText)
+                        oldText.Erase(true);
+                }
+
+                AddGridBubbleAttributeDefinition(existing, transaction, label, metrics, normal, rotation, textStyleId);
+                return existingId;
+            }
+
+            blockTable.UpgradeOpen();
+            var block = new BlockTableRecord { Name = name };
+            ObjectId blockId = blockTable.Add(block);
+            transaction.AddNewlyCreatedDBObject(block, true);
+
+            var circle = new Circle(Point3d.Origin, normal, metrics.BubbleRadius);
+            block.AppendEntity(circle);
+            transaction.AddNewlyCreatedDBObject(circle, true);
+
+            AddGridBubbleAttributeDefinition(block, transaction, label, metrics, normal, rotation, textStyleId);
+            return blockId;
+        }
+
+        private static void AddGridBubbleAttributeDefinition(
+            BlockTableRecord block,
+            Transaction transaction,
+            string label,
+            AnnotationMetrics metrics,
+            Vector3d normal,
+            double rotation,
+            ObjectId textStyleId)
+        {
+            var attribute = new AttributeDefinition
+            {
+                Position = Point3d.Origin,
+                AlignmentPoint = Point3d.Origin,
+                Tag = "GRID_LABEL",
+                Prompt = "Nhãn cọc Grid",
+                TextString = label,
+                Height = metrics.TextHeight,
+                Justify = AttachmentPoint.MiddleCenter,
+                Constant = false,
+                Invisible = false,
                 Rotation = rotation,
                 Normal = normal,
-                LayerId = layerId,
                 TextStyleId = textStyleId
             };
-            Append(owner, transaction, text);
+            attribute.SetDatabaseDefaults(block.Database);
+            block.AppendEntity(attribute);
+            transaction.AddNewlyCreatedDBObject(attribute, true);
+        }
+
+        private static void AddGridBubbleAttribute(
+            Transaction transaction,
+            BlockReference reference,
+            ObjectId blockId,
+            string value)
+        {
+            BlockTableRecord definition = (BlockTableRecord)transaction.GetObject(blockId, OpenMode.ForRead);
+            foreach (ObjectId entityId in definition)
+            {
+                if (transaction.GetObject(entityId, OpenMode.ForRead) is not AttributeDefinition definitionAttribute)
+                    continue;
+
+                var attribute = new AttributeReference();
+                attribute.SetAttributeFromBlock(definitionAttribute, reference.BlockTransform);
+                attribute.TextString = value;
+                reference.AttributeCollection.AppendAttribute(attribute);
+                transaction.AddNewlyCreatedDBObject(attribute, true);
+            }
+        }
+
+        private static string SanitizeBlockName(string label)
+        {
+            string value = new string(label
+                .ToUpperInvariant()
+                .Select(character => char.IsLetterOrDigit(character) ? character : '_')
+                .ToArray());
+            return string.IsNullOrEmpty(value) ? "LABEL" : value;
         }
 
         private static int AddHorizontalDimensions(
