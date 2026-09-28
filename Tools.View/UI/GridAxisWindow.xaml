@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
         Title="Cài đặt Lưới Trục"
-        Height="500" Width="400"
+        Height="600" Width="420"
         SizeToContent="Height"
         MinHeight="300" MinWidth="200"
         WindowStartupLocation="CenterScreen"
@@ -13,6 +13,7 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -30,45 +31,75 @@
                 SizeChanged="PreviewCanvas_SizeChanged"/>
         </Border>
 
-        <Grid Grid.Row="1" Margin="0,0,0,10">
+        <Grid Grid.Row="1" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Chiều Rộng:" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1"
+            <TextBlock Grid.Column="0" Text="Chiều Rộng:" VerticalAlignment="Center" TextAlignment="Left" />
+            <TextBox Grid.Column="1" Height="25"
                  x:Name="BreadthsTextBoxControl"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding BreadthsText, UpdateSourceTrigger=PropertyChanged}"
+                 TextAlignment="Right"
                  ToolTip="Nhịp theo X, ví dụ: 4200 2500 4300 hoặc 4x3600"/>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0,0,0,5">
+        <Grid Grid.Row="2" Margin="0,5,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Chiều Sâu:" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1"
+            <TextBlock Grid.Column="0" Text="Chiều Sâu:" VerticalAlignment="Center" TextAlignment="Left" />
+            <TextBox Grid.Column="1" Height="25"
                  x:Name="DepthsTextBox"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding DepthsText, UpdateSourceTrigger=PropertyChanged}"
+                 TextAlignment="Right"
                  ToolTip="Nhịp theo Y, nhập từ trên xuống dưới"/>
         </Grid>
 
-        <CheckBox Grid.Row="3"
+        <Grid Grid.Row="3" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Trục tung:" VerticalAlignment="Center" TextAlignment="Left"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" Width="88" Height="25" HorizontalAlignment="Left"
+                      ItemsSource="{Binding LabelTypes}"
+                      SelectedItem="{Binding VerticalAxisLabelType, Mode=TwoWay}"
+                      HorizontalContentAlignment="Right" Margin="0,5,5,5"/>
+            <TextBox Grid.Row="0" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Right"
+                     Text="{Binding VerticalAxisStart, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Số hoặc chữ bắt đầu của trục tung" Margin="0,5,0,5"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Trục hoành:" VerticalAlignment="Center" TextAlignment="Left"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" Width="88" Height="25" HorizontalAlignment="Left"
+                      ItemsSource="{Binding LabelTypes}"
+                      SelectedItem="{Binding HorizontalAxisLabelType, Mode=TwoWay}"
+                      HorizontalContentAlignment="Right" Margin="0,5,5,5"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Height="25" VerticalContentAlignment="Center" TextAlignment="Right"
+                     Text="{Binding HorizontalAxisStart, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Số hoặc chữ bắt đầu của trục hoành" Margin="0,5,0,5"/>
+        </Grid>
+
+        <CheckBox Grid.Row="4"
               Content="Vẽ ký hiệu trục + Kích thước"
               IsChecked="{Binding DrawAnnotations, Mode=TwoWay}"
               Margin="0,5,0,5"/>
 
-        <Button Grid.Row="4"
+        <Button Grid.Row="5"
             Content="Cài Đặt Giá Trị Gốc"
             Height="28"
             HorizontalAlignment="Stretch"
             Margin="0,5,0,5"
             Click="ResetButton_Click"/>
 
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
