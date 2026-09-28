@@ -4,7 +4,7 @@
         xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
         Title="Độ rộng cửa / Khoảng trụ"
         Width="400"
-        Height="500"
+        Height="550"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
@@ -32,6 +32,8 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="Danh sách độ rộng" />
                 <ListBox x:Name="HoleWidthList" x:FieldModifier="public"
+                         HorizontalContentAlignment="Right"
+                         Padding="0,2,10,2"
                          Grid.Row="1"
                          Margin="0,4"
                          />
@@ -66,6 +68,8 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="Danh sách khoảng trụ" />
                 <ListBox x:Name="PierWidthList" x:FieldModifier="public"
+                         HorizontalContentAlignment="Right"
+                         Padding="0,2,10,2"
                          Grid.Row="1"
                          Margin="0,4"
                          />

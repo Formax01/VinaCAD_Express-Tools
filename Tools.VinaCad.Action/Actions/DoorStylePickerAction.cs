@@ -199,7 +199,11 @@ namespace Tools.VinaCAD.Action.Actions
                     element = VisualTreeHelper.GetParent(element);
                 if (element is not ListBoxItem item || item.DataContext is not DoorStyleModel style) return;
                 window.StyleList.SelectedItem = style;
-                window.DialogResult = true;
+            };
+            window.AcceptButton.Click += (_, _) =>
+            {
+                if (window.SelectedStyle != null)
+                    window.DialogResult = true;
             };
             window.PreviousButton.Click += (_, _) => ((DoorStylePickerVM)window.DataContext).PreviousPage();
             window.NextButton.Click += (_, _) => ((DoorStylePickerVM)window.DataContext).NextPage();
