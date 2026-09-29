@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Tools.Model;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -108,6 +109,65 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             return label;
+        }
+
+        public static bool TryBuildLabel(
+            GridAxisLabelType type,
+            string start,
+            int offset,
+            out string label,
+            out string error)
+        {
+            label = string.Empty;
+            error = string.Empty;
+
+            if (offset < 0)
+            {
+                error = "Vị trí nhãn không hợp lệ.";
+                return false;
+            }
+
+            if (type == GridAxisLabelType.Number)
+            {
+                if (!int.TryParse(start, NumberStyles.Integer, CultureInfo.InvariantCulture, out int number)
+                    || number < 0
+                    || number > int.MaxValue - offset)
+                {
+                    error = "Ký tự bắt đầu của trục số phải là số nguyên không âm.";
+                    return false;
+                }
+
+                label = (number + offset).ToString(CultureInfo.InvariantCulture);
+                return true;
+            }
+
+            string letters = (start ?? string.Empty).Trim().ToUpperInvariant();
+            if (letters.Length == 0 || letters.Any(c => c < 'A' || c > 'Z'))
+            {
+                error = "Ký tự bắt đầu của trục chữ phải gồm A-Z.";
+                return false;
+            }
+
+            long value = 0;
+            foreach (char letter in letters)
+            {
+                value = value * 26 + (letter - 'A' + 1);
+                if (value > int.MaxValue)
+                {
+                    error = "Ký tự bắt đầu của trục chữ quá lớn.";
+                    return false;
+                }
+            }
+
+            value += offset;
+            if (value > int.MaxValue)
+            {
+                error = "Số lượng trục vượt quá giới hạn nhãn chữ.";
+                return false;
+            }
+
+            label = ToAlphabeticLabel((int)value - 1);
+            return true;
         }
 
         private static bool TryParsePositiveNumber(string token, out double value)

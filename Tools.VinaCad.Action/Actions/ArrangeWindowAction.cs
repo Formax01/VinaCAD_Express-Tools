@@ -53,6 +53,22 @@ namespace Tools.VinaCAD.Action.Actions
                         editor.WriteMessage($"\nAW: {exception.Message} Hãy chọn lại.");
                         continue;
                     }
+
+                    try
+                    {
+                        PromptStatus directionStatus = WindowOpeningHelper.JigWindowDirection(
+                            editor,
+                            document.Database,
+                            windowId,
+                            selection);
+                        editor.UpdateScreen();
+                        if (directionStatus == PromptStatus.Cancel)
+                            break;
+                    }
+                    catch (Exception exception)
+                    {
+                        editor.WriteMessage($"\nAW: Không thể đổi hướng cửa sổ: {exception.Message}");
+                    }
                 }
 
                 editor.WriteMessage($"\nAW: đã tạo {createdCount} cửa sổ.");

@@ -150,7 +150,7 @@ namespace Tools.VinaCad.Helper.Helper
 
 
         //jig để chỉnh hướng cửa sổ sau khi tạo
-        /*public static PromptStatus JigWindowDirection(
+        public static PromptStatus JigWindowDirection(
             Editor editor,
             Database database,
             ObjectId windowId,
@@ -234,7 +234,7 @@ namespace Tools.VinaCad.Helper.Helper
             UpdateWindowAttributes(transaction, blockReference, windowAttribute);
             TagOpening(transaction, database, blockReference, segmentId, selection, centerStart, centerEnd);
             transaction.Commit();
-        }*/
+        }
 
         private static void SetWindowVisible(Database database, ObjectId windowId)
         {
@@ -244,7 +244,7 @@ namespace Tools.VinaCad.Helper.Helper
             transaction.Commit();
         }
 
-        /*private sealed class WindowDirectionJig : EntityJig
+        private sealed class WindowDirectionJig : EntityJig
         {
             private readonly Point3d _centerStart;
             private readonly Point3d _center;
@@ -328,7 +328,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Preview.ScaleFactors = new Scale3d(scaleX, scaleY, _assetScaleX);
                 return true;
             }
-        }*/
+        }
 
         public static bool TryGetWindowWidth(Database database, ObjectId blockId, out double width)
         {
