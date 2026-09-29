@@ -49,14 +49,14 @@ namespace Tools.VinaCAD.Action.Actions
                         psr.Value.Cast<SelectedObject>().Where(x => x != null).Select(x => x.ObjectId));
                     int originalCount = selectedIds.Count;
 
-                    ExpandWallPairs(tr, db, selectedIds);
+                    BlockTable blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+                    BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+                    ExpandWallPairs(tr, db, modelSpace, selectedIds);
 
                     List<ObjectId> erasedIds = new List<ObjectId>();
                     List<ErasedZoneInfo> erasedZones = new List<ErasedZoneInfo>();
                     HashSet<Point3d> erasedEndpoints = new HashSet<Point3d>();
-
-                    BlockTable blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
-                    BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
                     foreach (ObjectId objectId in selectedIds)
                     {
@@ -73,7 +73,7 @@ namespace Tools.VinaCAD.Action.Actions
                             try
                             {
                                 Extents3d ext = selLine.GeometricExtents;
-                                double padding = 500.0;
+                                double padding = 1500.0;
                                 Extents3d zoneBounds = new Extents3d(
                                     new Point3d(ext.MinPoint.X - padding, ext.MinPoint.Y - padding, 0),
                                     new Point3d(ext.MaxPoint.X + padding, ext.MaxPoint.Y + padding, 0)
@@ -153,12 +153,8 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        private void ExpandWallPairs(Transaction tr, Database db, HashSet<ObjectId> selectedIds)
+        private void ExpandWallPairs(Transaction tr, Database db, BlockTableRecord modelSpace, HashSet<ObjectId> selectedIds)
         {
-            BlockTable blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
-            BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(
-                blockTable[BlockTableRecord.ModelSpace], OpenMode.ForRead);
-
             List<Line> wallLines = new List<Line>();
             foreach (ObjectId id in modelSpace)
             {
@@ -185,14 +181,73 @@ namespace Tools.VinaCAD.Action.Actions
                         if (candidateSegId == segmentId && candidateSide != selectedSide)
                         {
                             if (AreParallelAndOverlapping(selectedLine, candidate))
-                                selectedIds.Add(candidate.ObjectId);
+                            {
+                                ProcessPairedLine(tr, db, modelSpace, selectedLine, candidate, selectedIds);
+                            }
                         }
                     }
                     continue;
                 }
 
                 Line pairedLine = FindLegacyPairedLine(selectedLine, wallLines);
-                if (pairedLine != null) selectedIds.Add(pairedLine.ObjectId);
+                if (pairedLine != null) ProcessPairedLine(tr, db, modelSpace, selectedLine, pairedLine, selectedIds);
+            }
+        }
+
+        // tách tường dài thành các đoạn nhỏ để không xóa nhầm toàn bộ mảng tường
+        private void ProcessPairedLine(Transaction tr, Database db, BlockTableRecord modelSpace, Line selected, Line paired, HashSet<ObjectId> selectedIds)
+        {
+            if (selectedIds.Contains(paired.ObjectId)) return;
+
+            Vector3d pairDir = (paired.EndPoint - paired.StartPoint).GetNormal();
+            double pairLen = paired.Length;
+
+            double proj1 = (selected.StartPoint - paired.StartPoint).DotProduct(pairDir);
+            double proj2 = (selected.EndPoint - paired.StartPoint).DotProduct(pairDir);
+
+            double minProj = Math.Min(proj1, proj2);
+            double maxProj = Math.Max(proj1, proj2);
+
+            double breakThreshold = 100.0;
+
+            bool breakStart = minProj > breakThreshold;
+            bool breakEnd = maxProj < pairLen - breakThreshold;
+
+            if (breakStart || breakEnd)
+            {
+                paired.UpgradeOpen();
+
+                if (breakStart)
+                {
+                    Point3d pt = paired.StartPoint + pairDir * minProj;
+                    Line l1 = new Line(paired.StartPoint, pt) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
+                    modelSpace.AppendEntity(l1);
+                    tr.AddNewlyCreatedDBObject(l1, true);
+                    DrawWallHelper.CopyWallMetadata(tr, db, paired, l1);
+                }
+                if (breakEnd)
+                {
+                    Point3d pt = paired.StartPoint + pairDir * maxProj;
+                    Line l2 = new Line(pt, paired.EndPoint) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
+                    modelSpace.AppendEntity(l2);
+                    tr.AddNewlyCreatedDBObject(l2, true);
+                    DrawWallHelper.CopyWallMetadata(tr, db, paired, l2);
+                }
+
+                Point3d midStart = paired.StartPoint + pairDir * Math.Max(0, minProj);
+                Point3d midEnd = paired.StartPoint + pairDir * Math.Min(pairLen, maxProj);
+                Line midLine = new Line(midStart, midEnd) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
+
+                modelSpace.AppendEntity(midLine);
+                tr.AddNewlyCreatedDBObject(midLine, true);
+                DrawWallHelper.CopyWallMetadata(tr, db, paired, midLine);
+
+                paired.Erase(true);
+                selectedIds.Add(midLine.ObjectId);
+            }
+            else
+            {
+                selectedIds.Add(paired.ObjectId);
             }
         }
 
@@ -305,7 +360,174 @@ namespace Tools.VinaCAD.Action.Actions
                 if (group.Count > 1) JoinLines(tr, db, modelSpace, group, validWallLines);
             }
 
+            // gọi hàm bo góc trước khi đóng nắp cap
+            HealCorners(validWallLines, erasedEndpoints);
+
             LocalCapExposedEnds(tr, db, modelSpace, validWallLines, erasedZones);
+        }
+
+        // lấy 2 nét tạo bề dày tường ưu tiên gần tâm điểm bị xóa nhất
+        private List<Line> GetThickWallLines(List<Line> group, Point3d center)
+        {
+            if (group.Count == 0) return new List<Line>();
+
+            // Sắp xếp nét tường theo khoảng cách gần với điểm hở (Endpoint) nhất
+            var sorted = group.OrderBy(l => Math.Min(l.StartPoint.DistanceTo(center), l.EndPoint.DistanceTo(center))).ToList();
+
+            var first = sorted.First();
+            Vector3d dir = (first.EndPoint - first.StartPoint).GetNormal();
+
+            // Tìm mép tường thứ 2 (cách mép 1 độ dày > 50)
+            var second = sorted.FirstOrDefault(l => DistanceToInfiniteLine(l.StartPoint, first.StartPoint, dir) > 50.0);
+
+            if (second != null) return new List<Line> { first, second };
+            return new List<Line> { first };
+        }
+
+        private void HealCorners(List<Line> validWallLines, HashSet<Point3d> erasedEndpoints)
+        {
+            double searchRadius = 1500.0;
+
+            foreach (var ep in erasedEndpoints)
+            {
+                var localLines = validWallLines.Where(l =>
+                    l.StartPoint.DistanceTo(ep) < searchRadius || l.EndPoint.DistanceTo(ep) < searchRadius
+                ).ToList();
+
+                if (localLines.Count < 2) continue;
+
+                var dirGroups = new List<List<Line>>();
+                foreach (var l in localLines)
+                {
+                    if (l.Length < Tolerance) continue;
+
+                    Vector3d dir = (l.EndPoint - l.StartPoint).GetNormal();
+                    bool found = false;
+                    foreach (var g in dirGroups)
+                    {
+                        Vector3d gDir = (g[0].EndPoint - g[0].StartPoint).GetNormal();
+                        if (Math.Abs(dir.DotProduct(gDir)) > 0.866)
+                        {
+                            g.Add(l);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) dirGroups.Add(new List<Line> { l });
+                }
+
+                dirGroups = dirGroups.OrderByDescending(g => g.Sum(l => l.Length)).ToList();
+
+                if (dirGroups.Count >= 2)
+                {
+                    var g1 = GetThickWallLines(dirGroups[0], ep);
+                    var g2 = GetThickWallLines(dirGroups[1], ep);
+
+                    Point3d? testIntersect = IntersectInfiniteLines(g1[0], g2[0]);
+                    if (testIntersect != null)
+                    {
+                        bool isTOrX = false;
+                        foreach (var l in g1.Concat(g2))
+                        {
+                            Vector3d v = l.EndPoint - l.StartPoint;
+                            double len = v.Length;
+                            if (len < Tolerance) continue;
+
+                            Vector3d w = testIntersect.Value - l.StartPoint;
+                            double t = w.DotProduct(v) / (len * len);
+
+                            double distFromStart = t * len;
+                            double distFromEnd = (1.0 - t) * len;
+
+                            if (distFromStart > 50.0 && distFromEnd > 50.0)
+                            {
+                                isTOrX = true;
+                                break;
+                            }
+                        }
+                        if (isTOrX) continue;
+                    }
+
+                    if (g1.Count == 2 && g2.Count == 2)
+                    {
+                        Point3d? i00 = IntersectInfiniteLines(g1[0], g2[0]);
+                        Point3d? i01 = IntersectInfiniteLines(g1[0], g2[1]);
+                        Point3d? i10 = IntersectInfiniteLines(g1[1], g2[0]);
+                        Point3d? i11 = IntersectInfiniteLines(g1[1], g2[1]);
+
+                        if (i00 != null && i01 != null && i10 != null && i11 != null)
+                        {
+                            Point3d J = new Point3d(
+                                (i00.Value.X + i01.Value.X + i10.Value.X + i11.Value.X) / 4.0,
+                                (i00.Value.Y + i01.Value.Y + i10.Value.Y + i11.Value.Y) / 4.0, 0);
+
+                            Point3d far1_0 = g1[0].StartPoint.DistanceTo(J) > g1[0].EndPoint.DistanceTo(J) ? g1[0].StartPoint : g1[0].EndPoint;
+                            Point3d far1_1 = g1[1].StartPoint.DistanceTo(J) > g1[1].EndPoint.DistanceTo(J) ? g1[1].StartPoint : g1[1].EndPoint;
+                            Vector3d v1 = (new Vector3d((far1_0.X + far1_1.X) / 2.0 - J.X, (far1_0.Y + far1_1.Y) / 2.0 - J.Y, 0)).GetNormal();
+
+                            Point3d far2_0 = g2[0].StartPoint.DistanceTo(J) > g2[0].EndPoint.DistanceTo(J) ? g2[0].StartPoint : g2[0].EndPoint;
+                            Point3d far2_1 = g2[1].StartPoint.DistanceTo(J) > g2[1].EndPoint.DistanceTo(J) ? g2[1].StartPoint : g2[1].EndPoint;
+                            Vector3d v2 = (new Vector3d((far2_0.X + far2_1.X) / 2.0 - J.X, (far2_0.Y + far2_1.Y) / 2.0 - J.Y, 0)).GetNormal();
+
+                            Vector3d innerDir = v1 + v2;
+
+                            if (innerDir.Length > 0.1)
+                            {
+                                double val1 = Math.Abs((i00.Value - J).DotProduct(innerDir)) + Math.Abs((i11.Value - J).DotProduct(innerDir));
+                                double val2 = Math.Abs((i01.Value - J).DotProduct(innerDir)) + Math.Abs((i10.Value - J).DotProduct(innerDir));
+
+                                if (val1 > val2)
+                                {
+                                    ExtendOrTrimToPoint(g1[0], i00.Value); ExtendOrTrimToPoint(g2[0], i00.Value);
+                                    ExtendOrTrimToPoint(g1[1], i11.Value); ExtendOrTrimToPoint(g2[1], i11.Value);
+                                }
+                                else
+                                {
+                                    ExtendOrTrimToPoint(g1[0], i01.Value); ExtendOrTrimToPoint(g2[1], i01.Value);
+                                    ExtendOrTrimToPoint(g1[1], i10.Value); ExtendOrTrimToPoint(g2[0], i10.Value);
+                                }
+                            }
+                        }
+                    }
+                    else if (g1.Count >= 1 && g2.Count >= 1)
+                    {
+                        Point3d? intersect = IntersectInfiniteLines(g1[0], g2[0]);
+                        if (intersect != null)
+                        {
+                            ExtendOrTrimToPoint(g1[0], intersect.Value);
+                            ExtendOrTrimToPoint(g2[0], intersect.Value);
+                        }
+                    }
+                }
+            }
+        }
+
+        private Point3d? IntersectInfiniteLines(Line l1, Line l2)
+        {
+            Vector3d p = l1.StartPoint.GetAsVector();
+            Vector3d r = l1.EndPoint - l1.StartPoint;
+            Vector3d q = l2.StartPoint.GetAsVector();
+            Vector3d s = l2.EndPoint - l2.StartPoint;
+
+            double rs = Cross2d(r, s);
+            if (Math.Abs(rs) < Tolerance) return null;
+
+            double t = Cross2d(q - p, s) / rs;
+            return l1.StartPoint + r * t;
+        }
+
+        private double Cross2d(Vector3d a, Vector3d b)
+        {
+            return a.X * b.Y - a.Y * b.X;
+        }
+
+        private void ExtendOrTrimToPoint(Line l, Point3d pt)
+        {
+            l.UpgradeOpen();
+            if (l.StartPoint.DistanceTo(pt) < l.EndPoint.DistanceTo(pt))
+                l.StartPoint = pt;
+            else
+                l.EndPoint = pt;
         }
 
         private void SquareOffWallEnds(List<Line> survivingLines, List<ErasedZoneInfo> erasedZones)
@@ -356,8 +578,6 @@ namespace Tools.VinaCAD.Action.Actions
             Point3d mid = new Point3d((ptA.X + ptB.X) / 2, (ptA.Y + ptB.Y) / 2, 0);
             if (!IsInsideAnyZoneBounds(mid, erasedZones)) return;
 
-            // A T-junction is an occupied boundary, not an exposed wall end.
-            // Do not move either wall side across a perpendicular branch.
             if (HasPerpendicularWallOnSegment(ptA, ptB, lineA, lineB, survivingLines)) return;
 
             MakeEndsSquare(lineA, lineB, aIsStart, bIsStart);
@@ -449,8 +669,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             if (HasPerpendicularWallOnSegment(ptA, bestPtB, lineA, bestLineB, allLines)) return;
 
-            // --- BẮT ĐẦU CẬP NHẬT: CHỐNG BO NẮP TẠI NGÃ 3 BẰNG DISTANCE-TO-SEGMENT ---
-            double checkRadius = 5.0; // Tăng dung sai lên 5.0 để khắc phục lỗi bắt điểm hụt khi vẽ tay
+            double checkRadius = 5.0;
             Vector3d wallDir = (lineA.EndPoint - lineA.StartPoint).GetNormal();
 
             foreach (var l in allLines)
@@ -505,12 +724,7 @@ namespace Tools.VinaCAD.Action.Actions
             return pt.DistanceTo(pb);
         }
 
-        private bool HasPerpendicularWallOnSegment(
-            Point3d start,
-            Point3d end,
-            Line excludedA,
-            Line excludedB,
-            IEnumerable<Line> candidates)
+        private bool HasPerpendicularWallOnSegment(Point3d start, Point3d end, Line excludedA, Line excludedB, IEnumerable<Line> candidates)
         {
             if (candidates == null) return false;
 
@@ -543,17 +757,12 @@ namespace Tools.VinaCAD.Action.Actions
                 DistanceToSegment(c, a, b) <= tolerance || DistanceToSegment(d, a, b) <= tolerance)
                 return true;
 
-            double ab = Cross2d(a, b, c);
-            double ab2 = Cross2d(a, b, d);
-            double cd = Cross2d(c, d, a);
-            double cd2 = Cross2d(c, d, b);
+            double ab = Cross2d(b - a, c - a);
+            double ab2 = Cross2d(b - a, d - a);
+            double cd = Cross2d(d - c, a - c);
+            double cd2 = Cross2d(d - c, b - c);
             return ((ab > 0 && ab2 < 0) || (ab < 0 && ab2 > 0)) &&
                    ((cd > 0 && cd2 < 0) || (cd < 0 && cd2 > 0));
-        }
-
-        private double Cross2d(Point3d a, Point3d b, Point3d c)
-        {
-            return (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
         }
 
         private bool IsEntityInBounds(Entity ent, Point3d minPt, Point3d maxPt)
