@@ -15,7 +15,15 @@ namespace Tools.VinaCAD.UI
         public WallThicknessWindow(double currentThickness)
         {
             InitializeComponent();
+            PreviewKeyDown += Window_PreviewKeyDown;
             DataContext = new WallThicknessVM(currentThickness);
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape) return;
+            e.Handled = true;
+            DialogResult = false;
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)

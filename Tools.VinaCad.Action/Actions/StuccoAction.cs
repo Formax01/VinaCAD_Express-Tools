@@ -84,11 +84,11 @@ namespace Tools.VinaCad.Action.Actions
                 string selectedMode = pointResult.StringResult;
                 if (IsMode(selectedMode, "Settings", "S"))
                 {
-                    if (TryEditSettings(settings, out StuccoSetting updatedSettings))
-                    {
-                        settings = updatedSettings;
-                        EnsureTargetLayer(settings);
-                    }
+                    if (!TryEditSettings(settings, out StuccoSetting updatedSettings))
+                        return;
+
+                    settings = updatedSettings;
+                    EnsureTargetLayer(settings);
 
                     continue;
                 }
