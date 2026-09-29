@@ -14,11 +14,6 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Tools.VinaCAD.Action.Actions
 {
-    /// <summary>
-    /// Lệnh TW (Trim Wall): xử lý ngã tư X, ngã ba T, góc L (kể cả đoạn lố),
-    /// nối khe hở, xóa nắp bít thừa và gộp các nét tường phân mảnh.
-    /// Hoạt động tương đương TW của YQArch.
-    /// </summary>
     public class TrimFixWallAction
     {
         private const double Tolerance = 0.001;
@@ -27,21 +22,15 @@ namespace Tools.VinaCAD.Action.Actions
         private const double MaximumSupportedThickness = 5000.0;
         private const double CoplanarTolerance = 0.01;
 
-        // [FIX #2] Đoạn đuôi lố tối đa = max(MinOvershoot, bề dày * OvershootFactor). Giả định đơn vị mm.
         private const double OvershootFactor = 1.5;
         private const double MinOvershoot = 100.0;
 
-        // [FIX #4] Khe hở đồng tuyến tối đa được nối (khe cửa/cửa sổ đã tháo). Giảm nếu nối nhầm lỗ cửa thật.
         private const double MaxGapHeal = 1200.0;
 
-        // [FIX #7] Tự chạy lặp trong 1 lệnh cho tới khi hình học ổn định (không phải gõ TW 2 lần)
         private const int MaxPasses = 4;
 
-        // [FIX #8] Chân tường lệch (mặt ngoài dài hơn mặt trong): trim đường dài về đường ngắn rồi bo lại cap.
-        // Chỉ xử lý khi độ lệch <= MaxStaggerFactor x bề dày tường.
         private const double MaxStaggerFactor = 3.0;
 
-        // [FIX #9] Hai mặt tường bằng nhau (đã vuông đầu) nhưng chân tường tự do, chưa có cap -> bo cap. Đặt false để tắt.
         private const bool CapSquaredFreeEnds = true;
 
         public void Execute()
@@ -107,8 +96,7 @@ namespace Tools.VinaCAD.Action.Actions
                 editor.WriteMessage(
                     $"\nĐã sửa {summary.ChangedLineCount} line, " +
                     $"{summary.JunctionCount} giao tường, " +
-                    $"{summary.HealedGapCount} khoảng hở; " +
-                    $"đã tối ưu hóa X, T, L Junctions.");
+                    $"{summary.HealedGapCount} khoảng hở ");
                 editor.UpdateScreen();
             }
             catch (Exception ex)
@@ -184,11 +172,9 @@ namespace Tools.VinaCAD.Action.Actions
                 .GroupBy(item => item.Key)
                 .ToDictionary(group => group.Key, group => Median(group.Select(item => item.Value)));
 
-            // 1. Nối khoảng hở (Heal Gaps)
             int healedGaps = HealSingleFaceGaps(walls, caps, window, collinearHealDistance, typicalThickness);
             healedGaps += HealCollinearGaps(initialPairs, caps, window, collinearHealDistance);
 
-            // 2. Kéo dài các đầu hở để tạo giao cắt (Snap Endpoints)
             List<Point3d> junctionPoints = new List<Point3d>();
             SnapWallEndpoints(walls, caps, window, thicknessByLine, junctionPoints);
 
@@ -196,20 +182,15 @@ namespace Tools.VinaCAD.Action.Actions
                 .Where(pair => pairedIds.Contains(pair.First.Id) && pairedIds.Contains(pair.Second.Id))
                 .ToList();
 
-            // 3. Xử lý L, T, X Junctions (cắt các đoạn thừa + đuôi lố)
             Dictionary<ObjectId, List<SegmentPiece>> output = BuildOutput(walls, repairedPairs, caps, window, junctionPoints, thicknessByLine);
 
-            // Cập nhật Database
             ReplaceResult replaceResult = ReplaceChangedLines(transaction, database, walls, output);
 
-            // 4. Xóa nắp bít thừa
             int erasedCaps = EraseObsoleteCaps(transaction, caps, junctionPoints, typicalThickness, repairedPairs, output);
 
-            // 5. Nối các đường thẳng vụn
             List<ObjectId> createdIds = new List<ObjectId>();
             int normalizedLines = NormalizeCollinearResults(transaction, database, replaceResult.ResultIds, typicalThickness, createdIds);
 
-            // Vùng chọn cho lượt kế tiếp: line ban đầu + line mới tạo, bỏ những line đã bị xóa
             ObjectId[] nextSelection = selectedIds
                 .Concat(replaceResult.ResultIds)
                 .Concat(createdIds)
@@ -217,7 +198,6 @@ namespace Tools.VinaCAD.Action.Actions
                 .Where(id => IsAlive(transaction, id))
                 .ToArray();
 
-            // 6. [FIX #8] Chân tường lệch: trim đường dài theo đường ngắn + bo lại đầu cap
             int cappedEnds = SquareAndCapFreeEnds(transaction, database, nextSelection, acceptedLayers, typicalThickness);
 
             transaction.Commit();
@@ -231,11 +211,6 @@ namespace Tools.VinaCAD.Action.Actions
             };
         }
 
-
-        /// <summary>
-        /// [FIX #8] Với mỗi cặp mặt tường: nếu một đầu tự do (không chạm tường khác, chưa có cap) mà hai mặt
-        /// lệch nhau, thì chọn mặt NGẮN hơn làm chuẩn, trim mặt DÀI hơn về đó và vẽ lại cap bít đầu.
-        /// </summary>
         private static int SquareAndCapFreeEnds(Transaction transaction, Database database, IEnumerable<ObjectId> ids, IReadOnlySet<ObjectId> acceptedLayers, double typicalThickness)
         {
             List<LineRecord> all = ReadLines(transaction, ids).Where(l => acceptedLayers.Contains(l.LayerId)).ToList();
@@ -247,8 +222,6 @@ namespace Tools.VinaCAD.Action.Actions
             List<WallPair> pairs = FindWallPairs(walls);
             int changed = 0;
 
-            // [FIX #10] Vật cản lấy từ TOÀN BẢN VẼ trong vùng, không chỉ line đang chọn,
-            // để nhận đúng ngã L/T/X và tường nối tiếp nằm ngoài vùng chọn.
             List<LineRecord> obstacles = ReadObstacleLines(transaction, database, window);
             Dictionary<ObjectId, LineRecord> obstacleById = obstacles.ToDictionary(o => o.Id);
 
@@ -283,19 +256,16 @@ namespace Tools.VinaCAD.Action.Actions
                     if (Math.Abs(cosA) < Tolerance) continue;
                     Point3d newLongPt = square ? longPt : longPt + u * ((shortS - longS) / cosA);
 
-                    // Đầu này đã có cap -> giữ nguyên
                     if (caps.Any(c => c.Start.DistanceTo(longPt) <= capTol || c.End.DistanceTo(longPt) <= capTol ||
                                       c.Start.DistanceTo(shortPt) <= capTol || c.End.DistanceTo(shortPt) <= capTol))
                         continue;
 
-                    // Tường vẫn tiếp tục bằng một đoạn thẳng hàng khác (hai tường nối đầu-đuôi) -> không phải chân tường
                     bool wallContinues = obstacles.Any(o =>
                         o.Id != a.Id && o.Id != b.Id &&
                         Math.Abs((o.End - o.Start).GetNormal().DotProduct(dir)) > ParallelDotTolerance &&
                         (DistanceToSeg(longPt, o.Start, o.End) <= capTol || DistanceToSeg(shortPt, o.Start, o.End) <= capTol));
                     if (wallContinues) continue;
 
-                    // Đầu này chạm/cắt tường khác (L, T, X) -> không phải chân tường tự do
                     bool occupied = obstacles.Any(o =>
                         o.Id != a.Id && o.Id != b.Id &&
                         Math.Abs((o.End - o.Start).GetNormal().DotProduct(dir)) <= ParallelDotTolerance &&
@@ -402,14 +372,6 @@ namespace Tools.VinaCAD.Action.Actions
             catch { return false; }
         }
 
-        // -----------------------------------------------------------------------------------
-        // THUẬT TOÁN X, T, L JUNCTIONS & CAPS
-        // -----------------------------------------------------------------------------------
-
-        /// <summary>
-        /// [FIX #1] Điểm có nằm thật sự bên trong lõi của một tường khác (cắt ngang) hay không.
-        /// Bỏ qua nét song song/thẳng hàng và điểm nằm trên mặt tường.
-        /// </summary>
         private static bool IsInsideAnotherWall(Point3d point, LineRecord source, IEnumerable<WallPair> pairs)
         {
             foreach (WallPair pair in pairs)
@@ -496,7 +458,6 @@ namespace Tools.VinaCAD.Action.Actions
                     segs.Add(new SegInfo { Start = s, End = e, Core = core, Remove = core || cap });
                 }
 
-                // [FIX #2] Cắt đuôi lố: đoạn ngắn, đầu tự do, không có cap, liền kề đoạn lõi đã bị xóa
                 double thickness = GetWallThickness(line.Id, thicknessByLine);
                 double tailLimit = Math.Max(MinOvershoot, thickness * OvershootFactor);
 
@@ -515,7 +476,6 @@ namespace Tools.VinaCAD.Action.Actions
                     TrimTail(segs.Count - 1, segs.Count - 2, segs[^1].End);
                 }
 
-                // Gộp các đoạn còn sống liên tiếp
                 List<SegmentPiece> pieces = new List<SegmentPiece>();
                 SegmentPiece? active = null;
                 foreach (SegInfo seg in segs)
@@ -541,9 +501,6 @@ namespace Tools.VinaCAD.Action.Actions
             return output;
         }
 
-        /// <summary>
-        /// [FIX #5] Xóa cap nếu bị lõi tường nuốt, hoặc nằm gần giao điểm VÀ không còn dính vào đầu line nào.
-        /// </summary>
         private static int EraseObsoleteCaps(
             Transaction transaction,
             IEnumerable<LineRecord> caps,
@@ -591,10 +548,6 @@ namespace Tools.VinaCAD.Action.Actions
             double length = line.Start.DistanceTo(line.End);
             return station >= -customTolerance && station <= length + customTolerance;
         }
-
-        // -----------------------------------------------------------------------------------
-        // CÁC HÀM TIỆN ÍCH (READ, NORMALIZATION, HEALING GAP...)
-        // -----------------------------------------------------------------------------------
 
         private static List<LineRecord> ReadLines(Transaction transaction, IEnumerable<ObjectId> selectedIds)
         {
@@ -702,7 +655,6 @@ namespace Tools.VinaCAD.Action.Actions
                 if (!nearest.TryGetValue(line.Id, out PairCandidate? pair) ||
                     !nearest.TryGetValue(pair.Other.Id, out PairCandidate? reverse)) continue;
 
-                // [FIX #3] Chấp nhận mutual-nearest HOẶC cùng bề dày (một mặt liền đối diện nhiều mảnh ở ngã ba T)
                 bool mutual = reverse.Other.Id == line.Id;
                 bool sameWidth = Math.Abs(reverse.Width - pair.Width) <= Math.Max(1.0, pair.Width * 0.02);
                 if (!mutual && !sameWidth) continue;
@@ -746,7 +698,6 @@ namespace Tools.VinaCAD.Action.Actions
                     double localThickness = Math.Max(firstWall.Width, secondWall.Width);
                     bool metadataConfirmsSameWall = !string.IsNullOrEmpty(GetPairSegmentId(firstWall));
 
-                    // [FIX #4] Cho phép nối khe cửa/cửa sổ đã tháo (tối đa MaxGapHeal)
                     bool sameWidth = Math.Abs(firstWall.Width - secondWall.Width) <= Math.Max(1.0, localThickness * 0.02);
                     double localSearchDistance = metadataConfirmsSameWall
                         ? Math.Max(searchDistance, MaxGapHeal)
@@ -767,9 +718,6 @@ namespace Tools.VinaCAD.Action.Actions
             return healed;
         }
 
-        /// <summary>
-        /// [FIX #4] Nối khe hở một mặt (mặt đối diện vẫn liền). Chạy cả với tường không có tag.
-        /// </summary>
         private static int HealSingleFaceGaps(IReadOnlyList<LineRecord> walls, IReadOnlyCollection<LineRecord> caps, RepairWindow window, double searchDistance, double typicalThickness)
         {
             int healed = 0;
@@ -1032,7 +980,9 @@ namespace Tools.VinaCAD.Action.Actions
             return groups;
         }
 
-        private static bool AreCollinear(NormalizeLine first, NormalizeLine second) => Math.Abs((first.End - first.Start).GetNormal().DotProduct((second.End - second.Start).GetNormal())) > ParallelDotTolerance && DistancePointToInfiniteLine(second.Start, first.Start, (first.End - first.Start).GetNormal()) <= Tolerance * 10.0 && DistancePointToInfiniteLine(second.End, first.Start, (first.End - first.Start).GetNormal()) <= Tolerance * 10.0;
+        private static bool AreCollinear(NormalizeLine first, NormalizeLine second) 
+            => Math.Abs((first.End - first.Start).GetNormal().DotProduct((second.End - second.Start).GetNormal())) > ParallelDotTolerance && DistancePointToInfiniteLine(second.Start, first.Start, (first.End - first.Start).GetNormal()) <= Tolerance * 10.0 && DistancePointToInfiniteLine(second.End, first.Start, (first.End - first.Start).GetNormal()) <= Tolerance * 10.0;
+       
         private static bool HasInteriorJunction(Point3d start, Point3d end, IReadOnlyCollection<NormalizeLine> allLines, IReadOnlyCollection<NormalizeLine> clusterLines)
         {
             foreach (NormalizeLine other in allLines)
@@ -1043,55 +993,293 @@ namespace Tools.VinaCAD.Action.Actions
             }
             return false;
         }
-        private static bool MetadataAllowsMerge(NormalizeLine first, NormalizeLine second) => (!first.IsCap && !second.IsCap) && (string.IsNullOrEmpty(first.SegmentId) && string.IsNullOrEmpty(second.SegmentId) ? (string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side == second.Side) : (!string.IsNullOrEmpty(first.SegmentId) && first.SegmentId == second.SegmentId && !string.IsNullOrEmpty(first.Side) && first.Side == second.Side));
-        private static LineInterval CreateInterval(NormalizeLine line, Point3d origin, Vector3d axis) { double first = (line.Start - origin).DotProduct(axis); double second = (line.End - origin).DotProduct(axis); return new LineInterval { Line = line, StartStation = Math.Min(first, second), EndStation = Math.Max(first, second) }; }
-        private static bool SameSegment(NormalizeLine line, Point3d start, Point3d end) => (line.Start.DistanceTo(start) <= Tolerance && line.End.DistanceTo(end) <= Tolerance) || (line.Start.DistanceTo(end) <= Tolerance && line.End.DistanceTo(start) <= Tolerance);
-        private static bool IsUnchanged(LineRecord source, IReadOnlyList<SegmentPiece> output) => output.Count == 1 && ((source.OriginalStart.DistanceTo(output[0].Start) <= Tolerance && source.OriginalEnd.DistanceTo(output[0].End) <= Tolerance) || (source.OriginalStart.DistanceTo(output[0].End) <= Tolerance && source.OriginalEnd.DistanceTo(output[0].Start) <= Tolerance));
-        private static int CountDistinctPoints(IEnumerable<Point3d> points) { List<Point3d> distinct = new List<Point3d>(); foreach (Point3d point in points) if (!distinct.Any(existing => existing.DistanceTo(point) <= Tolerance)) distinct.Add(point); return distinct.Count; }
-        private static bool SidesAreCompatible(LineRecord first, LineRecord second) => string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side == second.Side;
-        private static bool CanFormWallPair(LineRecord first, LineRecord second) => string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side != second.Side;
-        private static bool AreParallel(LineRecord first, LineRecord second) => Math.Abs((first.End - first.Start).GetNormal().DotProduct((second.End - second.Start).GetNormal())) > ParallelDotTolerance;
-        private static bool AreCollinear(LineRecord first, LineRecord second) => AreParallel(first, second) && AreCoplanar(first, second) && DistancePointToInfiniteLine(second.Start, first) <= Tolerance * 10.0 && DistancePointToInfiniteLine(second.End, first) <= Tolerance * 10.0;
-        private static bool AreCoplanar(LineRecord first, LineRecord second) => Math.Max(Math.Max(first.Start.Z, first.End.Z), Math.Max(second.Start.Z, second.End.Z)) - Math.Min(Math.Min(first.Start.Z, first.End.Z), Math.Min(second.Start.Z, second.End.Z)) <= CoplanarTolerance;
-        private static double ProjectedOverlap(LineRecord first, LineRecord second) { Vector3d dir = (first.End - first.Start).GetNormal(); double start = (second.Start - first.Start).DotProduct(dir); double end = (second.End - first.Start).DotProduct(dir); return Math.Min(first.Start.DistanceTo(first.End), Math.Max(start, end)) - Math.Max(0.0, Math.Min(start, end)); }
-        private static double DistancePointToInfiniteLine(Point3d point, LineRecord line) => DistancePointToInfiniteLine(point, line.Start, (line.End - line.Start).GetNormal());
-        private static double DistancePointToInfiniteLine(Point3d point, Point3d lineStart, Vector3d direction) => ((point - lineStart) - direction * (point - lineStart).DotProduct(direction)).Length;
-        private static double Station(LineRecord line, Point3d point) => (point - line.Start).DotProduct((line.End - line.Start).GetNormal());
-        private static bool TryInfiniteIntersection(LineRecord first, LineRecord second, out Point3d intersection) => TryIntersection(first.Start, first.End, second.Start, second.End, false, out intersection);
-        private static bool TrySegmentIntersection(LineRecord first, LineRecord second, out Point3d intersection) => TryIntersection(first.Start, first.End, second.Start, second.End, true, out intersection);
-        private static bool TryIntersection(LineRecord first, LineRecord second, bool requireSegments, out Point3d intersection) => TryIntersection(first.Start, first.End, second.Start, second.End, requireSegments, out intersection);
-        private static bool TryIntersection(Point3d firstStart, Point3d firstEnd, Point3d secondStart, Point3d secondEnd, bool requireSegments, out Point3d intersection) { double ax = firstEnd.X - firstStart.X; double ay = firstEnd.Y - firstStart.Y; double bx = secondEnd.X - secondStart.X; double by = secondEnd.Y - secondStart.Y; double denominator = ax * by - ay * bx; intersection = Point3d.Origin; if (Math.Abs(denominator) <= Tolerance) return false; double dx = secondStart.X - firstStart.X; double dy = secondStart.Y - firstStart.Y; double fp = (dx * by - dy * bx) / denominator; double sp = (dx * ay - dy * ax) / denominator; if (requireSegments && (fp < -Tolerance || fp > 1.0 + Tolerance || sp < -Tolerance || sp > 1.0 + Tolerance)) return false; intersection = new Point3d(firstStart.X + fp * ax, firstStart.Y + fp * ay, firstStart.Z + fp * (firstEnd.Z - firstStart.Z)); return true; }
-        private static bool IsPointOnSegment(Point3d point, Point3d start, Point3d end, double tolerance) => Math.Abs(point.DistanceTo(start) + point.DistanceTo(end) - start.DistanceTo(end)) <= tolerance;
-        private static bool HasCompatibleCornerMovement(Point3d endpoint, Point3d otherEndpoint, Point3d targetEndpoint, Point3d targetOtherEndpoint, Point3d intersection) => (intersection - endpoint).DotProduct((endpoint - otherEndpoint).GetNormal()) >= -Tolerance && (intersection - targetEndpoint).DotProduct((targetEndpoint - targetOtherEndpoint).GetNormal()) >= -Tolerance;
-        private static EndpointMatch GetClosestEndpoints(LineRecord first, LineRecord second) => new[] { CreateEndpointMatch(first.Start, true, second.Start, true), CreateEndpointMatch(first.Start, true, second.End, false), CreateEndpointMatch(first.End, false, second.Start, true), CreateEndpointMatch(first.End, false, second.End, false) }.OrderBy(c => c.Distance).First();
-        private static EndpointMatch CreateEndpointMatch(Point3d first, bool firstIsStart, Point3d second, bool secondIsStart) => new EndpointMatch { FirstPoint = first, FirstIsStart = firstIsStart, SecondPoint = second, SecondIsStart = secondIsStart, Distance = first.DistanceTo(second) };
-        private static void SetEndpoint(LineRecord line, bool start, Point3d point) { if (start) line.Start = point; else line.End = point; }
-        private static Point3d Midpoint(Point3d first, Point3d second) => new Point3d((first.X + second.X) / 2.0, (first.Y + second.Y) / 2.0, (first.Z + second.Z) / 2.0);
-        private static double Median(IEnumerable<double> values) { var o = values.OrderBy(v => v).ToList(); if (o.Count == 0) return 0.0; int m = o.Count / 2; return o.Count % 2 == 0 ? (o[m - 1] + o[m]) / 2.0 : o[m]; }
+        private static bool MetadataAllowsMerge(NormalizeLine first, NormalizeLine second) 
+            => (!first.IsCap && !second.IsCap) && (string.IsNullOrEmpty(first.SegmentId) && string.IsNullOrEmpty(second.SegmentId) ? (string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side == second.Side) : (!string.IsNullOrEmpty(first.SegmentId) && first.SegmentId == second.SegmentId && !string.IsNullOrEmpty(first.Side) && first.Side == second.Side));
+        private static LineInterval CreateInterval(NormalizeLine line, Point3d origin, Vector3d axis) 
+        { 
+            double first = (line.Start - origin).DotProduct(axis);
+            double second = (line.End - origin).DotProduct(axis); 
+           
+            return new LineInterval 
+            { 
+                Line = line,
+                StartStation = Math.Min(first, second), 
+                EndStation = Math.Max(first, second) 
+            }; 
+        }
 
-        private sealed class LineRecord { public ObjectId Id { get; init; } public Line Entity { get; init; } = null!; public ObjectId LayerId { get; init; } public string? Side { get; init; } public string? SegmentId { get; init; } public bool IsCap { get; init; } public Point3d OriginalStart { get; init; } public Point3d OriginalEnd { get; init; } public Point3d Start { get; set; } public Point3d End { get; set; } }
-        private sealed class WallPair { public LineRecord First { get; init; } = null!; public LineRecord Second { get; init; } = null!; public double Width { get; init; } }
-        private sealed class PairCandidate { public LineRecord Other { get; init; } = null!; public double Width { get; init; } public double Overlap { get; init; } }
-        private sealed class PairOption { public LineRecord First { get; init; } = null!; public LineRecord Second { get; init; } = null!; public double Width { get; init; } public double Overlap { get; init; } }
-        private sealed class EndpointMoveCandidate { public Point3d Point { get; init; } public bool IsCorner { get; init; } public double Score { get; init; } public string StableKey { get; init; } = string.Empty; public List<EndpointReference> Endpoints { get; init; } = new List<EndpointReference>(); }
-        private sealed class EndpointReference { public LineRecord Line { get; init; } = null!; public bool IsStart { get; init; } }
-        private sealed class WallEnd { public LineRecord FirstLine { get; init; } = null!; public bool FirstIsStart { get; init; } public Point3d FirstPoint { get; init; } public LineRecord SecondLine { get; init; } = null!; public bool SecondIsStart { get; init; } public Point3d SecondPoint { get; init; } }
-        private sealed class HostChain { public LineRecord Reference { get; init; } = null!; public HashSet<ObjectId> MemberIds { get; init; } = new HashSet<ObjectId>(); public Point3d Start { get; init; } public Point3d End { get; init; } }
-        private sealed class SegmentPiece { public Point3d Start { get; set; } public Point3d End { get; set; } }
-        private sealed class SegInfo { public Point3d Start; public Point3d End; public bool Core; public bool Remove; }
-        private sealed class ReplaceResult { public int ChangedCount { get; set; } public List<ObjectId> ResultIds { get; } = new List<ObjectId>(); }
-        private sealed class NormalizeLine { public ObjectId Id { get; init; } public Line Entity { get; init; } = null!; public ObjectId LayerId { get; init; } public Point3d Start { get; init; } public Point3d End { get; init; } public string? Side { get; init; } public string? SegmentId { get; init; } public bool IsCap { get; init; } }
-        private sealed class LineInterval { public NormalizeLine Line { get; init; } = null!; public double StartStation { get; init; } public double EndStation { get; init; } }
-        private sealed class LineIntervalCluster { public double StartStation { get; set; } public double EndStation { get; set; } public List<NormalizeLine> Lines { get; set; } = new List<NormalizeLine>(); }
-        private struct EndpointMatch { public Point3d FirstPoint; public bool FirstIsStart; public Point3d SecondPoint; public bool SecondIsStart; public double Distance; }
+        private static bool SameSegment(NormalizeLine line, Point3d start, Point3d end) 
+            => (line.Start.DistanceTo(start) <= Tolerance && line.End.DistanceTo(end) <= Tolerance) || (line.Start.DistanceTo(end) <= Tolerance && line.End.DistanceTo(start) <= Tolerance);
+       
+        private static bool IsUnchanged(LineRecord source, IReadOnlyList<SegmentPiece> output)
+            => output.Count == 1 && ((source.OriginalStart.DistanceTo(output[0].Start) <= Tolerance && source.OriginalEnd.DistanceTo(output[0].End) <= Tolerance) || (source.OriginalStart.DistanceTo(output[0].End) <= Tolerance && source.OriginalEnd.DistanceTo(output[0].Start) <= Tolerance));
+       
+        private static int CountDistinctPoints(IEnumerable<Point3d> points) 
+        {
+            List<Point3d> distinct = new List<Point3d>();
+            foreach (Point3d point in points)
+                if (!distinct.Any(existing => existing.DistanceTo(point) <= Tolerance)) distinct.Add(point); return distinct.Count; 
+        }
+
+        private static bool SidesAreCompatible(LineRecord first, LineRecord second) 
+            => string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side == second.Side;
+
+        private static bool CanFormWallPair(LineRecord first, LineRecord second) 
+            => string.IsNullOrEmpty(first.Side) || string.IsNullOrEmpty(second.Side) || first.Side != second.Side;
+        private static bool AreParallel(LineRecord first, LineRecord second)
+            => Math.Abs((first.End - first.Start).GetNormal().DotProduct((second.End - second.Start).GetNormal())) > ParallelDotTolerance;
+       
+        private static bool AreCollinear(LineRecord first, LineRecord second)
+            => AreParallel(first, second) && AreCoplanar(first, second) && DistancePointToInfiniteLine(second.Start, first) <= Tolerance * 10.0 && DistancePointToInfiniteLine(second.End, first) <= Tolerance * 10.0;
+        private static bool AreCoplanar(LineRecord first, LineRecord second)
+            => Math.Max(Math.Max(first.Start.Z, first.End.Z), Math.Max(second.Start.Z, second.End.Z)) - Math.Min(Math.Min(first.Start.Z, first.End.Z), Math.Min(second.Start.Z, second.End.Z)) <= CoplanarTolerance;
+        private static double ProjectedOverlap(LineRecord first, LineRecord second) 
+        {
+            Vector3d dir = (first.End - first.Start).GetNormal();
+            double start = (second.Start - first.Start).DotProduct(dir);
+            double end = (second.End - first.Start).DotProduct(dir);
+
+            return
+                Math.Min(first.Start.DistanceTo(first.End),
+                Math.Max(start, end)) - Math.Max(0.0, Math.Min(start, end));
+        }
+
+        private static double DistancePointToInfiniteLine(Point3d point, LineRecord line)
+            => DistancePointToInfiniteLine(point, line.Start, (line.End - line.Start).GetNormal());
+
+        private static double DistancePointToInfiniteLine(Point3d point, Point3d lineStart, Vector3d direction)
+            => ((point - lineStart) - direction * (point - lineStart).DotProduct(direction)).Length;
+
+        private static double Station(LineRecord line, Point3d point)
+            => (point - line.Start).DotProduct((line.End - line.Start).GetNormal());
+
+        private static bool TryInfiniteIntersection(LineRecord first, LineRecord second, out Point3d intersection)
+            => TryIntersection(first.Start, first.End, second.Start, second.End, false, out intersection);
+
+        private static bool TrySegmentIntersection(LineRecord first, LineRecord second, out Point3d intersection) 
+            => TryIntersection(first.Start, first.End, second.Start, second.End, true, out intersection);
+
+        private static bool TryIntersection(LineRecord first, LineRecord second, bool requireSegments, out Point3d intersection) 
+            => TryIntersection(first.Start, first.End, second.Start, second.End, requireSegments, out intersection);
+
+        private static bool TryIntersection(Point3d firstStart, Point3d firstEnd, Point3d secondStart, Point3d secondEnd, bool requireSegments, out Point3d intersection)
+        { 
+            double ax = firstEnd.X - firstStart.X; 
+            double ay = firstEnd.Y - firstStart.Y; 
+            double bx = secondEnd.X - secondStart.X;
+            double by = secondEnd.Y - secondStart.Y;
+            double denominator = ax * by - ay * bx; 
+            intersection = Point3d.Origin; if (Math.Abs(denominator) <= Tolerance) 
+
+                return false; 
+
+            double dx = secondStart.X - firstStart.X; 
+            double dy = secondStart.Y - firstStart.Y;
+            double fp = (dx * by - dy * bx) / denominator;
+            double sp = (dx * ay - dy * ax) / denominator; 
+
+            if (requireSegments && (fp < -Tolerance || fp > 1.0 + Tolerance || sp < -Tolerance || sp > 1.0 + Tolerance)) 
+                return false; 
+            
+            intersection = new Point3d(firstStart.X + fp * ax, firstStart.Y + fp * ay, firstStart.Z + fp * (firstEnd.Z - firstStart.Z)); 
+            return true;
+
+        }
+        private static bool IsPointOnSegment(Point3d point, Point3d start, Point3d end, double tolerance) 
+            => Math.Abs(point.DistanceTo(start) + point.DistanceTo(end) - start.DistanceTo(end)) <= tolerance;
+
+        private static bool HasCompatibleCornerMovement(Point3d endpoint, Point3d otherEndpoint, Point3d targetEndpoint, Point3d targetOtherEndpoint, Point3d intersection)
+            => (intersection - endpoint).DotProduct((endpoint - otherEndpoint).GetNormal()) >= -Tolerance && (intersection - targetEndpoint).DotProduct((targetEndpoint - targetOtherEndpoint).GetNormal()) >= -Tolerance;
+
+        private static EndpointMatch GetClosestEndpoints(LineRecord first, LineRecord second) 
+            => new[] 
+            { 
+                CreateEndpointMatch(first.Start, true, second.Start, true), 
+                CreateEndpointMatch(first.Start, true, second.End, false), 
+                CreateEndpointMatch(first.End, false, second.Start, true), 
+                CreateEndpointMatch(first.End, false, second.End, false) 
+            }.OrderBy(c => c.Distance).First();
+
+        private static EndpointMatch CreateEndpointMatch(Point3d first, bool firstIsStart, Point3d second, bool secondIsStart)
+            => new EndpointMatch { FirstPoint = first, FirstIsStart = firstIsStart, SecondPoint = second, SecondIsStart = secondIsStart, Distance = first.DistanceTo(second) };
+
+        private static void SetEndpoint(LineRecord line, bool start, Point3d point)
+        { 
+            if 
+                (start) line.Start = point; 
+            else 
+                line.End = point; }
+        private static Point3d Midpoint(Point3d first, Point3d second)
+            => new Point3d((first.X + second.X) / 2.0, (first.Y + second.Y) / 2.0, (first.Z + second.Z) / 2.0);
+
+        private static double Median(IEnumerable<double> values) 
+        { 
+            var o = values.OrderBy(v => v).ToList();
+            if 
+                (o.Count == 0) return 0.0; int m = o.Count / 2;
+            return o.Count % 2 == 0 ? (o[m - 1] + o[m]) / 2.0 : o[m]; }
+
+        
+        private sealed class LineRecord 
+        { 
+            public ObjectId Id { get; init; } 
+            public Line Entity { get; init; } = null!; 
+            public ObjectId LayerId { get; init; }
+            public string? Side { get; init; }
+            public string? SegmentId { get; init; } 
+            public bool IsCap { get; init; } 
+            public Point3d OriginalStart { get; init; } 
+            public Point3d OriginalEnd { get; init; } 
+            public Point3d Start { get; set; } 
+            public Point3d End { get; set; }
+        }
+
+        private sealed class WallPair
+        { 
+            public LineRecord First { get; init; } = null!;
+            public LineRecord Second { get; init; } = null!;
+            public double Width { get; init; }
+        }
+
+        private sealed class PairCandidate
+        { 
+            public LineRecord Other { get; init; } = null!;
+            public double Width { get; init; }
+            public double Overlap { get; init; }
+        }
+
+        private sealed class PairOption 
+        {
+            public LineRecord First { get; init; } = null!;
+            public LineRecord Second { get; init; } = null!;
+            public double Width { get; init; }
+            public double Overlap { get; init; }
+        }
+
+        private sealed class EndpointMoveCandidate 
+        { 
+            public Point3d Point { get; init; }
+            public bool IsCorner { get; init; }
+            public double Score { get; init; }
+            public string StableKey { get; init; } = string.Empty; 
+            public List<EndpointReference> Endpoints { get; init; } = new List<EndpointReference>(); 
+        }
+
+        private sealed class EndpointReference
+        {
+            public LineRecord Line { get; init; } = null!;
+            public bool IsStart { get; init; }
+        }
+
+        private sealed class WallEnd 
+        { 
+            public LineRecord FirstLine { get; init; } = null!;
+            public bool FirstIsStart { get; init; }
+            public Point3d FirstPoint { get; init; }
+            public LineRecord SecondLine { get; init; } = null!; 
+            public bool SecondIsStart { get; init; } 
+            public Point3d SecondPoint { get; init; }
+        }
+        private sealed class HostChain
+        { 
+            public LineRecord Reference { get; init; } = null!;
+            public HashSet<ObjectId> MemberIds { get; init; } = new HashSet<ObjectId>();
+            public Point3d Start { get; init; }
+            public Point3d End { get; init; } 
+        }
+
+        private sealed class SegmentPiece
+        { 
+            public Point3d Start { get; set; }
+            public Point3d End { get; set; }
+        }
+
+        private sealed class SegInfo
+        {
+            public Point3d Start;
+            public Point3d End;
+            public bool Core;
+            public bool Remove;
+        }
+
+        private sealed class ReplaceResult
+        {
+            public int ChangedCount { get; set; }
+            public List<ObjectId> ResultIds { get; } = new List<ObjectId>();
+        }
+
+        private sealed class NormalizeLine 
+        { 
+            public ObjectId Id { get; init; }
+            public Line Entity { get; init; } = null!;
+            public ObjectId LayerId { get; init; }
+            public Point3d Start { get; init; }
+            public Point3d End { get; init; } 
+            public string? Side { get; init; }
+            public string? SegmentId { get; init; }
+            public bool IsCap { get; init; }
+        }
+
+        private sealed class LineInterval
+        { 
+            public NormalizeLine Line { get; init; } = null!; 
+            public double StartStation { get; init; }
+            public double EndStation { get; init; }
+        }
+
+        private sealed class LineIntervalCluster
+        { 
+            public double StartStation { get; set; }
+            public double EndStation { get; set; }
+            public List<NormalizeLine> Lines { get; set; } = new List<NormalizeLine>();
+        }
+
+        private struct EndpointMatch 
+        { 
+            public Point3d FirstPoint;
+            public bool FirstIsStart;
+            public Point3d SecondPoint; 
+            public bool SecondIsStart; public double Distance;
+        }
+
         private sealed class RepairWindow
         {
-            private readonly double _minX; private readonly double _minY; private readonly double _maxX; private readonly double _maxY;
-            public RepairWindow(Point3d first, Point3d second) { _minX = Math.Min(first.X, second.X); _minY = Math.Min(first.Y, second.Y); _maxX = Math.Max(first.X, second.X); _maxY = Math.Max(first.Y, second.Y); }
-            public static RepairWindow FromLines(IReadOnlyCollection<LineRecord> lines, double padding) { double minX = lines.Min(line => Math.Min(line.Start.X, line.End.X)) - padding; double minY = lines.Min(line => Math.Min(line.Start.Y, line.End.Y)) - padding; double maxX = lines.Max(line => Math.Max(line.Start.X, line.End.X)) + padding; double maxY = lines.Max(line => Math.Max(line.Start.Y, line.End.Y)) + padding; return new RepairWindow(new Point3d(minX, minY, 0.0), new Point3d(maxX, maxY, 0.0)); }
-            public bool Intersects(double minX, double minY, double maxX, double maxY) => !(maxX < _minX - Tolerance || minX > _maxX + Tolerance || maxY < _minY - Tolerance || minY > _maxY + Tolerance);
-            public bool Contains(Point3d point) => point.X >= _minX - Tolerance && point.X <= _maxX + Tolerance && point.Y >= _minY - Tolerance && point.Y <= _maxY + Tolerance;
+            private readonly double _minX;
+            private readonly double _minY;
+            private readonly double _maxX; 
+            private readonly double _maxY;
+            public RepairWindow(Point3d first, Point3d second)
+            { 
+                _minX = Math.Min(first.X, second.X); 
+                _minY = Math.Min(first.Y, second.Y);
+                _maxX = Math.Max(first.X, second.X);
+                _maxY = Math.Max(first.Y, second.Y);
+            }
+
+            public static RepairWindow FromLines(IReadOnlyCollection<LineRecord> lines, double padding)
+            {
+                double minX = lines.Min(line => Math.Min(line.Start.X, line.End.X)) - padding; 
+                double minY = lines.Min(line => Math.Min(line.Start.Y, line.End.Y)) - padding;
+                double maxX = lines.Max(line => Math.Max(line.Start.X, line.End.X)) + padding;
+                double maxY = lines.Max(line => Math.Max(line.Start.Y, line.End.Y)) + padding; 
+
+                return new RepairWindow(new Point3d(minX, minY, 0.0), new Point3d(maxX, maxY, 0.0));
+            }
+
+            public bool Intersects(double minX, double minY, double maxX, double maxY)
+                => !(maxX < _minX - Tolerance || minX > _maxX + Tolerance || maxY < _minY - Tolerance || minY > _maxY + Tolerance);
+
+            public bool Contains(Point3d point)
+                => point.X >= _minX - Tolerance && point.X <= _maxX + Tolerance && point.Y >= _minY - Tolerance && point.Y <= _maxY + Tolerance;
         }
-        private sealed class RepairSummary { public int WallLineCount { get; init; } public int ChangedLineCount { get; init; } public int JunctionCount { get; init; } public int HealedGapCount { get; init; } public ObjectId[] NextSelection { get; init; } = Array.Empty<ObjectId>(); }
+
+        private sealed class RepairSummary 
+        {
+            public int WallLineCount { get; init; }
+            public int ChangedLineCount { get; init; }
+            public int JunctionCount { get; init; }
+            public int HealedGapCount { get; init; }
+            public ObjectId[] NextSelection { get; init; } = Array.Empty<ObjectId>();
+        }
     }
 }
