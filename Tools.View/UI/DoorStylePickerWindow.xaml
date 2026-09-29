@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helper="clr-namespace:Tools.View.Controls;assembly=Tools.VinaCad.Helper"
-        xmlns:controls="clr-namespace:Tools.View.Controls"
         Title="-Chọn loại cửa mặc định"
         Width="690"
         Height="620"
