@@ -55,30 +55,62 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   VerticalAlignment="Center"
-                   Text="Layer Vữa :" />
-        <ComboBox x:Name="CmbLayerName"
-                  Grid.Row="0" Grid.Column="1"
-                  Style="{StaticResource ComboBoxStyle}"
-                  IsEditable="True"
-                  IsTextSearchEnabled="True"
-                  ItemsSource="{Binding LayerNames}"
-                  Text="{Binding LayerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  ToolTip="Gõ tên layer mới hoặc chọn một layer có sẵn"/>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <RadioButton Content="Chọn layer có sẵn"
+                         IsChecked="{Binding UseExistingLayer, Mode=TwoWay}"
+                         Margin="0,0,18,0" />
+            <RadioButton Content="Tạo layer mới"
+                         IsChecked="{Binding CreateNewLayer, Mode=TwoWay}" />
+        </StackPanel>
 
         <TextBlock Grid.Row="2" Grid.Column="0"
                    VerticalAlignment="Center"
+                   Text="Layer Vữa :" />
+        <ComboBox x:Name="CmbLayerName"
+                  Grid.Row="2" Grid.Column="1"
+                  IsEditable="False"
+                  ItemsSource="{Binding LayerNames}"
+                  SelectedItem="{Binding LayerName, Mode=TwoWay}"
+                  ToolTip="Chọn một layer đã có">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CreateNewLayer}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+        <TextBox Grid.Row="2" Grid.Column="1"
+                 Text="{Binding NewLayerName, UpdateSourceTrigger=PropertyChanged}"
+                 ToolTip="Nhập tên layer mới">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource InputStyle}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CreateNewLayer}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <TextBlock Grid.Row="4" Grid.Column="0"
+                   VerticalAlignment="Center"
                    Text="Màu Layer :" />
-        <Grid Grid.Row="2" Grid.Column="1">
+        <Grid Grid.Row="4" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="44" />
+                <ColumnDefinition Width="54" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -99,23 +131,23 @@
                     ToolTip="Layer color preview" />
         </Grid>
 
-        <TextBlock Grid.Row="4" Grid.Column="0"
+        <TextBlock Grid.Row="6" Grid.Column="0"
                    VerticalAlignment="Center"
                    Text="Độ Dày Vữa :" />
         <TextBox x:Name="TxtThickness"
-                 Grid.Row="4" Grid.Column="1"
+                 Grid.Row="6" Grid.Column="1"
                  Style="{StaticResource InputStyle}"
                  HorizontalContentAlignment="Right"
                  behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
                  Text="{Binding ThicknessText, UpdateSourceTrigger=PropertyChanged}"
                  PreviewTextInput="DecimalTextBox_PreviewTextInput" />
 
-        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+        <Button Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                 Style="{StaticResource ButtonStyle}"
                 Content="Đặt Lại Giá Trị Mặc Định"
                 Click="BtnReset_Click" />
 
-        <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+        <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
             <Button Width="72"
