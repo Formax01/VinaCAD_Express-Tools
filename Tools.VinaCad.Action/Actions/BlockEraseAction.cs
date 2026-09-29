@@ -13,6 +13,7 @@ namespace Tools.VinaCad.Action.Actions
     public class BlockEraseAction
     {
         private const int VirtualKeyEscape = 0x1B;
+        private const int VirtualKeySpace = 0x20;
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(int virtualKey);
@@ -36,7 +37,6 @@ namespace Tools.VinaCad.Action.Actions
                     HashSet<ObjectId> dynamicDefinitionIds = new HashSet<ObjectId>();
                     result = EraseInteractively(editor,transaction,dynamicDefinitionIds);
 
-                    // Enter hoặc Space: lưu thay đổi. Esc: transaction tự rollback.
                     if (!result.Cancelled && result.ErasedCount > 0)
                     {
                         BlockEraseHelper.UpdateDynamicDefinitions(transaction, dynamicDefinitionIds);
@@ -75,8 +75,6 @@ namespace Tools.VinaCad.Action.Actions
 
             editor.WriteMessage("\nBBE: Chọn đối tượng con cần xóa | Enter/Space: Xóa | Esc: Hủy/Hoàn tác");
 
-            // VinaCAD tự echo điểm click của GetNestedEntity. Tạm tắt toàn bộ
-            // các kênh ghi prompt/input rồi khôi phục nguyên trạng khi BBE kết thúc.
             TrySetSystemVariable(originalSystemVariables, "CMDECHO", (short)0);
             TrySetSystemVariable(originalSystemVariables, "INPUTHISTORYMODE", (short)0);
             TrySetSystemVariable(originalSystemVariables, "CLIPROMPTUPDATE", (short)0);
@@ -85,8 +83,6 @@ namespace Tools.VinaCad.Action.Actions
             {
                 while (true)
                 {
-                    // Mỗi lần chọn chỉ dùng một dòng. Số trong ngoặc vuông là
-                    // thứ tự đối tượng đang chọn; VinaCAD tự nối tọa độ phía sau.
                     string prompt = $"\nChọn đối tượng";
 
                     PromptNestedEntityOptions options = new PromptNestedEntityOptions(prompt)
@@ -115,7 +111,24 @@ namespace Tools.VinaCad.Action.Actions
                         };
                     }
 
-                    if (result.Status != PromptStatus.OK)
+                    bool hasObject = !result.ObjectId.IsNull && result.ObjectId.IsValid;
+
+                    if (result.Status == PromptStatus.Error && !hasObject)
+                    {
+                        if (WasSpacePressed())
+                        {
+                            return new InteractiveEraseResult
+                            {
+                                ErasedCount = erasedCount,
+                                Cancelled = false
+                            };
+                        }
+
+                        editor.WriteMessage("\nBBE: Không có đối tượng. Hãy chọn lại.");
+                        continue;
+                    }
+
+                    if (result.Status != PromptStatus.OK && result.Status != PromptStatus.Error)
                     {
                         return new InteractiveEraseResult
                         {
@@ -124,10 +137,26 @@ namespace Tools.VinaCad.Action.Actions
                         };
                     }
 
+                    if (!hasObject)
+                    {
+                        if (WasSpacePressed())
+                        {
+                            return new InteractiveEraseResult
+                            {
+                                ErasedCount = erasedCount,
+                                Cancelled = false
+                            };
+                        }
+
+                        editor.WriteMessage("\nBBE: Không có đối tượng. Hãy chọn lại.");
+                        continue;
+                    }
+
                     BlockEraseHelper.EraseResult eraseResult = BlockEraseHelper.TryEraseSingleEntity(transaction,result.ObjectId,result.GetContainers());
                     if (!eraseResult.Succeeded)
                     {
                         Logger.Info($"{nameof(BlockEraseAction)}.RejectedSelection",new InvalidOperationException(eraseResult.RejectionReason ?? "Không xác định được lý do từ chối."));
+                        editor.WriteMessage("\nBBE: Đối tượng không nằm trong block có thể sửa. Hãy chọn lại.");
                         continue;
                     }
 
@@ -148,13 +177,24 @@ namespace Tools.VinaCad.Action.Actions
         {
             try
             {
-                // Prompt vừa kết thúc ngay tại thời điểm KeyDown, vì vậy chỉ kiểm tra
-                // bit "đang giữ phím" để không nhầm với một lần nhấn Esc cũ.
                 return (GetAsyncKeyState(VirtualKeyEscape) & 0x8000) != 0;
             }
             catch (Exception ex)
             {
                 Logger.Info($"{nameof(BlockEraseAction)}.GetEscapeState", ex);
+                return false;
+            }
+        }
+
+        private static bool WasSpacePressed()
+        {
+            try
+            {
+                return (GetAsyncKeyState(VirtualKeySpace) & 0x8000) != 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Info($"{nameof(BlockEraseAction)}.GetSpaceState", ex);
                 return false;
             }
         }

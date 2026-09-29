@@ -13,7 +13,14 @@ namespace Tools.ViewModel
         private string _breadthsText;
         private string _depthsText;
         private bool _drawAnnotations;
+        private GridAxisLabelType _verticalAxisLabelType;
+        private string _verticalAxisStart;
+        private GridAxisLabelType _horizontalAxisLabelType;
+        private string _horizontalAxisStart;
         private string _validationMessage;
+
+        public IReadOnlyList<GridAxisLabelType> LabelTypes { get; } =
+            new[] { GridAxisLabelType.Number, GridAxisLabelType.Letter };
 
         public string BreadthsText
         {
@@ -50,6 +57,54 @@ namespace Tools.ViewModel
             }
         }
 
+        public GridAxisLabelType VerticalAxisLabelType
+        {
+            get => _verticalAxisLabelType;
+            set
+            {
+                if (_verticalAxisLabelType == value) return;
+                _verticalAxisLabelType = value;
+                OnPropertyChanged(nameof(VerticalAxisLabelType));
+                RefreshValidation();
+            }
+        }
+
+        public string VerticalAxisStart
+        {
+            get => _verticalAxisStart;
+            set
+            {
+                if (_verticalAxisStart == value) return;
+                _verticalAxisStart = value;
+                OnPropertyChanged(nameof(VerticalAxisStart));
+                RefreshValidation();
+            }
+        }
+
+        public GridAxisLabelType HorizontalAxisLabelType
+        {
+            get => _horizontalAxisLabelType;
+            set
+            {
+                if (_horizontalAxisLabelType == value) return;
+                _horizontalAxisLabelType = value;
+                OnPropertyChanged(nameof(HorizontalAxisLabelType));
+                RefreshValidation();
+            }
+        }
+
+        public string HorizontalAxisStart
+        {
+            get => _horizontalAxisStart;
+            set
+            {
+                if (_horizontalAxisStart == value) return;
+                _horizontalAxisStart = value;
+                OnPropertyChanged(nameof(HorizontalAxisStart));
+                RefreshValidation();
+            }
+        }
+
         public string ValidationMessage
         {
             get => _validationMessage;
@@ -75,6 +130,10 @@ namespace Tools.ViewModel
                 ? GridAxisSetting.DefaultDepths
                 : depthsText;
             _drawAnnotations = drawAnnotations ?? GridAxisSetting.DefaultDrawAnnotations;
+            _verticalAxisLabelType = GridAxisLabelType.Number;
+            _verticalAxisStart = "1";
+            _horizontalAxisLabelType = GridAxisLabelType.Letter;
+            _horizontalAxisStart = "A";
             _validationMessage = string.Empty;
             RefreshValidation();
         }
@@ -84,6 +143,10 @@ namespace Tools.ViewModel
             BreadthsText = GridAxisSetting.DefaultBreadths;
             DepthsText = GridAxisSetting.DefaultDepths;
             DrawAnnotations = GridAxisSetting.DefaultDrawAnnotations;
+            VerticalAxisLabelType = GridAxisLabelType.Number;
+            VerticalAxisStart = "1";
+            HorizontalAxisLabelType = GridAxisLabelType.Letter;
+            HorizontalAxisStart = "A";
         }
 
         public bool TryGetPreview(out IReadOnlyList<double> breadths, out IReadOnlyList<double> depths)
@@ -105,7 +168,30 @@ namespace Tools.ViewModel
             if (!GridAxisDataHelper.TryParseSpacings(DepthsText, "Depths", out IReadOnlyList<double> depths, out error))
                 return false;
 
-            input = new GridAxisInput(breadths, depths.Reverse(), DrawAnnotations);
+            if (!GridAxisDataHelper.TryBuildLabel(
+                    VerticalAxisLabelType,
+                    VerticalAxisStart,
+                    breadths.Count,
+                    out _,
+                    out error))
+                return false;
+
+            if (!GridAxisDataHelper.TryBuildLabel(
+                    HorizontalAxisLabelType,
+                    HorizontalAxisStart,
+                    depths.Count,
+                    out _,
+                    out error))
+                return false;
+
+            input = new GridAxisInput(
+                breadths,
+                depths.Reverse(),
+                DrawAnnotations,
+                VerticalAxisLabelType,
+                VerticalAxisStart,
+                HorizontalAxisLabelType,
+                HorizontalAxisStart);
             error = string.Empty;
             return true;
         }

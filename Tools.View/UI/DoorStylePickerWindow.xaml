@@ -2,8 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helper="clr-namespace:Tools.View.Controls;assembly=Tools.VinaCad.Helper"
-
-        xmlns:controls="clr-namespace:Tools.View.Controls"
         Title="-Chọn loại cửa mặc định"
         Width="690"
         Height="620"
@@ -78,7 +76,8 @@
         </ListBox>
 
         <DockPanel Grid.Row="1" Margin="4,6,4,0">
-            <Button x:Name="CancelButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Content="Hủy" />
+            <Button x:Name="CancelButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Margin="15,0,0,0" Content="Hủy" />
+            <Button x:Name="AcceptButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Margin="0,0,10,0" IsDefault="True" Content="OK" />
             <StackPanel DockPanel.Dock="Right" Margin="50,0,50,0" Orientation="Horizontal">
                 <Button x:Name="PreviousButton" x:FieldModifier="public" Width="66" Height="28" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
                 <TextBlock Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />
