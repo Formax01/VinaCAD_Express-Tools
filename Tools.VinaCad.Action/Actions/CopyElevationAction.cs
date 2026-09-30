@@ -11,6 +11,9 @@ namespace Tools.VinaCAD.Action.Actions
 {
     public class CopyElevationAction
     {
+        // Mặc định: bản vẽ dùng đơn vị mét, không cần quy đổi
+        private const double DRAWING_UNIT_TO_METER = 1.0;
+
         private Document? _document;
         private Editor? _editor;
         private Database? _database;
@@ -19,9 +22,9 @@ namespace Tools.VinaCAD.Action.Actions
         {
             try
             {
-                _document = Application.DocumentManager.MdiActiveDocument;//lấy Document hiện tại
-                _editor = _document?.Editor;//lấy Editor hiện tại
-                _database = _document?.Database;//lấy Database hiện tại
+                _document = Application.DocumentManager.MdiActiveDocument;
+                _editor = _document?.Editor;
+                _database = _document?.Database;
 
                 if (_editor == null || _database == null)
                     throw new Exception("Không có tài liệu hoạt động");
@@ -57,8 +60,11 @@ namespace Tools.VinaCAD.Action.Actions
                         break;
 
                     Point3d newPosition = pr.Value;
-                    double deltaY = newPosition.Y - oldPosition.Y;
-                    double newElevation = oldElevation + deltaY;
+
+                    double deltaY_drawingUnit = newPosition.Y - oldPosition.Y;
+                    double deltaY_meter = deltaY_drawingUnit * DRAWING_UNIT_TO_METER;
+                    double newElevation = oldElevation + deltaY_meter;
+
                     string newText = ElevationBlockHelper.BuildElevationText(prefix, newElevation);
 
                     Vector3d offset = newPosition - oldPosition;
