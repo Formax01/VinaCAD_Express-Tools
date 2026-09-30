@@ -67,7 +67,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Trục tung :" VerticalAlignment="Center" TextAlignment="Left"/>
@@ -78,7 +77,7 @@
             <TextBox Grid.Row="0" Grid.Column="3" Height="25" VerticalContentAlignment="Center" TextAlignment="Left"
                      Text="{Binding VerticalAxisStart, UpdateSourceTrigger=PropertyChanged}"
                      behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                     ToolTip="Số hoặc chữ bắt đầu của trục tung" Margin="0,5,0,5"/>
+                     ToolTip="Số hoặc chữ bắt đầu của trục tung" Margin="5,5,0,5"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Trục hoành :" VerticalAlignment="Center" TextAlignment="Left"/>
             <ComboBox Grid.Row="1" Grid.Column="1" Width="95" Height="25" HorizontalAlignment="Left"
                       ItemsSource="{Binding LabelTypes}"
@@ -87,7 +86,7 @@
             <TextBox Grid.Row="1" Grid.Column="3" Height="25" VerticalContentAlignment="Center" TextAlignment="Left"
                      Text="{Binding HorizontalAxisStart, UpdateSourceTrigger=PropertyChanged}"
                      behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                     ToolTip="Số hoặc chữ bắt đầu của trục hoành" Margin="0,5,0,5"/>
+                     ToolTip="Số hoặc chữ bắt đầu của trục hoành" Margin="5,5,0,5"/>
         </Grid>
 
         <CheckBox Grid.Row="4"

@@ -56,7 +56,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="2" Header="Chọn Khoảng cách mép tường">
+        <GroupBox Grid.Column="2" Header="Chọn khoảng cách mép tường">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
