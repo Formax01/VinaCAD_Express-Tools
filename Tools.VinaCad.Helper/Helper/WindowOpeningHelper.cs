@@ -19,6 +19,13 @@ namespace Tools.VinaCad.Helper.Helper
         private const string WindowLayerName = "Window";
         private const string WindowAttributeTag = "A";
         private const string ReferenceBlockPrefix = "WINDOW_REFERENCE_";
+        private static readonly Dictionary<ObjectId, WindowRollbackState> PendingRollbacks = new Dictionary<ObjectId, WindowRollbackState>();
+
+        private sealed class WindowRollbackState
+        {
+            public List<ObjectId> RestoreIds = new List<ObjectId>(); // tường/polyline/block gốc cần un-erase
+            public List<ObjectId> CreatedIds = new List<ObjectId>(); // đoạn tường tạm, cap, line sinh ra khi materialize/explode
+        }
 
         public static ObjectId CreateOpening(
             Database database,
@@ -39,6 +46,11 @@ namespace Tools.VinaCad.Helper.Helper
             BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
             ObjectId windowLayerId = EnsureWindowLayer(transaction, database);
             NormalizeWindowBlockColors(transaction, blockDefinitionId);
+
+            // Các list dùng cho rollback (CancelOpening)
+            List<ObjectId> createdIds = new List<ObjectId>();
+            List<ObjectId> restoreIds = new List<ObjectId>();
+
             ResolveWallPair(
                 database,
                 transaction,
@@ -46,6 +58,8 @@ namespace Tools.VinaCad.Helper.Helper
                 selectedWallId,
                 pickedPoint,
                 selection.WallThickness,
+                createdIds,
+                restoreIds,
                 out Line selectedWall,
                 out Line pairedWall);
 
@@ -94,10 +108,10 @@ namespace Tools.VinaCad.Helper.Helper
             if (CrossesAnotherWall(transaction, currentSpace, selectedWall, pairedWall, clearanceStart, clearanceEnd))
                 throw new InvalidOperationException("Lỗ mở quá gần góc hoặc giao tường T/X.");
 
-            SplitWallLine(database, transaction, currentSpace, selectedWall, selectedCutStart, selectedCutEnd);
-            SplitWallLine(database, transaction, currentSpace, pairedWall, pairedCutStart, pairedCutEnd);
-            AppendCap(database, transaction, currentSpace, selectedWall.LayerId, selectedCutStart, pairedCutStart);
-            AppendCap(database, transaction, currentSpace, selectedWall.LayerId, selectedCutEnd, pairedCutEnd);
+            SplitWallLine(database, transaction, currentSpace, selectedWall, selectedCutStart, selectedCutEnd, createdIds);
+            SplitWallLine(database, transaction, currentSpace, pairedWall, pairedCutStart, pairedCutEnd, createdIds);
+            createdIds.Add(AppendCap(database, transaction, currentSpace, selectedWall.LayerId, selectedCutStart, pairedCutStart));
+            createdIds.Add(AppendCap(database, transaction, currentSpace, selectedWall.LayerId, selectedCutEnd, pairedCutEnd));
 
             GetAssetHorizontalBounds(
                 transaction,
@@ -125,8 +139,6 @@ namespace Tools.VinaCad.Helper.Helper
                 - direction * (sourceRootX * scaleX)
                 - normal * (sourceHingeY.GetValueOrDefault() * scaleY);
 
-
-
             BlockReference blockReference = new BlockReference(insertionPoint, blockDefinitionId)
             {
                 LayerId = windowLayerId,
@@ -144,7 +156,17 @@ namespace Tools.VinaCad.Helper.Helper
             pairedWall.UpgradeOpen();
             selectedWall.Erase();
             pairedWall.Erase();
+            // selectedWall/pairedWall là line đã tồn tại từ trước (hoặc line tạm đã nằm trong createdIds/restoreIds)
+            if (!restoreIds.Contains(selectedWall.ObjectId) && !createdIds.Contains(selectedWall.ObjectId))
+                restoreIds.Add(selectedWall.ObjectId);
+            if (!restoreIds.Contains(pairedWall.ObjectId) && !createdIds.Contains(pairedWall.ObjectId))
+                restoreIds.Add(pairedWall.ObjectId);
             transaction.Commit();
+            PendingRollbacks[blockReference.ObjectId] = new WindowRollbackState
+            {
+                RestoreIds = restoreIds,
+                CreatedIds = createdIds
+            };
             return blockReference.ObjectId;
         }
 
@@ -188,11 +210,17 @@ namespace Tools.VinaCad.Helper.Helper
             try
             {
                 result = editor.Drag(jig);
-                ApplyJigResult(database, windowId, jig, selection, result.Status == PromptStatus.OK);
+                bool accepted = result.Status == PromptStatus.OK && jig.HasDirectionPoint;
+                ApplyJigResult(database, windowId, jig, selection, accepted);
+                if (!accepted)
+                {
+                    CancelOpening(database, windowId);
+                    return PromptStatus.Cancel;
+                }
             }
             catch
             {
-                SetWindowVisible(database, windowId);
+                CancelOpening(database, windowId);
                 throw;
             }
             finally
@@ -200,6 +228,44 @@ namespace Tools.VinaCad.Helper.Helper
                 jig.Preview.Dispose();
             }
             return result.Status;
+        }
+
+        /// <summary>
+        /// Hủy lỗ mở: xóa block cửa sổ, xóa cap + đoạn tường tạm, khôi phục tường gốc.
+        /// openErased = true để có thể mở/khôi phục đối tượng đã bị Erase (tránh eWasErased).
+        /// </summary>
+        public static void CancelOpening(Database database, ObjectId windowId)
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+
+            EraseIfAlive(transaction, windowId);   // block cửa sổ
+
+            if (PendingRollbacks.TryGetValue(windowId, out WindowRollbackState rollback))
+            {
+                foreach (ObjectId id in rollback.CreatedIds)   // cap + đoạn tường tạm + line sinh ra
+                    EraseIfAlive(transaction, id);
+
+                foreach (ObjectId id in rollback.RestoreIds)   // tường/polyline/block gốc
+                {
+                    if (id.IsNull) continue;
+                    if (transaction.GetObject(id, OpenMode.ForWrite, true) is DBObject original && original.IsErased)
+                        original.Erase(false);   // un-erase
+                }
+                PendingRollbacks.Remove(windowId);
+            }
+            transaction.Commit();
+        }
+
+        private static void EraseIfAlive(Transaction transaction, ObjectId id)
+        {
+            if (id.IsNull) return;
+            if (transaction.GetObject(id, OpenMode.ForWrite, true) is DBObject obj && !obj.IsErased)
+                obj.Erase(true);
+        }
+
+        public static void CommitOpening(ObjectId windowId)
+        {
+            PendingRollbacks.Remove(windowId);
         }
 
         private static void ApplyJigResult(
@@ -261,6 +327,7 @@ namespace Tools.VinaCad.Helper.Helper
             public double SourceLabelY { get; }
             public bool ReverseAlongWall { get; private set; }
             public bool MirrorAcrossWall { get; private set; }
+            public bool HasDirectionPoint { get; private set; }
 
             public WindowDirectionJig(
                 BlockReference preview,
@@ -304,6 +371,7 @@ namespace Tools.VinaCad.Helper.Helper
                 };
                 PromptPointResult result = prompts.AcquirePoint(options);
                 if (result.Status != PromptStatus.OK) return SamplerStatus.Cancel;
+                HasDirectionPoint = true;
 
                 Vector3d mouseDirection = result.Value - _center;
                 if (mouseDirection.Length <= Tolerance) return SamplerStatus.NoChange;
@@ -401,13 +469,15 @@ namespace Tools.VinaCad.Helper.Helper
             ObjectId selectedWallId,
             Point3d pickedPoint,
             double expectedThickness,
+            List<ObjectId> createdIds,
+            List<ObjectId> restoreIds,
             out Line selectedWall,
             out Line pairedWall)
         {
             DBObject selectedObject = transaction.GetObject(selectedWallId, OpenMode.ForRead);
             if (selectedObject is BlockReference blockReference)
             {
-                ExplodeWallBlock(database, transaction, currentSpace, blockReference, pickedPoint, expectedThickness, out selectedWall, out pairedWall);
+                ExplodeWallBlock(database, transaction, currentSpace, blockReference, pickedPoint, expectedThickness, createdIds, restoreIds, out selectedWall, out pairedWall);
                 return;
             }
 
@@ -418,8 +488,8 @@ namespace Tools.VinaCad.Helper.Helper
 
             Entity pairedEntity = FindPairedWall(transaction, currentSpace, selectedEntity, pickedPoint, expectedThickness)
                 ?? throw new InvalidOperationException("Không tìm thấy mặt tường song song tương ứng. Hãy chọn tường được tạo bởi WW.");
-            selectedWall = MaterializeWallLine(database, transaction, currentSpace, selectedEntity);
-            pairedWall = MaterializeWallLine(database, transaction, currentSpace, pairedEntity);
+            selectedWall = MaterializeWallLine(database, transaction, currentSpace, selectedEntity, createdIds, restoreIds);
+            pairedWall = MaterializeWallLine(database, transaction, currentSpace, pairedEntity, createdIds, restoreIds);
         }
 
         private static Entity? FindPairedWall(Transaction transaction, BlockTableRecord currentSpace, Entity selectedWall, Point3d pickedPoint, double expectedThickness)
@@ -493,9 +563,19 @@ namespace Tools.VinaCad.Helper.Helper
             return false;
         }
 
-        private static Line MaterializeWallLine(Database database, Transaction transaction, BlockTableRecord currentSpace, Entity source)
+        private static Line MaterializeWallLine(
+            Database database,
+            Transaction transaction,
+            BlockTableRecord currentSpace,
+            Entity source,
+            List<ObjectId> createdIds,
+            List<ObjectId> restoreIds)
         {
-            if (source is Line line) return line;
+            if (source is Line line)
+            {
+                restoreIds.Add(line.ObjectId);   // rollback: khôi phục line gốc
+                return line;
+            }
             if (!TryGetWallFace(source, out Point3d start, out Point3d end))
                 throw new InvalidOperationException("Polyline tường phải là một đoạn thẳng gồm đúng 2 đỉnh.");
 
@@ -504,6 +584,8 @@ namespace Tools.VinaCad.Helper.Helper
             transaction.AddNewlyCreatedDBObject(replacement, true);
             if (source.XData != null)
                 replacement.XData = new ResultBuffer(source.XData.AsArray());
+            createdIds.Add(replacement.ObjectId);   // rollback: xóa line thay thế
+            restoreIds.Add(source.ObjectId);        // rollback: khôi phục polyline gốc
             source.UpgradeOpen();
             source.Erase();
             return replacement;
@@ -529,6 +611,8 @@ namespace Tools.VinaCad.Helper.Helper
             BlockReference blockReference,
             Point3d pickedPoint,
             double expectedThickness,
+            List<ObjectId> createdIds,
+            List<ObjectId> restoreIds,
             out Line selectedWall,
             out Line pairedWall)
         {
@@ -563,6 +647,7 @@ namespace Tools.VinaCad.Helper.Helper
                     faceLine.LayerId = blockReference.LayerId;
                     currentSpace.AppendEntity(faceLine);
                     transaction.AddNewlyCreatedDBObject(faceLine, true);
+                    createdIds.Add(faceLine.ObjectId);   // rollback: xóa line mặt tường sinh ra
                     entity.Dispose();
 
                     if (ReferenceEquals(entity, firstFace)) selectedWall = faceLine;
@@ -572,8 +657,10 @@ namespace Tools.VinaCad.Helper.Helper
 
                 currentSpace.AppendEntity(entity);
                 transaction.AddNewlyCreatedDBObject(entity, true);
+                createdIds.Add(entity.ObjectId);   // rollback: xóa entity sinh ra khi explode
             }
 
+            restoreIds.Add(blockReference.ObjectId);   // rollback: khôi phục block tường gốc
             blockReference.UpgradeOpen();
             blockReference.Erase();
         }
@@ -669,7 +756,7 @@ namespace Tools.VinaCad.Helper.Helper
             return lineStart + (lineEnd - lineStart) * parameter;
         }
 
-        private static void SplitWallLine(Database database, Transaction transaction, BlockTableRecord currentSpace, Line source, Point3d firstCut, Point3d secondCut)
+        private static void SplitWallLine(Database database, Transaction transaction, BlockTableRecord currentSpace, Line source, Point3d firstCut, Point3d secondCut, List<ObjectId> createdIds)
         {
             Vector3d sourceVector = source.EndPoint - source.StartPoint;
             double lengthSquared = sourceVector.DotProduct(sourceVector);
@@ -677,11 +764,11 @@ namespace Tools.VinaCad.Helper.Helper
             double secondParameter = (secondCut - source.StartPoint).DotProduct(sourceVector) / lengthSquared;
             Point3d nearCut = firstParameter <= secondParameter ? firstCut : secondCut;
             Point3d farCut = firstParameter <= secondParameter ? secondCut : firstCut;
-            AppendWallFragment(database, transaction, currentSpace, source, source.StartPoint, nearCut);
-            AppendWallFragment(database, transaction, currentSpace, source, farCut, source.EndPoint);
+            AppendWallFragment(database, transaction, currentSpace, source, source.StartPoint, nearCut, createdIds);
+            AppendWallFragment(database, transaction, currentSpace, source, farCut, source.EndPoint, createdIds);
         }
 
-        private static void AppendWallFragment(Database database, Transaction transaction, BlockTableRecord currentSpace, Line source, Point3d start, Point3d end)
+        private static void AppendWallFragment(Database database, Transaction transaction, BlockTableRecord currentSpace, Line source, Point3d start, Point3d end, List<ObjectId> createdIds)
         {
             if (start.DistanceTo(end) <= Tolerance) return;
             Line fragment = new Line(start, end)
@@ -696,15 +783,17 @@ namespace Tools.VinaCad.Helper.Helper
             currentSpace.AppendEntity(fragment);
             transaction.AddNewlyCreatedDBObject(fragment, true);
             DrawWallHelper.CopyWallMetadata(transaction, database, source, fragment);
+            createdIds.Add(fragment.ObjectId);
         }
 
-        private static void AppendCap(Database database, Transaction transaction, BlockTableRecord currentSpace, ObjectId layerId, Point3d start, Point3d end)
+        private static ObjectId AppendCap(Database database, Transaction transaction, BlockTableRecord currentSpace, ObjectId layerId, Point3d start, Point3d end)
         {
-            if (start.DistanceTo(end) <= Tolerance) return;
+            if (start.DistanceTo(end) <= Tolerance) return ObjectId.Null;
             Line cap = new Line(start, end) { LayerId = layerId };
             currentSpace.AppendEntity(cap);
             transaction.AddNewlyCreatedDBObject(cap, true);
             DrawWallHelper.TagAsCap(transaction, database, cap);
+            return cap.ObjectId;
         }
 
         private static bool CrossesAnotherWall(Transaction transaction, BlockTableRecord currentSpace, Line selectedWall, Line pairedWall, Point3d openingStart, Point3d openingEnd)

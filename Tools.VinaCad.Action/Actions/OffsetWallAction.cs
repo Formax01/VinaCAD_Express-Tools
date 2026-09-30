@@ -99,8 +99,7 @@ namespace Tools.VinaCAD.Action.Actions
 
                     PromptPointOptions sideOptions = new PromptPointOptions("\nChọn điểm về phía cần offset: ")
                     {
-                        UseBasePoint = true,
-                        BasePoint = Midpoint(preview.CenterStart, preview.CenterEnd),
+                        UseBasePoint = false,
                         AllowArbitraryInput = false
                     };
                     PromptPointResult sideResult = editor.GetPoint(sideOptions);
