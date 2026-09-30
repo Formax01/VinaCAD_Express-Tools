@@ -19,12 +19,23 @@ namespace Tools.VinaCAD.Action.Actions
         public Extents3d Bounds;
         public Vector3d Direction;
         public string SegmentId;
+        public Point3d Start;   
+        public Point3d End;    
     }
 
     public class EraseAutoHealWallAction
     {
         private const double Tolerance = 0.001;
         private const double CollinearAngleTolerance = 0.002;
+
+        private double _zonePadding = 600.0;
+        private double _healExpansion = 500.0;
+        private double _cornerSearchRadius = 250.0;
+        private double _maxStubLength = 500.0;
+        private double _maxHealGap = 10.0;
+        private double _maxSquareOffset = 15.0;   
+        private double _maxBridgeGap = 300.0;     
+        private double _wallThickness = 200.0;    
 
         public void Execute()
         {
@@ -52,6 +63,8 @@ namespace Tools.VinaCAD.Action.Actions
                     BlockTable blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
                     BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
+                    ConfigureTolerances(tr, modelSpace, selectedIds);
+
                     ExpandWallPairs(tr, db, modelSpace, selectedIds);
 
                     List<ObjectId> erasedIds = new List<ObjectId>();
@@ -73,13 +86,19 @@ namespace Tools.VinaCAD.Action.Actions
                             try
                             {
                                 Extents3d ext = selLine.GeometricExtents;
-                                double padding = 1500.0;
                                 Extents3d zoneBounds = new Extents3d(
-                                    new Point3d(ext.MinPoint.X - padding, ext.MinPoint.Y - padding, 0),
-                                    new Point3d(ext.MaxPoint.X + padding, ext.MaxPoint.Y + padding, 0)
+                                    new Point3d(ext.MinPoint.X - _zonePadding, ext.MinPoint.Y - _zonePadding, 0),
+                                    new Point3d(ext.MaxPoint.X + _zonePadding, ext.MaxPoint.Y + _zonePadding, 0)
                                 );
 
-                                erasedZones.Add(new ErasedZoneInfo { Bounds = zoneBounds, Direction = dir, SegmentId = segId });
+                                erasedZones.Add(new ErasedZoneInfo
+                                {
+                                    Bounds = zoneBounds,
+                                    Direction = dir,
+                                    SegmentId = segId,
+                                    Start = selLine.StartPoint,
+                                    End = selLine.EndPoint
+                                });
 
                                 if (totalExtents == null) totalExtents = ext;
                                 else totalExtents = new Extents3d(
@@ -93,7 +112,7 @@ namespace Tools.VinaCAD.Action.Actions
                         }
                     }
 
-                    CleanUpStubs(tr, modelSpace, selectedIds, erasedZones, erasedIds);
+                    CleanUpStubs(tr, modelSpace, selectedIds, erasedZones, erasedIds, erasedEndpoints);
 
                     foreach (ObjectId objectId in selectedIds)
                     {
@@ -122,7 +141,48 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        private void CleanUpStubs(Transaction tr, BlockTableRecord modelSpace, HashSet<ObjectId> selectedIds, List<ErasedZoneInfo> erasedZones, List<ObjectId> erasedIds)
+        private void ConfigureTolerances(Transaction tr, BlockTableRecord modelSpace, HashSet<ObjectId> selectedIds)
+        {
+            Line selected = selectedIds
+                .Select(id => tr.GetObject(id, OpenMode.ForRead) as Line)
+                .FirstOrDefault(line => line != null && !line.IsErased && line.Length > Tolerance);
+            if (selected == null) return;
+
+            Vector3d direction = (selected.EndPoint - selected.StartPoint).GetNormal();
+            string segmentId = DrawWallHelper.GetWallSegmentId(selected);
+            string side = DrawWallHelper.GetWallSideMarker(selected);
+            double thickness = double.MaxValue;
+
+            foreach (ObjectId id in modelSpace)
+            {
+                if (tr.GetObject(id, OpenMode.ForRead) is not Line candidate || candidate.IsErased ||
+                    candidate.ObjectId == selected.ObjectId || candidate.LayerId != selected.LayerId ||
+                    DrawWallHelper.IsWallCap(candidate) || candidate.Length <= Tolerance) continue;
+
+                string candidateSegment = DrawWallHelper.GetWallSegmentId(candidate);
+                string candidateSide = DrawWallHelper.GetWallSideMarker(candidate);
+                if (!string.IsNullOrEmpty(segmentId) &&
+                    (candidateSegment != segmentId || candidateSide == side)) continue;
+                if (!AreParallelAndOverlapping(selected, candidate)) continue;
+
+                double distance = DistanceToInfiniteLine(candidate.StartPoint, selected.StartPoint, direction);
+                if (distance > Tolerance) thickness = Math.Min(thickness, distance);
+            }
+
+            if (double.IsInfinity(thickness) || thickness == double.MaxValue) thickness = 200.0;
+            thickness = Math.Max(50.0, thickness);
+
+            _zonePadding = thickness * 3.0;
+            _healExpansion = thickness * 2.5;
+            _cornerSearchRadius = thickness * 1.25;
+            _maxStubLength = thickness * 2.5;
+            _maxHealGap = Math.Clamp(thickness * 0.05, 5.0, 20.0);
+            _maxSquareOffset = thickness * 1.5;   // NEW
+            _maxBridgeGap = thickness * 1.5;      // NEW
+            _wallThickness = thickness;           // NEW
+        }
+
+        private void CleanUpStubs(Transaction tr, BlockTableRecord modelSpace, HashSet<ObjectId> selectedIds, List<ErasedZoneInfo> erasedZones, List<ObjectId> erasedIds, HashSet<Point3d> erasedEndpoints)
         {
             HashSet<string> targetSegIds = new HashSet<string>();
             foreach (var zone in erasedZones)
@@ -140,12 +200,14 @@ namespace Tools.VinaCAD.Action.Actions
                     string segId = DrawWallHelper.GetWallSegmentId(line);
                     if (targetSegIds.Contains(segId))
                     {
-                        if (line.Length < 1000.0)
+                        if (line.Length <= _maxStubLength)
                         {
                             Point3d mid = new Point3d((line.StartPoint.X + line.EndPoint.X) / 2, (line.StartPoint.Y + line.EndPoint.Y) / 2, 0);
                             if (IsInsideAnyZoneBounds(mid, erasedZones))
                             {
                                 selectedIds.Add(id);
+                                erasedEndpoints.Add(line.StartPoint);   
+                                erasedEndpoints.Add(line.EndPoint);     
                             }
                         }
                     }
@@ -194,7 +256,6 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        // tách tường dài thành các đoạn nhỏ để không xóa nhầm toàn bộ mảng tường
         private void ProcessPairedLine(Transaction tr, Database db, BlockTableRecord modelSpace, Line selected, Line paired, HashSet<ObjectId> selectedIds)
         {
             if (selectedIds.Contains(paired.ObjectId)) return;
@@ -208,10 +269,14 @@ namespace Tools.VinaCAD.Action.Actions
             double minProj = Math.Min(proj1, proj2);
             double maxProj = Math.Max(proj1, proj2);
 
+            double start = Math.Max(0.0, minProj);
+            double end = Math.Min(pairLen, maxProj);
+            if (end <= start + Tolerance) return;
+
             double breakThreshold = 100.0;
 
-            bool breakStart = minProj > breakThreshold;
-            bool breakEnd = maxProj < pairLen - breakThreshold;
+            bool breakStart = start > breakThreshold;
+            bool breakEnd = end < pairLen - breakThreshold;
 
             if (breakStart || breakEnd)
             {
@@ -219,7 +284,7 @@ namespace Tools.VinaCAD.Action.Actions
 
                 if (breakStart)
                 {
-                    Point3d pt = paired.StartPoint + pairDir * minProj;
+                    Point3d pt = paired.StartPoint + pairDir * start;
                     Line l1 = new Line(paired.StartPoint, pt) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
                     modelSpace.AppendEntity(l1);
                     tr.AddNewlyCreatedDBObject(l1, true);
@@ -227,28 +292,62 @@ namespace Tools.VinaCAD.Action.Actions
                 }
                 if (breakEnd)
                 {
-                    Point3d pt = paired.StartPoint + pairDir * maxProj;
+                    Point3d pt = paired.StartPoint + pairDir * end;
                     Line l2 = new Line(pt, paired.EndPoint) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
                     modelSpace.AppendEntity(l2);
                     tr.AddNewlyCreatedDBObject(l2, true);
                     DrawWallHelper.CopyWallMetadata(tr, db, paired, l2);
                 }
 
-                Point3d midStart = paired.StartPoint + pairDir * Math.Max(0, minProj);
-                Point3d midEnd = paired.StartPoint + pairDir * Math.Min(pairLen, maxProj);
+                Point3d midStart = paired.StartPoint + pairDir * start;
+                Point3d midEnd = paired.StartPoint + pairDir * end;
                 Line midLine = new Line(midStart, midEnd) { LayerId = paired.LayerId, Color = paired.Color, LineWeight = paired.LineWeight, Linetype = paired.Linetype };
 
                 modelSpace.AppendEntity(midLine);
                 tr.AddNewlyCreatedDBObject(midLine, true);
                 DrawWallHelper.CopyWallMetadata(tr, db, paired, midLine);
 
+                CreateCutCaps(tr, db, modelSpace, selected, paired, pairDir, start, end);
+
                 paired.Erase(true);
                 selectedIds.Add(midLine.ObjectId);
             }
             else
             {
+                CreateCutCaps(tr, db, modelSpace, selected, paired, pairDir, start, end);
                 selectedIds.Add(paired.ObjectId);
             }
+        }
+
+        private void CreateCutCaps(Transaction tr, Database db, BlockTableRecord modelSpace, Line selected, Line paired, Vector3d pairDir, double start, double end)
+        {
+            TryCreateCutCap(tr, db, modelSpace, selected.StartPoint, paired.StartPoint + pairDir * start, selected.LayerId, selected.Color, selected.Linetype, selected.LineWeight);
+            TryCreateCutCap(tr, db, modelSpace, selected.EndPoint, paired.StartPoint + pairDir * end, selected.LayerId, selected.Color, selected.Linetype, selected.LineWeight);
+        }
+
+        private void TryCreateCutCap(Transaction tr, Database db, BlockTableRecord modelSpace, Point3d first, Point3d second, ObjectId layerId, Teigha.Colors.Color color, string linetype, LineWeight lineWeight)
+        {
+            if (first.DistanceTo(second) <= Tolerance) return;
+
+            foreach (ObjectId id in modelSpace)
+            {
+                if (tr.GetObject(id, OpenMode.ForRead) is not Line existing || existing.IsErased ||
+                    DrawWallHelper.IsWallCap(existing)) continue;
+
+                if ((existing.StartPoint.DistanceTo(first) <= Tolerance && existing.EndPoint.DistanceTo(second) <= Tolerance) ||
+                    (existing.StartPoint.DistanceTo(second) <= Tolerance && existing.EndPoint.DistanceTo(first) <= Tolerance)) return;
+            }
+
+            Line cap = new Line(first, second)
+            {
+                LayerId = layerId,
+                Color = color,
+                Linetype = linetype,
+                LineWeight = lineWeight
+            };
+            modelSpace.AppendEntity(cap);
+            tr.AddNewlyCreatedDBObject(cap, true);
+            DrawWallHelper.TagAsCap(tr, db, cap);
         }
 
         private Line FindLegacyPairedLine(Line selected, List<Line> candidates)
@@ -291,7 +390,7 @@ namespace Tools.VinaCAD.Action.Actions
             return Math.Abs(offset.X * direction.Y - offset.Y * direction.X);
         }
 
-        private static bool AreParallelAndOverlapping(Line first, Line second)
+        private bool AreParallelAndOverlapping(Line first, Line second)
         {
             Vector3d firstVector = first.EndPoint - first.StartPoint;
             Vector3d secondVector = second.EndPoint - second.StartPoint;
@@ -301,7 +400,7 @@ namespace Tools.VinaCAD.Action.Actions
             if (Math.Abs(direction.DotProduct(secondVector.GetNormal())) < 1.0 - CollinearAngleTolerance) return false;
 
             double dist = DistanceToInfiniteLine(second.StartPoint, first.StartPoint, direction);
-            if (dist > 1500.0) return false;
+            if (dist > _zonePadding) return false;
 
             double firstLength = firstVector.Length;
             double startProjection = (second.StartPoint - first.StartPoint).DotProduct(direction);
@@ -315,9 +414,8 @@ namespace Tools.VinaCAD.Action.Actions
 
         private void HealBrokenWalls(Transaction tr, Database db, BlockTableRecord modelSpace, Extents3d totalExtents, List<ErasedZoneInfo> erasedZones, HashSet<Point3d> erasedEndpoints, List<ObjectId> erasedIds)
         {
-            double exp = 1000.0;
-            Point3d minPt = new Point3d(totalExtents.MinPoint.X - exp, totalExtents.MinPoint.Y - exp, 0);
-            Point3d maxPt = new Point3d(totalExtents.MaxPoint.X + exp, totalExtents.MaxPoint.Y + exp, 0);
+            Point3d minPt = new Point3d(totalExtents.MinPoint.X - _healExpansion, totalExtents.MinPoint.Y - _healExpansion, 0);
+            Point3d maxPt = new Point3d(totalExtents.MaxPoint.X + _healExpansion, totalExtents.MaxPoint.Y + _healExpansion, 0);
 
             List<LineRecord> linesToHeal = new List<LineRecord>();
             List<Line> validWallLines = new List<Line>();
@@ -352,32 +450,122 @@ namespace Tools.VinaCAD.Action.Actions
                 }
             }
 
-            SquareOffWallEnds(validWallLines, erasedZones);
-
             var groups = GroupCollinearLines(linesToHeal, erasedZones, validWallLines);
             foreach (var group in groups)
             {
                 if (group.Count > 1) JoinLines(tr, db, modelSpace, group, validWallLines);
             }
 
-            // gọi hàm bo góc trước khi đóng nắp cap
-            HealCorners(validWallLines, erasedEndpoints);
+            List<Line> Alive() => validWallLines.Where(l => !l.IsErased && !DrawWallHelper.IsWallCap(l)).ToList();
 
-            LocalCapExposedEnds(tr, db, modelSpace, validWallLines, erasedZones);
+            HealCorners(Alive(), erasedEndpoints);
+
+            SquareAndCapDanglingEnds(tr, db, modelSpace, Alive(), erasedZones);
         }
 
-        // lấy 2 nét tạo bề dày tường ưu tiên gần tâm điểm bị xóa nhất
+        private void SquareAndCapDanglingEnds(Transaction tr, Database db, BlockTableRecord modelSpace, List<Line> lines, List<ErasedZoneInfo> zones)
+        {
+            double maxPair = _wallThickness * 1.3;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                Line a = lines[i];
+                if (a.IsErased || a.Length <= Tolerance) continue;
+                Vector3d dir = (a.EndPoint - a.StartPoint).GetNormal();
+                double lenA = a.Length;
+
+                for (int j = i + 1; j < lines.Count; j++)
+                {
+                    Line b = lines[j];
+                    if (b.IsErased || b.LayerId != a.LayerId || b.Length <= Tolerance) continue;
+                    if (Math.Abs(dir.DotProduct((b.EndPoint - b.StartPoint).GetNormal())) < 1.0 - CollinearAngleTolerance) continue;
+
+                    double perp = DistanceToInfiniteLine(b.StartPoint, a.StartPoint, dir);
+                    if (perp <= Tolerance || perp > maxPair) continue;
+
+                    double pbS = (b.StartPoint - a.StartPoint).DotProduct(dir);
+                    double pbE = (b.EndPoint - a.StartPoint).DotProduct(dir);
+                    double bMin = Math.Min(pbS, pbE), bMax = Math.Max(pbS, pbE);
+                    if (bMax <= Tolerance || bMin >= lenA - Tolerance) continue; // không chồng lấn
+
+                    foreach (bool atMax in new[] { false, true })
+                    {
+                        double aPos = atMax ? lenA : 0.0;
+                        double bPos = atMax ? bMax : bMin;
+                        if (Math.Abs(aPos - bPos) > _maxSquareOffset) continue;
+
+                        double target = atMax ? Math.Max(aPos, bPos) : Math.Min(aPos, bPos);
+                        Point3d pA = a.StartPoint + dir * target;
+                        Point3d pB = b.StartPoint + dir * ((pA - b.StartPoint).DotProduct(dir));
+
+                        Point3d mid = new Point3d((pA.X + pB.X) / 2, (pA.Y + pB.Y) / 2, 0);
+                        if (!IsInsideAnyZoneBounds(mid, zones)) continue;
+
+                        if (HasWallTouchingSegment(pA, pB, dir, a, b, lines)) continue;
+
+                        if (Math.Abs(aPos - target) > Tolerance)
+                        {
+                            a.UpgradeOpen();
+                            if (atMax) a.EndPoint = pA; else a.StartPoint = pA;
+                        }
+                        if (Math.Abs(bPos - target) > Tolerance)
+                        {
+                            b.UpgradeOpen();
+                            bool bStartIsThisEnd = atMax ? (pbS >= pbE) : (pbS <= pbE);
+                            if (bStartIsThisEnd) b.StartPoint = pB; else b.EndPoint = pB;
+                        }
+
+                        CreateCapIfMissing(tr, db, modelSpace, pA, pB, a);
+                    }
+                }
+            }
+        }
+
+        private bool HasWallTouchingSegment(Point3d s, Point3d e, Vector3d wallDir, Line ex1, Line ex2, List<Line> lines)
+        {
+            foreach (Line l in lines)
+            {
+                if (l.IsErased || l.ObjectId == ex1.ObjectId || l.ObjectId == ex2.ObjectId) continue;
+                Vector3d v = l.EndPoint - l.StartPoint;
+                if (v.Length <= Tolerance) continue;
+                if (Math.Abs(wallDir.DotProduct(v.GetNormal())) >= 1.0 - CollinearAngleTolerance) continue;
+                if (SegmentsTouchOrCross(s, e, l.StartPoint, l.EndPoint, 2.0)) return true;
+            }
+            return false;
+        }
+
+        private void CreateCapIfMissing(Transaction tr, Database db, BlockTableRecord modelSpace, Point3d p1, Point3d p2, Line src)
+        {
+            if (p1.DistanceTo(p2) <= Tolerance) return;
+
+            foreach (ObjectId id in modelSpace)
+            {
+                if (tr.GetObject(id, OpenMode.ForRead) is not Line ex || ex.IsErased) continue;
+                if ((ex.StartPoint.DistanceTo(p1) <= Tolerance && ex.EndPoint.DistanceTo(p2) <= Tolerance) ||
+                    (ex.StartPoint.DistanceTo(p2) <= Tolerance && ex.EndPoint.DistanceTo(p1) <= Tolerance)) return;
+            }
+
+            Line cap = new Line(p1, p2)
+            {
+                LayerId = src.LayerId,
+                Color = src.Color,
+                Linetype = src.Linetype,
+                LineWeight = src.LineWeight
+            };
+            modelSpace.AppendEntity(cap);
+            tr.AddNewlyCreatedDBObject(cap, true);
+            DrawWallHelper.TagAsCap(tr, db, cap);
+        }
+
         private List<Line> GetThickWallLines(List<Line> group, Point3d center)
         {
             if (group.Count == 0) return new List<Line>();
 
-            // Sắp xếp nét tường theo khoảng cách gần với điểm hở (Endpoint) nhất
             var sorted = group.OrderBy(l => Math.Min(l.StartPoint.DistanceTo(center), l.EndPoint.DistanceTo(center))).ToList();
 
             var first = sorted.First();
             Vector3d dir = (first.EndPoint - first.StartPoint).GetNormal();
 
-            // Tìm mép tường thứ 2 (cách mép 1 độ dày > 50)
             var second = sorted.FirstOrDefault(l => DistanceToInfiniteLine(l.StartPoint, first.StartPoint, dir) > 50.0);
 
             if (second != null) return new List<Line> { first, second };
@@ -386,12 +574,10 @@ namespace Tools.VinaCAD.Action.Actions
 
         private void HealCorners(List<Line> validWallLines, HashSet<Point3d> erasedEndpoints)
         {
-            double searchRadius = 1500.0;
-
             foreach (var ep in erasedEndpoints)
             {
                 var localLines = validWallLines.Where(l =>
-                    l.StartPoint.DistanceTo(ep) < searchRadius || l.EndPoint.DistanceTo(ep) < searchRadius
+                    l.StartPoint.DistanceTo(ep) < _cornerSearchRadius || l.EndPoint.DistanceTo(ep) < _cornerSearchRadius
                 ).ToList();
 
                 if (localLines.Count < 2) continue;
@@ -523,6 +709,8 @@ namespace Tools.VinaCAD.Action.Actions
 
         private void ExtendOrTrimToPoint(Line l, Point3d pt)
         {
+            if (Math.Min(l.StartPoint.DistanceTo(pt), l.EndPoint.DistanceTo(pt)) > _cornerSearchRadius)
+                return;
             l.UpgradeOpen();
             if (l.StartPoint.DistanceTo(pt) < l.EndPoint.DistanceTo(pt))
                 l.StartPoint = pt;
@@ -530,7 +718,7 @@ namespace Tools.VinaCAD.Action.Actions
                 l.EndPoint = pt;
         }
 
-        private void SquareOffWallEnds(List<Line> survivingLines, List<ErasedZoneInfo> erasedZones)
+        private void SquareOffWallEnds(List<Line> survivingLines, List<ErasedZoneInfo> erasedZones, HashSet<Point3d> erasedEndpoints)
         {
             var bySegment = survivingLines
                 .Where(l => !string.IsNullOrEmpty(DrawWallHelper.GetWallSegmentId(l)))
@@ -545,14 +733,14 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     foreach (Line lineB in linesB)
                     {
-                        TrySquareOff(lineA, lineB, true, erasedZones, survivingLines);
-                        TrySquareOff(lineA, lineB, false, erasedZones, survivingLines);
+                        TrySquareOff(lineA, lineB, true, erasedZones, erasedEndpoints, survivingLines);
+                        TrySquareOff(lineA, lineB, false, erasedZones, erasedEndpoints, survivingLines);
                     }
                 }
             }
         }
 
-        private void TrySquareOff(Line lineA, Line lineB, bool aIsStart, List<ErasedZoneInfo> erasedZones, List<Line> survivingLines)
+        private void TrySquareOff(Line lineA, Line lineB, bool aIsStart, List<ErasedZoneInfo> erasedZones, HashSet<Point3d> erasedEndpoints, List<Line> survivingLines)
         {
             Point3d ptA = aIsStart ? lineA.StartPoint : lineA.EndPoint;
 
@@ -564,19 +752,24 @@ namespace Tools.VinaCAD.Action.Actions
 
             if (distToBStart < distToBEnd)
             {
-                if (distToBStart > 1000.0) return;
+                if (distToBStart > _cornerSearchRadius) return;
                 bIsStart = true;
                 ptB = lineB.StartPoint;
             }
             else
             {
-                if (distToBEnd > 1000.0) return;
+                if (distToBEnd > _cornerSearchRadius) return;
                 bIsStart = false;
                 ptB = lineB.EndPoint;
             }
 
             Point3d mid = new Point3d((ptA.X + ptB.X) / 2, (ptA.Y + ptB.Y) / 2, 0);
             if (!IsInsideAnyZoneBounds(mid, erasedZones)) return;
+            if (!erasedEndpoints.Any(ep => ep.DistanceTo(ptA) <= _cornerSearchRadius || ep.DistanceTo(ptB) <= _cornerSearchRadius)) return;
+
+            Vector3d wallDirection = lineA.EndPoint - lineA.StartPoint;
+            if (wallDirection.Length <= Tolerance ||
+                Math.Abs((ptB - ptA).DotProduct(wallDirection.GetNormal())) > _maxSquareOffset) return;   // CHANGED
 
             if (HasPerpendicularWallOnSegment(ptA, ptB, lineA, lineB, survivingLines)) return;
 
@@ -618,7 +811,7 @@ namespace Tools.VinaCAD.Action.Actions
             if (bIsStart) lineB.StartPoint = targetPtB; else lineB.EndPoint = targetPtB;
         }
 
-        private void LocalCapExposedEnds(Transaction tr, Database db, BlockTableRecord modelSpace, List<Line> allLines, List<ErasedZoneInfo> erasedZones)
+        private void LocalCapExposedEnds(Transaction tr, Database db, BlockTableRecord modelSpace, List<Line> allLines, List<ErasedZoneInfo> erasedZones, HashSet<Point3d> erasedEndpoints)
         {
             var bySegment = allLines
                 .Where(l => !string.IsNullOrEmpty(DrawWallHelper.GetWallSegmentId(l)) && !DrawWallHelper.IsWallCap(l) && !l.IsErased)
@@ -633,13 +826,13 @@ namespace Tools.VinaCAD.Action.Actions
 
                 foreach (Line a in linesA)
                 {
-                    TryCapEndpoint(tr, db, modelSpace, a, a.StartPoint, linesB, erasedZones, allLines);
-                    TryCapEndpoint(tr, db, modelSpace, a, a.EndPoint, linesB, erasedZones, allLines);
+                    TryCapEndpoint(tr, db, modelSpace, a, a.StartPoint, linesB, erasedZones, erasedEndpoints, allLines);
+                    TryCapEndpoint(tr, db, modelSpace, a, a.EndPoint, linesB, erasedZones, erasedEndpoints, allLines);
                 }
             }
         }
 
-        private void TryCapEndpoint(Transaction tr, Database db, BlockTableRecord modelSpace, Line lineA, Point3d ptA, List<Line> linesB, List<ErasedZoneInfo> zones, List<Line> allLines)
+        private void TryCapEndpoint(Transaction tr, Database db, BlockTableRecord modelSpace, Line lineA, Point3d ptA, List<Line> linesB, List<ErasedZoneInfo> zones, HashSet<Point3d> erasedEndpoints, List<Line> allLines)
         {
             Point3d bestPtB = Point3d.Origin;
             double minDist = double.MaxValue;
@@ -661,7 +854,12 @@ namespace Tools.VinaCAD.Action.Actions
                 }
             }
 
-            if (minDist > 1000.0 || bestLineB == null) return;
+            if (minDist > _cornerSearchRadius || bestLineB == null) return;
+            if (!erasedEndpoints.Any(ep => ep.DistanceTo(ptA) <= _cornerSearchRadius || ep.DistanceTo(bestPtB) <= _cornerSearchRadius)) return;
+
+            Vector3d wallDirection = lineA.EndPoint - lineA.StartPoint;
+            if (wallDirection.Length <= Tolerance ||
+                Math.Abs((bestPtB - ptA).DotProduct(wallDirection.GetNormal())) > _maxSquareOffset) return;   // CHANGED
 
             Point3d mid = new Point3d((ptA.X + bestPtB.X) / 2, (ptA.Y + bestPtB.Y) / 2, 0);
 
@@ -795,10 +993,7 @@ namespace Tools.VinaCAD.Action.Actions
                 if (gapMid.X >= zone.Bounds.MinPoint.X && gapMid.X <= zone.Bounds.MaxPoint.X &&
                     gapMid.Y >= zone.Bounds.MinPoint.Y && gapMid.Y <= zone.Bounds.MaxPoint.Y)
                 {
-                    if (Math.Abs(lineDir.DotProduct(zone.Direction)) > 1.0 - CollinearAngleTolerance)
-                        continue;
-
-                    return true;
+                    return Math.Abs(lineDir.DotProduct(zone.Direction)) > 1.0 - CollinearAngleTolerance;
                 }
             }
             return false;
@@ -824,15 +1019,11 @@ namespace Tools.VinaCAD.Action.Actions
                     {
                         if (used[j]) continue;
 
-                        foreach (var groupLine in currentGroup.ToList())
+                        if (CanGroup(currentGroup[0], lines[j], erasedZones, validWallLines))
                         {
-                            if (CanGroup(groupLine, lines[j], erasedZones, validWallLines))
-                            {
-                                currentGroup.Add(lines[j]);
-                                used[j] = true;
-                                added = true;
-                                break;
-                            }
+                            currentGroup.Add(lines[j]);
+                            used[j] = true;
+                            added = true;
                         }
                     }
                 } while (added);
@@ -855,17 +1046,32 @@ namespace Tools.VinaCAD.Action.Actions
 
             double gap = CalculateGap(l1, l2, out Point3d gapMid);
 
-            if (gap >= 0 && gap < 1500.0)
+            if (gap > Tolerance && gap <= _maxBridgeGap)
             {
-                bool shouldGroup = false;
-                if (!string.IsNullOrEmpty(seg1) && seg1 == seg2 && side1 == side2)
+                Vector3d d = (l1.End - l1.Start).GetNormal();
+                Point3d gA = gapMid - d * (gap / 2.0);
+                Point3d gB = gapMid + d * (gap / 2.0);
+                if (BridgesErasedWall(gA, gB, d, erasedZones) &&
+                    !IsGapOccupiedByPerpendicularWall(l1, l2, validWallLines))
+                    return true;
+            }
+
+            double maxGap = GetHealGapLimit(l1, l2, seg1, seg2, erasedZones);
+
+            if (gap >= 0 && gap <= maxGap)
+            {
+                bool hasMetadata = !string.IsNullOrEmpty(seg1) || !string.IsNullOrEmpty(seg2);
+                bool shouldGroup;
+                if (hasMetadata)
                 {
-                    if (IsInsideAnyZoneBounds(gapMid, erasedZones)) shouldGroup = true;
+                    shouldGroup = !string.IsNullOrEmpty(seg1) &&
+                                  seg1 == seg2 && side1 == side2 &&
+                                  IsInsideAnyZoneBounds(gapMid, erasedZones);
                 }
                 else
                 {
                     Vector3d lineDir = (l1.End - l1.Start).GetNormal();
-                    if (IsValidGapForHealing(gapMid, lineDir, erasedZones)) shouldGroup = true;
+                    shouldGroup = IsValidGapForHealing(gapMid, lineDir, erasedZones);
                 }
 
                 if (shouldGroup)
@@ -879,6 +1085,49 @@ namespace Tools.VinaCAD.Action.Actions
             }
 
             return false;
+        }
+
+        private bool BridgesErasedWall(Point3d a, Point3d b, Vector3d dir, List<ErasedZoneInfo> zones)
+        {
+            foreach (var z in zones)
+            {
+                Vector3d zd = z.End - z.Start;
+                if (zd.Length <= Tolerance) continue;
+                if (Math.Abs(dir.DotProduct(zd.GetNormal())) > 1.0 - CollinearAngleTolerance) continue; // bỏ đường song song
+                if (SegmentsTouchOrCross(a, b, z.Start, z.End, 5.0)) return true;
+            }
+            return false;
+        }
+
+        private double GetHealGapLimit(LineRecord l1, LineRecord l2, string seg1, string seg2, List<ErasedZoneInfo> erasedZones)
+        {
+            if (string.IsNullOrEmpty(seg1) || seg1 != seg2) return _maxHealGap;
+
+            Vector3d direction = l1.End - l1.Start;
+            if (direction.Length <= Tolerance) return _maxHealGap;
+            direction = direction.GetNormal();
+
+            double limit = _maxHealGap;
+            foreach (ErasedZoneInfo zone in erasedZones)
+            {
+                if (zone.SegmentId != seg1 ||
+                    Math.Abs(direction.DotProduct(zone.Direction)) < 1.0 - CollinearAngleTolerance)
+                    continue;
+
+                Point3d min = zone.Bounds.MinPoint;
+                Point3d max = zone.Bounds.MaxPoint;
+                Point3d[] corners =
+                {
+                    new Point3d(min.X, min.Y, 0), new Point3d(min.X, max.Y, 0),
+                    new Point3d(max.X, min.Y, 0), new Point3d(max.X, max.Y, 0)
+                };
+
+                double minProjection = corners.Min(p => (p - Point3d.Origin).DotProduct(direction));
+                double maxProjection = corners.Max(p => (p - Point3d.Origin).DotProduct(direction));
+                limit = Math.Max(limit, maxProjection - minProjection + _maxHealGap);
+            }
+
+            return limit;
         }
 
         private bool IsGapOccupiedByPerpendicularWall(LineRecord l1, LineRecord l2, List<Line> validWallLines)

@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Background="#F3F3F3">
-    <Grid Margin="0">
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -94,7 +94,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Grid Grid.Row="1" Margin="6,6,4,5">
+        <Grid Grid.Row="1" Margin="5,5,5,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="20" />
@@ -102,12 +102,12 @@
                 <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="66" />
                 <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="76" />
                 <ColumnDefinition Width="15" />
-                <ColumnDefinition Width="66" />
+                <ColumnDefinition Width="76" />
             </Grid.ColumnDefinitions>
-            <Button x:Name="CancelButton" x:FieldModifier="public" Grid.Column="8" Width="66" Height="28" Content="Hủy"  />
-            <Button x:Name="AcceptButton" x:FieldModifier="public" Grid.Column="6" Width="66" Height="28" IsDefault="True" Content="OK"  />
+            <Button x:Name="CancelButton" x:FieldModifier="public" Grid.Column="8" Width="76" Height="28" Content="Hủy"  />
+            <Button x:Name="AcceptButton" x:FieldModifier="public" Grid.Column="6" Width="76" Height="28" IsDefault="True" Content="OK"  />
             
             <Button x:Name="PreviousButton" x:FieldModifier="public" Grid.Column="2" Width="66" Height="28" IsEnabled="{Binding CanPrevious}" Content="&#8592;" />
             <TextBlock Grid.Column="3" Width="45" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PageText}" />

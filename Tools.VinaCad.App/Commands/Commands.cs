@@ -574,7 +574,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 TrimFixWallAction action = new TrimFixWallAction();
-                action.Execute();
+                while (action.Execute()) { }
             }
             catch (System.Exception ex)
             {
