@@ -65,7 +65,8 @@ namespace Tools.VinaCAD.Action.Actions
                     switch (choice)
                     {
                         case "T":
-                            ChangeThickness();
+                            if (!ChangeThickness())
+                                return;
                             break;
                         case "A":
                             ChangeAlignment();
@@ -88,10 +89,10 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        private void ChangeThickness()
+        private bool ChangeThickness()
         {
             if (_editor == null)
-                return;
+                return false;
 
             bool showDialog = true;
             while (showDialog)
@@ -121,11 +122,12 @@ namespace Tools.VinaCAD.Action.Actions
                 }
                 else
                 {
-                    showDialog = false;
+                    return false;
                 }
             }
 
             _editor.WriteMessage($"\nĐã cập nhật chiều dày tường: {_wallModel.Thickness}");
+            return true;
         }
 
         private void ChangeAlignment()

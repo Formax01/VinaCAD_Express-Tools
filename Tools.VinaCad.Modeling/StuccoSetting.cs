@@ -7,6 +7,7 @@ namespace Tools.VinaCad.Modeling
         public const double DefaultThickness = 30.0;
 
         public string LayerName { get; set; } = DefaultLayerName;
+        public bool CreateNewLayer { get; set; }
         public short LayerColorIndex { get; set; } = DefaultLayerColorIndex;
         public double Thickness { get; set; } = DefaultThickness;
 
@@ -15,6 +16,7 @@ namespace Tools.VinaCad.Modeling
             return new StuccoSetting
             {
                 LayerName = LayerName,
+                CreateNewLayer = CreateNewLayer,
                 LayerColorIndex = LayerColorIndex,
                 Thickness = Thickness
             };
