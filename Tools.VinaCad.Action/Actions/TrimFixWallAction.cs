@@ -52,7 +52,7 @@ namespace Tools.VinaCAD.Action.Actions
                 };
                 PromptSelectionOptions selectionOptions = new PromptSelectionOptions
                 {
-                    MessageForAdding = "\nQuét chọn các tường cần sửa từ phải qua trái: "
+                    MessageForAdding = "\nQuét chọn các tường cần sửa : "
                 };
                 PromptSelectionResult selection = editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
 
