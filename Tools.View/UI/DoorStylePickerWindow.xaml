@@ -75,7 +75,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <DockPanel Grid.Row="1" Margin="4,6,4,0">
+        <DockPanel Grid.Row="1" Margin="5,5,5,5">
             <Button x:Name="CancelButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Margin="15,0,0,0" Content="Hủy" />
             <Button x:Name="AcceptButton" x:FieldModifier="public" DockPanel.Dock="Right" Width="76" Height="28" Margin="0,0,10,0" IsDefault="True" Content="OK" />
             <StackPanel DockPanel.Dock="Right" Margin="50,0,50,0" Orientation="Horizontal">

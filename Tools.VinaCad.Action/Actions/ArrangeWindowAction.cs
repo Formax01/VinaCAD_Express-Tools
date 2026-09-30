@@ -46,7 +46,6 @@ namespace Tools.VinaCAD.Action.Actions
                             result.ObjectId,
                             result.PickedPoint,
                             selection);
-                        createdCount++;
                         editor.UpdateScreen();
                     }
                     catch (Exception exception)
@@ -63,11 +62,19 @@ namespace Tools.VinaCAD.Action.Actions
                             windowId,
                             selection);
                         editor.UpdateScreen();
-                        if (directionStatus == PromptStatus.Cancel)
+                        if (directionStatus != PromptStatus.OK)
+                        {
+                            WindowOpeningHelper.CancelOpening(document.Database, windowId);
+                            editor.UpdateScreen();
                             break;
+                        }
+
+                        createdCount++;
+                        WindowOpeningHelper.CommitOpening(windowId);
                     }
                     catch (Exception exception)
                     {
+                        WindowOpeningHelper.CancelOpening(document.Database, windowId);
                         editor.WriteMessage($"\nAW: Không thể đổi hướng cửa sổ: {exception.Message}");
                     }
                 }
