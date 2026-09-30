@@ -5,7 +5,7 @@
     xmlns:behaviors="clr-namespace:Tools.View.Behaviors" 
     Title="Vẽ mặt cắt cầu thang"
     Width="1020"
-    Height="530"
+    Height="525"
     Background="#F0F0F0"
     FontFamily="Segoe UI"
     FontSize="12"
@@ -17,17 +17,13 @@
 
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="Height" Value="21" />
-            <Setter Property="Margin" Value="3,2" />
-            <Setter Property="Padding" Value="2,0" />
+            <Setter Property="Height" Value="22" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="behaviors:TextBoxBehavior.SelectAllTextOnFocus" Value="True" />
             <Setter Property="TextAlignment" Value="Right" />
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="22" />
-            <Setter Property="Margin" Value="3,2" />
-            <Setter Property="Padding" Value="6,0" />
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -48,14 +44,14 @@
                 <RowDefinition Height="36" />
                 <RowDefinition Height="1" />
                 <RowDefinition Height="85" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="230" />
                     <ColumnDefinition Width="230" />
-                    <ColumnDefinition Width="*" />
+
                 </Grid.ColumnDefinitions>
                 <RadioButton Grid.Column="0" Margin="8,0,0,0" VerticalAlignment="Center" Content="Cầu thang 2 vế" GroupName="StairType" IsChecked="{Binding IsDoubleFlight}" />
                 <RadioButton Grid.Column="1" Margin="7,0,0,0" VerticalAlignment="Center" Content="Cầu thang 1 vế" GroupName="StairType" IsChecked="{Binding IsSingleFlight}" />
@@ -103,57 +99,51 @@
 
             <Border Grid.Row="3" Background="#D0D0D0" />
 
-            <GroupBox Grid.Row="4" Margin="0" Header="Thông số chiếu nghỉ:">
-                <!-- Đã chỉnh sửa Margin từ "3,0" thành "10,5,5,5" để chữ không bị dính sát mép trái -->
-                <Grid Margin="10,5,5,5">
+            <GroupBox Grid.Row="4" Header="Thông số chiếu nghỉ:">
+                <Grid HorizontalAlignment="Center" Width="673">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="4" />
                         <ColumnDefinition Width="60" />
-                        <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="27" />
-                        <RowDefinition Height="27" />
+                        <RowDefinition Height="29" />
+                        <RowDefinition Height="29" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Chiếu nghỉ 1:" ToolTip="Chiều rộng chiếu nghỉ 1" />
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Landing1Width, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <Button Grid.Row="0" Grid.Column="3" Command="{Binding MeasureLanding1WidthCmd}" Content="Đo" />
-                    <TextBlock Grid.Row="0" Grid.Column="5" Margin="8,0,0,0" Text="Dầm chính C:" ToolTip="Chiều cao dầm chính" />
-                    <TextBox Grid.Row="0" Grid.Column="6" Text="{Binding GirderHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <TextBlock Grid.Row="0" Grid.Column="8" Margin="8,0,0,0" Text="Dầm phụ C:" ToolTip="Chiều cao dầm phụ" />
-                    <TextBox Grid.Row="0" Grid.Column="9" Text="{Binding BeamHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <CheckBox Grid.Row="0" Grid.Column="11" Margin="8,0,0,0" VerticalAlignment="Center" Content="Dầm 1" IsChecked="{Binding HasBeam1}" />
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,5,0" Text="Chiếu nghỉ 1:" ToolTip="Chiều rộng chiếu nghỉ 1" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" Text="{Binding Landing1Width, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <Button Grid.Row="0" Grid.Column="2" Margin="5,0,5,0" Command="{Binding MeasureLanding1WidthCmd}" Content="Đo" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" Margin="5,0,5,0" Text="Dầm chính C:" ToolTip="Chiều cao dầm chính" />
+                    <TextBox Grid.Row="0" Grid.Column="4" Margin="0,0,5,0" Text="{Binding GirderHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <TextBlock Grid.Row="0" Grid.Column="5" Margin="5,0,5,0" Text="Dầm phụ C:" ToolTip="Chiều cao dầm phụ" />
+                    <TextBox Grid.Row="0" Grid.Column="6" Margin="0,0,5,0" Text="{Binding BeamHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <CheckBox Grid.Row="0" Grid.Column="7" Margin="5,0,5,0" VerticalAlignment="Center" Content="Dầm 1" IsChecked="{Binding HasBeam1}" />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Chiếu nghỉ 2:" ToolTip="Chiều rộng chiếu nghỉ 2" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Landing2Width, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <Button Grid.Row="1" Grid.Column="3" Command="{Binding MeasureLanding2WidthCmd}" Content="Đo" />
-                    <TextBlock Grid.Row="1" Grid.Column="5" Margin="8,0,0,0" Text="Dầm chính R:" ToolTip="Chiều rộng dầm chính" />
-                    <TextBox Grid.Row="1" Grid.Column="6" Text="{Binding GirderWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <TextBlock Grid.Row="1" Grid.Column="8" Margin="8,0,0,0" Text="Dầm phụ R:" ToolTip="Chiều rộng dầm phụ" />
-                    <TextBox Grid.Row="1" Grid.Column="9" Text="{Binding BeamWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                    <CheckBox Grid.Row="1" Grid.Column="11" Margin="8,0,0,0" VerticalAlignment="Center" Content="Dầm 2" IsChecked="{Binding HasBeam2}" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5,0,5,0" Text="Chiếu nghỉ 2:" ToolTip="Chiều rộng chiếu nghỉ 2" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,5,0" Text="{Binding Landing2Width, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <Button Grid.Row="1" Grid.Column="2" Margin="5,0,5,0" Command="{Binding MeasureLanding2WidthCmd}" Content="Đo" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Margin="5,0,5,0" Text="Dầm chính R:" ToolTip="Chiều rộng dầm chính" />
+                    <TextBox Grid.Row="1" Grid.Column="4" Margin="0,0,5,0" Text="{Binding GirderWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <TextBlock Grid.Row="1" Grid.Column="5" Margin="5,0,5,0" Text="Dầm phụ R:" ToolTip="Chiều rộng dầm phụ" />
+                    <TextBox Grid.Row="1" Grid.Column="6" Margin="0,0,5,0" Text="{Binding BeamWidth, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                    <CheckBox Grid.Row="1" Grid.Column="7" Margin="5,0,5,0" VerticalAlignment="Center" Content="Dầm 2" IsChecked="{Binding HasBeam2}" />
                 </Grid>
             </GroupBox>
 
             <StackPanel Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <Button Width="76" Height="25" Margin="0,5,15,0" Command="{Binding AcceptCmd}" Content="Đồng ý" IsDefault="True" />
-                <Button Width="76" Height="25" Margin="0,5,0,0" Command="{Binding CancelCmd}" Content="Hủy" IsCancel="True" />
+                <Button Width="76" Height="25" Margin="0,0,10,0" Command="{Binding AcceptCmd}" Content="Đồng ý" IsDefault="True" />
+                <Button Width="76" Height="25" Margin="0,0,0,0" Command="{Binding CancelCmd}" Content="Hủy" IsCancel="True" />
             </StackPanel>
         </Grid>
 
         <GroupBox Grid.Column="2" Margin="0" Header="Thông số cầu thang:">
-            <!-- Đã điều chỉnh Grid Margin và phân bổ lại ColumnDefinitions để sát lề phải -->
-            <Grid Margin="10,5,10,5">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="135" />
                     <ColumnDefinition Width="*" />
@@ -174,11 +164,9 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Chiều cao tầng:" />
-                <!-- Cột 1 và 2 tách biệt cho Dòng 0 để vừa TextBox và Button "Đo" -->
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,6,0" Text="{Binding StoreyHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
-                <Button Grid.Row="0" Grid.Column="2" Command="{Binding MeasureStoreyHeightCmd}" Content="Đo" />
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" Text="{Binding StoreyHeight, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, StringFormat=0.####}" />
+                <Button Grid.Row="0" Grid.Column="2" Margin="5,0,0,0" Command="{Binding MeasureStoreyHeightCmd}" Content="Đo" />
 
-                <!-- Dùng ColumnSpan="2" để các TextBox dãn chạm mép phải đồng đều -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Số tầng:" />
                 <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding StoreyNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
 

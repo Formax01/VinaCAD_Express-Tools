@@ -103,7 +103,7 @@
                 <ColumnDefinition Width="66" />
                 <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="76" />
-                <ColumnDefinition Width="15" />
+                <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="76" />
             </Grid.ColumnDefinitions>
             <Button x:Name="CancelButton" x:FieldModifier="public" Grid.Column="8" Width="76" Height="28" Content="Hủy"  />
