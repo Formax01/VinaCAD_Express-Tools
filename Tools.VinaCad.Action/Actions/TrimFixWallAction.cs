@@ -33,11 +33,11 @@ namespace Tools.VinaCAD.Action.Actions
 
         private const bool CapSquaredFreeEnds = true;
 
-        public void Execute()
+        public bool Execute()
         {
             Document? document = Application.DocumentManager.MdiActiveDocument;
             if (document == null)
-                return;
+                return false;
 
             Editor editor = document.Editor;
             Database database = document.Database;
@@ -52,14 +52,13 @@ namespace Tools.VinaCAD.Action.Actions
                 };
                 PromptSelectionOptions selectionOptions = new PromptSelectionOptions
                 {
-                    MessageForAdding = "\nKéo chọn tường: "
+                    MessageForAdding = "\nQuét chọn các tường cần sửa từ phải qua trái: "
                 };
                 PromptSelectionResult selection = editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
 
                 if (selection.Status != PromptStatus.OK || selection.Value == null)
                 {
-                    editor.WriteMessage("\nKhông có line trong vùng chọn.");
-                    return;
+                    return false;
                 }
 
                 ObjectId[] ids = selection.Value.GetObjectIds();
@@ -90,7 +89,7 @@ namespace Tools.VinaCAD.Action.Actions
                 if (summary.WallLineCount == 0)
                 {
                     editor.WriteMessage("\nKhông tìm thấy cặp nét tường hợp lệ trong vùng chọn.");
-                    return;
+                    return true;
                 }
 
                 editor.WriteMessage(
@@ -98,11 +97,13 @@ namespace Tools.VinaCAD.Action.Actions
                     $"{summary.JunctionCount} giao tường, " +
                     $"{summary.HealedGapCount} khoảng hở ");
                 editor.UpdateScreen();
+                return true;
             }
             catch (Exception ex)
             {
                 Logger.Info(nameof(TrimFixWallAction), ex);
                 MessageBox.Show($"Lỗi TW: {ex.Message}", StringDefinition.TITLE_ERROR);
+                return false;
             }
         }
 
@@ -118,7 +119,6 @@ namespace Tools.VinaCAD.Action.Actions
 
             Dictionary<ObjectId, string> layerNames = ReadLayerNames(transaction, database);
 
-            // [FIX #6] Fallback nhiều tầng: layer có tag -> layer tên WALL/TUONG -> mọi layer của line được chọn
             HashSet<ObjectId> acceptedLayers = taggedWallLayers;
             if (acceptedLayers.Count == 0)
             {
