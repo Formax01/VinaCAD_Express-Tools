@@ -5,7 +5,7 @@
     xmlns:behaviors="clr-namespace:Tools.View.Behaviors" 
     Title="Vẽ mặt cắt cầu thang"
     Width="1020"
-    Height="525"
+    SizeToContent="Height"
     Background="#F0F0F0"
     FontFamily="Segoe UI"
     FontSize="12"
@@ -30,7 +30,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="5">
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="690" />
             <ColumnDefinition Width="5" />
@@ -44,7 +44,7 @@
                 <RowDefinition Height="36" />
                 <RowDefinition Height="1" />
                 <RowDefinition Height="85" />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -137,7 +137,7 @@
                 </Grid>
             </GroupBox>
 
-            <StackPanel Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                 <Button Width="76" Height="25" Margin="0,0,10,0" Command="{Binding AcceptCmd}" Content="Đồng ý" IsDefault="True" />
                 <Button Width="76" Height="25" Margin="0,0,0,0" Command="{Binding CancelCmd}" Content="Hủy" IsCancel="True" />
             </StackPanel>
