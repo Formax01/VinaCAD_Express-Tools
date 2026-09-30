@@ -15,6 +15,27 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+        [CommandMethod("DEMLINE")]
+        public void CountLineCommand()
+        {
+            CountLineAction action = new CountLineAction();
+            action.Execute();
+        }
+        [CommandMethod("CPD")]
+        public void CopyElevation()
+        {
+            try
+            {
+                CopyElevationAction action = new CopyElevationAction();
+                action.Execute();
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
@@ -23,6 +44,7 @@ namespace Tools.VinaCAD.App.Commands
             {
                 CreateGridAxisAction action = new CreateGridAxisAction();
                 action.Execute();
+               
             }
             catch (System.Exception ex)
             {
@@ -522,6 +544,12 @@ namespace Tools.VinaCAD.App.Commands
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
+        }
+        [CommandMethod("HELLO")]
+        public void HelloWorldCommand()
+        {
+            HelloWorldAction action = new HelloWorldAction();
+            action.Execute();
         }
 
         [CommandMethod("EW")]
