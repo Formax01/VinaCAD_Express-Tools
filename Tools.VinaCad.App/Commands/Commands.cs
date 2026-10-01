@@ -15,12 +15,7 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
-        [CommandMethod("DEMLINE")]
-        public void CountLineCommand()
-        {
-            CountLineAction action = new CountLineAction();
-            action.Execute();
-        }
+        
         [CommandMethod("CPD")]
         public void CopyElevation()
         {
@@ -545,12 +540,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
-        [CommandMethod("HELLO")]
-        public void HelloWorldCommand()
-        {
-            HelloWorldAction action = new HelloWorldAction();
-            action.Execute();
-        }
+        
 
         [CommandMethod("EW")]
         public void EraseAutoHealWallCommand()

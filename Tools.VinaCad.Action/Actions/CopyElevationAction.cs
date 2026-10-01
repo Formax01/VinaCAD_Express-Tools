@@ -11,9 +11,6 @@ namespace Tools.VinaCAD.Action.Actions
 {
     public class CopyElevationAction
     {
-        // Mặc định: bản vẽ dùng đơn vị mét, không cần quy đổi
-        private const double DRAWING_UNIT_TO_METER = 1.0;
-
         private Document? _document;
         private Editor? _editor;
         private Database? _database;
@@ -45,6 +42,8 @@ namespace Tools.VinaCAD.Action.Actions
                     return;
                 }
 
+                double unitToMeter = ElevationBlockHelper.GetUnitToMeterFactor(_database);
+
                 _editor.WriteMessage($"\nCao độ gốc: {oldText}. Chọn điểm đặt mới, Enter để kết thúc.");
 
                 while (true)
@@ -62,7 +61,7 @@ namespace Tools.VinaCAD.Action.Actions
                     Point3d newPosition = pr.Value;
 
                     double deltaY_drawingUnit = newPosition.Y - oldPosition.Y;
-                    double deltaY_meter = deltaY_drawingUnit * DRAWING_UNIT_TO_METER;
+                    double deltaY_meter = deltaY_drawingUnit * unitToMeter;
                     double newElevation = oldElevation + deltaY_meter;
 
                     string newText = ElevationBlockHelper.BuildElevationText(prefix, newElevation);
@@ -82,7 +81,6 @@ namespace Tools.VinaCAD.Action.Actions
             }
         }
 
-        // Chọn block và xác thực bằng 3 điều kiện
         private ObjectId GetSourceBlock(out ObjectId attributeId)
         {
             attributeId = ObjectId.Null;
