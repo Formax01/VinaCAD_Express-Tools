@@ -1,4 +1,5 @@
-﻿using Teigha.DatabaseServices;
+﻿using System.Globalization;
+using Teigha.DatabaseServices;
 using Teigha.Geometry;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -20,7 +21,7 @@ namespace Tools.VinaCad.Helper.Helper
                 tr.Commit();
             }
         }
-       
+
         public static bool TryParseElevationText(string text, out string prefix, out double value)
         {
             prefix = string.Empty;
@@ -30,8 +31,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (signSymbolIndex >= 0)
             {
                 prefix = text.Substring(0, signSymbolIndex);
-                string numberPart = text.Substring(signSymbolIndex + 3); // bỏ qua "%%p" (3 ký tự)
-                return double.TryParse(numberPart, out value);
+                return TryParseNumberToMeters(text.Substring(signSymbolIndex + 3), out value);
             }
 
             int signIndex = text.IndexOfAny(new[] { '+', '-' });
@@ -40,16 +40,35 @@ namespace Tools.VinaCad.Helper.Helper
 
             prefix = text.Substring(0, signIndex);
             char signChar = text[signIndex];
-            string numPart = text.Substring(signIndex + 1);
 
-            if (!double.TryParse(numPart, out double absValue))
+            if (!TryParseNumberToMeters(text.Substring(signIndex + 1), out double absValue))
                 return false;
 
             value = signChar == '-' ? -absValue : absValue;
             return true;
         }
 
-        
+        // Chỉ 2 dạng: "2,000" (số nguyên, đơn vị mm) hoặc "102.450" (đã là mét)
+        private static bool TryParseNumberToMeters(string numberPart, out double meters)
+        {
+            meters = 0;
+            numberPart = numberPart.Trim();
+
+            if (numberPart.Contains(','))
+            {
+                // "2,000" / "20,000" → số nguyên theo mm → quy đổi sang mét
+                string digitsOnly = numberPart.Replace(",", "");
+                if (!double.TryParse(digitsOnly, NumberStyles.Any, CultureInfo.InvariantCulture, out double mmValue))
+                    return false;
+
+                meters = mmValue / 1000.0;
+                return true;
+            }
+
+            // "102.450" → đã là mét, giữ nguyên cách đọc cũ
+            return double.TryParse(numberPart, NumberStyles.Any, CultureInfo.InvariantCulture, out meters);
+        }
+
         public static string BuildElevationText(string prefix, double value)
         {
             // Làm tròn trước khi so sánh với 0 — tránh sai số dấu phẩy động
