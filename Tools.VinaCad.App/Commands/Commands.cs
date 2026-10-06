@@ -654,5 +654,46 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+
+        [CommandMethod("S1")]
+        public void FlexDuctTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctTopDownCommand), ex);
+            }
+        }
+        [CommandMethod("S2")]
+        public void FlexDuctHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.Horizontal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("S3")]
+        public void FlexDuctDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
+            }
+        }
     }
 }
