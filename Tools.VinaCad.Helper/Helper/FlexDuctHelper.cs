@@ -19,6 +19,8 @@ namespace Tools.VinaCad.Helper.Helper
         public double PitchFactor = 0.3;        // bước gân = x * D
         public double RibBulge = 0.18;          // cung gân (phồng theo chiều đi) = độ phồng / (D/2)
         public double CapBulge = 0.5;           // cung nối 2 gân kề nhau ở mép (phồng ra ngoài)
+        public double CapBulgeBare = -0.5;      // cung nối 2 gân kề nhau ở mép (lún vào trong)
+        public bool IsBare = false;
         public double InnerArcBulge = 0.44;     // cung phụ trong vòm đầu ống
         public double DomeBulge = 1.0;          // 1.0 = bán nguyệt
         public double BoxDepthFactor = 0.55;    // độ dày hộp = x * (D/2)
@@ -36,6 +38,9 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 case "S2": return S2();
                 case "S3": return S3();
+                case "R1": return R1();
+                case "R2": return R2();
+                case "R3": return R3();
                 default: return S1();
             }
         }
@@ -43,6 +48,11 @@ namespace Tools.VinaCad.Helper.Helper
         public static FlexDuctStyle S1() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Box, EndEnd = FlexDuctEnd.Dome };
         public static FlexDuctStyle S2() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Box, EndEnd = FlexDuctEnd.Box };
         public static FlexDuctStyle S3() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Dome, EndEnd = FlexDuctEnd.Dome };
+
+
+        public static FlexDuctStyle R1() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Box, EndEnd = FlexDuctEnd.Dome, IsBare= true };
+        public static FlexDuctStyle R2() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Box, EndEnd = FlexDuctEnd.Box, IsBare= true };
+        public static FlexDuctStyle R3() => new FlexDuctStyle { StartEnd = FlexDuctEnd.Dome, EndEnd = FlexDuctEnd.Dome, IsBare= true };
     }
 
     public static class FlexDuctHelper
@@ -51,8 +61,7 @@ namespace Tools.VinaCad.Helper.Helper
 
         #region Public API
 
-        public static (int RingCount, string GroupName, string? Warning) Draw(
-            Database database, IList<Point3d> path, FlexDuctModel settings, FlexDuctStyle style)
+        public static (int RingCount, string GroupName, string? Warning) Draw(Database database, IList<Point3d> path, FlexDuctModel settings, FlexDuctStyle style)
         {
             if (path == null || path.Count < 2 || settings.Diameter <= 0)
                 return (0, string.Empty, null);
@@ -122,13 +131,14 @@ namespace Tools.VinaCad.Helper.Helper
                 ids.Add(entity.ObjectId);
             }
 
+            double cap = style.IsBare ? style.CapBulgeBare : style.CapBulge;  
             for (int k = 0; k < n; k++)
             {
                 var ring = new Polyline { Elevation = elevation };
-                ring.AddVertexAt(0, a[k], -style.CapBulge, 0, 0);   // mép +n, nối A_k -> A_k+1, phồng ra ngoài (trái)
-                ring.AddVertexAt(1, a[k + 1], -style.RibBulge, 0, 0);   // gân k+1, A -> B, phồng theo chiều đi
-                ring.AddVertexAt(2, b[k + 1], -style.CapBulge, 0, 0);   // mép -n, nối B_k+1 -> B_k, phồng ra ngoài
-                ring.AddVertexAt(3, b[k], +style.RibBulge, 0, 0);   // gân k, B -> A, phồng theo chiều đi
+                ring.AddVertexAt(0, a[k], -cap, 0, 0);                  
+                ring.AddVertexAt(1, a[k + 1], -style.RibBulge, 0, 0);
+                ring.AddVertexAt(2, b[k + 1], -cap, 0, 0);            
+                ring.AddVertexAt(3, b[k], +style.RibBulge, 0, 0);
                 ring.Closed = true;
                 Add(ring);
             }

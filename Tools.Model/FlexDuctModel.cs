@@ -11,6 +11,9 @@ namespace Tools.Model
        TopDown,
        Horizontal,
        DoubleTopDown,
+       TopDownBare,
+       HorizontalBare,
+       DoubleTopDownBare,
     }
     public enum FlexDuctPathMode
     {

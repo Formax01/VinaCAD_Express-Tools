@@ -48,21 +48,17 @@ public sealed class FlexDuctAction
         editor.WriteMessage($"\n{name}: đã vẽ {count} đối tượng trong group {groupName}.");
     }
 
-    private static FlexDuctStyle ResolveStyle(FlexDuctType type)
-    {
-        string name = type.ToString().ToUpperInvariant();
-        if (name.Contains("S3")) return FlexDuctStyles.S3();
-        if (name.Contains("S2")) return FlexDuctStyles.S2();
-        if (name.Contains("S1")) return FlexDuctStyles.S1();
 
-        int index = Array.IndexOf(Enum.GetValues(typeof(FlexDuctType)), type);
-        return index switch
-        {
-            1 => FlexDuctStyles.S2(),
-            2 => FlexDuctStyles.S3(),
-            _ => FlexDuctStyles.S1()
-        };
-    }
+    private static FlexDuctStyle ResolveStyle(FlexDuctType type) => type switch
+    {
+        FlexDuctType.TopDown => FlexDuctStyles.S1(),
+        FlexDuctType.Horizontal => FlexDuctStyles.S2(),
+        FlexDuctType.DoubleTopDown => FlexDuctStyles.S3(),
+        FlexDuctType.TopDownBare => FlexDuctStyles.R1(),   
+        FlexDuctType.HorizontalBare => FlexDuctStyles.R2(),   
+        FlexDuctType.DoubleTopDownBare => FlexDuctStyles.R3(),   
+        _ => FlexDuctStyles.S1()
+    };
 
     private static List<Point3d>? DrawPath(Editor editor, Database database)
     {

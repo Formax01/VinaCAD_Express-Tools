@@ -1,4 +1,4 @@
-using Prima.VinaCAD.ApplicationServices;
+﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
@@ -693,6 +693,48 @@ namespace Tools.VinaCAD.App.Commands
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R1")]
+        public void FlexDuctBareTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R2")]
+        public void FlexDuctBareHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.HorizontalBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("R3")]
+        public void FlexDuctBareDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
     }
