@@ -15,8 +15,7 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
-<<<<<<< Updated upstream
-=======
+
         
         
         [CommandMethod("LG")]
@@ -33,24 +32,24 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("CPD")]
-        public void CopyElevation()
-        {
-            try
-            {
-                CopyElevationAction action = new CopyElevationAction();
-                action.Execute();
+        //[CommandMethod("CPD")]
+        //public void CopyElevation()
+        //{
+        //    try
+        //    {
+        //        CopyElevationAction action = new CopyElevationAction();
+        //        action.Execute();
 
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(CreateGridAxisCommand), ex);
-            }
-        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
+        //    }
+        //}
         
 
->>>>>>> Stashed changes
+
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()

@@ -11,6 +11,41 @@ namespace Tools.VinaCad.Helper.Helper
     {
         private static readonly byte[] Grays = { 51, 91, 132, 173, 214, 255 };       // ACI 250..255
         private static readonly double[] Values = { 1.0, 0.65, 0.5, 0.3, 0.15 };    // độ sáng theo cặp
+        private static readonly int[] DarkOffsets = { 8, 6, 4, 2, 0 };
+        private static readonly int[] LightOffsets = { 1, 3, 5, 7, 9 };
+
+        public static bool IsValidIndex(short aci) => aci >= 1 && aci <= 255;
+
+        public static bool TryParseIndex(string text, out short aci) =>
+            short.TryParse(text, System.Globalization.NumberStyles.Integer,
+                System.Globalization.CultureInfo.InvariantCulture, out aci) && IsValidIndex(aci);
+
+        public static IReadOnlyList<short> GetDarkPalette() => GetHuePalette(DarkOffsets);
+
+        public static IReadOnlyList<short> GetLightPalette() => GetHuePalette(LightOffsets);
+
+        public static IReadOnlyList<short> GetStandardPalette()
+        {
+            var indices = new List<short>(15);
+            for (short aci = 1; aci <= 9; aci++) indices.Add(aci);
+            for (short aci = 250; aci <= 255; aci++) indices.Add(aci);
+            return indices;
+        }
+
+        public static string Describe(short aci)
+        {
+            var (r, g, b) = ToRgb(aci);
+            return $"ACI {aci}  (R {r}, G {g}, B {b})";
+        }
+
+        private static IReadOnlyList<short> GetHuePalette(int[] offsets)
+        {
+            var indices = new List<short>(120);
+            foreach (int offset in offsets)
+                for (int n = 0; n < 24; n++)
+                    indices.Add((short)(10 + n * 10 + offset));
+            return indices;
+        }
 
         public static (byte R, byte G, byte B) ToRgb(short aci)
         {

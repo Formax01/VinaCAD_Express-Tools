@@ -9,8 +9,7 @@ namespace Tools.VinaCad.Helper.Helper
 
     public static class BanisterGeometry
     {
-        /// <param name="L">Chiều dài ngang (mm)</param>
-        /// <param name="m">Độ dốc theo chiều đi (dy/dx), lan can ngang thì m = 0</param>
+        
         public static List<BanisterRect> Build(BanisterInput i, double L, double m = 0.0)
         {
             var rects = new List<BanisterRect>();
@@ -35,13 +34,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
             else
             {
-                // Lan can nghiêng: đoạn dốc ở giữa, hai đầu là đoạn nằm ngang dài Extend
-                //rects.Add(new BanisterRect(0, handrailBottom, L, hd));
-                //rects.Add(new BanisterRect(-i.HandrailExtend, handrailBottom,
-                //                           i.HandrailExtend, hd, true));              // đầu
-                //rects.Add(new BanisterRect(L, handrailBottom + m * L,
-                //                           i.HandrailExtend, hd, true));              // cuối
-                // Lan can nghiêng: MỘT hình liền khối gồm đoạn dốc và hai đầu nằm ngang dài Extend
+                
                 rects.Add(new BanisterRect(0, handrailBottom, L, hd, i.HandrailExtend));
             }
 

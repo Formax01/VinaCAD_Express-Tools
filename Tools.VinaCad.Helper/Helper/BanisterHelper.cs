@@ -73,14 +73,14 @@ namespace Tools.VinaCad.Helper
                         double c = r.Cap;
                         var local = new (double x, double y)[]
                         {
-            (xl0 - c, m * xl0 + r.Y),
-            (xl0,     m * xl0 + r.Y),
-            (xl1,     m * xl1 + r.Y),
-            (xl1 + c, m * xl1 + r.Y),
-            (xl1 + c, m * xl1 + r.Y + r.H),
-            (xl1,     m * xl1 + r.Y + r.H),
-            (xl0,     m * xl0 + r.Y + r.H),
-            (xl0 - c, m * xl0 + r.Y + r.H)
+                            (xl0 - c, m * xl0 + r.Y),
+                            (xl0,     m * xl0 + r.Y),
+                            (xl1,     m * xl1 + r.Y),
+                            (xl1 + c, m * xl1 + r.Y),
+                            (xl1 + c, m * xl1 + r.Y + r.H),
+                            (xl1,     m * xl1 + r.Y + r.H),
+                            (xl0,     m * xl0 + r.Y + r.H),
+                            (xl0 - c, m * xl0 + r.Y + r.H)
                         };
                         for (int v = 0; v < local.Length; v++)
                             pl.AddVertexAt(v,
