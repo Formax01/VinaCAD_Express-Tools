@@ -16,7 +16,7 @@ namespace Tools.VinaCad.Helper.Helper
 
         public static bool IsValidIndex(short aci) => aci >= 1 && aci <= 255;
 
-        public static bool TryParseIndex(string text, out short aci) =>
+        public static bool TryParseIndex(string text, out short aci) =>//Chuyển đổi chuỗi sang số nguyên ACI (1..255)
             short.TryParse(text, System.Globalization.NumberStyles.Integer,
                 System.Globalization.CultureInfo.InvariantCulture, out aci) && IsValidIndex(aci);
 
@@ -47,7 +47,7 @@ namespace Tools.VinaCad.Helper.Helper
             return indices;
         }
 
-        public static (byte R, byte G, byte B) ToRgb(short aci)
+        public static (byte R, byte G, byte B) ToRgb(short aci) //    đổi ACI sang RGB (0..255)
         {
             switch (aci)
             {

@@ -1,15 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows;
+using System.Windows.Controls;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
 using Tools.VinaCad.Helper.Helper;
 using Prima.VinaCAD.EditorInput;
+
 namespace Tools.VinaCad.Helper
 {
     public static class BanisterHelper
     {
+        public static void DrawIllustrations(Canvas slopedCanvas, Canvas flatCanvas)
+        {
+            var sample = new BanisterInput();
+            DrawRailing(slopedCanvas, sample, 2400, 0.5);
+            DrawRailing(flatCanvas, sample, 2400, 0.0);
+        }
+
+        private static void DrawRailing(Canvas canvas, BanisterInput input, double lengthMm, double slope)
+        {
+            const double px = 0.065;
+            const double left = 12;
+            const double bottom = 8;
+
+            // Sửa lỗi CS0104: Chỉ định rõ dùng Color của System.Windows.Media
+            var stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x1F, 0xA3, 0xB5));
+            var fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(40, 0x1F, 0xA3, 0xB5));
+
+            Point Q(double x, double xRef, double off) =>
+                new Point(left + x * px, canvas.Height - bottom - (slope * xRef + off) * px);
+
+            canvas.Children.Clear();
+            foreach (var r in BanisterGeometry.Build(input, lengthMm, slope))
+            {
+                double x0 = r.X, x1 = r.X + r.W, y0 = r.Y, y1 = r.Y + r.H;
+                PointCollection points;
+                if (r.Cap > 0)
+                {
+                    double c = r.Cap;
+                    points = new PointCollection
+                    {
+                        Q(x0 - c, x0, y0), Q(x0, x0, y0), Q(x1, x1, y0), Q(x1 + c, x1, y0),
+                        Q(x1 + c, x1, y1), Q(x1, x1, y1), Q(x0, x0, y1), Q(x0 - c, x0, y1)
+                    };
+                }
+                else
+                {
+                    points = new PointCollection
+                    {
+                        Q(x0, x0, y0), Q(x1, x1, y0), Q(x1, x1, y1), Q(x0, x0, y1)
+                    };
+                }
+
+                canvas.Children.Add(new Polygon
+                {
+                    Points = points,
+                    Stroke = stroke,
+                    StrokeThickness = 0.7,
+                    Fill = fill
+                });
+            }
+        }
+
         // Nếu đường nối lệch dưới ~0,5 độ so với phương ngang thì coi là ngang
         public static Point3d NormalizeEnd(Point3d p1, Point3d p2)
         {
@@ -33,7 +90,7 @@ namespace Tools.VinaCad.Helper
 
             double m = (p2.Y - p1.Y) / absDx;                       // độ dốc theo chiều đi
             if (Math.Abs(m) > 2.75) return ids;                     // dốc quá ~70 độ thì bỏ qua
-            //double k = Math.Sqrt(1 + m * m);                        
+            //double k = Math.Sqrt(1 + m * m);                       
 
             var rects = BanisterGeometry.Build(input, L, m);
             if (rects.Count > 3000)
@@ -65,7 +122,9 @@ namespace Tools.VinaCad.Helper
                 foreach (var r in rects)
                 {
                     double xl0 = r.X, xl1 = r.X + r.W;                   // tọa độ ngang cục bộ (mm)
-                    var pl = new Polyline();
+
+                    // Sửa lỗi CS0104: Chỉ định rõ dùng Polyline của Teigha.DatabaseServices
+                    var pl = new Teigha.DatabaseServices.Polyline();
 
                     if (r.Cap > 0)
                     {
@@ -105,6 +164,9 @@ namespace Tools.VinaCad.Helper
 
                     pl.Closed = true;
                     pl.Layer = input.LayerName;
+
+                    // Sửa lỗi CS0104: Chỉ định rõ dùng Color của Teigha.Colors
+                    pl.Color = Teigha.Colors.Color.FromColorIndex(ColorMethod.ByAci, input.ColorIndex);
 
                     container.AppendEntity(pl);
                     tr.AddNewlyCreatedDBObject(pl, true);
@@ -212,7 +274,8 @@ namespace Tools.VinaCad.Helper
 
         private static void EnsureLayer(Database db, Transaction tr, string name, short aci)
         {
-            var color = Color.FromColorIndex(ColorMethod.ByAci, aci);
+            
+            var color = Teigha.Colors.Color.FromColorIndex(ColorMethod.ByAci, aci);
             var lt = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
 
             if (!lt.Has(name))
@@ -224,14 +287,7 @@ namespace Tools.VinaCad.Helper
                 return;
             }
 
-            var exist = (LayerTableRecord)tr.GetObject(lt[name], OpenMode.ForRead);
-            if (exist.Color.ColorIndex != aci || exist.IsOff || exist.IsFrozen)
-            {
-                exist.UpgradeOpen();
-                exist.Color = color;
-                exist.IsOff = false;
-                exist.IsFrozen = false;
-            }
+            
         }
     }
 }

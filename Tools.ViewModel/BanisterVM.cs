@@ -16,7 +16,7 @@ namespace Tools.ViewModel
         {
             if (Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(name);      // <-- xem lưu ý bên dưới
+            OnPropertyChanged(name);      
         }
 
         private string _layerName, _colorIndex, _totalHeight, _handrailDia, _handrailExtend,
@@ -26,8 +26,7 @@ namespace Tools.ViewModel
         private bool _acceptRequested, _pickRequested;
         private Dictionary<string, short> _layerColors = new Dictionary<string, short>(StringComparer.OrdinalIgnoreCase);
         private readonly IAciColorPickerService _colorPicker;
-        //private bool _sloped;
-        //public bool Sloped { get => _sloped; set => Set(ref _sloped, value); }
+       
         public ObservableCollection<string> LayerNames { get; } = new ObservableCollection<string>();
         
 
@@ -124,7 +123,7 @@ namespace Tools.ViewModel
         // Đưa giá trị từ DTO lên form
         public void Load(BanisterInput i)
         {
-            //Sloped = i.Sloped;
+            
             LayerName = i.LayerName;
             ColorIndex = i.ColorIndex.ToString();
             TotalHeight = Fmt(i.TotalHeight);
@@ -139,7 +138,7 @@ namespace Tools.ViewModel
             PoleGap = Fmt(i.PoleGap);
             HasSideColumns = i.HasSideColumns;
             ToGroup = i.ToGroup;
-            //SelectedUnit = i.DrawingUnit;
+           
         }
 
         public void ApplyPickedLayer(string layerName, short aci)

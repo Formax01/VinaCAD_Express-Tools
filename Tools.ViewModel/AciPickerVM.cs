@@ -2,6 +2,7 @@ using PrMVVMCore;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using Tools.Model;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media;

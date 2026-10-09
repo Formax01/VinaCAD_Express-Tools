@@ -1,7 +1,7 @@
 using System.Windows.Media;
 using System.ComponentModel;
 
-namespace Tools.ViewModel
+namespace Tools.Model
 {
     public sealed class AciColorItem : INotifyPropertyChanged
     {

@@ -38,6 +38,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 vm.ResetDialogRequest();
                 var window = new BanisterWindow { DataContext = vm };
+                BanisterHelper.DrawIllustrations(window.SlopedPreviewCanvas, window.FlatPreviewCanvas);
                 Application.ShowModalWindow(window);
 
                 if (vm.PickRequested)
