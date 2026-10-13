@@ -10,7 +10,7 @@ namespace Tools.VinaCad.Modeling
     public static class DuctElbowSettings
     {
         public const double DefaultRadiusRatio = 1.0;    
-        public const RadiusMode DefaultRadiusMode = RadiusMode.Center;
+        public const RadiusMode DefaultRadiusMode = RadiusMode.Inner;
 
         public const double MinAngle = 1.0;
         public const double MaxAngle = 180.0;

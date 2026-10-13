@@ -36,6 +36,7 @@ namespace Tools.Model
         public Vector3d Direction { get; set; } = Vector3d.XAxis;   
         public double Width1 { get; set; }   
         public double Width2 { get; set; }
+        public double InnerRadius { get; set; }
         public double CenterRadius { get; set; }
         public double AngleDeg { get; set; }
         public ElbowSide Side { get; set; }

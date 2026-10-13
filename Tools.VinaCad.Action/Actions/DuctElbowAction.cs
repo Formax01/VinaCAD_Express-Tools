@@ -50,7 +50,12 @@ namespace Tools.VinaCad.Action.Actions
                 }
 
                 double r;
-                if (!AskDouble(editor, "Nhập bán kính đường cong R", vm.SuggestRadius(w1), out r)) return;
+
+                if (!AskDouble(editor,"Nhập bán kính cong phía trong R",vm.Radius,out r))
+                {
+                    return;
+                }
+
                 vm.Radius = r;
 
                 if (type == DuctElbowType.Vertical)
@@ -141,7 +146,7 @@ namespace Tools.VinaCad.Action.Actions
             { error = "Kích thước đầu ra W2 phải lớn hơn 0."; return false; }
 
             if (vm.Radius <= 0)
-            { error = "Bán kính R phải lớn hơn 0."; return false; }
+            { error = "Bán kính cong phía trong R phải lớn hơn 0."; return false; }
 
             if (vm.Type == DuctElbowType.Vertical)
                 return ValidateVertical(vm, out error);
