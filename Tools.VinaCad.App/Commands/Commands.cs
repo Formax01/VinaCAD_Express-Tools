@@ -654,5 +654,46 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+        [CommandMethod("E1")]
+        public void DuctElbowEqualCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
+            }   
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+            }
+        }
+
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+            }
+        }
+
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
     }
 }
