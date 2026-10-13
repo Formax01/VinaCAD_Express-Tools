@@ -28,7 +28,7 @@ namespace Tools.VinaCad.Action.Actions
             double oldW2 = vm.Width2;
             double oldR = vm.Radius;
             double oldAngle = vm.AngleDeg;
-            double oldDrop = vm.DropLength;
+/*          double oldDrop = vm.DropLength;*/
 
             var ppo = new PromptPointOptions("\nChọn điểm chèn: ");
             PromptPointResult promptPointResult = editor.GetPoint(ppo);
@@ -53,9 +53,9 @@ namespace Tools.VinaCad.Action.Actions
 
             if (type == DuctElbowType.Vertical)
             {
-                double l;
+                /*double l;
                 if (!AskDouble(editor, "Nhập chiều dài đoạn hạ/ngóc", vm.DropLength, out l)) return;
-                vm.DropLength = l;
+                vm.DropLength = l;*/
 
                 string v;
                 if (!AskKeyword(editor, "Chọn kiểu", new[] { "Down", "Up" },
@@ -77,8 +77,11 @@ namespace Tools.VinaCad.Action.Actions
             string err;
             if (!Validate(vm, out err))
             {
-                vm.Width1 = oldW1; vm.Width2 = oldW2; vm.Radius = oldR;
-                vm.AngleDeg = oldAngle; vm.DropLength = oldDrop;
+                vm.Width1 = oldW1;
+                vm.Width2 = oldW2;
+                vm.Radius = oldR;
+                vm.AngleDeg = oldAngle;
+                /*vm.DropLength = oldDrop;*/
                 editor.WriteMessage("\n" + err);
                 return;
             }
@@ -224,7 +227,7 @@ namespace Tools.VinaCad.Action.Actions
         private static bool AskKeyword(Editor ed, string msg, string[] keys, string def, out string value)
         {
             value = def;
-            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> (Enter giữ mặc định): ");
+            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> : ");
 
             foreach (string key in keys)
                 options.Keywords.Add(key);
@@ -265,7 +268,7 @@ namespace Tools.VinaCad.Action.Actions
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                var options = new JigPromptPointOptions("\n[" + _commandName + "] Click chuột để xác nhận hướng ống: ");
+                var options = new JigPromptPointOptions("\n Click chuột để xác nhận hướng ống: ");
 
                 options.BasePoint = _insertPoint;
                 options.UseBasePoint = true;
