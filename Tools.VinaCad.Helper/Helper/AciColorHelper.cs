@@ -7,8 +7,12 @@ using Teigha.Colors;
 
 namespace Tools.VinaCad.Helper.Helper
 {
+
     public static class AciColorHelper
     {
+        public const short DefaultAci = 7;
+
+        
         private static readonly byte[] Grays = { 51, 91, 132, 173, 214, 255 };       // ACI 250..255
         private static readonly double[] Values = { 1.0, 0.65, 0.5, 0.3, 0.15 };    // độ sáng theo cặp
         private static readonly int[] DarkOffsets = { 8, 6, 4, 2, 0 };
@@ -16,7 +20,7 @@ namespace Tools.VinaCad.Helper.Helper
 
         public static bool IsValidIndex(short aci) => aci >= 1 && aci <= 255;
 
-        public static bool TryParseIndex(string text, out short aci) =>//Chuyển đổi chuỗi sang số nguyên ACI (1..255)
+        public static bool TryParseIndex(string text, out short aci) =>
             short.TryParse(text, System.Globalization.NumberStyles.Integer,
                 System.Globalization.CultureInfo.InvariantCulture, out aci) && IsValidIndex(aci);
 

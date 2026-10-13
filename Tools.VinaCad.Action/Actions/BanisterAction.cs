@@ -1,8 +1,8 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
-using Prima.VinaCAD.ApplicationServices;
-using Prima.VinaCAD.EditorInput;
 using Prima.VinaCAD.EditorInput;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teigha.DatabaseServices;
@@ -29,9 +29,7 @@ namespace Tools.VinaCad.Action.Actions
             var db = doc.Database;
 
             // 1. Form (lặp lại nếu người dùng bấm Pick)
-            var vm = new BanisterVM(this);
-            vm.Load(BanisterSettingsStore.Load());
-            vm.SetLayers(BanisterHelper.GetLayerColors(db));
+            var vm = CreateViewModel(db);
 
             BanisterInput input = null;
             while (true)
@@ -48,7 +46,7 @@ namespace Tools.VinaCad.Action.Actions
                     continue;                       // mở lại form với giá trị đã nhập
                 }
 
-                if (!vm.AcceptRequested) break; // Cancel/đóng cửa sổ
+                if (!vm.AcceptRequested) break;     // Cancel/đóng cửa sổ
 
                 if (!BanisterInputFactory.TryCreate(vm, out input, out string error))
                 {
@@ -111,13 +109,109 @@ namespace Tools.VinaCad.Action.Actions
             ed.WriteMessage($"\nKết thúc LG: {segments} đoạn lan can.");
         }
 
+        // Dựng VM và nối logic đồng bộ layer → màu → brush (VM chỉ giữ state)
+        private BanisterVM CreateViewModel(Database db)
+        {
+            var vm = new BanisterVM(this);
+            var layerColors = BanisterHelper.GetLayerColors(db);
+
+            void SyncColorFromLayer()
+            {
+                if (!string.IsNullOrWhiteSpace(vm.LayerName)
+                    && layerColors.TryGetValue(vm.LayerName.Trim(), out short layerAci))
+                    vm.ColorIndex = layerAci.ToString(CultureInfo.InvariantCulture);
+            }
+
+            void UpdateColorBrush()
+            {
+                if (!AciColorHelper.TryParseIndex(vm.ColorIndex, out short aci))
+                {
+                    vm.ColorBrush = System.Windows.Media.Brushes.Transparent;
+                    return;
+                }
+                var (r, g, b) = AciColorHelper.ToRgb(aci);
+                var brush = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(r, g, b));
+                brush.Freeze();
+                vm.ColorBrush = brush;
+            }
+
+            vm.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(BanisterVM.LayerName)) SyncColorFromLayer();
+                else if (e.PropertyName == nameof(BanisterVM.ColorIndex)) UpdateColorBrush();
+            };
+
+            vm.SetLayers(layerColors.Keys.OrderBy(x => x));
+            vm.Load(BanisterSettingsStore.Load());
+            SyncColorFromLayer();   // giữ hành vi cũ: layer có sẵn thì lấy màu layer
+            UpdateColorBrush();     // bắt buộc: giá trị không đổi thì không phát PropertyChanged
+            return vm;
+        }
+
         public short? PickColor(short currentIndex)
         {
             var owner = System.Windows.Application.Current?.Windows
                 .OfType<System.Windows.Window>()
                 .FirstOrDefault(window => window.IsActive);
-            var dialog = new AciPickerWindow(currentIndex) { Owner = owner };
-            return dialog.ShowDialog() == true ? dialog.Selected : null;
+            return AciPickerAction.Pick(currentIndex, owner);
+        }
+    }
+
+    /// <summary>
+    /// Toàn bộ logic của picker ACI: dựng palette, parse, chọn ô, tính preview.
+    /// AciPickerVM chỉ giữ state và command.
+    /// </summary>
+    internal static class AciPickerAction
+    {
+        public static short? Pick(short current, System.Windows.Window owner)
+        {
+            var vm = new AciPickerVM();
+            var items = new Dictionary<short, AciColorItem>();
+            Fill(vm.DarkColors, AciColorHelper.GetDarkPalette(), items);
+            Fill(vm.LightColors, AciColorHelper.GetLightPalette(), items);
+            Fill(vm.StandardColors, AciColorHelper.GetStandardPalette(), items);
+
+            AciColorItem selected = null;
+            vm.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName != nameof(AciPickerVM.ColorText)) return;
+
+                bool valid = AciColorHelper.TryParseIndex(vm.ColorText, out short aci);
+                vm.CanAccept = valid;
+                if (!valid) return;
+
+                if (selected != null) selected.IsSelected = false;
+                selected = items[aci];
+                selected.IsSelected = true;
+                vm.PreviewBrush = selected.ColorBrush;
+                vm.Description = selected.Description;
+            };
+
+            // Gán sau khi đã gắn handler để lần đầu cũng chọn đúng ô.
+            short start = AciColorHelper.IsValidIndex(current) ? current : AciColorHelper.DefaultAci;
+            vm.ColorText = start.ToString(CultureInfo.InvariantCulture);
+
+            var dialog = new AciPickerWindow(vm) { Owner = owner };
+            if (dialog.ShowDialog() != true) return null;
+
+            return AciColorHelper.TryParseIndex(vm.ColorText, out short result) ? result : (short?)null;
+        }
+
+        private static void Fill(ObservableCollection<AciColorItem> target,
+            IEnumerable<short> indices, Dictionary<short, AciColorItem> lookup)
+        {
+            foreach (short aci in indices)
+            {
+                var (r, g, b) = AciColorHelper.ToRgb(aci);
+                var brush = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(r, g, b));
+                brush.Freeze();
+
+                var item = new AciColorItem(aci, brush, AciColorHelper.Describe(aci));
+                target.Add(item);
+                lookup[aci] = item;
+            }
         }
     }
 
@@ -132,7 +226,7 @@ namespace Tools.VinaCad.Action.Actions
             if (layer.Length == 0 || layer.IndexOfAny("<>/\\\":;?*|=`".ToCharArray()) >= 0)
             { error = "Tên layer không hợp lệ."; return false; }
 
-            if (!short.TryParse(vm.ColorIndex, out short aci) || aci < 1 || aci > 255)
+            if (!AciColorHelper.TryParseIndex(vm.ColorIndex, out short aci))
             { error = "Màu layer (ACI) phải từ 1 đến 255."; return false; }
 
             if (!Parse(vm.TotalHeight, "Total Height", true, out double h, ref error) ||

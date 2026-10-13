@@ -5,15 +5,10 @@ namespace Tools.View.UI
 {
     public partial class AciPickerWindow : Window
     {
-        private AciPickerVM ViewModel => (AciPickerVM)DataContext;
-
-        public short? Selected => ViewModel.SelectedAci;
-
-        public AciPickerWindow(short current)
+        public AciPickerWindow(AciPickerVM viewModel)
         {
             InitializeComponent();
-            DataContext = new AciPickerVM(current);
+            DataContext = viewModel;
         }
     }
-
 }
