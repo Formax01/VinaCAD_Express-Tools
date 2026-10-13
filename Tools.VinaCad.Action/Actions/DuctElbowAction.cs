@@ -18,106 +18,115 @@ namespace Tools.VinaCad.Action.Actions
     {
         public void Execute(DuctElbowType type)
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Editor editor = doc.Editor;
-            Database db = doc.Database;
-
-            DuctElbowVM vm = DuctElbowVM.Get(type);
-
-            double oldW1 = vm.Width1;
-            double oldW2 = vm.Width2;
-            double oldR = vm.Radius;
-            double oldAngle = vm.AngleDeg;
-/*          double oldDrop = vm.DropLength;*/
-
-            var ppo = new PromptPointOptions("\nChọn điểm chèn: ");
-            PromptPointResult promptPointResult = editor.GetPoint(ppo);
-            if (promptPointResult.Status != PromptStatus.OK) return;
-            Point3d insert = promptPointResult.Value;
-
-            double w1;
-            string w1Prompt = type == DuctElbowType.Reducing ? "Nhập kích thước đầu vào W1" : "Nhập kích thước 2 đầu W";
-            if (!AskDouble(editor, w1Prompt, vm.Width1, out w1)) return;
-            vm.Width1 = w1;
-
-            if (type == DuctElbowType.Reducing)
-            {
-                double w2;
-                if (!AskDouble(editor, "Nhập kích thước đầu ra W2", vm.Width2, out w2)) return;
-                vm.Width2 = w2;
-            }
-
-            double r;
-            if (!AskDouble(editor, "Nhập bán kính đường cong R", vm.SuggestRadius(w1), out r)) return;
-            vm.Radius = r;
-
-            if (type == DuctElbowType.Vertical)
-            {
-                /*double l;
-                if (!AskDouble(editor, "Nhập chiều dài đoạn hạ/ngóc", vm.DropLength, out l)) return;
-                vm.DropLength = l;*/
-
-                string v;
-                if (!AskKeyword(editor, "Chọn kiểu", new[] { "Down", "Up" },
-                    vm.VerticalDir == VerticalDirection.Down ? "Down" : "Up", out v)) return;
-                vm.VerticalDir = v == "Up" ? VerticalDirection.Up : VerticalDirection.Down;
-            }
-            else
-            {
-                string s;
-                if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Left", "Right" },
-                        vm.Side == ElbowSide.Left ? "Left" : "Right", out s)) return;
-                vm.Side = s == "Right" ? ElbowSide.Right : ElbowSide.Left;
-
-                double a;
-                if (!AskDouble(editor, "Nhập góc quay (độ)", vm.AngleDeg, out a)) return;
-                vm.AngleDeg = a;
-            }
-
-            string err;
-            if (!Validate(vm, out err))
-            {
-                vm.Width1 = oldW1;
-                vm.Width2 = oldW2;
-                vm.Radius = oldR;
-                vm.AngleDeg = oldAngle;
-                /*vm.DropLength = oldDrop;*/
-                editor.WriteMessage("\n" + err);
-                return;
-            }
-
-            Vector3d direction;
-            var jig = new DuctElbowPreviewJig(insert, "DuctElbow", currentDirection =>
-            {
-                DuctElbowModel previewModel = vm.BuildModel(insert, currentDirection);
-                previewModel.ShowLabel = false;
-                return previewModel;
-            });
-
             try
             {
-                PromptResult result = editor.Drag(jig);
-                if (result.Status != PromptStatus.OK) return;
-                direction = jig.Direction;
-            }
-            finally
-            {
-                jig.Cleanup();  
-            }
+                Document doc = Application.DocumentManager.MdiActiveDocument;
+                Editor editor = doc.Editor;
+                Database db = doc.Database;
 
-            if (direction.Length < 1e-6)
-            {
-                editor.WriteMessage("\nHướng ống không hợp lệ.");
-                return;
+                DuctElbowVM vm = DuctElbowVM.Get(type);
+
+                double oldW1 = vm.Width1;
+                double oldW2 = vm.Width2;
+                double oldR = vm.Radius;
+                double oldAngle = vm.AngleDeg;
+                /*double oldDrop = vm.DropLength;*/
+
+                var ppo = new PromptPointOptions("\nChọn điểm chèn: ");
+                PromptPointResult promptPointResult = editor.GetPoint(ppo);
+                if (promptPointResult.Status != PromptStatus.OK) return;
+                Point3d insert = promptPointResult.Value;
+
+                double w1;
+                string w1Prompt = type == DuctElbowType.Reducing ? "Nhập kích thước đầu vào W1" : "Nhập kích thước 2 đầu W";
+                if (!AskDouble(editor, w1Prompt, vm.Width1, out w1)) return;
+                vm.Width1 = w1;
+
+                if (type == DuctElbowType.Reducing)
+                {
+                    double w2;
+                    if (!AskDouble(editor, "Nhập kích thước đầu ra W2", vm.Width2, out w2)) return;
+                    vm.Width2 = w2;
+                }
+
+                double r;
+                if (!AskDouble(editor, "Nhập bán kính đường cong R", vm.SuggestRadius(w1), out r)) return;
+                vm.Radius = r;
+
+                if (type == DuctElbowType.Vertical)
+                {
+                    /*double l;
+                    if (!AskDouble(editor, "Nhập chiều dài đoạn hạ/ngóc", vm.DropLength, out l)) return;
+                    vm.DropLength = l;*/
+
+                    string v;
+                    if (!AskKeyword(editor, "Chọn kiểu", new[] { "Down", "Up" },
+                        vm.VerticalDir == VerticalDirection.Down ? "Down" : "Up", out v)) return;
+                    vm.VerticalDir = v == "Up" ? VerticalDirection.Up : VerticalDirection.Down;
+                }
+                else
+                {
+                    string s;
+                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Left", "Right" },
+                            vm.Side == ElbowSide.Left ? "Left" : "Right", out s)) return;
+                    vm.Side = s == "Right" ? ElbowSide.Right : ElbowSide.Left;
+
+                    double a;
+                    if (!AskDouble(editor, "Nhập góc quay (độ)", vm.AngleDeg, out a)) return;
+                    vm.AngleDeg = a;
+                }
+
+                string err;
+                if (!Validate(vm, out err))
+                {
+                    vm.Width1 = oldW1;
+                    vm.Width2 = oldW2;
+                    vm.Radius = oldR;
+                    vm.AngleDeg = oldAngle;
+                    /*vm.DropLength = oldDrop;*/
+                    editor.WriteMessage("\n" + err);
+                    return;
+                }
+
+                Vector3d direction;
+                var jig = new DuctElbowPreviewJig(insert, "DuctElbow", currentDirection =>
+                {
+                    DuctElbowModel previewModel = vm.BuildModel(insert, currentDirection);
+                    previewModel.ShowLabel = false;
+                    return previewModel;
+                });
+
+                try
+                {
+                    PromptResult result = editor.Drag(jig);
+                    if (result.Status != PromptStatus.OK) return;
+                    direction = jig.Direction;
+                }
+                finally
+                {
+                    jig.Cleanup();
+                }
+
+                if (direction.Length < 1e-6)
+                {
+                    editor.WriteMessage("\nHướng ống không hợp lệ.");
+                    return;
+                }
+
+                DuctElbowModel model = vm.BuildModel(insert, direction);
+                model.ShowLabel = false;
+
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    DuctElbowHelper.Draw(db, tr, model);
+                    tr.Commit();
+                }
             }
-
-            DuctElbowModel model = vm.BuildModel(insert, direction);
-            model.ShowLabel = false;
-
-            using (Transaction tr = db.TransactionManager.StartTransaction())
+            catch (System.Exception ex)
             {
-                DuctElbowHelper.Draw(db, tr, model);
-                tr.Commit();
+                Document doc = Application.DocumentManager.MdiActiveDocument;
+                Editor ed = doc.Editor;
+                ed.WriteMessage("\nLỗi: " + ex.Message);
             }
         }
 
