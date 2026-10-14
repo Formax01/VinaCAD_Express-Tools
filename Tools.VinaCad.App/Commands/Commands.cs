@@ -16,6 +16,41 @@ namespace Tools.VinaCAD.App.Commands
     public class Commands
     {
 
+        
+        
+        [CommandMethod("LG")]
+        public void BanisterCommand()
+        {
+            try
+            {
+                new BanisterAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.Info(ex.ToString());
+            }
+        }
+
+        //[CommandMethod("CPD")]
+        //public void CopyElevation()
+        //{
+        //    try
+        //    {
+        //        CopyElevationAction action = new CopyElevationAction();
+        //        action.Execute();
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
+        //    }
+        //}
+        
+
+
+
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
         {
