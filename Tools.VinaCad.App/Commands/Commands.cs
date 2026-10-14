@@ -15,6 +15,22 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+        
+        [CommandMethod("CPD")]
+        public void CopyElevation()
+        {
+            try
+            {
+                CopyElevationAction action = new CopyElevationAction();
+                action.Execute();
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
 
         
         
@@ -58,6 +74,7 @@ namespace Tools.VinaCAD.App.Commands
             {
                 CreateGridAxisAction action = new CreateGridAxisAction();
                 action.Execute();
+               
             }
             catch (System.Exception ex)
             {
@@ -558,6 +575,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
+        
 
         [CommandMethod("EW")]
         public void EraseAutoHealWallCommand()
