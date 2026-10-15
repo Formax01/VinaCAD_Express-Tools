@@ -18,6 +18,7 @@ namespace Tools.VinaCad.Helper.Helper
         private const double CapPerpendicularDotTolerance = 0.2;
         private const double MiterLimitFactor = 10.0;
         private const int MaximumMissedRays = 14;
+        private const int MaximumRoomSeeds = 48;
 
         private sealed class StuccoContext
         {
@@ -59,24 +60,29 @@ namespace Tools.VinaCad.Helper.Helper
 
         private sealed class FaceSpan
         {
-            public FaceSpan(WallFaceRef face, Point3d hit)
+            public FaceSpan(WallFaceRef face, Point3d hit, Point3d viewPoint)
             {
                 Face = face;
+                ViewPoint = viewPoint;
                 Ids.Add(face.Id);
-                S0 = S1 = Project(hit);
+                S0 = S1 = ProjectPoint(hit);
+                Weight = 1;
             }
 
             public WallFaceRef Face { get; }
+            public Point3d ViewPoint { get; }
             public HashSet<ObjectId> Ids { get; } = new HashSet<ObjectId>();
             public double S0 { get; private set; }
             public double S1 { get; private set; }
+            public int Weight { get; private set; }
 
             public void Extend(WallFaceRef face, Point3d hit)
             {
                 Ids.Add(face.Id);
-                double parameter = Project(hit);
+                double parameter = ProjectPoint(hit);
                 S0 = Math.Min(S0, parameter);
                 S1 = Math.Max(S1, parameter);
+                Weight++;
             }
 
             public void Merge(FaceSpan other)
@@ -87,13 +93,16 @@ namespace Tools.VinaCad.Helper.Helper
                 Vector3d vector = other.Face.End - other.Face.Start;
                 foreach (double s in new[] { other.S0, other.S1 })
                 {
-                    double parameter = Project(other.Face.Start + vector * s);
+                    double parameter = ProjectPoint(other.Face.Start + vector * s);
                     S0 = Math.Min(S0, parameter);
                     S1 = Math.Max(S1, parameter);
                 }
+                Weight += other.Weight;
             }
 
-            private double Project(Point3d point)
+            public void ResetWeight() => Weight = 0;
+            public Point3d PointAt(double parameter) => Face.Start + (Face.End - Face.Start) * parameter;
+            public double ProjectPoint(Point3d point)
             {
                 Vector3d vector = Face.End - Face.Start;
                 double lengthSquared = vector.DotProduct(vector);
@@ -101,6 +110,21 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
+        private readonly struct RaySample
+        {
+            public RaySample(double angle, WallFaceRef face, Point3d hit, double distance)
+            {
+                Angle = angle;
+                Face = face;
+                Hit = hit;
+                Distance = distance;
+            }
+
+            public double Angle { get; }
+            public WallFaceRef Face { get; }
+            public Point3d Hit { get; }
+            public double Distance { get; }
+        }
         private sealed class EndpointSnaps
         {
             private readonly Point3d?[] _points;
@@ -143,7 +167,6 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        /// <summary>Giữ mặt tường đối diện tốt nhất (gần nhất, chồng lấn nhiều nhất).</summary>
         private sealed class BestFace
         {
             private double _distance = double.PositiveInfinity;
@@ -223,7 +246,7 @@ namespace Tools.VinaCad.Helper.Helper
                         // Chỉ offset phần mặt tường THẤY ĐƯỢC từ điểm trong phòng (không kéo cả line dài sang phòng khác)
                         Vector3d vector = span.Face.End - span.Face.Start;
                         using Line segment = new Line(span.Face.Start + vector * span.S0, span.Face.Start + vector * span.S1);
-                        Point3d guide = GetGuidePointOnSideOf(segment, interiorPoint, thickness);
+                        Point3d guide = GetGuidePointOnSideOf(segment, span.ViewPoint, thickness);
                         created += AppendOffsetOnSide(segment, guide, thickness, context);
                     }
 
@@ -763,37 +786,85 @@ namespace Tools.VinaCad.Helper.Helper
                 ? all.FindAll(f => f.Tagged || wallLayers.Contains(f.LayerId))
                 : all;
 
-            const double twoPi = Math.PI * 2.0;
             double sameLineTolerance = Math.Max(Math.Abs(thickness) * 0.5, MinimumConnectionTolerance * 100.0);
-            List<(double Angle, WallFaceRef Face, Point3d Hit)> samples = new List<(double Angle, WallFaceRef Face, Point3d Hit)>();
+            double seedDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
+            double seedSeparation = seedDistance * 3.0;
+
+            List<FaceSpan> merged = new List<FaceSpan>();
+            List<Point3d> visited = new List<Point3d> { origin };
+            Queue<Point3d> pending = new Queue<Point3d>();
+            pending.Enqueue(origin);
+            int processed = 0;
+
+            while (pending.Count > 0 && processed < MaximumRoomSeeds)
+            {
+                Point3d seed = pending.Dequeue();
+                bool isOrigin = processed == 0;
+                List<Point3d> newSeeds = new List<Point3d>();
+                List<FaceSpan>? spans = CastVisibility(faces, seed, isOrigin ? 720 : 360, isOrigin, sameLineTolerance, seedDistance, newSeeds);
+                processed++;
+                if (spans == null)
+                    continue; // điểm quan sát này nhìn ra ngoài (rò qua cửa) -> bỏ
+
+                foreach (FaceSpan span in spans)
+                {
+                    if (!isOrigin)
+                        span.ResetWeight();
+                    MergeSpan(merged, span, sameLineTolerance);
+                }
+
+                foreach (Point3d candidate in newSeeds)
+                {
+                    if (visited.Exists(point => point.DistanceTo(candidate) <= seedSeparation))
+                        continue;
+                    visited.Add(candidate);
+                    pending.Enqueue(candidate);
+                }
+            }
+
+            double minimumLength = MinimumConnectionTolerance * 100.0;
+            merged.RemoveAll(span =>
+                span.Face.IsCap ||
+                (span.S1 - span.S0) * span.Face.Start.DistanceTo(span.Face.End) <= minimumLength);
+
+            return SelectConnectedSpans(merged, Math.Max(Math.Abs(thickness) * 1.5, 0.1));
+        }
+
+        private static List<FaceSpan>? CastVisibility(List<WallFaceRef> faces, Point3d origin, int coarseRays, bool isOrigin, double sameLineTolerance, double seedDistance, List<Point3d> newSeeds)
+        {
+            const double twoPi = Math.PI * 2.0;
+            List<RaySample> samples = new List<RaySample>();
             double minX = double.PositiveInfinity, minY = double.PositiveInfinity;
             double maxX = double.NegativeInfinity, maxY = double.NegativeInfinity;
 
             int missedRays = 0;
             double firstMissDegrees = 0.0;
-            for (int k = 0; k < 720; k++)
+            for (int k = 0; k < coarseRays; k++)
             {
-                double angle = k * Math.PI / 360.0;
+                double angle = k * twoPi / coarseRays;
                 if (!TryRayHit(faces, origin, angle, out WallFaceRef? face, out double distance) || face == null)
                 {
-                    // Khe hở rất nhỏ ở góc cho vài tia lọt ra ngoài: bỏ qua; hở thật (cửa) thì nhiều tia lọt -> báo lỗi
                     if (missedRays++ == 0)
                         firstMissDegrees = angle * 180.0 / Math.PI;
                     continue;
                 }
 
                 Point3d hitPoint = new Point3d(origin.X + Math.Cos(angle) * distance, origin.Y + Math.Sin(angle) * distance, origin.Z);
-                samples.Add((angle, face, hitPoint));
+                samples.Add(new RaySample(angle, face, hitPoint, distance));
                 minX = Math.Min(minX, hitPoint.X);
                 maxX = Math.Max(maxX, hitPoint.X);
                 minY = Math.Min(minY, hitPoint.Y);
                 maxY = Math.Max(maxY, hitPoint.Y);
             }
 
-            if (missedRays > MaximumMissedRays || samples.Count == 0)
+            int allowedMisses = Math.Max(1, MaximumMissedRays * coarseRays / 720);
+            if (missedRays > allowedMisses || samples.Count == 0)
             {
+                if (!isOrigin)
+                    return null;
+
                 throw new InvalidOperationException(
-                    $"Phòng không kín: {missedRays}/720 tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.");
+                    $"Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.");
             }
 
             const double margin = 1.0;
@@ -814,7 +885,7 @@ namespace Tools.VinaCad.Helper.Helper
                         if (TryRayHit(local, origin, angle, out WallFaceRef? hit, out double distance) && hit != null)
                         {
                             Point3d hitPoint = new Point3d(origin.X + Math.Cos(angle) * distance, origin.Y + Math.Sin(angle) * distance, origin.Z);
-                            samples.Add((angle, hit, hitPoint));
+                            samples.Add(new RaySample(angle, hit, hitPoint, distance));
                         }
                     }
                 }
@@ -824,7 +895,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             List<FaceSpan> spans = new List<FaceSpan>();
             FaceSpan? current = null;
-            foreach (var sample in samples)
+            foreach (RaySample sample in samples)
             {
                 if (current != null && SameWallLine(current.Face, sample.Face, sameLineTolerance))
                 {
@@ -834,7 +905,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                 if (current != null)
                     spans.Add(current);
-                current = new FaceSpan(sample.Face, sample.Hit);
+                current = new FaceSpan(sample.Face, sample.Hit, origin);
             }
 
             if (current != null)
@@ -845,14 +916,114 @@ namespace Tools.VinaCad.Helper.Helper
                     spans.Add(current);
             }
 
-            double minimumLength = MinimumConnectionTolerance * 100.0;
-            spans.RemoveAll(span =>
-                span.Face.IsCap ||
-                (span.S1 - span.S0) * span.Face.Start.DistanceTo(span.Face.End) <= minimumLength);
+            for (int index = 0; index < samples.Count; index++)
+            {
+                RaySample first = samples[index];
+                RaySample second = samples[(index + 1) % samples.Count];
+                if (SameWallLine(first.Face, second.Face, sameLineTolerance))
+                    continue;
+
+                RaySample near = first.Distance <= second.Distance ? first : second;
+                RaySample far = first.Distance <= second.Distance ? second : first;
+                double gap = far.Distance - near.Distance;
+                if (gap <= seedDistance * 2.0)
+                    continue;
+
+                double reach = near.Distance + Math.Min(seedDistance, gap * 0.5);
+                newSeeds.Add(new Point3d(
+                    origin.X + Math.Cos(far.Angle) * reach,
+                    origin.Y + Math.Sin(far.Angle) * reach,
+                    origin.Z));
+            }
+
             return spans;
         }
 
-        /// <summary>Hai mặt tường cùng nằm trên một đường (song song và cách nhau không quá tolerance).</summary>
+        private static void MergeSpan(List<FaceSpan> result, FaceSpan span, double tolerance)
+        {
+            foreach (FaceSpan existing in result)
+            {
+                if (!SameWallLine(existing.Face, span.Face, tolerance))
+                    continue;
+
+                double length = existing.Face.Start.DistanceTo(existing.Face.End);
+                if (length <= MinimumConnectionTolerance)
+                    continue;
+
+                Vector3d vector = span.Face.End - span.Face.Start;
+                double first = existing.ProjectPoint(span.Face.Start + vector * span.S0);
+                double second = existing.ProjectPoint(span.Face.Start + vector * span.S1);
+                double slack = tolerance / length;
+                if (Math.Max(first, second) < existing.S0 - slack || Math.Min(first, second) > existing.S1 + slack)
+                    continue;
+
+                existing.Merge(span);
+                return;
+            }
+
+            result.Add(span);
+        }
+
+        private static List<FaceSpan> SelectConnectedSpans(List<FaceSpan> spans, double tolerance)
+        {
+            int count = spans.Count;
+            if (count <= 1)
+                return spans;
+
+            int[] parent = Enumerable.Range(0, count).ToArray();
+            int Find(int node)
+            {
+                while (parent[node] != node)
+                {
+                    parent[node] = parent[parent[node]];
+                    node = parent[node];
+                }
+
+                return node;
+            }
+
+            for (int first = 0; first < count; first++)
+            {
+                for (int second = first + 1; second < count; second++)
+                {
+                    if (SpansTouch(spans[first], spans[second], tolerance))
+                        parent[Find(first)] = Find(second);
+                }
+            }
+
+            Dictionary<int, int> weights = new Dictionary<int, int>();
+            for (int index = 0; index < count; index++)
+            {
+                int root = Find(index);
+                weights.TryGetValue(root, out int weight);
+                weights[root] = weight + spans[index].Weight;
+            }
+
+            int bestRoot = weights.OrderByDescending(pair => pair.Value).First().Key;
+            double keepWeight = Math.Max(1.0, weights.Values.Sum() * 0.2);
+            List<FaceSpan> selected = new List<FaceSpan>();
+            for (int index = 0; index < count; index++)
+            {
+                int root = Find(index);
+                if (root == bestRoot || weights[root] >= keepWeight)
+                    selected.Add(spans[index]);
+            }
+
+            return selected.Count > 0 ? selected : spans;
+        }
+
+        private static bool SpansTouch(FaceSpan first, FaceSpan second, double tolerance)
+        {
+            Point3d firstStart = first.PointAt(first.S0);
+            Point3d firstEnd = first.PointAt(first.S1);
+            Point3d secondStart = second.PointAt(second.S0);
+            Point3d secondEnd = second.PointAt(second.S1);
+            return DistanceToSegment(firstStart, secondStart, secondEnd) <= tolerance ||
+                   DistanceToSegment(firstEnd, secondStart, secondEnd) <= tolerance ||
+                   DistanceToSegment(secondStart, firstStart, firstEnd) <= tolerance ||
+                   DistanceToSegment(secondEnd, firstStart, firstEnd) <= tolerance;
+        }
+
         private static bool SameWallLine(WallFaceRef first, WallFaceRef second, double tolerance)
         {
             if (ReferenceEquals(first, second))
