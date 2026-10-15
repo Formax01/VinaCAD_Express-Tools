@@ -47,7 +47,7 @@ namespace Tools.VinaCad.Action.Actions
         {
             while (true)
             {
-                PromptPointOptions pointOptions = new PromptPointOptions("\n Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Dày riêng | S Cài đặt] : ")
+                PromptPointOptions pointOptions = new PromptPointOptions("\n Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Độ dày | S Cài đặt] : ")
                 {
                     AllowNone = true,
                     AllowArbitraryInput = false,
@@ -55,7 +55,7 @@ namespace Tools.VinaCad.Action.Actions
                 };
                 pointOptions.Keywords.Add("Open", "O", "Quét chọn tường");
                 pointOptions.Keywords.Add("Exterior", "E", "Mặt ngoài");
-                pointOptions.Keywords.Add("Thick", "D", "Dày riêng");
+                pointOptions.Keywords.Add("Thick", "D", "Độ dày");
                 pointOptions.Keywords.Add("Settings", "S", "Cài đặt");
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
