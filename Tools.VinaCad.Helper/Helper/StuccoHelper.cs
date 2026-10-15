@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
@@ -16,10 +17,7 @@ namespace Tools.VinaCad.Helper.Helper
         private const double MinimumWallFaceOverlapRatio = 0.25;
         private const double CapPerpendicularDotTolerance = 0.2;
         private const double MiterLimitFactor = 10.0;
-
-        // -----------------------------------------------------------------------------------
-        // NGỮ CẢNH DÙNG CHUNG (thay cho 6-8 tham số truyền qua từng hàm)
-        // -----------------------------------------------------------------------------------
+        private const int MaximumMissedRays = 14;
 
         private sealed class StuccoContext
         {
@@ -38,7 +36,71 @@ namespace Tools.VinaCad.Helper.Helper
             public List<ObjectId> CreatedIds { get; } = new List<ObjectId>();
         }
 
-        /// <summary>Gom các đề xuất kéo đầu mút line về giao điểm, rồi áp dụng một lượt.</summary>
+        private sealed class WallFaceRef
+        {
+            public WallFaceRef(ObjectId id, Point3d start, Point3d end, bool tagged, bool isCap, ObjectId layerId)
+            {
+                Id = id;
+                Start = start;
+                End = end;
+                Tagged = tagged;
+                IsCap = isCap;
+                LayerId = layerId;
+            }
+
+            public ObjectId LayerId { get; }
+
+            public ObjectId Id { get; }
+            public Point3d Start { get; }
+            public Point3d End { get; }
+            public bool Tagged { get; }
+            public bool IsCap { get; }
+        }
+
+        private sealed class FaceSpan
+        {
+            public FaceSpan(WallFaceRef face, Point3d hit)
+            {
+                Face = face;
+                Ids.Add(face.Id);
+                S0 = S1 = Project(hit);
+            }
+
+            public WallFaceRef Face { get; }
+            public HashSet<ObjectId> Ids { get; } = new HashSet<ObjectId>();
+            public double S0 { get; private set; }
+            public double S1 { get; private set; }
+
+            public void Extend(WallFaceRef face, Point3d hit)
+            {
+                Ids.Add(face.Id);
+                double parameter = Project(hit);
+                S0 = Math.Min(S0, parameter);
+                S1 = Math.Max(S1, parameter);
+            }
+
+            public void Merge(FaceSpan other)
+            {
+                foreach (ObjectId id in other.Ids)
+                    Ids.Add(id);
+
+                Vector3d vector = other.Face.End - other.Face.Start;
+                foreach (double s in new[] { other.S0, other.S1 })
+                {
+                    double parameter = Project(other.Face.Start + vector * s);
+                    S0 = Math.Min(S0, parameter);
+                    S1 = Math.Max(S1, parameter);
+                }
+            }
+
+            private double Project(Point3d point)
+            {
+                Vector3d vector = Face.End - Face.Start;
+                double lengthSquared = vector.DotProduct(vector);
+                return lengthSquared <= 0.0 ? 0.0 : (point - Face.Start).DotProduct(vector) / lengthSquared;
+            }
+        }
+
         private sealed class EndpointSnaps
         {
             private readonly Point3d?[] _points;
@@ -103,10 +165,6 @@ namespace Tools.VinaCad.Helper.Helper
             }
         }
 
-        // -----------------------------------------------------------------------------------
-        // ĐIỂM VÀO (PUBLIC)
-        // -----------------------------------------------------------------------------------
-
         public static string EnsureLayer(Database database, string requestedLayerName, short colorIndex)
         {
             if (database == null)
@@ -139,7 +197,375 @@ namespace Tools.VinaCad.Helper.Helper
             return actualLayerName;
         }
 
-        /// <summary>FN mặt trong: offset các cạnh biên phòng vào phía điểm bên trong phòng.</summary>
+        public static int CreateStuccoForRoomFaces(Database database, Point3d interiorPoint, double thickness, string targetLayerName)
+        {
+            ValidateArguments(database, thickness, targetLayerName);
+
+            List<FaceSpan> spans;
+            using (Transaction transaction = database.TransactionManager.StartTransaction())
+            {
+                ObjectId layerId = GetTargetLayerId(transaction, database, targetLayerName);
+                spans = FindRoomFaces(CollectWallFaceRefs(transaction, database, layerId), interiorPoint, thickness);
+            }
+
+            if (spans.Count == 0)
+                throw new InvalidOperationException("Không tìm thấy mặt tường quanh điểm đã chọn.");
+
+            ObjectId[] sourceIds = spans.SelectMany(span => span.Ids).Distinct().ToArray();
+            return RunStucco(database, sourceIds, thickness, targetLayerName,
+                "Chưa có mặt tường.",
+                "Không thể tạo vữa mặt trong.",
+                context =>
+                {
+                    int created = 0;
+                    foreach (FaceSpan span in spans)
+                    {
+                        // Chỉ offset phần mặt tường THẤY ĐƯỢC từ điểm trong phòng (không kéo cả line dài sang phòng khác)
+                        Vector3d vector = span.Face.End - span.Face.Start;
+                        using Line segment = new Line(span.Face.Start + vector * span.S0, span.Face.Start + vector * span.S1);
+                        Point3d guide = GetGuidePointOnSideOf(segment, interiorPoint, thickness);
+                        created += AppendOffsetOnSide(segment, guide, thickness, context);
+                    }
+
+                    return created;
+                },
+                isolate: true);
+        }
+
+        public static int CreateStuccoForExteriorFaces(Database database, ObjectId[] sourceIds, Point3d sidePoint, double thickness, string targetLayerName)
+        {
+            return RunStucco(database, sourceIds, thickness, targetLayerName,
+                "Chưa chọn mặt tường ngoài.",
+                "Các đường đã chọn không thể tạo vữa mặt ngoài.",
+                context =>
+                {
+                    List<Line> allFaces = new List<Line>();
+                    List<Line> transientFaces = new List<Line>();
+                    try
+                    {
+                        foreach (ObjectId id in context.Space)
+                        {
+                            Curve? curve = GetCurve(context.Transaction, id);
+                            if (curve == null || curve.IsErased || curve.LayerId == context.LayerId)
+                                continue;
+
+                            if (curve is Line line)
+                            {
+                                if (!DrawWallHelper.IsWallCap(line) &&
+                                    line.StartPoint.DistanceTo(line.EndPoint) > MinimumConnectionTolerance)
+                                    allFaces.Add(line);
+                            }
+                            else if (curve is Polyline polyline)
+                            {
+                                CollectStraightPolylineSegments(polyline, transientFaces);
+                            }
+                        }
+
+                        allFaces.AddRange(transientFaces);
+
+                        int created = 0;
+                        foreach (ObjectId sourceId in sourceIds)
+                        {
+                            Curve? curve = GetCurve(context.Transaction, sourceId);
+                            if (curve is Line face)
+                            {
+                                if (DrawWallHelper.IsWallCap(face))
+                                    continue; // cap sẽ được bo tự động ở bước cleanup
+
+                                Line? opposite = FindOppositeOpenWallFace(face, allFaces, thickness);
+                                Point3d guide = opposite != null
+                                    ? GetPointAwayFromOppositeFace(face, opposite, thickness)
+                                    : GetGuidePointOnSideOf(face, sidePoint, thickness);
+                                created += AppendOffsetOnSide(face, guide, thickness, context);
+                            }
+                            else if (curve != null)
+                            {
+                                // Arc / polyline / spline: offset về phía điểm chỉ dẫn như cũ
+                                created += AppendOffsetOnSide(curve, sidePoint, thickness, context);
+                            }
+                        }
+
+                        return created;
+                    }
+                    finally
+                    {
+                        foreach (Line face in transientFaces)
+                            face.Dispose();
+                    }
+                },
+                isolate: true);
+        }
+        private sealed class StuccoEdit
+        {
+            public StuccoEdit(Line line, bool selected)
+            {
+                Line = line;
+                Selected = selected;
+                OriginalStart = line.StartPoint;
+                OriginalEnd = line.EndPoint;
+                Start = OriginalStart;
+                End = OriginalEnd;
+                Direction = (OriginalEnd - OriginalStart).GetNormal();
+                Shift = new Vector3d(0.0, 0.0, 0.0);
+            }
+
+            public Line Line { get; }
+            public bool Selected { get; }
+            public Point3d OriginalStart { get; }
+            public Point3d OriginalEnd { get; }
+            public Vector3d Direction { get; }
+            public Point3d Start { get; set; }
+            public Point3d End { get; set; }
+            public Vector3d Shift { get; set; }
+            public bool Moved { get; set; }
+            public bool Dirty { get; set; }
+
+            public Point3d MovedAnchor => Moved ? OriginalStart + Shift : OriginalStart;
+        }
+        public static int ChangeStuccoThickness(Database database, ObjectId[] stuccoIds, double referenceThickness, double newThickness, string targetLayerName)
+        {
+            ValidateArguments(database, newThickness, targetLayerName);
+            if (stuccoIds == null || stuccoIds.Length == 0)
+                throw new ArgumentException("Chưa chọn cạnh vữa.", nameof(stuccoIds));
+
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            ObjectId layerId = GetTargetLayerId(transaction, database, targetLayerName);
+            BlockTableRecord space = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+
+            List<WallFaceRef> walls = FilterWallLayerFaces(CollectWallFaceRefs(transaction, database, layerId));
+            if (walls.Count == 0)
+                throw new InvalidOperationException("Không tìm thấy line tường trong bản vẽ.");
+
+            // 1) Gom toàn bộ line vữa trên layer FN (đánh dấu các line được chọn)
+            HashSet<ObjectId> selectedIds = new HashSet<ObjectId>(stuccoIds);
+            List<StuccoEdit> edits = new List<StuccoEdit>();
+            foreach (ObjectId id in space)
+            {
+                if (id.IsNull || !id.IsValid ||
+                    transaction.GetObject(id, OpenMode.ForRead) is not Line line ||
+                    line.IsErased || line.LayerId != layerId ||
+                    line.StartPoint.DistanceTo(line.EndPoint) <= MinimumConnectionTolerance)
+                {
+                    continue;
+                }
+
+                edits.Add(new StuccoEdit(line, selectedIds.Contains(id)));
+            }
+
+            double largest = Math.Max(Math.Abs(referenceThickness), Math.Abs(newThickness));
+            double maximumDistance = JoinLimit(largest, 5.0);
+            int movedCount = 0;
+            foreach (StuccoEdit edit in edits)
+            {
+                if (!edit.Selected ||
+                    !TryFindStuccoBaseFace(edit, walls, maximumDistance, out Vector3d normal, out double currentDistance))
+                {
+                    continue;
+                }
+
+                Vector3d shift = normal * (newThickness - currentDistance);
+                if (shift.Length <= MinimumConnectionTolerance)
+                    continue; // đã đúng độ dày
+
+                edit.Shift = shift;
+                edit.Moved = true;
+                movedCount++;
+            }
+
+            if (movedCount == 0)
+                throw new InvalidOperationException("Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng).");
+
+            // 3) Nối lại hai đầu của từng cạnh đã dịch chuyển
+            double connectionTolerance = FineTolerance(largest, 0.05);
+            double miterLimit = MiterLimit(largest);
+            List<(Point3d From, Point3d To)> connectors = new List<(Point3d From, Point3d To)>();
+            foreach (StuccoEdit edit in edits)
+            {
+                if (!edit.Moved)
+                    continue;
+
+                AdjustMovedEndpoint(edit, 0, edits, connectionTolerance, miterLimit, connectors);
+                AdjustMovedEndpoint(edit, 1, edits, connectionTolerance, miterLimit, connectors);
+            }
+
+            // 4) Ghi vào bản vẽ
+            foreach (StuccoEdit edit in edits)
+            {
+                if (!edit.Dirty)
+                    continue;
+
+                if (!edit.Line.IsWriteEnabled)
+                    edit.Line.UpgradeOpen();
+                edit.Line.StartPoint = edit.Start;
+                edit.Line.EndPoint = edit.End;
+            }
+
+            foreach ((Point3d from, Point3d to) in connectors)
+            {
+                Line connector = new Line(from, to)
+                {
+                    LayerId = layerId,
+                    ColorIndex = 256
+                };
+                space.AppendEntity(connector);
+                transaction.AddNewlyCreatedDBObject(connector, true);
+            }
+
+            transaction.Commit();
+            return movedCount;
+        }
+
+        private static List<WallFaceRef> FilterWallLayerFaces(List<WallFaceRef> all)
+        {
+            HashSet<ObjectId> wallLayers = new HashSet<ObjectId>(all.Where(f => f.Tagged).Select(f => f.LayerId));
+            return wallLayers.Count > 0
+                ? all.FindAll(f => f.Tagged || wallLayers.Contains(f.LayerId))
+                : all;
+        }
+
+        private static bool TryFindStuccoBaseFace(StuccoEdit edit, List<WallFaceRef> walls, double maximumDistance, out Vector3d normal, out double distance)
+        {
+            normal = new Vector3d(0.0, 0.0, 0.0);
+            distance = 0.0;
+            Vector3d vector = edit.OriginalEnd - edit.OriginalStart;
+            double length = vector.Length;
+            Point3d midpoint = edit.OriginalStart + vector * 0.5;
+            double best = double.PositiveInfinity;
+
+            foreach (WallFaceRef wall in walls)
+            {
+                if (wall.IsCap)
+                    continue;
+
+                Vector3d wallVector = wall.End - wall.Start;
+                double wallLength = wallVector.Length;
+                if (wallLength <= MinimumConnectionTolerance)
+                    continue;
+
+                Vector3d wallDirection = wallVector.GetNormal();
+                if (Math.Abs(edit.Direction.DotProduct(wallDirection)) < 1.0 - ParallelDotTolerance)
+                    continue;
+
+                Vector3d wallNormal = new Vector3d(-wallDirection.Y, wallDirection.X, 0.0);
+                double signed = (midpoint - wall.Start).DotProduct(wallNormal);
+                double absolute = Math.Abs(signed);
+                if (absolute <= MinimumConnectionTolerance || absolute > maximumDistance || absolute >= best)
+                    continue;
+
+                double first = (edit.OriginalStart - wall.Start).DotProduct(wallDirection);
+                double second = (edit.OriginalEnd - wall.Start).DotProduct(wallDirection);
+                double overlap = Math.Min(wallLength, Math.Max(first, second)) - Math.Max(0.0, Math.Min(first, second));
+                double minimumOverlap = Math.Max(MinimumConnectionTolerance * 100.0, Math.Min(length, wallLength) * MinimumWallFaceOverlapRatio);
+                if (overlap < minimumOverlap)
+                    continue;
+
+                best = absolute;
+                distance = absolute;
+                normal = signed >= 0.0 ? wallNormal : -wallNormal;
+            }
+
+            return !double.IsPositiveInfinity(best);
+        }
+
+        private static void AdjustMovedEndpoint(StuccoEdit moved, int endIndex, List<StuccoEdit> edits, double connectionTolerance, double miterLimit, List<(Point3d From, Point3d To)> connectors)
+        {
+            Point3d original = endIndex == 0 ? moved.OriginalStart : moved.OriginalEnd;
+            Point3d translated = original + moved.Shift;
+            Point3d result = translated;
+
+            StuccoEdit? corner = null;
+            Point3d cornerTarget = translated;
+            double cornerDistance = double.PositiveInfinity;
+            StuccoEdit? straight = null;
+
+            foreach (StuccoEdit other in edits)
+            {
+                if (ReferenceEquals(other, moved))
+                    continue;
+
+                double distance = DistanceToSegment(original, other.OriginalStart, other.OriginalEnd);
+                if (distance > connectionTolerance)
+                    continue;
+
+                if (Math.Abs(moved.Direction.DotProduct(other.Direction)) >= 1.0 - ParallelDotTolerance)
+                {
+                    straight ??= other; // tiếp nối thẳng hàng
+                    continue;
+                }
+
+                if (distance >= cornerDistance ||
+                    !TryIntersectInfiniteLines(moved.OriginalStart + moved.Shift, moved.Direction, other.MovedAnchor, other.Direction, out Point3d target) ||
+                    target.DistanceTo(translated) > miterLimit)
+                {
+                    continue;
+                }
+
+                corner = other;
+                cornerTarget = target;
+                cornerDistance = distance;
+            }
+
+            if (corner != null)
+            {
+                result = cornerTarget;
+                if (!corner.Moved)
+                {
+                    // Góc nối đầu-đầu: kéo luôn đầu mút của cạnh kề về giao điểm mới (ngã ba thì giữ nguyên)
+                    double toStart = original.DistanceTo(corner.OriginalStart);
+                    double toEnd = original.DistanceTo(corner.OriginalEnd);
+                    if (Math.Min(toStart, toEnd) <= connectionTolerance)
+                    {
+                        if (toStart <= toEnd)
+                            corner.Start = cornerTarget;
+                        else
+                            corner.End = cornerTarget;
+                        corner.Dirty = true;
+                    }
+                }
+            }
+            else if (straight != null)
+            {
+                // Thẳng hàng nhưng lệch bậc độ dày -> thêm đoạn nối vuông góc
+                Point3d otherPoint = original + straight.Shift;
+                bool differentShift = (moved.Shift - straight.Shift).Length > MinimumConnectionTolerance;
+                bool firstOfPair = !straight.Moved || edits.IndexOf(moved) < edits.IndexOf(straight);
+                if (differentShift && firstOfPair)
+                    connectors.Add((translated, otherPoint));
+            }
+
+            if (endIndex == 0)
+                moved.Start = result;
+            else
+                moved.End = result;
+            moved.Dirty = true;
+        }
+
+        private static bool TryIntersectInfiniteLines(Point3d firstPoint, Vector3d firstDirection, Point3d secondPoint, Vector3d secondDirection, out Point3d intersection)
+        {
+            intersection = firstPoint;
+            double denominator = Cross2d(firstDirection.X, firstDirection.Y, secondDirection.X, secondDirection.Y);
+            if (Math.Abs(denominator) <= 1e-6)
+                return false;
+
+            double parameter = Cross2d(secondPoint.X - firstPoint.X, secondPoint.Y - firstPoint.Y, secondDirection.X, secondDirection.Y) / denominator;
+            intersection = new Point3d(
+                firstPoint.X + firstDirection.X * parameter,
+                firstPoint.Y + firstDirection.Y * parameter,
+                firstPoint.Z);
+            return true;
+        }
+
+        private static double DistanceToSegment(Point3d point, Point3d start, Point3d end)
+        {
+            Vector3d vector = end - start;
+            double lengthSquared = vector.DotProduct(vector);
+            if (lengthSquared <= MinimumConnectionTolerance * MinimumConnectionTolerance)
+                return point.DistanceTo(start);
+
+            double parameter = Math.Max(0.0, Math.Min(1.0, (point - start).DotProduct(vector) / lengthSquared));
+            return point.DistanceTo(start + vector * parameter);
+        }
+
         public static int CreateStuccoForBoundary(Database database, ObjectId[] boundaryIds, Point3d interiorPoint, double thickness, string targetLayerName)
         {
             return RunStucco(database, boundaryIds, thickness, targetLayerName,
@@ -163,7 +589,6 @@ namespace Tools.VinaCad.Helper.Helper
                 });
         }
 
-        /// <summary>FN mặt ngoài: nối các Line được chọn thành đường dẫn rồi offset về phía điểm chỉ dẫn.</summary>
         public static int CreateStuccoForSelection(Database database, ObjectId[] sourceIds, Point3d sidePoint, double thickness, string targetLayerName)
         {
             return RunStucco(database, sourceIds, thickness, targetLayerName,
@@ -199,7 +624,6 @@ namespace Tools.VinaCad.Helper.Helper
                 });
         }
 
-        /// <summary>FN tường hở: ghép cặp mặt tường, offset ra ngoài mỗi mặt và cắt phần chui vào tường giao.</summary>
         public static int CreateStuccoForOpenWalls(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName)
         {
             return RunStucco(database, sourceIds, thickness, targetLayerName,
@@ -264,8 +688,7 @@ namespace Tools.VinaCad.Helper.Helper
                 });
         }
 
-        /// <summary>Khung chung của 3 lệnh: kiểm tra đầu vào, mở transaction, dựng offset, dọn hình học, commit.</summary>
-        private static int RunStucco(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName, string emptySourceMessage, string noResultMessage, Func<StuccoContext, int> build)
+        private static int RunStucco(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName, string emptySourceMessage, string noResultMessage, Func<StuccoContext, int> build, bool isolate = false)
         {
             ValidateArguments(database, thickness, targetLayerName);
             if (sourceIds == null || sourceIds.Length == 0)
@@ -282,7 +705,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (createdCount == 0)
                 throw new InvalidOperationException(noResultMessage);
 
-            CleanupStuccoGeometry(context, new HashSet<ObjectId>(sourceIds), thickness);
+            CleanupStuccoGeometry(context, new HashSet<ObjectId>(sourceIds), thickness, isolate);
             transaction.Commit();
             return createdCount;
         }
@@ -294,9 +717,201 @@ namespace Tools.VinaCad.Helper.Helper
             return transaction.GetObject(id, OpenMode.ForRead) as Curve;
         }
 
-        // -----------------------------------------------------------------------------------
-        // OFFSET BIÊN PHÒNG (MẶT TRONG)
-        // -----------------------------------------------------------------------------------
+
+        private static List<WallFaceRef> CollectWallFaceRefs(Transaction transaction, Database database, ObjectId stuccoLayerId)
+        {
+            List<WallFaceRef> result = new List<WallFaceRef>();
+            BlockTableRecord space = (BlockTableRecord)transaction.GetObject(database.CurrentSpaceId, OpenMode.ForRead);
+            foreach (ObjectId id in space)
+            {
+                if (transaction.GetObject(id, OpenMode.ForRead) is not Curve curve || curve.IsErased || curve.LayerId == stuccoLayerId)
+                    continue;
+
+                if (curve is Line line)
+                {
+                    if (line.StartPoint.DistanceTo(line.EndPoint) <= MinimumConnectionTolerance)
+                        continue;
+
+                    bool isCap = DrawWallHelper.IsWallCap(line);
+                    result.Add(new WallFaceRef(id, line.StartPoint, line.EndPoint,
+                        isCap || !string.IsNullOrEmpty(DrawWallHelper.GetWallSegmentId(line)), isCap, line.LayerId));
+                }
+                else if (curve is Polyline polyline)
+                {
+                    int count = polyline.Closed ? polyline.NumberOfVertices : polyline.NumberOfVertices - 1;
+                    for (int index = 0; index < count; index++)
+                    {
+                        if (Math.Abs(polyline.GetBulgeAt(index)) > 1e-10)
+                            continue;
+
+                        Point3d start = polyline.GetPoint3dAt(index);
+                        Point3d end = polyline.GetPoint3dAt((index + 1) % polyline.NumberOfVertices);
+                        if (start.DistanceTo(end) > MinimumConnectionTolerance)
+                            result.Add(new WallFaceRef(id, start, end, false, false, polyline.LayerId));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static List<FaceSpan> FindRoomFaces(List<WallFaceRef> all, Point3d origin, double thickness)
+        {
+            // Chỉ xét các line nằm trên layer tường (layer của line do WW tạo)
+            HashSet<ObjectId> wallLayers = new HashSet<ObjectId>(all.Where(f => f.Tagged).Select(f => f.LayerId));
+            List<WallFaceRef> faces = wallLayers.Count > 0
+                ? all.FindAll(f => f.Tagged || wallLayers.Contains(f.LayerId))
+                : all;
+
+            const double twoPi = Math.PI * 2.0;
+            double sameLineTolerance = Math.Max(Math.Abs(thickness) * 0.5, MinimumConnectionTolerance * 100.0);
+            List<(double Angle, WallFaceRef Face, Point3d Hit)> samples = new List<(double Angle, WallFaceRef Face, Point3d Hit)>();
+            double minX = double.PositiveInfinity, minY = double.PositiveInfinity;
+            double maxX = double.NegativeInfinity, maxY = double.NegativeInfinity;
+
+            int missedRays = 0;
+            double firstMissDegrees = 0.0;
+            for (int k = 0; k < 720; k++)
+            {
+                double angle = k * Math.PI / 360.0;
+                if (!TryRayHit(faces, origin, angle, out WallFaceRef? face, out double distance) || face == null)
+                {
+                    // Khe hở rất nhỏ ở góc cho vài tia lọt ra ngoài: bỏ qua; hở thật (cửa) thì nhiều tia lọt -> báo lỗi
+                    if (missedRays++ == 0)
+                        firstMissDegrees = angle * 180.0 / Math.PI;
+                    continue;
+                }
+
+                Point3d hitPoint = new Point3d(origin.X + Math.Cos(angle) * distance, origin.Y + Math.Sin(angle) * distance, origin.Z);
+                samples.Add((angle, face, hitPoint));
+                minX = Math.Min(minX, hitPoint.X);
+                maxX = Math.Max(maxX, hitPoint.X);
+                minY = Math.Min(minY, hitPoint.Y);
+                maxY = Math.Max(maxY, hitPoint.Y);
+            }
+
+            if (missedRays > MaximumMissedRays || samples.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    $"Phòng không kín: {missedRays}/720 tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.");
+            }
+
+            const double margin = 1.0;
+            List<WallFaceRef> local = faces.FindAll(f =>
+                Math.Max(f.Start.X, f.End.X) >= minX - margin && Math.Min(f.Start.X, f.End.X) <= maxX + margin &&
+                Math.Max(f.Start.Y, f.End.Y) >= minY - margin && Math.Min(f.Start.Y, f.End.Y) <= maxY + margin);
+
+            foreach (WallFaceRef face in local)
+            {
+                foreach (Point3d point in new[] { face.Start, face.End })
+                {
+                    double baseAngle = Math.Atan2(point.Y - origin.Y, point.X - origin.X);
+                    foreach (double delta in new[] { -1e-5, 1e-5 })
+                    {
+                        double angle = (baseAngle + delta) % twoPi;
+                        if (angle < 0.0)
+                            angle += twoPi;
+                        if (TryRayHit(local, origin, angle, out WallFaceRef? hit, out double distance) && hit != null)
+                        {
+                            Point3d hitPoint = new Point3d(origin.X + Math.Cos(angle) * distance, origin.Y + Math.Sin(angle) * distance, origin.Z);
+                            samples.Add((angle, hit, hitPoint));
+                        }
+                    }
+                }
+            }
+
+            samples.Sort((a, b) => a.Angle.CompareTo(b.Angle));
+
+            List<FaceSpan> spans = new List<FaceSpan>();
+            FaceSpan? current = null;
+            foreach (var sample in samples)
+            {
+                if (current != null && SameWallLine(current.Face, sample.Face, sameLineTolerance))
+                {
+                    current.Extend(sample.Face, sample.Hit);
+                    continue;
+                }
+
+                if (current != null)
+                    spans.Add(current);
+                current = new FaceSpan(sample.Face, sample.Hit);
+            }
+
+            if (current != null)
+            {
+                if (spans.Count > 0 && SameWallLine(spans[0].Face, current.Face, sameLineTolerance))
+                    spans[0].Merge(current); // đoạn nối vòng qua góc 0
+                else
+                    spans.Add(current);
+            }
+
+            double minimumLength = MinimumConnectionTolerance * 100.0;
+            spans.RemoveAll(span =>
+                span.Face.IsCap ||
+                (span.S1 - span.S0) * span.Face.Start.DistanceTo(span.Face.End) <= minimumLength);
+            return spans;
+        }
+
+        /// <summary>Hai mặt tường cùng nằm trên một đường (song song và cách nhau không quá tolerance).</summary>
+        private static bool SameWallLine(WallFaceRef first, WallFaceRef second, double tolerance)
+        {
+            if (ReferenceEquals(first, second))
+                return true;
+
+            Vector3d firstVector = first.End - first.Start;
+            Vector3d secondVector = second.End - second.Start;
+            if (firstVector.Length <= MinimumConnectionTolerance || secondVector.Length <= MinimumConnectionTolerance)
+                return false;
+
+            Vector3d direction = firstVector.GetNormal();
+            if (Math.Abs(direction.DotProduct(secondVector.GetNormal())) < 1.0 - ParallelDotTolerance)
+                return false;
+
+            return DistanceToInfiniteLine(second.Start, first.Start, direction) <= tolerance &&
+                   DistanceToInfiniteLine(second.End, first.Start, direction) <= tolerance;
+        }
+
+        private static bool TryRayHit(List<WallFaceRef> faces, Point3d origin, double angle, out WallFaceRef? hitFace, out double hitDistance)
+        {
+            double dx = Math.Cos(angle);
+            double dy = Math.Sin(angle);
+            hitFace = null;
+            hitDistance = double.PositiveInfinity;
+
+            foreach (WallFaceRef face in faces)
+            {
+                double ex = face.End.X - face.Start.X;
+                double ey = face.End.Y - face.Start.Y;
+                double denominator = dx * ey - dy * ex;
+                if (Math.Abs(denominator) < 1e-12)
+                    continue; // song song
+
+                double wx = face.Start.X - origin.X;
+                double wy = face.Start.Y - origin.Y;
+                double t = (wx * ey - wy * ex) / denominator; // khoảng cách dọc tia
+                double s = (wx * dy - wy * dx) / denominator; // tham số dọc mặt tường
+                if (t > 1e-9 && s >= -1e-9 && s <= 1.0 + 1e-9 && t < hitDistance)
+                {
+                    hitDistance = t;
+                    hitFace = face;
+                }
+            }
+
+            return hitFace != null;
+        }
+
+        private static Point3d GetGuidePointOnSideOf(Line face, Point3d sidePoint, double thickness)
+        {
+            Vector3d vector = face.EndPoint - face.StartPoint;
+            Vector3d direction = vector.GetNormal();
+            Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
+            if ((sidePoint - face.StartPoint).DotProduct(normal) < 0.0)
+                normal = -normal;
+
+            double guideDistance = Math.Max(Math.Abs(thickness) * 2.0, 1.0);
+            return face.StartPoint + vector * 0.5 + normal * guideDistance;
+        }
+
 
         private static bool CanOffsetBySegments(Polyline polyline)
         {
@@ -411,9 +1026,6 @@ namespace Tools.VinaCad.Helper.Helper
             return inside;
         }
 
-        // -----------------------------------------------------------------------------------
-        // TƯỜNG HỞ: GHÉP CẶP MẶT TƯỜNG, DẢI TƯỜNG, CẮT PHẦN CHUI VÀO TƯỜNG GIAO
-        // -----------------------------------------------------------------------------------
 
         private static Line? FindOppositeOpenWallFace(Line face, List<Line> candidates, double thickness)
         {
@@ -776,9 +1388,6 @@ namespace Tools.VinaCad.Helper.Helper
             return piece;
         }
 
-        // -----------------------------------------------------------------------------------
-        // NỐI CÁC LINE ĐƯỢC CHỌN THÀNH ĐƯỜNG DẪN
-        // -----------------------------------------------------------------------------------
 
         private static List<Polyline> BuildSelectedLinePaths(List<StuccoModel.LineSegment> segments, double tolerance)
         {
@@ -850,12 +1459,8 @@ namespace Tools.VinaCad.Helper.Helper
             return true;
         }
 
-        // -----------------------------------------------------------------------------------
-        // DỌN HÌNH HỌC SAU KHI OFFSET
-        // Thứ tự: gộp khe -> cắt/nối góc -> bỏ trùng -> bo cap -> tách tại giao điểm
-        // -----------------------------------------------------------------------------------
 
-        private static void CleanupStuccoGeometry(StuccoContext context, HashSet<ObjectId> excludedIds, double thickness)
+        private static void CleanupStuccoGeometry(StuccoContext context, HashSet<ObjectId> excludedIds, double thickness, bool isolate = false)
         {
             List<Line> stuccoLines = new List<Line>();
             List<Line> polylineSegments = new List<Line>();
@@ -866,8 +1471,12 @@ namespace Tools.VinaCad.Helper.Helper
                 void Collect(ObjectId id) => CollectStuccoEntity(
                     context.Transaction, id, excludedIds, context.LayerId, collectedIds, stuccoLines, polylineSegments);
 
-                foreach (ObjectId id in context.Space)
-                    Collect(id);
+                if (!isolate)
+                {
+                    foreach (ObjectId id in context.Space)
+                        Collect(id);
+                }
+
                 foreach (ObjectId id in context.CreatedIds)
                     Collect(id);
 

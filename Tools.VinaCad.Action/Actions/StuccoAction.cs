@@ -47,8 +47,7 @@ namespace Tools.VinaCad.Action.Actions
         {
             while (true)
             {
-                PromptPointOptions pointOptions = new PromptPointOptions(
-                    "\nFN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] : ")
+                PromptPointOptions pointOptions = new PromptPointOptions("\n Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Dày riêng | S Cài đặt] : ")
                 {
                     AllowNone = true,
                     AllowArbitraryInput = false,
@@ -56,6 +55,7 @@ namespace Tools.VinaCad.Action.Actions
                 };
                 pointOptions.Keywords.Add("Open", "O", "Quét chọn tường");
                 pointOptions.Keywords.Add("Exterior", "E", "Mặt ngoài");
+                pointOptions.Keywords.Add("Thick", "D", "Dày riêng");
                 pointOptions.Keywords.Add("Settings", "S", "Cài đặt");
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
@@ -69,11 +69,12 @@ namespace Tools.VinaCad.Action.Actions
                         if (operationCount <= 0)
                             continue;
 
-                        _editor.UpdateScreen();
+                            _editor.UpdateScreen();
                     }
                     catch (Exception ex)
                     {
                         Logger.Info(nameof(DrawStucco), ex);
+                        _editor.WriteMessage("\nFN: " + ex.Message);
                     }
 
                     continue;
@@ -93,6 +94,22 @@ namespace Tools.VinaCad.Action.Actions
                     continue;
                 }
 
+                if (IsMode(selectedMode, "Thick", "D"))
+                {
+                    try
+                    {
+                        if (ChangeStuccoThicknessBySelection(settings) > 0)
+                            _editor.UpdateScreen();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Info(nameof(DrawStucco), ex);
+                        _editor.WriteMessage("\nFN: " + ex.Message);
+                    }
+
+                    continue;
+                }
+
                 try
                 {
                     int operationCount = IsMode(selectedMode, "Open", "O")
@@ -106,6 +123,7 @@ namespace Tools.VinaCad.Action.Actions
                 catch (Exception ex)
                 {
                     Logger.Info(nameof(DrawStucco), ex);
+                    _editor.WriteMessage("\nFN: " + ex.Message);
                 }
 
                 break;
@@ -127,7 +145,7 @@ namespace Tools.VinaCad.Action.Actions
             };
             PromptSelectionOptions selectionOptions = new PromptSelectionOptions
             {
-                MessageForAdding = "\nChọn các cạnh liên tiếp của mặt ngoài, nhấn Enter để xác nhận: "
+                MessageForAdding = "\nChọn các mặt tường phía ngoài, nhấn Enter để xác nhận: "
             };
             PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
             if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
@@ -138,11 +156,57 @@ namespace Tools.VinaCad.Action.Actions
             if (sideResult.Status != PromptStatus.OK)
                 return 0;
 
-            return StuccoHelper.CreateStuccoForSelection(
+            return StuccoHelper.CreateStuccoForExteriorFaces(
                 _database,
                 selectionResult.Value.GetObjectIds(),
                 ToWorldPoint(sideResult.Value),
                 settings.Thickness,
+                settings.LayerName);
+        }
+
+        private int ChangeStuccoThicknessBySelection(StuccoSetting settings)
+        {
+            TypedValue[] filterValues =
+            {
+                new TypedValue((int)DxfCode.Start, "LINE"),
+                new TypedValue((int)DxfCode.LayerName, settings.LayerName)
+            };
+            PromptSelectionOptions selectionOptions = new PromptSelectionOptions
+            {
+                MessageForAdding = "\nChọn các cạnh vữa cần đổi độ dày, nhấn Enter để xác nhận: "
+            };
+            PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
+            if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
+                return 0;
+
+            PromptDoubleOptions thicknessOptions = new PromptDoubleOptions($"\nNhập độ dày mới cho các cạnh đã chọn <{settings.Thickness}>: ")
+            {
+                AllowNegative = false,
+                AllowZero = false,
+                AllowNone = true,
+                UseDefaultValue = false
+            };
+            PromptDoubleResult thicknessResult = _editor.GetDouble(thicknessOptions);
+
+            double newThickness;
+            if (thicknessResult.Status == PromptStatus.None)
+            {
+                newThickness = settings.Thickness;
+            }
+            else if (thicknessResult.Status == PromptStatus.OK)
+            {
+                newThickness = thicknessResult.Value;
+            }
+            else
+            {
+                return 0;
+            }
+
+            return StuccoHelper.ChangeStuccoThickness(
+                _database,
+                selectionResult.Value.GetObjectIds(),
+                settings.Thickness,
+                newThickness,
                 settings.LayerName);
         }
 
@@ -168,6 +232,25 @@ namespace Tools.VinaCad.Action.Actions
         }
 
         private int DrawInteriorBoundary(Point3d interiorPoint, StuccoSetting settings)
+        {
+            try
+            {
+                return StuccoHelper.CreateStuccoForRoomFaces(
+                    _database,
+                    ToWorldPoint(interiorPoint),
+                    settings.Thickness,
+                    settings.LayerName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.Info(nameof(DrawInteriorBoundary), ex);
+                _editor.WriteMessage("\nFN: " + ex.Message + " Thử lại bằng BOUNDARY...");
+            }
+
+            return DrawInteriorBoundaryByBoundaryCommand(interiorPoint, settings);
+        }
+
+        private int DrawInteriorBoundaryByBoundaryCommand(Point3d interiorPoint, StuccoSetting settings)
         {
             ObjectId[] temporaryBoundaryIds = Array.Empty<ObjectId>();
             try
@@ -360,6 +443,5 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch { }
         }
-
     }
 }
