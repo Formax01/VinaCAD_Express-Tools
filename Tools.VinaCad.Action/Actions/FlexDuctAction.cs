@@ -18,11 +18,21 @@ public sealed class FlexDuctAction
         var vm = new FlexDuctVM { DuctType = type };
         Editor editor = document.Editor;
 
-        PromptDoubleResult diameter = editor.GetDistance(new PromptDistanceOptions($"\nĐường kính ống mềm <{vm.Diameter}>: ")
-        { UseDefaultValue = true, DefaultValue = vm.Diameter });
-        
-        if (diameter.Status != PromptStatus.OK || diameter.Value <= 0) return;
-        vm.Diameter = diameter.Value;
+        var distanceOptions = new PromptDistanceOptions($"\nĐường kính ống mềm <{vm.Diameter}>: ");
+        distanceOptions.AllowNone = true; 
+        PromptDoubleResult diameter = editor.GetDistance(distanceOptions);
+
+        if (diameter.Status == PromptStatus.None)
+        {
+        }
+        else if (diameter.Status == PromptStatus.OK && diameter.Value > 0)
+        {
+            vm.Diameter = diameter.Value;
+        }
+        else
+        {
+            return;
+        }
 
         var modeOptions = new PromptKeywordOptions("\nChọn cách lấy đường tâm [Draw/Select] <Draw>: ") { AllowNone = true };
        
