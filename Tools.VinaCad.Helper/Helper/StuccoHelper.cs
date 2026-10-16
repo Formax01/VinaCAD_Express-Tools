@@ -293,7 +293,12 @@ namespace Tools.VinaCad.Helper.Helper
                             if (curve is Line face)
                             {
                                 if (DrawWallHelper.IsWallCap(face))
-                                    continue; // cap sẽ được bo tự động ở bước cleanup
+                                {
+                                    // Đầu tường: phủ vữa ra ngoài đầu tường đơn
+                                    if (TryGetOpenWallCapGuidePoint(face, allFaces, thickness, out Point3d capGuide))
+                                        created += AppendOffsetOnSide(face, capGuide, thickness, context);
+                                    continue;
+                                }
 
                                 Line? opposite = FindOppositeOpenWallFace(face, allFaces, thickness);
                                 Point3d guide = opposite != null
@@ -823,11 +828,17 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             double minimumLength = MinimumConnectionTolerance * 100.0;
-            merged.RemoveAll(span =>
-                span.Face.IsCap ||
-                (span.S1 - span.S0) * span.Face.Start.DistanceTo(span.Face.End) <= minimumLength);
+            merged.RemoveAll(span => (span.S1 - span.S0) * span.Face.Start.DistanceTo(span.Face.End) <= minimumLength);
 
-            return SelectConnectedSpans(merged, Math.Max(Math.Abs(thickness) * 1.5, 0.1));
+            double connectTolerance = Math.Max(Math.Abs(thickness) * 1.5, 0.1);
+            List<FaceSpan> selected = new List<FaceSpan>(SelectConnectedSpans(merged.FindAll(span => !span.Face.IsCap), connectTolerance));
+
+            foreach (FaceSpan capSpan in merged.FindAll(span => span.Face.IsCap))
+            {
+                if (selected.Exists(span => !span.Face.IsCap && SpansTouch(span, capSpan, connectTolerance)))
+                    selected.Add(capSpan);
+            }
+            return selected;
         }
 
         private static List<FaceSpan>? CastVisibility(List<WallFaceRef> faces, Point3d origin, int coarseRays, bool isOrigin, double sameLineTolerance, double seedDistance, List<Point3d> newSeeds)
@@ -1652,14 +1663,22 @@ namespace Tools.VinaCad.Helper.Helper
                     Collect(id);
 
                 double mergeTolerance = FineTolerance(thickness, 0.001);
+                List<Curve> sourceCurves = GetSourceCurves(context.Transaction, excludedIds);
+
+                List<Line> mergeBlockers = new List<Line>(polylineSegments);
+                foreach (Curve sourceCurve in sourceCurves)
+                {
+                    if (sourceCurve is Line sourceLine)
+                        mergeBlockers.Add(sourceLine);
+                }
+
                 RemoveLinesCoveredByPolylineSegments(stuccoLines, polylineSegments, mergeTolerance);
-                MergeCollinearLineGaps(stuccoLines, polylineSegments, thickness, mergeTolerance);
+                MergeCollinearLineGaps(stuccoLines, mergeBlockers, thickness, mergeTolerance);
                 TrimOffsetLineIntersections(stuccoLines, thickness);
                 ConnectLineEndpointsToReferences(stuccoLines, polylineSegments, thickness);
                 RemoveLinesCoveredByPolylineSegments(stuccoLines, polylineSegments, mergeTolerance);
                 RemoveDuplicateStuccoLines(stuccoLines, mergeTolerance);
 
-                List<Curve> sourceCurves = GetSourceCurves(context.Transaction, excludedIds);
                 CreateStuccoEndCaps(context, sourceCurves, stuccoLines, polylineSegments, thickness, mergeTolerance);
                 SplitLinesAtIntersections(context, stuccoLines, polylineSegments, sourceCurves, mergeTolerance);
             }
