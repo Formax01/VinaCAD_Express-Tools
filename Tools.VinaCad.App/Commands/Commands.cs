@@ -695,5 +695,48 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DuctElbowVerticalCommand), ex);
             }
         }
+
+        [CommandMethod("EEX")]
+        public void ExportExcelCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEX);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ExportExcelCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEY")]
+        public void ExportExcelYeuCauCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEY);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ExportExcelYeuCauCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEZ")]
+        public void ExportExcelZCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEZ);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ExportExcelZCommand), ex);
+            }
+        }
+
     }
 }
