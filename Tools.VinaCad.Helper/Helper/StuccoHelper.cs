@@ -617,41 +617,6 @@ namespace Tools.VinaCad.Helper.Helper
                 });
         }
 
-        public static int CreateStuccoForSelection(Database database, ObjectId[] sourceIds, Point3d sidePoint, double thickness, string targetLayerName)
-        {
-            return RunStucco(database, sourceIds, thickness, targetLayerName,
-                "Chưa chọn đường bao mặt ngoài.",
-                "Các đường đã chọn không thể tạo vữa mặt ngoài.",
-                context =>
-                {
-                    List<StuccoModel.LineSegment> lineSegments = new List<StuccoModel.LineSegment>();
-                    int created = 0;
-
-                    foreach (ObjectId sourceId in sourceIds)
-                    {
-                        Curve? curve = GetCurve(context.Transaction, sourceId);
-                        if (curve is Line line)
-                            lineSegments.Add(new StuccoModel.LineSegment(line.StartPoint, line.EndPoint));
-                        else if (curve != null)
-                            created += AppendOffsetOnSide(curve, sidePoint, thickness, context);
-                    }
-
-                    List<Polyline> linePaths = BuildSelectedLinePaths(lineSegments, FineTolerance(thickness, 0.01));
-                    try
-                    {
-                        foreach (Polyline path in linePaths)
-                            created += AppendOffsetOnSide(path, sidePoint, thickness, context);
-                    }
-                    finally
-                    {
-                        foreach (Polyline path in linePaths)
-                            path.Dispose();
-                    }
-
-                    return created;
-                });
-        }
-
         public static int CreateStuccoForOpenWalls(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName)
         {
             return RunStucco(database, sourceIds, thickness, targetLayerName,
@@ -1569,78 +1534,6 @@ namespace Tools.VinaCad.Helper.Helper
                 context.CreatedIds.Add(piece.ObjectId);
             return piece;
         }
-
-
-        private static List<Polyline> BuildSelectedLinePaths(List<StuccoModel.LineSegment> segments, double tolerance)
-        {
-            List<Polyline> paths = new List<Polyline>();
-            bool[] used = new bool[segments.Count];
-
-            for (int seedIndex = 0; seedIndex < segments.Count; seedIndex++)
-            {
-                if (used[seedIndex])
-                    continue;
-
-                used[seedIndex] = true;
-                List<Point3d> points = new List<Point3d> { segments[seedIndex].Start, segments[seedIndex].End };
-                while (TryExtendSelectedPath(points, segments, used, true, tolerance) || TryExtendSelectedPath(points, segments, used, false, tolerance))
-                {
-                }
-
-                bool closed = points.Count > 2 && points[0].DistanceTo(points[^1]) <= tolerance;
-                if (closed)
-                    points.RemoveAt(points.Count - 1);
-
-                Polyline path = new Polyline(points.Count) { Elevation = points[0].Z, Closed = closed };
-                for (int index = 0; index < points.Count; index++)
-                    path.AddVertexAt(index, new Point2d(points[index].X, points[index].Y), 0.0, 0.0, 0.0);
-                paths.Add(path);
-            }
-
-            return paths;
-        }
-
-        private static bool TryExtendSelectedPath(List<Point3d> points, List<StuccoModel.LineSegment> segments, bool[] used, bool extendEnd, double tolerance)
-        {
-            Point3d endpoint = extendEnd ? points[^1] : points[0];
-            int bestIndex = -1;
-            bool matchedStart = true;
-            double bestDistance = double.PositiveInfinity;
-
-            for (int index = 0; index < segments.Count; index++)
-            {
-                if (used[index])
-                    continue;
-
-                double startDistance = endpoint.DistanceTo(segments[index].Start);
-                if (startDistance <= tolerance && startDistance < bestDistance)
-                {
-                    bestIndex = index;
-                    matchedStart = true;
-                    bestDistance = startDistance;
-                }
-
-                double endDistance = endpoint.DistanceTo(segments[index].End);
-                if (endDistance <= tolerance && endDistance < bestDistance)
-                {
-                    bestIndex = index;
-                    matchedStart = false;
-                    bestDistance = endDistance;
-                }
-            }
-
-            if (bestIndex < 0)
-                return false;
-
-            used[bestIndex] = true;
-            Point3d nextPoint = matchedStart ? segments[bestIndex].End : segments[bestIndex].Start;
-            if (extendEnd)
-                points.Add(nextPoint);
-            else
-                points.Insert(0, nextPoint);
-            return true;
-        }
-
 
         private static void CleanupStuccoGeometry(StuccoContext context, HashSet<ObjectId> excludedIds, double thickness, bool isolate = false)
         {
