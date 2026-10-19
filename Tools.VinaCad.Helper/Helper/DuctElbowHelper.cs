@@ -11,6 +11,8 @@ namespace Tools.VinaCad.Helper.Helper
     public static class DuctElbowHelper
     {
         private const double Eps = 1e-6;
+        private const double DashScaleRatio = 0.05;
+        private const string VerticalDashLinetype = "DASHED_LINE";
 
         public static List<ObjectId> Draw(Database db, Transaction tr, DuctElbowModel m)
         {
@@ -22,6 +24,9 @@ namespace Tools.VinaCad.Helper.Helper
 
             var ms = (BlockTableRecord)tr.GetObject(
                 SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForWrite);
+            ObjectId dashLinetypeId = m.Type == DuctElbowType.Vertical && m.VerticalDir == VerticalDirection.Down
+                ? EnsureVerticalDashLinetype(db, tr)
+                : ObjectId.Null;
 
             var ids = new List<ObjectId>();
             foreach (Entity e in ents)
@@ -29,6 +34,11 @@ namespace Tools.VinaCad.Helper.Helper
                 if (!string.IsNullOrEmpty(m.LayerName) && e.Layer == "0") e.Layer = m.LayerName;
                 ids.Add(ms.AppendEntity(e));
                 tr.AddNewlyCreatedDBObject(e, true);
+                if (!dashLinetypeId.IsNull && e is Line)
+                {
+                    e.LinetypeId = dashLinetypeId;
+                    e.LinetypeScale = Math.Max(m.Width1 * DashScaleRatio, 1.0);
+                }
             }
 
             CreateGroup(db, tr, ids);
@@ -52,11 +62,9 @@ namespace Tools.VinaCad.Helper.Helper
 
             // Đường tim: điểm cuối + hướng cuối
             Point2d Pe = O + (P - O).RotateBy(theta);
-            Vector2d de = d.RotateBy(theta);
             Vector2d nOut = nIn.RotateBy(theta);
 
             double h1 = m.Width1 / 2.0;
-            double h2 = m.Width2 / 2.0;
 
             // R là bán kính từ tâm cung đến cung trong.
             double innerRadius = m.CenterRadius - h1;
@@ -83,7 +91,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Polyline c = MakeArcPolyline(P, Pe, d, z);
                 if (c != null)
                 {
-                    c.Color = Color.FromColorIndex(ColorMethod.ByAci, 1);   
+                    c.Color = Color.FromColorIndex(ColorMethod.ByAci, 1);
                     result.Add(c);
                 }
             }
@@ -113,8 +121,8 @@ namespace Tools.VinaCad.Helper.Helper
             if (chord.Length < Eps) return null;
 
             double phi = Math.Atan2(
-                startDir.X * chord.Y - startDir.Y * chord.X,    
-                startDir.X * chord.X + startDir.Y * chord.Y);  
+                startDir.X * chord.Y - startDir.Y * chord.X,
+                startDir.X * chord.X + startDir.Y * chord.Y);
             double bulge = Math.Tan(phi / 2.0);
 
             var pl = new Polyline();
@@ -137,74 +145,38 @@ namespace Tools.VinaCad.Helper.Helper
             double h = W / 2.0;
             double Lf = m.CenterRadius + h;
             double Ls = Math.Max(Lf - W, 0.0);
-
             Func<double, double, Point2d> pt = (a, b) => P + d * a + n * b;
 
-            string downLinetype = null;
+            // Khung ngoài (nét liền)
+            var rect = new Polyline();
+            rect.Elevation = z;
+            rect.AddVertexAt(0, pt(0, -h), 0, 0, 0);
+            rect.AddVertexAt(1, pt(Lf, -h), 0, 0, 0);
+            rect.AddVertexAt(2, pt(Lf, h), 0, 0, 0);
+            rect.AddVertexAt(3, pt(0, h), 0, 0, 0);
+            rect.Closed = true;
+            result.Add(rect);
 
-            if (m.VerticalDir == VerticalDirection.Down && db != null && tr != null)
-            {
-                downLinetype = FindLinetype(db, tr, "DASHED")
-                    ?? FindLinetype(db, tr, "HIDDEN");
-            }
-
-            void ApplyVerticalLinetype(Entity entity)
-            {
-                if (m.VerticalDir != VerticalDirection.Down)
-                    return;
-
-                if (string.IsNullOrEmpty(downLinetype))
-                    return;
-
-                entity.Linetype = downLinetype;
-                entity.LinetypeScale = 1.0;
-            }
-
-            // Vẽ phần khung ống đi tới (Nét liền)
+            // Đường bán kính cong trong R (nét đứt nếu Down)
             if (Ls > Eps)
             {
-                var solidRect = new Polyline();
-                solidRect.Elevation = z;
-                solidRect.AddVertexAt(0, pt(0, -h), 0, 0, 0);
-                solidRect.AddVertexAt(1, pt(Ls, -h), 0, 0, 0);
-                solidRect.AddVertexAt(2, pt(Ls, h), 0, 0, 0);
-                solidRect.AddVertexAt(3, pt(0, h), 0, 0, 0);
-                solidRect.Closed = true;
-                result.Add(solidRect);
-            }
-            else
-            {
-                // Nếu Ls = 0, thì ít nhất cũng phải có đường nối ở miệng ống vào
-                result.Add(new Line(To3(pt(0, -h), z), To3(pt(0, h), z)));
+                Line radiusLine = new Line(To3(pt(Ls, -h), z), To3(pt(Ls, h), z));
+                result.Add(radiusLine);
             }
 
-            // Vẽ phần khung hình vuông (hoặc chữ nhật) chứa dấu X (Nét đứt nếu là Down)
-            var dropRect = new Polyline();
-            dropRect.Elevation = z;
-            dropRect.AddVertexAt(0, pt(Ls, -h), 0, 0, 0);
-            dropRect.AddVertexAt(1, pt(Lf, -h), 0, 0, 0);
-            dropRect.AddVertexAt(2, pt(Lf, h), 0, 0, 0);
-            dropRect.AddVertexAt(3, pt(Ls, h), 0, 0, 0);
-            dropRect.Closed = true;
-
-            ApplyVerticalLinetype(dropRect);
-            result.Add(dropRect);
-
-            // Vẽ Dấu X (Nét đứt nếu là Down)
-            Line x1 = new Line( To3(pt(Ls, -h), z), To3(pt(Lf, h), z));
-
-            Line x2 = new Line( To3(pt(Ls, h), z), To3(pt(Lf, -h), z));
-
-            ApplyVerticalLinetype(x1);
-            ApplyVerticalLinetype(x2);
-
+            // Dấu X trong ô đứng (nét đứt nếu Down)
+            Line x1 = new Line(To3(pt(Ls, -h), z), To3(pt(Lf, h), z));
+            Line x2 = new Line(To3(pt(Ls, h), z), To3(pt(Lf, -h), z));
             result.Add(x1);
             result.Add(x2);
 
             return result;
         }
 
-        private static Point3d To3(Point2d p, double z) { return new Point3d(p.X, p.Y, z); }
+        private static Point3d To3(Point2d p, double z) 
+        { 
+            return new Point3d(p.X, p.Y, z); 
+        }
 
         private static DBText MakeText(Point3d pos, string text, double height)
         {
@@ -215,10 +187,24 @@ namespace Tools.VinaCad.Helper.Helper
             return t;
         }
 
-        private static string FindLinetype(Database db, Transaction tr, string name)
+        private static ObjectId EnsureVerticalDashLinetype(Database db, Transaction tr)
         {
             var ltt = (LinetypeTable)tr.GetObject(db.LinetypeTableId, OpenMode.ForRead);
-            return ltt.Has(name) ? name : null;
+            if (ltt.Has(VerticalDashLinetype)) return ltt[VerticalDashLinetype];
+
+            ltt.UpgradeOpen();
+            var linetype = new LinetypeTableRecord
+            {
+                Name = VerticalDashLinetype,
+                AsciiDescription = "E3 DOWN DASHED",
+                PatternLength = 0.75,
+                NumDashes = 2
+            };
+            linetype.SetDashLengthAt(0, 0.5);
+            linetype.SetDashLengthAt(1, -0.25);
+            ObjectId id = ltt.Add(linetype);
+            tr.AddNewlyCreatedDBObject(linetype, true);
+            return id;
         }
 
         private static void EnsureLayer(Database db, Transaction tr, string name)
