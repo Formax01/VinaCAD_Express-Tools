@@ -10,13 +10,15 @@ namespace Tools.VinaCad.Helper.Helper
     public class OffsetDuctJig : DrawJig
     {
         private readonly OffsetDuctModel _model;
+        private readonly Matrix3d _ucsToWcs;
         private Point3d _point;
 
         public Vector3d Direction { get; private set; } = Vector3d.XAxis;
 
-        public OffsetDuctJig(OffsetDuctModel model)
+        public OffsetDuctJig(OffsetDuctModel model, Matrix3d ucsToWcs)
         {
             _model = model;
+            _ucsToWcs = ucsToWcs;
             _point = model.StartPoint;
         }
 
@@ -52,7 +54,7 @@ namespace Tools.VinaCad.Helper.Helper
             draw.SubEntityTraits.Color = 3;
             WorldGeometry g = draw.Geometry;
             for (int i = 0; i < p.Length; i++)
-                g.WorldLine(p[i], p[(i + 1) % p.Length]);
+                g.WorldLine(p[i].TransformBy(_ucsToWcs), p[(i + 1) % p.Length].TransformBy(_ucsToWcs));
 
             return true;
         }

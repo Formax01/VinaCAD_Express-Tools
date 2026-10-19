@@ -84,7 +84,7 @@ namespace Tools.VinaCad.Action.Actions
 
             if (!TryGetSmallAndLength(ed, model)) return;
 
-            CreateShape(ed, db, model);
+            CreateShape(ed, db, model, ed.CurrentUserCoordinateSystem);
         }
 
         // Nhánh Length: nhập đầu lớn, đầu nhỏ, L rồi ướm hướng bằng Jig
@@ -96,13 +96,14 @@ namespace Tools.VinaCad.Action.Actions
 
             if (!TryGetSmallAndLength(ed, model)) return;
 
-            SquareToRoundJig jig = new SquareToRoundJig(model);
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
+            SquareToRoundJig jig = new SquareToRoundJig(model, ucsToWcs);
             PromptResult dragResult = ed.Drag(jig);
             if (dragResult.Status != PromptStatus.OK) return;
 
             model.Direction = jig.Direction;
 
-            CreateShape(ed, db, model);
+            CreateShape(ed, db, model, ucsToWcs);
         }
 
         // Nhập đầu nhỏ (phải nhỏ hơn đầu lớn) và L (Enter để tự tính)
@@ -145,13 +146,13 @@ namespace Tools.VinaCad.Action.Actions
         }
 
         // Ghi hình thật vào bản vẽ (dùng chung cho cả hai nhánh)
-        private void CreateShape(Editor ed, Database db, SquareToRoundModel model)
+        private void CreateShape(Editor ed, Database db, SquareToRoundModel model, Matrix3d ucsToWcs)
         {
             Point3d[] corners = SquareToRoundHelper.GetCorners(
                 model.StartPoint, model.Direction,
                 model.BigSize, model.SmallSize, model.Length);
 
-            SquareToRoundHelper.Create(db, corners, model.Layer);
+            SquareToRoundHelper.Create(db, corners, model.Layer, ucsToWcs);
 
             ed.Regen();
             ed.WriteMessage(

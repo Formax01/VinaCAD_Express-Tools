@@ -142,7 +142,7 @@ namespace Tools.VinaCad.Helper.Helper
             return points;
         }
 
-        public static void Create(Database database, ZElbowShape shape, string layer)
+        public static void Create(Database database, ZElbowShape shape, string layer, Matrix3d ucsToWcs)
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
             if (shape == null) throw new ArgumentNullException(nameof(shape));
@@ -163,12 +163,14 @@ namespace Tools.VinaCad.Helper.Helper
             polyline.Closed = true;
             polyline.Elevation = shape.Vertices[0].Z;
             polyline.Layer = layer;
+            polyline.TransformBy(ucsToWcs);
             modelSpace.AppendEntity(polyline);
             transaction.AddNewlyCreatedDBObject(polyline, true);
 
             foreach (Point3d[] cutLine in shape.CutLines)
             {
                 var line = new Line(cutLine[0], cutLine[1]) { Layer = layer };
+                line.TransformBy(ucsToWcs);
                 modelSpace.AppendEntity(line);
                 transaction.AddNewlyCreatedDBObject(line, true);
             }

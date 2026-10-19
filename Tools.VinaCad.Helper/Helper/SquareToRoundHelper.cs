@@ -64,7 +64,7 @@ namespace Tools.VinaCad.Helper.Helper
             };
         }
 
-        public static void Create(Database database, Point3d[] corners, string layer)
+        public static void Create(Database database, Point3d[] corners, string layer, Matrix3d ucsToWcs)
         {
             Point3d[] path = GetPath(corners);
             using Transaction transaction = database.TransactionManager.StartTransaction();
@@ -81,6 +81,7 @@ namespace Tools.VinaCad.Helper.Helper
             polyline.Closed = false;
             polyline.Elevation = path[0].Z;
             polyline.Layer = layer;
+            polyline.TransformBy(ucsToWcs);
             modelSpace.AppendEntity(polyline);
             transaction.AddNewlyCreatedDBObject(polyline, true);
             transaction.Commit();

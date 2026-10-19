@@ -11,15 +11,17 @@ namespace Tools.VinaCad.Helper
     public class ShoePlacementJig : DrawJig
     {
         private readonly ShoeModel _model;
+        private readonly Matrix3d _ucsToWcs;
         private Point3d _point;
 
         public Vector3d Direction { get; private set; } = Vector3d.XAxis;
         public bool Mirror { get; private set; }
         public bool FlipRequested { get; private set; }
 
-        public ShoePlacementJig(ShoeModel model)
+        public ShoePlacementJig(ShoeModel model, Matrix3d ucsToWcs)
         {
             _model = model;
+            _ucsToWcs = ucsToWcs;
             _point = model.StartPoint;
             Mirror = model.Mirror;
         }
@@ -67,7 +69,7 @@ namespace Tools.VinaCad.Helper
             draw.SubEntityTraits.Color = 3;
             WorldGeometry g = draw.Geometry;
             for (int i = 0; i < c.Length; i++)
-                g.WorldLine(c[i], c[(i + 1) % c.Length]);
+                g.WorldLine(c[i].TransformBy(_ucsToWcs), c[(i + 1) % c.Length].TransformBy(_ucsToWcs));
 
             return true;
         }

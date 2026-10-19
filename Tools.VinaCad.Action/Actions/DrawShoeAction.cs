@@ -76,7 +76,8 @@ namespace Tools.VinaCad.Action.Actions
                 return;
 
             // Bước 6: chọn hướng bằng Jig (gõ F để đảo bên nhanh)
-            ShoePlacementJig jig = new ShoePlacementJig(model);
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
+            ShoePlacementJig jig = new ShoePlacementJig(model, ucsToWcs);
            
             PromptResult dragResult;
             do
@@ -95,7 +96,7 @@ namespace Tools.VinaCad.Action.Actions
                 model.StartPoint, model.Direction,
                 model.Height, model.SmallSide, model.BaseSide, model.Mirror);
 
-            DuctHelper.CreateClosedPolyline(db, corners, model.Layer);
+            DuctHelper.CreateClosedPolyline(db, corners, model.Layer, ucsToWcs);
 
 
             ed.Regen();

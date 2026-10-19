@@ -20,7 +20,7 @@ namespace Tools.VinaCad.Action.Actions
             Database db = doc.Database;
 
             OffsetDuctModel model = new OffsetDuctModel();
-            // Bước 1: bắt điểm (tâm đầu ống 1)
+            // Bước 1: bắt điểm
             PromptPointResult startResult =
                 ed.GetPoint("\nChọn điểm đặt : ");
             if (startResult.Status != PromptStatus.OK) return;
@@ -97,7 +97,8 @@ namespace Tools.VinaCad.Action.Actions
             }
 
             // Bước 7: chọn hướng bằng Jig
-            OffsetDuctJig jig = new OffsetDuctJig(model);
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
+            OffsetDuctJig jig = new OffsetDuctJig(model, ucsToWcs);
             PromptResult dragResult = ed.Drag(jig);
             if (dragResult.Status != PromptStatus.OK) return;
 
@@ -108,7 +109,7 @@ namespace Tools.VinaCad.Action.Actions
                 model.StartPoint, model.Direction,
                 model.Width1, model.Width2, model.Offset, model.Length);
 
-            DuctHelper.CreateClosedPolyline(db, pts, model.Layer);
+            DuctHelper.CreateClosedPolyline(db, pts, model.Layer, ucsToWcs);
 
             ed.Regen();
             ed.WriteMessage(

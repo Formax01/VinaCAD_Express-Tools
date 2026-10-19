@@ -11,13 +11,15 @@ namespace Tools.VinaCad.Helper
     public class SquareToRoundJig : DrawJig
     {
         private readonly SquareToRoundModel _model;
+        private readonly Matrix3d _ucsToWcs;
         private Point3d _point;
 
         public Vector3d Direction { get; private set; } = Vector3d.XAxis;
 
-        public SquareToRoundJig(SquareToRoundModel model)
+        public SquareToRoundJig(SquareToRoundModel model, Matrix3d ucsToWcs)
         {
             _model = model;
+            _ucsToWcs = ucsToWcs;
             _point = model.StartPoint;
         }
 
@@ -54,7 +56,7 @@ namespace Tools.VinaCad.Helper
             WorldGeometry g = draw.Geometry;
             Point3d[] path = SquareToRoundHelper.GetPath(c);
             for (int i = 0; i < path.Length - 1; i++)
-                g.WorldLine(path[i], path[i + 1]);
+                g.WorldLine(path[i].TransformBy(_ucsToWcs), path[i + 1].TransformBy(_ucsToWcs));
 
             return true;
         }

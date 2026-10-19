@@ -12,15 +12,17 @@ namespace Tools.VinaCad.Helper
         private readonly Point3d _p1;
         private readonly Point3d _p2;
         private readonly Vector3d _normal;
+        private readonly Matrix3d _ucsToWcs;
         private double _offset;          // có dấu: >0 bên trái P1->P2, <0 bên phải
         private double _lastSign = 1.0;
 
         public double Offset => _offset;
 
-        public DuctSideJig(Point3d p1, Point3d p2)
+        public DuctSideJig(Point3d p1, Point3d p2, Matrix3d ucsToWcs)
         {
             _p1 = p1;
             _p2 = p2;
+            _ucsToWcs = ucsToWcs;
             _normal = (p2 - p1).GetNormal().RotateBy(Math.PI / 2, Vector3d.ZAxis);
         }
 
@@ -68,17 +70,17 @@ namespace Tools.VinaCad.Helper
         {
             if (Math.Abs(_offset) < 1e-9)
             {
-                draw.Geometry.WorldLine(_p1, _p2);
+                draw.Geometry.WorldLine(_p1.TransformBy(_ucsToWcs), _p2.TransformBy(_ucsToWcs));
                 return true;
             }
 
             Point3d[] c = DuctHelper.GetCornersFromSide(_p1, _p2, _offset);
             draw.SubEntityTraits.Color = 3;
             WorldGeometry g = draw.Geometry;
-            g.WorldLine(c[0], c[1]);
-            g.WorldLine(c[1], c[2]);
-            g.WorldLine(c[2], c[3]);
-            g.WorldLine(c[3], c[0]);
+            g.WorldLine(c[0].TransformBy(_ucsToWcs), c[1].TransformBy(_ucsToWcs));
+            g.WorldLine(c[1].TransformBy(_ucsToWcs), c[2].TransformBy(_ucsToWcs));
+            g.WorldLine(c[2].TransformBy(_ucsToWcs), c[3].TransformBy(_ucsToWcs));
+            g.WorldLine(c[3].TransformBy(_ucsToWcs), c[0].TransformBy(_ucsToWcs));
             return true;
         }
     }

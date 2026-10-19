@@ -20,9 +20,9 @@ namespace Tools.VinaCad.Action.Actions
             Database db = doc.Database;
 
             ZElbowDuctModel model = new ZElbowDuctModel();
-            // Bước 1: bắt điểm (tâm đầu ống)
+            // Bước 1: bắt điểm 
             PromptPointResult startResult =
-                ed.GetPoint("\nChọn điểm đặt (tâm đầu ống gió): ");
+                ed.GetPoint("\nChọn điểm đặt : ");
             if (startResult.Status != PromptStatus.OK) return;
             model.StartPoint = startResult.Value;
 
@@ -75,7 +75,8 @@ namespace Tools.VinaCad.Action.Actions
             }
 
             // Bước 6: chọn hướng bằng Jig
-            ZElbowJig jig = new ZElbowJig(model);
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
+            ZElbowJig jig = new ZElbowJig(model, ucsToWcs);
             PromptResult dragResult = ed.Drag(jig);
             if (dragResult.Status != PromptStatus.OK) return;
 
@@ -92,7 +93,7 @@ namespace Tools.VinaCad.Action.Actions
                 return;
             }
 
-            ZElbowHelper.Create(db, shape, model.Layer);
+            ZElbowHelper.Create(db, shape, model.Layer, ucsToWcs);
 
             ed.Regen();
 

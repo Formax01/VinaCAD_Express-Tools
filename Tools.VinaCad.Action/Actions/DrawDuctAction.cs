@@ -105,8 +105,9 @@ namespace Tools.VinaCad.Action.Actions
             }
 
             // Kéo chuột để xác định phía và chiều rộng
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
             DuctSideJig sideJig =
-                new DuctSideJig(p1, p2);
+                new DuctSideJig(p1, p2, ucsToWcs);
 
             PromptResult dragResult =
                 ed.Drag(sideJig);
@@ -125,7 +126,8 @@ namespace Tools.VinaCad.Action.Actions
             DuctHelper.CreateClosedPolyline(
                 db,
                 corners,
-                model.Layer);
+                model.Layer,
+                ucsToWcs);
 
             ed.Regen();
 
@@ -195,8 +197,9 @@ namespace Tools.VinaCad.Action.Actions
             model.Width = widthResult.Value;
 
             // Bước 3: Kéo chuột để xác định hướng đặt ống gió
+            Matrix3d ucsToWcs = ed.CurrentUserCoordinateSystem;
             DuctPlacementJig jig =
-                new DuctPlacementJig(model);
+                new DuctPlacementJig(model, ucsToWcs);
 
             PromptResult placementResult =
                 ed.Drag(jig);
@@ -207,7 +210,7 @@ namespace Tools.VinaCad.Action.Actions
             model.Direction = jig.Direction;
 
             // Bước 4: Tạo ống gió
-            DuctHelper.CreateDuct(db, model);
+            DuctHelper.CreateDuct(db, model, ucsToWcs);
 
             ed.Regen();
 

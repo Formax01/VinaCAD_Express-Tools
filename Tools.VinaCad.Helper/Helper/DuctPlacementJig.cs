@@ -12,6 +12,7 @@ namespace Tools.VinaCad.Helper
     public class DuctPlacementJig : DrawJig
     {
         private readonly DuctModel _model;
+        private readonly Matrix3d _ucsToWcs;
         private Point3d _point;
 
         public Point3d Point => _point;
@@ -19,9 +20,10 @@ namespace Tools.VinaCad.Helper
         public Vector3d Direction { get; private set; }
             = Vector3d.XAxis;
 
-        public DuctPlacementJig(DuctModel model)
+        public DuctPlacementJig(DuctModel model, Matrix3d ucsToWcs)
         {
             _model = model;
+            _ucsToWcs = ucsToWcs;
             _point = model.StartPoint;
         }
 
@@ -73,10 +75,10 @@ namespace Tools.VinaCad.Helper
 
             WorldGeometry g = draw.Geometry;
 
-            g.WorldLine(corners[0], corners[1]);
-            g.WorldLine(corners[1], corners[2]);
-            g.WorldLine(corners[2], corners[3]);
-            g.WorldLine(corners[3], corners[0]);
+            g.WorldLine(corners[0].TransformBy(_ucsToWcs), corners[1].TransformBy(_ucsToWcs));
+            g.WorldLine(corners[1].TransformBy(_ucsToWcs), corners[2].TransformBy(_ucsToWcs));
+            g.WorldLine(corners[2].TransformBy(_ucsToWcs), corners[3].TransformBy(_ucsToWcs));
+            g.WorldLine(corners[3].TransformBy(_ucsToWcs), corners[0].TransformBy(_ucsToWcs));
 
             return true;
         }

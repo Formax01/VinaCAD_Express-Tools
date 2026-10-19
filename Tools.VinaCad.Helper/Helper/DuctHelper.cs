@@ -55,20 +55,25 @@ namespace Tools.VinaCad.Helper.Helper
             return new[] { first, second, second + shift, first + shift };
         }
 
-        public static ObjectId CreateDuct(Database database, DuctModel model)
+        public static ObjectId CreateDuct(Database database, DuctModel model, Matrix3d ucsToWcs)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
             return CreateClosedPolyline(
                 database,
                 GetCorners(model.StartPoint, model.Direction, model.Length, model.Width),
-                model.Layer);
+                model.Layer,
+                ucsToWcs);
         }
 
         /// <summary>
         /// Ghi mot polyline kin va dam bao layer dich ton tai trong cung transaction.
         /// </summary>
-        public static ObjectId CreateClosedPolyline(Database database, Point3d[] vertices, string layer)
+        public static ObjectId CreateClosedPolyline(
+            Database database,
+            Point3d[] vertices,
+            string layer,
+            Matrix3d ucsToWcs)
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
             if (vertices == null) throw new ArgumentNullException(nameof(vertices));
@@ -89,6 +94,7 @@ namespace Tools.VinaCad.Helper.Helper
             polyline.Closed = true;
             polyline.Elevation = vertices[0].Z;
             polyline.Layer = layer;
+            polyline.TransformBy(ucsToWcs);
 
             ObjectId id = modelSpace.AppendEntity(polyline);
             transaction.AddNewlyCreatedDBObject(polyline, true);
