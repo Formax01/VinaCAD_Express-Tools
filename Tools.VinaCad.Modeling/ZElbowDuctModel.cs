@@ -9,7 +9,7 @@ namespace Tools.VinaCad.Modeling
 {
     public class ZElbowDuctModel
     {
-        public Point3d StartPoint { get; set; }     // tâm đầu ống
+        public Point3d StartPoint { get; set; }     
         public double Width { get; set; }           // bề rộng ống
         public double Offset { get; set; }          // cao độ lượn, có dấu: + = trái, - = phải
         public double Length { get; set; }          // L

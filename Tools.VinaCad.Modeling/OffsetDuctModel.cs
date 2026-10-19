@@ -9,7 +9,7 @@ namespace Tools.VinaCad.Modeling
 {
     public class OffsetDuctModel
     {
-        public Point3d StartPoint { get; set; }     // tâm đầu ống 1
+        public Point3d StartPoint { get; set; }     
         public double Width1 { get; set; }          // chiều rộng ống 1
         public double Width2 { get; set; }          // chiều rộng ống 2
         public double Offset { get; set; }          // cao độ lượn, có dấu: + = trái, - = phải

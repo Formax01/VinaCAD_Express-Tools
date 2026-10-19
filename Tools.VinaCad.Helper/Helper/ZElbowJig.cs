@@ -12,13 +12,15 @@ namespace Tools.VinaCad.Helper.Helper
     public class ZElbowJig : DrawJig
     {
         private readonly ZElbowDuctModel _model;
+        private readonly Matrix3d _ucsToWcs;
         private Point3d _point;
 
         public Vector3d Direction { get; private set; } = Vector3d.XAxis;
 
-        public ZElbowJig(ZElbowDuctModel model)
+        public ZElbowJig(ZElbowDuctModel model, Matrix3d ucsToWcs)
         {
             _model = model;
+            _ucsToWcs = ucsToWcs;
             _point = model.StartPoint;
         }
 
@@ -61,11 +63,11 @@ namespace Tools.VinaCad.Helper.Helper
                     shape.Vertices[i], shape.Vertices[(i + 1) % n], shape.Bulges[i], 24);
 
                 for (int j = 0; j < pts.Count - 1; j++)
-                    g.WorldLine(pts[j], pts[j + 1]);
+                    g.WorldLine(pts[j].TransformBy(_ucsToWcs), pts[j + 1].TransformBy(_ucsToWcs));
             }
 
             foreach (Point3d[] cut in shape.CutLines)
-                g.WorldLine(cut[0], cut[1]);
+                g.WorldLine(cut[0].TransformBy(_ucsToWcs), cut[1].TransformBy(_ucsToWcs));
 
             return true;
         }
