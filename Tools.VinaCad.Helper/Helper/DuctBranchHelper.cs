@@ -23,7 +23,7 @@ namespace Tools.VinaCad.Helper.Helper
         }
 
         public static void Draw(Database db, Transaction tr, DuctBranchModel m)
-        {
+            {
             EnsureLayer(db, tr, m.LayerName);
 
             Polyline pl = CreateOutline(m);
@@ -35,6 +35,8 @@ namespace Tools.VinaCad.Helper.Helper
             tr.AddNewlyCreatedDBObject(pl, true);
 
             CreateGroup(db, tr, new List<ObjectId> { id });
+            }
+            return list;
         }
 
         private static Outline BuildEEX(DuctBranchModel m)
@@ -124,26 +126,25 @@ namespace Tools.VinaCad.Helper.Helper
         }
 
         private class Outline
-        {
+                {
             private class Vertex
-            {
+                {
                 public double A, B, Bulge;
-            }
+        }
 
             private readonly List<Vertex> _vertices = new List<Vertex>();
 
             public void Start(double a, double b)
-            {
-                _vertices.Add(new Vertex { A = a, B = b });
-            }
+        {
+        }
 
             public void LineTo(double a, double b)
-            {
+        {
                 Add(a, b, 0);
-            }
+        }
 
             public void ArcTo(double a, double b, double sweep)
-            {
+        {
                 Add(a, b, Math.Tan(sweep / 4));
             }
 
@@ -151,19 +152,21 @@ namespace Tools.VinaCad.Helper.Helper
             public void Append(Outline other)
             {
                 for (int i = 0; i < other._vertices.Count; i++)
-                {
+            {
                     Vertex v = other._vertices[i];
                     double bulge = i == 0 ? 0 : other._vertices[i - 1].Bulge;
                     Add(v.A, v.B, bulge);
-                }
             }
+
+            public Point2d P2(double a, double b) { return O + D * a + N * b; }
+        }
 
             /// <summary>Nối tiếp một đường viền khác theo chiều NGƯỢC (đảo chiều cung thì đổi dấu bulge).</summary>
             public void AppendReversed(Outline other)
-            {
+        {
                 int last = other._vertices.Count - 1;
                 for (int i = last; i >= 0; i--)
-                {
+            {
                     Vertex v = other._vertices[i];
                     double bulge = i == last ? 0 : -v.Bulge;
                     Add(v.A, v.B, bulge);

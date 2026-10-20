@@ -22,6 +22,16 @@ namespace Tools.VinaCad.Action.Actions
             {
                 Document doc = Application.DocumentManager.MdiActiveDocument;
                 Editor editor = doc.Editor;
+                Database db = doc.Database;
+
+                DuctBranchVM vm = DuctBranchVM.Get(type);
+
+                // Lưu giá trị cũ để khôi phục nếu dữ liệu không hợp lệ
+                double oldW = vm.MainWidth, oldH = vm.MainHeight;
+                double oldWs = vm.ThroughWidth, oldHs = vm.ThroughHeight;
+                double oldWb = vm.BranchWidth, oldHb = vm.BranchHeight, oldR = vm.Radius;
+                double oldWb2 = vm.Branch2Width, oldR2 = vm.Radius2;
+                ElbowSide oldSide = vm.Side;
 
                 // 1) Điểm đặt
                 PromptPointResult point = editor.GetPoint(new PromptPointOptions("\nChọn điểm đặt: "));
@@ -98,7 +108,7 @@ namespace Tools.VinaCad.Action.Actions
                 vm.Side = side == "Right" ? ElbowSide.Right : ElbowSide.Left;
             }
             return true;
-        }
+            }
 
         public string Validate(DuctBranchVM vm)
         {
@@ -121,7 +131,7 @@ namespace Tools.VinaCad.Action.Actions
                 if (vm.ThroughHeight < 0) return "Hs không được âm.";
             }
             return null;
-        }
+            }
 
         private static string CheckBranch(DuctBranchVM vm, string name, double width, double radius)
         {
@@ -135,7 +145,7 @@ namespace Tools.VinaCad.Action.Actions
         {
             string defaultText = value.ToString("0.##", CultureInfo.CurrentCulture);
             var options = new PromptStringOptions("\n" + message + ": ")
-            {
+        {
                 AllowSpaces = false,
                 DefaultValue = defaultText
             };
@@ -159,7 +169,7 @@ namespace Tools.VinaCad.Action.Actions
         private static bool AskSide(Editor editor, ref string side)
         {
             var options = new PromptKeywordOptions("\nChọn hướng rẽ [Trái/Phải] <" + (side == "Left" ? "Trái" : "Phải") + ">: ")
-            {
+        {
                 AllowNone = true,
                 AppendKeywordsToMessage = false
             };
