@@ -34,17 +34,25 @@ public sealed class FlexDuctAction
             return;
         }
 
-        var modeOptions = new PromptKeywordOptions("\nChọn cách lấy đường tâm [Draw/Select] <Draw>: ") { AllowNone = true };
-       
-        modeOptions.Keywords.Add("Draw", "D", "Draw");
-        modeOptions.Keywords.Add("Select", "S", "Select");
-        
+        var modeOptions = new PromptKeywordOptions("\nChọn cách lấy đường tâm [Vẽ/Chọn] <Vẽ>: ")
+        {
+            AllowNone = true,
+            AppendKeywordsToMessage = false
+        };
+        modeOptions.Keywords.Add("Draw", "Vẽ", "Vẽ");
+        modeOptions.Keywords.Add("Select", "Chọn", "Chọn");
+
         PromptResult mode = editor.GetKeywords(modeOptions);
-        if (mode.Status == PromptStatus.Cancel) return;
-        vm.PathMode = mode.StringResult.Equals("Select", StringComparison.OrdinalIgnoreCase)
+        if (mode.Status != PromptStatus.OK && mode.Status != PromptStatus.None) return;
+        vm.PathMode = mode.Status == PromptStatus.OK &&
+            (string.Equals(mode.StringResult, "Select", StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(mode.StringResult, "Chọn", StringComparison.OrdinalIgnoreCase))
             ? FlexDuctPathMode.Select : FlexDuctPathMode.Draw;
 
-        List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select ? SelectPath(editor, document.Database) : DrawPath(editor, document.Database);
+        ObjectId sourceId = ObjectId.Null;          // line/polyline gốc (chỉ có khi chọn có sẵn)
+        List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select
+            ? SelectPath(editor, document.Database, out sourceId)
+            : DrawPath(editor, document.Database);
         if (path == null) return;
 
         string name = type.ToString();
@@ -54,6 +62,7 @@ public sealed class FlexDuctAction
             FlexDuctHelper.Draw(document.Database, path, vm.Model, style);
         editor.UpdateScreen();
         if (count == 0) { editor.WriteMessage("\nKhông thể vẽ ống với đường tâm đã chọn."); return; }
+        if (!sourceId.IsNull) EraseSource(editor, document.Database, sourceId);
         if (warning != null) editor.WriteMessage($"\n[Cảnh báo] {warning}");
         editor.WriteMessage($"\n{name}: đã vẽ {count} đối tượng trong group {groupName}.");
     }
@@ -97,8 +106,10 @@ public sealed class FlexDuctAction
         }
     }
 
-    private static List<Point3d>? SelectPath(Editor editor, Database database)
+    private static List<Point3d>? SelectPath(Editor editor, Database database, out ObjectId sourceId)
     {
+        sourceId = ObjectId.Null;
+
         var options = new PromptEntityOptions("\nChọn Line/Polyline đường tâm: ");
         options.SetRejectMessage("\nChỉ nhận Line hoặc Polyline.");
         options.AddAllowedClass(typeof(Line), true);
@@ -110,6 +121,24 @@ public sealed class FlexDuctAction
         Entity entity = (Entity)transaction.GetObject(result.ObjectId, OpenMode.ForRead);
         bool ok = FlexDuctHelper.TryGetPath(entity, out List<Point3d> path);
         transaction.Commit();
+
+        if (ok) sourceId = result.ObjectId;     // nhớ lại để xóa sau khi vẽ xong
         return ok ? path : null;
     }
+
+    private static void EraseSource(Editor editor, Database database, ObjectId id)
+    {
+        try
+        {
+            using Transaction transaction = database.TransactionManager.StartTransaction();
+            Entity entity = (Entity)transaction.GetObject(id, OpenMode.ForWrite);
+            entity.Erase();
+            transaction.Commit();
+        }
+        catch (System.Exception ex)
+        {
+            editor.WriteMessage($"\nKhông xóa được đường tâm gốc: {ex.Message}");
+        }
+    }
+
 }
