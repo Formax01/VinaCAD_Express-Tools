@@ -10,242 +10,197 @@ namespace Tools.VinaCad.Helper.Helper
     public static class DuctBranchHelper
     {
         private const double Eps = 1e-6;
-        private const double HalfPi = Math.PI / 2.0;
+        private const double Quarter = Math.PI / 2.0;   // 90 độ
 
-        public static List<ObjectId> Draw(Database db, Transaction tr, DuctBranchModel m)
+        public static Polyline CreateOutline(DuctBranchModel m)
         {
-            List<Entity> ents = Build(m);
+            Outline outline;
+            if (m.Type == DuctBranchType.EEX) outline = BuildEEX(m);
+            else if (m.Type == DuctBranchType.EEY) outline = BuildEEY(m);
+            else outline = BuildEEZ(m);
+
+            return outline.ToPolyline(m);
+        }
+
+        public static void Draw(Database db, Transaction tr, DuctBranchModel m)
+        {
             EnsureLayer(db, tr, m.LayerName);
 
-            var ms = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForWrite);
+            Polyline pl = CreateOutline(m);
+            pl.Layer = m.LayerName;
 
-            var ids = new List<ObjectId>();
-            foreach (Entity e in ents)
+            var modelSpace = (BlockTableRecord)tr.GetObject(
+                SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForWrite);
+            ObjectId id = modelSpace.AppendEntity(pl);
+            tr.AddNewlyCreatedDBObject(pl, true);
+
+            CreateGroup(db, tr, new List<ObjectId> { id });
+        }
+
+        private static Outline BuildEEX(DuctBranchModel m)
+        {
+            double hw = m.MainWidth / 2;
+            int side = m.BranchSide == ElbowSide.Left ? 1 : -1;
+
+            // Ống đi thẳng sát thành đối diện nên thành phía nhánh của nó cách trục (Ws - hw) về phía nhánh.
+            double wallDist = m.ThroughWidth - hw;
+
+            Outline branch = MakeBranch(side, hw, m.MainHeight, m.Branch1Width, m.Branch1Radius, m.BranchHeight, wallDist);
+            double mouthA = m.MainHeight + m.Branch1Radius + m.Branch1Width / 2 + m.ThroughHeight;
+
+            var o = new Outline();
+            o.Start(0, -side * hw);
+            o.LineTo(0, side * hw);              // miệng vào
+            o.Append(branch);                    // thành phía nhánh: chạy hết nhánh cong
+            o.LineTo(mouthA, side * wallDist);   // dọc thành ống đi thẳng
+            o.LineTo(mouthA, -side * hw);        // miệng ống đi thẳng
+            return o;                            // đóng lại về điểm đầu = thành đối diện
+        }
+
+        private static Outline BuildEEZ(DuctBranchModel m)
+        {
+            double hw = m.MainWidth / 2;
+            double wallDist = m.ThroughWidth / 2;      // thành ống đi thẳng cách trục Ws/2 về hai phía
+
+            Outline left = MakeBranch(+1, hw, m.MainHeight, m.Branch1Width, m.Branch1Radius, m.BranchHeight, wallDist);
+            Outline right = MakeBranch(-1, hw, m.MainHeight, m.Branch2Width, m.Branch2Radius, m.BranchHeight, wallDist);
+
+            double reach = Math.Max(m.Branch1Radius + m.Branch1Width / 2, m.Branch2Radius + m.Branch2Width / 2);
+            double mouthA = m.MainHeight + reach + m.ThroughHeight;
+
+            var o = new Outline();
+            o.Start(0, -hw);
+            o.LineTo(0, hw);                     // miệng vào
+            o.Append(left);                      // nhánh trái, đi tới thành ống đi thẳng
+            o.LineTo(mouthA, wallDist);
+            o.LineTo(mouthA, -wallDist);         // miệng ống đi thẳng
+            o.AppendReversed(right);             // nhánh phải, đi ngược từ thành ống đi thẳng về miệng vào
+            return o;
+        }
+
+        private static Outline BuildEEY(DuctBranchModel m)
+        {
+            double hw = m.MainWidth / 2;
+
+            // Wb > W/2: hai cung ngoài giao nhau tại đỉnh V trên trục tim -> "thành chặn" chính là trục (cách 0).
+            // Wb <= W/2: cung ngoài vẽ đủ 90°, thành chặn rơi đúng điểm bắt đầu của cung (hw - Wb);
+            //            đoạn nối giữa hai cung chính là line đóng (dài W - 2Wb, bằng 0 khi Wb = W/2).
+            double wallDist = Math.Max(hw - m.Branch1Width, 0);
+
+            Outline left = MakeBranch(+1, hw, m.MainHeight, m.Branch1Width, m.Branch1Radius, m.BranchHeight, wallDist);
+            Outline right = MakeBranch(-1, hw, m.MainHeight, m.Branch1Width, m.Branch1Radius, m.BranchHeight, wallDist);
+
+            var o = new Outline();
+            o.Start(0, -hw);
+            o.LineTo(0, hw);                     // miệng vào
+            o.Append(left);
+            o.AppendReversed(right);
+            return o;
+        }
+
+        private static Outline MakeBranch(int side, double hw, double aE, double wb, double centerRadius, double hb, double wallDist)
+        {
+            double rIn = centerRadius - wb / 2;      // bán kính cung trong
+            double rOut = rIn + wb;                  // bán kính cung ngoài
+            double bMid = side * (hw + rIn);         // b của đường chứa miệng ra (tâm cung nằm ở (aE, bMid))
+
+            double cosAlpha = (hw + rIn - wallDist) / rOut;
+            bool touchesWall = cosAlpha < 1 - 1e-9;
+            double alpha = touchesWall ? Math.Acos(Math.Max(-1, cosAlpha)) : 0;
+
+            var o = new Outline();
+            o.Start(aE, side * hw);
+            o.ArcTo(aE + rIn, bMid, side * Quarter);                    // cung trong
+            o.LineTo(aE + rIn, bMid + side * hb);                       // thành trong của đoạn thẳng nhánh
+            o.LineTo(aE + rOut, bMid + side * hb);                      // miệng ra
+            o.LineTo(aE + rOut, bMid);                                  // thành ngoài của đoạn thẳng nhánh
+            o.ArcTo(aE + rOut * Math.Sin(alpha),                        // cung ngoài, đi ngược về điểm chạm thành
+                    side * (hw + rIn - rOut * Math.Cos(alpha)),
+                    -side * (Quarter - alpha));
+
+            bool needStep = !touchesWall && (hw - wb) - wallDist > Eps;
+            if (needStep) o.LineTo(aE, side * wallDist);                // đoạn phẳng nối vào thành
+            return o;
+        }
+
+        private class Outline
+        {
+            private class Vertex
             {
-                if (!string.IsNullOrEmpty(m.LayerName)) e.Layer = m.LayerName;
-                ids.Add(ms.AppendEntity(e));
-                tr.AddNewlyCreatedDBObject(e, true);
+                public double A, B, Bulge;
             }
 
-            CreateGroup(db, tr, ids);
-            return ids;
-        }
+            private readonly List<Vertex> _vertices = new List<Vertex>();
 
-        public static List<Entity> BuildPreviewEntities(DuctBranchModel m)
-        {
-            return Build(m);
-        }
-
-        public static List<Entity> Build(DuctBranchModel m)
-        {
-            var list = new List<Entity>();
-            var f = new Frame(m);
-            switch (m.Type)
+            public void Start(double a, double b)
             {
-                case DuctBranchType.EEX: BuildEEX(list, f, m); break;
-                case DuctBranchType.EEY: BuildEEY(list, f, m); break;
-                default: BuildEEZ(list, f, m); break;
-            }
-            return list;
-        }
-
-        private static void BuildEEX(List<Entity> list, Frame f, DuctBranchModel m)
-        {
-            double hw = m.MainWidth / 2.0;
-            double wb = m.Branch1Width;
-            double rIn = m.Branch1CenterRadius - wb / 2.0;
-            double aE = m.MainHeight;
-            int s = m.BranchSide == ElbowSide.Left ? 1 : -1;
-
-            // Ống đi thẳng sát thành đối diện nhánh, rộng Ws -> thành phía nhánh cách trục (Ws - hw) về phía nhánh.
-            double dw = m.ThroughWidth - hw;
-
-            Elbow e = MakeElbow(s, aE, hw, wb, rIn, dw, m.BranchHeight);
-            double lBody = aE + e.ROut + m.ThroughHeight;
-
-            var p = new Outline(f);
-            p.MoveTo(0, -s * hw);
-            p.LineTo(0, s * hw);                    // miệng vào
-            ElbowForward(p, e);                     // thành phía nhánh: cút cong
-            p.LineTo(lBody, s * dw);
-            p.LineTo(lBody, -s * hw);               // miệng ra đoạn thẳng (sát thành đối diện)
-            list.Add(p.ToPolyline());
-        }
-
-        private static void BuildEEZ(List<Entity> list, Frame f, DuctBranchModel m)
-        {
-            double hw = m.MainWidth / 2.0;
-            double aE = m.MainHeight;
-
-            double wb1 = m.Branch1Width, wb2 = m.Branch2Width;
-            double rIn1 = m.Branch1CenterRadius - wb1 / 2.0;
-            double rIn2 = m.Branch2CenterRadius - wb2 / 2.0;
-
-            // Ống đi thẳng ở giữa rộng Ws: cung ngoài bị cắt bởi hai thành của nó (cách trục Ws/2)
-            double hs = m.ThroughWidth / 2.0;
-            Elbow eL = MakeElbow(+1, aE, hw, wb1, rIn1, hs, m.BranchHeight);   // nhánh 1 = bên trái
-            Elbow eR = MakeElbow(-1, aE, hw, wb2, rIn2, hs, m.BranchHeight);   // nhánh 2 = bên phải
-
-            double lBody = aE + Math.Max(eL.ROut, eR.ROut) + m.ThroughHeight;
-
-            var p = new Outline(f);
-            p.MoveTo(0, -hw);
-            p.LineTo(0, hw);                        // miệng vào
-            ElbowForward(p, eL);
-            p.LineTo(lBody, hs);
-            p.LineTo(lBody, -hs);                   // miệng ra đoạn thẳng
-            ElbowBackward(p, eR);
-            p.LineTo(0, -hw);
-            list.Add(p.ToPolyline());
-        }
-
-        private static void BuildEEY(List<Entity> list, Frame f, DuctBranchModel m)
-        {
-            double hw = m.MainWidth / 2.0;
-            double wb = m.Branch1Width;
-            double rIn = m.Branch1CenterRadius - wb / 2.0;
-            double aE = m.MainHeight;
-
-            // Wb > W/2: hai miệng nhánh chồng nhau, hai cung ngoài giao nhau tại đỉnh V trên trục tim -> cắt tại b = 0.
-            // Wb <= W/2: cung ngoài vẽ đủ 90°, giữa hai cung có line đóng (dài W - 2Wb, bằng 0 khi Wb = W/2).
-            double? cutAt = wb > hw + Eps ? (double?)0.0 : null;
-
-            Elbow eL = MakeElbow(+1, aE, hw, wb, rIn, cutAt, m.BranchHeight);
-            Elbow eR = MakeElbow(-1, aE, hw, wb, rIn, cutAt, m.BranchHeight);
-
-            var p = new Outline(f);
-            p.MoveTo(0, -hw);
-            p.LineTo(0, hw);                        // miệng vào
-            p.LineTo(aE, hw);                       // thành trái
-            ElbowForward(p, eL);
-            ElbowBackward(p, eR);                   // tự nối line đóng giữa 2 cung ngoài nếu Wb < W/2
-            p.LineTo(aE, -hw);
-            p.LineTo(0, -hw);
-            list.Add(p.ToPolyline());
-        }
-
-        private sealed class Elbow
-        {
-            public int S;               // +1 trái, -1 phải
-            public double AE;           // toạ độ a của miệng vào cút
-            public double BIn;          // khoảng cách từ trục tim tới thành TRONG miệng vào (đo về phía S)
-            public double Wb, RIn, ROut;
-            public double Ext;          // chiều cao ống rẽ = đoạn thẳng nối dài sau miệng ra của cung
-            public double Alpha0;       // góc cắt của cung ngoài (0 = vẽ đủ 90°)
-            public double DW;           // vị trí thành chặn (đo về phía S)
-            public bool Shelf;          // cung ngoài không chạm thành chặn -> nối bậc phẳng tại a = AE
-        }
-
-        private static Elbow MakeElbow(int s, double aE, double bIn, double wb, double rIn, double? cutAt, double ext)
-        {
-            var e = new Elbow { S = s, AE = aE, BIn = bIn, Wb = wb, RIn = rIn, ROut = rIn + wb, Ext = ext };
-            if (cutAt.HasValue)
-            {
-                double cosA = (bIn + rIn - cutAt.Value) / e.ROut;
-                e.DW = cutAt.Value;
-                if (cosA >= 1.0 - 1e-9)
-                {
-                    e.Alpha0 = 0.0;
-                    e.Shelf = (bIn - wb) - cutAt.Value > Eps;
-                }
-                else
-                {
-                    e.Alpha0 = Math.Acos(Math.Max(-1.0, cosA));
-                }
-            }
-            return e;
-        }
-
-        private static double CutA(Elbow e) { return e.AE + e.ROut * Math.Sin(e.Alpha0); }
-        private static double CutB(Elbow e) { return e.S * (e.BIn + e.RIn - e.ROut * Math.Cos(e.Alpha0)); }
-
-        private static void ElbowForward(Outline p, Elbow e)
-        {
-            double s = e.S;
-            double cb = s * (e.BIn + e.RIn);
-            p.LineTo(e.AE, s * e.BIn);                                    // thành ống chính tới chỗ bắt đầu cung trong
-            p.ArcTo(e.AE + e.RIn, cb, s * HalfPi);                        // thành trong
-            p.LineTo(e.AE + e.RIn, cb + s * e.Ext);                       // thành trong đoạn thẳng của nhánh
-            p.LineTo(e.AE + e.ROut, cb + s * e.Ext);                      // miệng ra của nhánh
-            p.LineTo(e.AE + e.ROut, cb);                                  // thành ngoài đoạn thẳng của nhánh
-            p.ArcTo(CutA(e), CutB(e), -s * (HalfPi - e.Alpha0));          // thành ngoài, đi ngược về điểm cắt
-            if (e.Shelf) p.LineTo(e.AE, s * e.DW);                        // bậc phẳng nối vào thành ống đi thẳng
-        }
-
-        private static void ElbowBackward(Outline p, Elbow e)
-        {
-            double s = e.S;
-            double cb = s * (e.BIn + e.RIn);
-            if (e.Shelf) p.LineTo(e.AE, s * e.DW);
-            p.LineTo(CutA(e), CutB(e));
-            p.ArcTo(e.AE + e.ROut, cb, s * (HalfPi - e.Alpha0));
-            p.LineTo(e.AE + e.ROut, cb + s * e.Ext);
-            p.LineTo(e.AE + e.RIn, cb + s * e.Ext);
-            p.LineTo(e.AE + e.RIn, cb);
-            p.ArcTo(e.AE, s * e.BIn, -s * HalfPi);
-        }
-
-        private sealed class Frame
-        {
-            public readonly Point2d O;
-            public readonly Vector2d D;
-            public readonly Vector2d N;
-            public readonly double Z;
-
-            public Frame(DuctBranchModel m)
-            {
-                O = new Point2d(m.InsertPoint.X, m.InsertPoint.Y);
-                D = new Vector2d(m.Direction.X, m.Direction.Y).GetNormal();
-                N = D.RotateBy(Math.PI / 2.0);
-                Z = m.InsertPoint.Z;
-            }
-
-            public Point2d P2(double a, double b) { return O + D * a + N * b; }
-        }
-
-        private sealed class Outline
-        {
-            private readonly Frame _f;
-            private readonly List<Point2d> _pts = new List<Point2d>();
-            private readonly List<double> _bulges = new List<double>();
-
-            public Outline(Frame f) { _f = f; }
-
-            public void MoveTo(double a, double b)
-            {
-                _pts.Add(_f.P2(a, b));
-                _bulges.Add(0.0);
+                _vertices.Add(new Vertex { A = a, B = b });
             }
 
             public void LineTo(double a, double b)
             {
-                Point2d p = _f.P2(a, b);
-                int last = _pts.Count - 1;
-                if (p.GetDistanceTo(_pts[last]) < Eps) return;
-                _bulges[last] = 0.0;
-                _pts.Add(p);
-                _bulges.Add(0.0);
+                Add(a, b, 0);
             }
 
             public void ArcTo(double a, double b, double sweep)
             {
-                Point2d p = _f.P2(a, b);
-                int last = _pts.Count - 1;
-                if (p.GetDistanceTo(_pts[last]) < Eps) return;
-                _bulges[last] = Math.Abs(sweep) < 1e-9 ? 0.0 : Math.Tan(sweep / 4.0);
-                _pts.Add(p);
-                _bulges.Add(0.0);
+                Add(a, b, Math.Tan(sweep / 4));
             }
 
-            public Polyline ToPolyline()
+            /// <summary>Nối tiếp một đường viền khác theo chiều thuận.</summary>
+            public void Append(Outline other)
             {
-                int n = _pts.Count;
-                if (n > 1 && _pts[n - 1].GetDistanceTo(_pts[0]) < Eps) n--;
+                for (int i = 0; i < other._vertices.Count; i++)
+                {
+                    Vertex v = other._vertices[i];
+                    double bulge = i == 0 ? 0 : other._vertices[i - 1].Bulge;
+                    Add(v.A, v.B, bulge);
+                }
+            }
+
+            /// <summary>Nối tiếp một đường viền khác theo chiều NGƯỢC (đảo chiều cung thì đổi dấu bulge).</summary>
+            public void AppendReversed(Outline other)
+            {
+                int last = other._vertices.Count - 1;
+                for (int i = last; i >= 0; i--)
+                {
+                    Vertex v = other._vertices[i];
+                    double bulge = i == last ? 0 : -v.Bulge;
+                    Add(v.A, v.B, bulge);
+                }
+            }
+
+            // Thêm đỉnh mới; bulge là của đoạn đi từ đỉnh trước tới đỉnh này. Đỉnh trùng đỉnh trước thì bỏ qua.
+            private void Add(double a, double b, double bulgeFromPrevious)
+            {
+                Vertex previous = _vertices[_vertices.Count - 1];
+                if (Math.Abs(previous.A - a) < Eps && Math.Abs(previous.B - b) < Eps) return;
+
+                previous.Bulge = bulgeFromPrevious;
+                _vertices.Add(new Vertex { A = a, B = b });
+            }
+
+            /// <summary>Đổi sang toạ độ bản vẽ và tạo Polyline kín.</summary>
+            public Polyline ToPolyline(DuctBranchModel m)
+            {
+                Point2d origin = new Point2d(m.InsertPoint.X, m.InsertPoint.Y);
+                Vector2d along = new Vector2d(m.Direction.X, m.Direction.Y).GetNormal();   // trục a
+                Vector2d across = along.RotateBy(Math.PI / 2);                              // trục b (bên trái)
+
+                // Đỉnh cuối trùng đỉnh đầu thì bỏ (Polyline kín tự nối về đỉnh đầu)
+                int count = _vertices.Count;
+                Vertex first = _vertices[0];
+                Vertex lastVertex = _vertices[count - 1];
+                if (count > 1 && Math.Abs(lastVertex.A - first.A) < Eps && Math.Abs(lastVertex.B - first.B) < Eps) count--;
 
                 var pl = new Polyline();
-                pl.Elevation = _f.Z;
-                for (int i = 0; i < n; i++)
-                    pl.AddVertexAt(i, _pts[i], _bulges[i], 0, 0);
+                pl.Elevation = m.InsertPoint.Z;
+                for (int i = 0; i < count; i++)
+                {
+                    Vertex v = _vertices[i];
+                    Point2d p = origin + along * v.A + across * v.B;
+                    pl.AddVertexAt(i, p, v.Bulge, 0, 0);
+                }
                 pl.Closed = true;
                 return pl;
             }
@@ -254,26 +209,29 @@ namespace Tools.VinaCad.Helper.Helper
         private static void EnsureLayer(Database db, Transaction tr, string name)
         {
             if (string.IsNullOrEmpty(name)) return;
-            var lt = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
-            if (lt.Has(name)) return;
-            lt.UpgradeOpen();
-            var rec = new LayerTableRecord();
-            rec.Name = name;
-            lt.Add(rec);
-            tr.AddNewlyCreatedDBObject(rec, true);
+
+            var layers = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
+            if (layers.Has(name)) return;
+
+            layers.UpgradeOpen();
+            var layer = new LayerTableRecord();
+            layer.Name = name;
+            layers.Add(layer);
+            tr.AddNewlyCreatedDBObject(layer, true);
         }
 
         private static void CreateGroup(Database db, Transaction tr, List<ObjectId> ids)
         {
-            var gd = (DBDictionary)tr.GetObject(db.GroupDictionaryId, OpenMode.ForWrite);
-            int i = 1;
-            string name;
-            do { name = DuctBranchSettings.GroupPrefix + i++; } while (gd.Contains(name));
+            var groups = (DBDictionary)tr.GetObject(db.GroupDictionaryId, OpenMode.ForWrite);
 
-            var g = new Group(name, true);
-            gd.SetAt(name, g);
-            tr.AddNewlyCreatedDBObject(g, true);
-            foreach (ObjectId id in ids) g.Append(id);
+            int number = 1;
+            string name;
+            do { name = DuctBranchSettings.GroupPrefix + number++; } while (groups.Contains(name));
+
+            var group = new Group(name, true);
+            groups.SetAt(name, group);
+            tr.AddNewlyCreatedDBObject(group, true);
+            foreach (ObjectId id in ids) group.Append(id);
         }
     }
 }

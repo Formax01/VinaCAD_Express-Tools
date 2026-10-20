@@ -46,7 +46,7 @@ namespace Tools.VinaCad.Modeling
         {
             MainWidth = 400,
             MainHeight = 0,
-            ThroughWidth = 240,
+            ThroughWidth = 300,
             ThroughHeight = 100,
             BranchWidth = 320,
             Radius = 320,
