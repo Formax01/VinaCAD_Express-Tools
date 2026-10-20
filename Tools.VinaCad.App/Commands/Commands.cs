@@ -15,6 +15,61 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+        [CommandMethod("CLG")]
+        public void TurningVaneCommand()
+        {
+            try
+            {
+                new TurningVaneAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "CLG");
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("VCD")]
+        public void VCDCommand()
+        {
+            try
+            {
+                VCDAction action = new VCDAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("LiL")]
+        public void LiLCommand()
+        {
+            try
+            {
+                LiLAction action = new LiLAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("HG")]
+        public void HGCommand()
+        {
+            try
+            {
+                HGAction action = new HGAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.Info(ex.ToString());
+            }
+        }
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
