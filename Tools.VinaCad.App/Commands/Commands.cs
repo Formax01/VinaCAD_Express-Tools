@@ -697,7 +697,7 @@ namespace Tools.VinaCAD.App.Commands
         }
 
         [CommandMethod("EEX")]
-        public void ExportExcelCommand()
+        public void DuctBranchEEXCommand()
         {
             try
             {
@@ -706,12 +706,12 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(ExportExcelCommand), ex);
+                Logger.Info(nameof(DuctBranchEEXCommand), ex);
             }
         }
 
         [CommandMethod("EEY")]
-        public void ExportExcelYeuCauCommand()
+        public void DuctBranchEEYCommand()
         {
             try
             {
@@ -720,12 +720,12 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(ExportExcelYeuCauCommand), ex);
+                Logger.Info(nameof(DuctBranchEEYCommand), ex);
             }
         }
 
         [CommandMethod("EEZ")]
-        public void ExportExcelZCommand()
+        public void DuctBranchEEZCommand()
         {
             try
             {
@@ -734,7 +734,7 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(ExportExcelZCommand), ex);
+                Logger.Info(nameof(DuctBranchEEZCommand), ex);
             }
         }
 
