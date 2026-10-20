@@ -1,199 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Teigha.Geometry;
+﻿using Teigha.Geometry;
 using Tools.Model;
 using Tools.VinaCad.Modeling;
 
 namespace Tools.ViewModel
 {
-    public class DuctBranchVM : INotifyPropertyChanged
+    public class DuctBranchVM
     {
-        private static readonly Dictionary<DuctBranchType, DuctBranchVM> _cache = new Dictionary<DuctBranchType, DuctBranchVM>();
+        public readonly DuctBranchType Type;
 
-        private double _mainWidth = DuctBranchSettings.DefaultMainWidth;
-        private double _mainHeight = DuctBranchSettings.DefaultMainHeight;
-        private double _throughWidth = DuctBranchSettings.DefaultThroughWidth;
-        private double _throughHeight = DuctBranchSettings.DefaultThroughHeight;
-        private double _branchWidth = DuctBranchSettings.DefaultBranchWidth;
-        private double _branchHeight = DuctBranchSettings.DefaultBranchHeight;
-        private double _radius = DuctBranchSettings.DefaultBranchWidth * DuctBranchSettings.DefaultRadiusRatio;
-        private double _branch2Width = DuctBranchSettings.DefaultBranchWidth;
-        private double _radius2 = DuctBranchSettings.DefaultBranchWidth * DuctBranchSettings.DefaultRadiusRatio;
-        private RadiusMode _radiusMode = DuctBranchSettings.DefaultRadiusMode;
-        private ElbowSide _side = DuctBranchSettings.DefaultSide;
-        private string _layerName = DuctBranchSettings.DefaultLayer;
-
-        public static DuctBranchVM Get(DuctBranchType type)
-        {
-            DuctBranchVM vm;
-            if (!_cache.TryGetValue(type, out vm))
-            {
-                vm = new DuctBranchVM(type);
-                _cache[type] = vm;
-            }
-            return vm;
-        }
+        public double MainWidth, MainHeight;
+        public double ThroughWidth, ThroughHeight;
+        public double BranchWidth, Radius;
+        public double Branch2Width, Radius2;
+        public double BranchHeight;
+        public ElbowSide Side;
 
         public DuctBranchVM(DuctBranchType type)
         {
             Type = type;
         }
 
-        public DuctBranchType Type { get; private set; }
-
-        public double MainWidth 
+        public bool HasThrough                                 // eex, eez
         { 
-            get => _mainWidth; 
-            set => Set(ref _mainWidth, value); 
+            get { return Type != DuctBranchType.EEY; } 
         }
-
-        public double MainHeight 
+        public bool HasBranch2                                  // eez
         { 
-            get => _mainHeight; 
-            set => Set(ref _mainHeight, value); 
-        }
-
-        public double ThroughWidth 
-        {
-            get => _throughWidth; 
-            set => Set(ref _throughWidth, value);
-        }
-
-        public double ThroughHeight 
+            get { return Type == DuctBranchType.EEZ; } 
+        }   
+        public bool HasSide                                      // eex
         { 
-            get => _throughHeight; 
-            set => Set(ref _throughHeight, value); 
-        }
+            get { return Type == DuctBranchType.EEX; } 
+        }      
 
-        public double BranchWidth 
-        { 
-            get => _branchWidth; 
-            set => Set(ref _branchWidth, value); 
-        }
-        public double BranchHeight 
-        { 
-            get => _branchHeight; 
-            set => Set(ref _branchHeight, value); 
-        }
-
-        public double Radius 
-        { 
-            get => _radius; 
-            set => Set(ref _radius, value); 
-        }
-
-        public double Branch2Width 
-        { 
-            get => _branch2Width; 
-            set => Set(ref _branch2Width, value); 
-        }
-
-        public double Radius2 
-        { 
-            get => _radius2; 
-            set => Set(ref _radius2, value); 
-        }
-        public RadiusMode RadiusMode 
-        { 
-            get => _radiusMode; 
-            set => Set(ref _radiusMode, value); 
-        }
-        public ElbowSide Side 
-        { 
-            get => _side;
-            set => Set(ref _side, value); 
-        }
-        public string LayerName 
-        { 
-            get => _layerName; 
-            set => Set(ref _layerName, value); 
-        }
-
-        public bool NeedsThrough
+        public void ApplyPreset(double mainWidth)
         {
-            get => Type != DuctBranchType.EEY;
+            DuctBranchPreset settings = DuctBranchSettings.PresetFor(Type);
+            MainWidth = mainWidth;
+            MainHeight = settings.MainHeight * mainWidth;
+            ThroughWidth = settings.ThroughWidth * mainWidth;
+            ThroughHeight = settings.ThroughHeight * mainWidth;
+            BranchWidth = settings.BranchWidth * mainWidth;
+            Radius = settings.Radius * mainWidth;
+            Branch2Width = settings.Branch2Width * mainWidth;
+            Radius2 = settings.Radius2 * mainWidth;
+            BranchHeight = settings.BranchHeight * mainWidth;
+            Side = settings.Side;
         }
 
-        public bool NeedsBranch2
-        {
-            get => Type == DuctBranchType.EEZ;
-        }
-
-        public bool NeedsSide
-        {
-            get => Type == DuctBranchType.EEX;
-        }
-
-        public double SuggestThroughWidth()
-        {
-            return ThroughWidth > 0 && ThroughWidth <= MainWidth ? ThroughWidth : MainWidth;
-        }
-
-        public double SuggestBranchWidth()
-        {
-            return Type == DuctBranchType.EEY ? MainWidth / 2.0 : BranchWidth;
-        }
-
-        public double SuggestRadius(double branchWidth)
-        {
-            return DuctBranchSettings.DefaultRadiusRatio * branchWidth;
-        }
-
-        public double ResolveCenterRadius(double width, double radius)
-        {
-            return RadiusMode == RadiusMode.Center
-                ? radius
-                : radius + width / 2.0;
-        }
-
-        public double Branch1CenterRadius
-        {
-            get => ResolveCenterRadius(BranchWidth, Radius);
-        }
-
-        public double EffectiveBranch2Width
-        {
-            get => NeedsBranch2 ? Branch2Width : BranchWidth;
-        }
-
-        public double Branch2CenterRadius
-        {
-            get => NeedsBranch2
-                ? ResolveCenterRadius(Branch2Width, Radius2)
-                : Branch1CenterRadius;
-        }
-
-        public DuctBranchModel BuildModel(Point3d insertPoint, Vector3d direction)
+        public DuctBranchModel ToModel(Point3d insertPoint, Vector3d direction)
         {
             return new DuctBranchModel
             {
                 Type = Type,
                 InsertPoint = insertPoint,
                 Direction = direction.GetNormal(),
+                LayerName = DuctBranchSettings.DefaultLayer,
                 MainWidth = MainWidth,
                 MainHeight = MainHeight,
-                ThroughWidth = NeedsThrough ? ThroughWidth : 0,
-                ThroughHeight = NeedsThrough ? ThroughHeight : 0,
+                ThroughWidth = ThroughWidth,
+                ThroughHeight = ThroughHeight,
                 BranchHeight = BranchHeight,
                 Branch1Width = BranchWidth,
-                Branch1CenterRadius = Branch1CenterRadius,
-                Branch2Width = EffectiveBranch2Width,
-                Branch2CenterRadius = Branch2CenterRadius,
-                BranchSide = Side,
-                LayerName = LayerName
+                Branch1Radius = Radius,
+                // eex, eey chỉ có một kiểu nhánh nên nhánh 2 giống nhánh 1
+                Branch2Width = HasBranch2 ? Branch2Width : BranchWidth,
+                Branch2Radius = HasBranch2 ? Radius2 : Radius,
+                BranchSide = Side
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void Set<T>(ref T field, T value, [CallerMemberName] string name = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return;
-            field = value;
-            var h = PropertyChanged;
-            if (h != null) h(this, new PropertyChangedEventArgs(name));
         }
     }
 }
