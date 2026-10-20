@@ -82,6 +82,7 @@ namespace Tools.ViewModel
                 Side = Side,
                 VerticalDir = VerticalDir,
                 DropLength = DropLength,
+                Height = Height,
                 LayerName = LayerName,
                 ShowCenterLine = ShowCenterLine,
                 ShowLabel = ShowLabel
