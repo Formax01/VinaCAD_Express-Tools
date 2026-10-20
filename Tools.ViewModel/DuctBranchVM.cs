@@ -18,6 +18,7 @@ namespace Tools.ViewModel
         public DuctBranchVM(DuctBranchType type)
         {
             Type = type;
+            ApplyPreset();
         }
 
         public bool HasThrough                                 // eex, eez
@@ -31,21 +32,21 @@ namespace Tools.ViewModel
         public bool HasSide                                      // eex
         { 
             get { return Type == DuctBranchType.EEX; } 
-        }      
+        }
 
-        public void ApplyPreset(double mainWidth)
+        public void ApplyPreset()
         {
-            DuctBranchPreset settings = DuctBranchSettings.PresetFor(Type);
-            MainWidth = mainWidth;
-            MainHeight = settings.MainHeight * mainWidth;
-            ThroughWidth = settings.ThroughWidth * mainWidth;
-            ThroughHeight = settings.ThroughHeight * mainWidth;
-            BranchWidth = settings.BranchWidth * mainWidth;
-            Radius = settings.Radius * mainWidth;
-            Branch2Width = settings.Branch2Width * mainWidth;
-            Radius2 = settings.Radius2 * mainWidth;
-            BranchHeight = settings.BranchHeight * mainWidth;
-            Side = settings.Side;
+            DuctBranchPreset setting = DuctBranchSettings.PresetFor(Type);
+            MainWidth = setting.MainWidth;
+            MainHeight = setting.MainHeight;
+            ThroughWidth = setting.ThroughWidth;
+            ThroughHeight = setting.ThroughHeight;
+            BranchWidth = setting.BranchWidth;
+            Radius = setting.Radius;
+            Branch2Width = setting.Branch2Width;
+            Radius2 = setting.Radius2;
+            BranchHeight = setting.BranchHeight;
+            Side = setting.Side;
         }
 
         public DuctBranchModel ToModel(Point3d insertPoint, Vector3d direction)
