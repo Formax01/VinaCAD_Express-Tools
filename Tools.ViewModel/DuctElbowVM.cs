@@ -30,6 +30,7 @@ namespace Tools.ViewModel
 
         public double Width1 { get; set; }              // bề rộng đầu vào
         public double Width2 { get; set; }              // bề rộng đầu ra (chỉ ống giảm cấp dùng)
+        public double Height { get; set; }              // chiều cao ống ( chỉ khi vẽ 3D với các lệnh EE)
         public double Radius { get; set; }              // bán kính cong
         public RadiusMode RadiusMode { get; set; }      // Radius tính theo đường tim hay theo thành trong
         public double AngleDeg { get; set; }            // góc cút (độ)
@@ -44,6 +45,7 @@ namespace Tools.ViewModel
         {
             Width1 = DuctElbowSettings.DefaultWidth1;
             Width2 = DuctElbowSettings.DefaultWidth2;
+            Height = DuctElbowSettings.DefaultHeight;
             Radius = DuctElbowSettings.DefaultRadius;
             RadiusMode = DuctElbowSettings.DefaultRadiusMode;
             AngleDeg = DuctElbowSettings.DefaultAngleDeg;

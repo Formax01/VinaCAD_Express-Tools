@@ -45,6 +45,87 @@ namespace Tools.VinaCad.Helper.Helper
             return ids;
         }
 
+        private static Polyline BuildVerticalProfile(DuctElbowModel model)
+        {
+            double radius = model.CenterRadius - model.Width1 / 2;
+            double outer = radius + model.Height;
+            double top = outer + model.DropLength;
+            double quarterBulge = Math.Tan(Math.PI / 8);
+            var profile = new Polyline();
+            profile.AddVertexAt(0, new Point2d(0, 0), quarterBulge, 0, 0);
+            profile.AddVertexAt(1, new Point2d(outer, outer), 0, 0, 0);
+            profile.AddVertexAt(2, new Point2d(outer, top), 0, 0, 0);
+            profile.AddVertexAt(3, new Point2d(radius, top), 0, 0, 0);
+            profile.AddVertexAt(4, new Point2d(radius, outer), -quarterBulge, 0, 0);
+            profile.AddVertexAt(5, new Point2d(0, model.Height), 0, 0, 0);
+            profile.Closed = true;
+            return profile;
+        }
+
+        public static Solid3d BuildSolid(DuctElbowModel model)
+        {
+            List<Entity> profile = model.Type == DuctElbowType.Vertical
+                ? new List<Entity> { BuildVerticalProfile(model) }
+                : BuildElbow(model);
+            var curves = new DBObjectCollection();
+            for (int index = 0; index < (model.Type == DuctElbowType.Vertical ? 1 : 4); index++)
+                curves.Add(profile[index]);
+
+            DBObjectCollection regions = null;
+            Solid3d solid = null;
+            try
+            {
+                regions = Region.CreateFromCurves(curves);
+                if (regions.Count != 1 || regions[0] is not Region region)
+                    throw new InvalidOperationException("Không tạo được mặt cắt ống gió 3D.");
+
+                solid = new Solid3d();
+                double extrusion = model.Type == DuctElbowType.Vertical ? model.Width1 : model.Height;
+                solid.CreateExtrudedSolid(region, new Vector3d(0, 0, extrusion), new SweepOptions());
+
+                if (model.Type == DuctElbowType.Vertical)
+                {
+                    double bend = model.VerticalDir == VerticalDirection.Up ? Math.PI / 2 : -Math.PI / 2;
+                    double heading = Math.Atan2(model.Direction.Y, model.Direction.X);
+                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -model.Width1 / 2)));
+                    solid.TransformBy(Matrix3d.Rotation(bend, Vector3d.XAxis, Point3d.Origin));
+                    solid.TransformBy(Matrix3d.Rotation(heading, Vector3d.ZAxis, Point3d.Origin));
+                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(model.InsertPoint.X, model.InsertPoint.Y, model.InsertPoint.Z)));
+                }
+
+                return solid;
+            }
+            catch
+            {
+                solid?.Dispose();
+                throw;
+            }
+            finally
+            {
+                foreach (DBObject region in regions ?? new DBObjectCollection()) region.Dispose();
+                foreach (Entity entity in profile) entity.Dispose();
+            }
+        }
+
+        public static List<ObjectId> Draw3D(Database db, Transaction tr, DuctElbowModel model)
+        {
+            EnsureLayer(db, tr, model.LayerName);
+            var space = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForWrite);
+            Solid3d solid = BuildSolid(model);
+            try
+            {
+                ObjectId id = space.AppendEntity(solid);
+                tr.AddNewlyCreatedDBObject(solid, true);
+                if (!string.IsNullOrEmpty(model.LayerName)) solid.Layer = model.LayerName;
+                return new List<ObjectId> { id };
+            }
+            catch
+            {
+                if (solid.ObjectId.IsNull) solid.Dispose();
+                throw;
+            }
+        }
+
         public static List<Entity> BuildElbow(DuctElbowModel m)
         {
             var result = new List<Entity>();
