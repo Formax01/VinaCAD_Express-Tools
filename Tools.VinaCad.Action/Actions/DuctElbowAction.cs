@@ -65,16 +65,16 @@ namespace Tools.VinaCad.Action.Actions
                     vm.DropLength = l;*/
 
                     string v;
-                    if (!AskKeyword(editor, "Chọn kiểu", new[] { "Down", "Up" },
-                        vm.VerticalDir == VerticalDirection.Down ? "Down" : "Up", out v)) return;
-                    vm.VerticalDir = v == "Up" ? VerticalDirection.Up : VerticalDirection.Down;
+                    if (!AskKeyword(editor, "Chọn hướng", new[] { "Xuống", "Lên" },
+                        vm.VerticalDir == VerticalDirection.Down ? "Xuống" : "Lên", out v)) return;
+                    vm.VerticalDir = v == "Lên" ? VerticalDirection.Up : VerticalDirection.Down;
                 }
                 else
                 {
                     string s;
-                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Left", "Right" },
-                            vm.Side == ElbowSide.Left ? "Left" : "Right", out s)) return;
-                    vm.Side = s == "Right" ? ElbowSide.Right : ElbowSide.Left;
+                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Trái", "Phải" },
+                            vm.Side == ElbowSide.Left ? "Trái" : "Phải", out s)) return;
+                    vm.Side = s == "Phải" ? ElbowSide.Right : ElbowSide.Left;
 
                     double a;
                     if (!AskDouble(editor, "Nhập góc quay (độ)", vm.AngleDeg, out a)) return;
@@ -241,13 +241,13 @@ namespace Tools.VinaCad.Action.Actions
         private static bool AskKeyword(Editor ed, string msg, string[] keys, string def, out string value)
         {
             value = def;
-            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> : ");
+            var options = new PromptKeywordOptions("\n" + msg + ": ")
+            {
+                AllowNone = true
+            };
 
             foreach (string key in keys)
                 options.Keywords.Add(key);
-
-            options.Keywords.Default = def;
-            options.AllowNone = true;
 
             PromptResult result = ed.GetKeywords(options);
 

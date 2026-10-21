@@ -17,7 +17,7 @@ namespace Tools.VinaCad.Modeling
 
         public const double DefaultWidth1 = 300;
         public const double DefaultWidth2 = 200;
-        public const double DefaultRadius = 300;
+        public const double DefaultRadius = 200;
         public const double DefaultAngleDeg = 90;
         public const double DefaultDropLength = 500;
         public const ElbowSide DefaultSide = ElbowSide.Left;
