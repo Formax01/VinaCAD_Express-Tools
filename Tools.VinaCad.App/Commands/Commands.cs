@@ -326,7 +326,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 DanhSoHieuTKTDAction action = new DanhSoHieuTKTDAction();
-                action.Execute(); 
+                action.Execute();
             }
             catch (System.Exception ex)
             {
@@ -617,7 +617,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
-        
+
         [CommandMethod("BBE")]
         public void BlockEraseCommand()
         {
@@ -638,8 +638,8 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                 StuccoAction action = new StuccoAction();
-                 action.Execute();
+                StuccoAction action = new StuccoAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
@@ -647,7 +647,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(StuccoCommand), ex);
             }
         }
-      
+
         [CommandMethod("AD")]
         public void OpenDoorCommand()
         {
@@ -661,33 +661,116 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
-      
+
         [CommandMethod("AW")]
-          public void ArrangeWindowCommand()
-          {
-              try
-              {
-                  new ArrangeWindowAction().Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(ArrangeWindowCommand), ex);
-              }
-          }
+        public void ArrangeWindowCommand()
+        {
+            try
+            {
+                new ArrangeWindowAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ArrangeWindowCommand), ex);
+            }
+        }
         [CommandMethod("LTP")]
-          public void StaircaseSectionCommand()
-          {
-              try
-              {
-                  StaircaseSectionAction action = new StaircaseSectionAction();
-                  action.Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(StaircaseSectionCommand), ex);
-              }
-          }
+        public void StaircaseSectionCommand()
+        {
+            try
+            {
+                StaircaseSectionAction action = new StaircaseSectionAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StaircaseSectionCommand), ex);
+            }
+        }
+        [CommandMethod("E1")]
+        public void DuctElbowEqualCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+            }
+        }
+
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+            }
+        }
+
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE1")]
+        public void DuctElbowEqual3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE2")]
+        public void DuctElbowReducing3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE3")]
+        public void DuctElbowVertical3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+            }
+        }
     }
 }
