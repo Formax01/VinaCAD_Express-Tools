@@ -30,7 +30,48 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(CreateGridAxisCommand), ex);
             }
         }
-
+        [CommandMethod("BB1")]
+        public void DrawBoxCommand()
+        {
+            try
+            {
+                DrawBoxAction action = new DrawBoxAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("BB2")]
+        public void DrawReducerDuct3DCommand()
+        {
+            try
+            {
+                DrawReducerDuct3DAction action = new DrawReducerDuct3DAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("Bbz")]
+        public void BbzCommand()
+        {
+            try
+            {
+                BbzAction action = new BbzAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());   // đổi cho đúng chữ ký Logger đang dùng ở các lệnh khác
+            }
+        }
         [CommandMethod("Sample")]
         public void SampleCommand()
         {
