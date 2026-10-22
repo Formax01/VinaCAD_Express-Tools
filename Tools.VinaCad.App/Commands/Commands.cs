@@ -689,5 +689,33 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+            }
+        }
+
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute3D();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
     }
 }
