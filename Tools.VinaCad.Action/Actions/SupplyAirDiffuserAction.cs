@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using WorldDraw = Teigha.GraphicsInterface.WorldDraw;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using Region = Teigha.DatabaseServices.Region;
@@ -54,6 +55,142 @@ namespace Tools.VinaCAD.Action.Actions
                     CreateGroup(database, tr, ids, "SupAir");
                     tr.Commit();
                 }
+            }
+        }
+
+        public void ExecuteBlock()
+        {
+            Document document = Application.DocumentManager.MdiActiveDocument;
+            if (document == null) return;
+            Editor editor = document.Editor;
+            if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
+
+            Database database = document.Database;
+            string baseName = "SupAirDiff_" + width.ToString("0.##", CultureInfo.InvariantCulture);
+            string defaultName = baseName;
+            using (Transaction tr = database.TransactionManager.StartTransaction())
+            {
+                BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
+                for (int suffix = 2; blocks.Has(defaultName); suffix++)
+                    defaultName = baseName + "_" + suffix;
+                System.Diagnostics.Debug.Assert(!blocks.Has(defaultName));
+            }
+
+            PromptResult nameResult = editor.GetString(new PromptStringOptions($"\nNhập tên block miệng gió cấp : ")
+            {
+                AllowSpaces = false,
+                DefaultValue = defaultName,
+                UseDefaultValue = true
+            });
+            if (nameResult.Status != PromptStatus.OK && nameResult.Status != PromptStatus.None) return;
+            string name = nameResult.Status == PromptStatus.OK &&
+                !string.IsNullOrWhiteSpace(nameResult.StringResult)
+                ? nameResult.StringResult.Trim() : defaultName;
+
+            using (Transaction tr = database.TransactionManager.StartTransaction())
+            {
+                BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
+                if (blocks.Has(name))
+                {
+                    editor.WriteMessage("\nTên block đã tồn tại. Hãy nhập tên khác.");
+                    return;
+                }
+            }
+
+            ObjectId blockId = ObjectId.Null;
+            while (true)
+            {
+                var jig = new DiffuserPlacementJig(width, editor.CurrentUserCoordinateSystem);
+                PromptResult placement = editor.Drag(jig);
+                if (placement.Status != PromptStatus.OK) break;
+
+                using (Transaction tr = database.TransactionManager.StartTransaction())
+                {
+                    BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+                    if (blockId.IsNull)
+                    {
+                        BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForWrite);
+                        var definition = new BlockTableRecord { Name = name, Origin = Point3d.Origin };
+                        blockId = blocks.Add(definition);
+                        tr.AddNewlyCreatedDBObject(definition, true);
+
+                        var ids = new ObjectIdCollection();
+                        double inner = width / 2;
+                        double outer = width * 0.75;
+                        AddSquare(definition, tr, ids, Point3d.Origin, inner, 0, Matrix3d.Identity);
+                        AddSquare(definition, tr, ids, Point3d.Origin, outer, 0, Matrix3d.Identity);
+                        AddCornerLines(definition, tr, ids, Point3d.Origin, inner, 0, outer, 0, Matrix3d.Identity);
+                        Line ax1 = AddLine(definition, tr, ids,
+                            new Point3d(-width, 0, 0), new Point3d(width, 0, 0), Matrix3d.Identity);
+                        Line ax2 = AddLine(definition, tr, ids,
+                            new Point3d(0, -width, 0), new Point3d(0, width, 0), Matrix3d.Identity);
+                        ax1.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                        ax2.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                    }
+
+                    var reference = new BlockReference(jig.Center, blockId);
+                    reference.SetDatabaseDefaults(database);
+                    reference.TransformBy(jig.Ucs);
+                    space.AppendEntity(reference);
+                    tr.AddNewlyCreatedDBObject(reference, true);
+                    tr.Commit();
+                }
+            }
+        }
+
+        private sealed class DiffuserPlacementJig : DrawJig
+        {
+            private readonly double _width;
+            private Point3d _center;
+            private bool _hasCenter;
+            public Point3d Center => _center;
+            public Matrix3d Ucs { get; }
+
+            public DiffuserPlacementJig(double width, Matrix3d ucs)
+            {
+                _width = width;
+                Ucs = ucs;
+            }
+
+            protected override SamplerStatus Sampler(JigPrompts prompts)
+            {
+                var options = new JigPromptPointOptions("\nChọn vị trí đặt miệng gió cấp : ")
+                {
+                    UserInputControls = UserInputControls.Accept3dCoordinates
+                };
+                PromptPointResult result = prompts.AcquirePoint(options);
+                if (result.Status != PromptStatus.OK) return SamplerStatus.Cancel;
+                if (_hasCenter && result.Value == _center) return SamplerStatus.NoChange;
+                _center = result.Value;
+                _hasCenter = true;
+                return SamplerStatus.OK;
+            }
+
+            protected override bool WorldDraw(WorldDraw draw)
+            {
+                double inner = _width / 2;
+                double outer = _width * 0.75;
+                int[] sx = { -1, 1, 1, -1 };
+                int[] sy = { -1, -1, 1, 1 };
+                draw.SubEntityTraits.Color = 7;
+                for (int i = 0; i < 4; i++)
+                {
+                    int next = (i + 1) % 4;
+                    DrawLine(draw, sx[i] * inner, sy[i] * inner, sx[next] * inner, sy[next] * inner);
+                    DrawLine(draw, sx[i] * outer, sy[i] * outer, sx[next] * outer, sy[next] * outer);
+                    DrawLine(draw, sx[i] * inner, sy[i] * inner, sx[i] * outer, sy[i] * outer);
+                }
+                draw.SubEntityTraits.Color = 8;
+                DrawLine(draw, -_width, 0, _width, 0);
+                DrawLine(draw, 0, -_width, 0, _width);
+                return true;
+            }
+
+            private void DrawLine(WorldDraw draw, double x1, double y1, double x2, double y2)
+            {
+                Point3d start = new Point3d(_center.X + x1, _center.Y + y1, _center.Z).TransformBy(Ucs);
+                Point3d end = new Point3d(_center.X + x2, _center.Y + y2, _center.Z).TransformBy(Ucs);
+                draw.Geometry.WorldLine(start, end);
             }
         }
 

@@ -717,5 +717,19 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
             }
         }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
+            }
+        }
     }
 }
