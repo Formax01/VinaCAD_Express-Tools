@@ -1,0 +1,143 @@
+﻿<Window x:Class="Tools.View.UI.BanisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behavior="clr-namespace:Tools.View.Behaviors"
+        Title="Lan can (LG)"
+        Width="480" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize" ShowInTaskbar="False"
+        behavior:WindowDialogBehavior.DialogResult="{Binding DialogResult, Mode=OneWay}">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="Padding" Value="3,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        </Style>
+        <!-- Style riêng cho nút OK để làm nổi bật Primary Action -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0,4"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#106EBE"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="190"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== Cột trái: hình minh họa ===== -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,0">
+            <Canvas x:Name="SlopedCanvas" Width="175" Height="165"/>
+            <Canvas x:Name="FlatCanvas" Width="175" Height="85" Margin="0,16,0,0"/>
+            <CheckBox Margin="0,12,0,0"
+                      Content="to Group" IsChecked="{Binding ToGroup}"
+                      ToolTip="Tích: gộp lan can thành 1 đối tượng. Bỏ tích: vẽ thành nhiều đối tượng rời."/>
+        </StackPanel>
+
+        <!-- ===== Cột phải: các ô nhập ===== -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="140"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Banister Layer:"/>
+            <ComboBox  Grid.Row="0" Grid.Column="1" Margin="0,3" IsEditable="True"
+                       ItemsSource="{Binding LayerNames}"
+                       Text="{Binding LayerName, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="1" Text="Layer Color (ACI):"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="42" Text="{Binding ColorIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Width="34" Height="22" Margin="6,0,6,0"
+                        Background="{Binding ColorBrush}"
+                        Command="{Binding ChooseColorCmd}"
+                        ToolTip="Bấm để chọn màu"/>
+                <Button Content="Pick" Width="46" Margin="0,3"
+                        Command="{Binding PickCmd}"
+                        ToolTip="Chọn một đối tượng trong bản vẽ để lấy layer và màu"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="2" Text="Total Height:"/>
+            <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding TotalHeight, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="3" Text="Handrail Dia.:"/>
+            <TextBox   Grid.Row="3" Grid.Column="1" Text="{Binding HandrailDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="4" Text="Handrail Extend.:"/>
+            <TextBox   Grid.Row="4" Grid.Column="1" Text="{Binding HandrailExtend, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="5" Text="Rail Dia.:"/>
+            <TextBox   Grid.Row="5" Grid.Column="1" Text="{Binding RailDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="6" Text="Top Gap:"/>
+            <TextBox   Grid.Row="6" Grid.Column="1" Text="{Binding TopGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="7" Text="Bottom Gap:"/>
+            <TextBox   Grid.Row="7" Grid.Column="1" Text="{Binding BottomGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="8" Text="Column Dia.:"/>
+            <TextBox   Grid.Row="8" Grid.Column="1" Text="{Binding ColumnDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="9" Text="Column Gap: &lt;="/>
+            <TextBox   Grid.Row="9" Grid.Column="1" Text="{Binding ColumnGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <CheckBox  Grid.Row="10" Grid.ColumnSpan="2" Margin="0,4"
+                       Content="Has Side Columns" IsChecked="{Binding HasSideColumns}"/>
+
+            <TextBlock Grid.Row="11" Text="Pole Dia.:"/>
+            <TextBox   Grid.Row="11" Grid.Column="1" Text="{Binding PoleDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="12" Text="Pole Gap: &lt;="/>
+            <TextBox   Grid.Row="12" Grid.Column="1" Text="{Binding PoleGap, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,16,0,0">
+            
+            <Button Content="Reset Defaults" 
+                    Width="110" Height="26"
+                    HorizontalAlignment="Left" 
+                    Command="{Binding ResetCmd}"/>
+
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="OK" Width="80" Height="26" Margin="0,0,8,0"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        IsDefault="True" Command="{Binding AcceptCmd}"/>
+                <Button Content="Cancel" Width="80" Height="26" 
+                        IsCancel="True" Command="{Binding CancelCmd}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
