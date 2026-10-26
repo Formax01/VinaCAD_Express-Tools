@@ -15,10 +15,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (selectedObject is not Entity)
                 return "Đối tượng được chọn không phải hình học có thể xóa.";
 
-            if (selectedObject is AttributeReference)
-                return "Không xóa Attribute Reference bằng BBE; hãy sửa Attribute Definition của block.";
-
-            BlockTableRecord? owner = transaction.GetObject(selectedObject.OwnerId,OpenMode.ForRead,false) as BlockTableRecord;
+            BlockTableRecord? owner = GetDefinitionOwner(transaction, selectedObject, containerIds);
 
             if (owner == null || owner.IsLayout)
                 return "Đối tượng không thuộc một block definition có thể chỉnh sửa.";
@@ -124,7 +121,53 @@ namespace Tools.VinaCad.Helper.Helper
                 };
             }
 
-            BlockTableRecord? owner = transaction.GetObject(entity.OwnerId,OpenMode.ForRead,false) as BlockTableRecord;
+            BlockTableRecord? owner = GetDefinitionOwner(transaction, entity, containerIds);
+
+            if (entity is AttributeReference attributeReference)
+            {
+                if (owner == null)
+                {
+                    return new EraseResult
+                    {
+                        Succeeded = false,
+                        RejectionReason = "Không tìm thấy định nghĩa block chứa Attribute."
+                    };
+                }
+
+                bool erased = false;
+                foreach (ObjectId childId in owner)
+                {
+                    if (transaction.GetObject(childId, OpenMode.ForWrite, false) is AttributeDefinition definition &&
+                        string.Equals(definition.Tag, attributeReference.Tag, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        definition.Erase(true);
+                        foreach (ObjectId referenceId in owner.GetBlockReferenceIds(true, true))
+                        {
+                            if (transaction.GetObject(referenceId, OpenMode.ForWrite, false) is not BlockReference reference)
+                                continue;
+
+                            foreach (ObjectId attributeId in reference.AttributeCollection)
+                            {
+                                if (transaction.GetObject(attributeId, OpenMode.ForWrite, false) is AttributeReference referenceAttribute &&
+                                    string.Equals(referenceAttribute.Tag, attributeReference.Tag, System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    referenceAttribute.Erase(true);
+                                }
+                            }
+                        }
+
+                        erased = true;
+                        break;
+                    }
+                }
+
+                return new EraseResult
+                {
+                    Succeeded = erased,
+                    RejectionReason = erased ? null : "Không tìm thấy Attribute Definition tương ứng trong block.",
+                    DynamicDefinitionId = erased && owner.IsDynamicBlock ? owner.ObjectId : ObjectId.Null
+                };
+            }
 
             ObjectId dynamicDefinitionId = (owner != null && owner.IsDynamicBlock) ? owner.ObjectId : ObjectId.Null;
 
@@ -135,6 +178,25 @@ namespace Tools.VinaCad.Helper.Helper
                 Succeeded = true,
                 DynamicDefinitionId = dynamicDefinitionId
             };
+        }
+
+        private static BlockTableRecord? GetDefinitionOwner(Transaction transaction,DBObject selectedObject,ObjectId[] containerIds)
+        {
+            if (selectedObject is AttributeReference)
+            {
+                BlockReference? blockReference = transaction.GetObject(selectedObject.OwnerId, OpenMode.ForRead, false) as BlockReference;
+                if (blockReference != null)
+                    return transaction.GetObject(blockReference.BlockTableRecord, OpenMode.ForRead, false) as BlockTableRecord;
+
+                foreach (ObjectId containerId in containerIds ?? System.Array.Empty<ObjectId>())
+                {
+                    blockReference = transaction.GetObject(containerId, OpenMode.ForRead, false) as BlockReference;
+                    if (blockReference != null)
+                        return transaction.GetObject(blockReference.BlockTableRecord, OpenMode.ForRead, false) as BlockTableRecord;
+                }
+            }
+
+            return transaction.GetObject(selectedObject.OwnerId, OpenMode.ForRead, false) as BlockTableRecord;
         }
 
         public static void UpdateDynamicDefinitions(Transaction transaction,IEnumerable<ObjectId> dynamicDefinitionIds)

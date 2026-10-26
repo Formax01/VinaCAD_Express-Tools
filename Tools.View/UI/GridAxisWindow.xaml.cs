@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using Tools.Model;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Tools.VinaCAD.UI
 {
@@ -18,6 +19,14 @@ namespace Tools.VinaCAD.UI
         public GridAxisWindow()
         {
             InitializeComponent();
+            PreviewKeyDown += Window_PreviewKeyDown;
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape) return;
+            e.Handled = true;
+            DialogResult = false;
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)

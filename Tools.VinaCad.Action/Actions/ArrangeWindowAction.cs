@@ -32,7 +32,8 @@ namespace Tools.VinaCAD.Action.Actions
                     PromptEntityResult result = editor.GetEntity(options);
                     if (result.Status == PromptStatus.Keyword)
                     {
-                        HandleActiveKeyword(editor, picker, result.StringResult, ref selection);
+                        if (!HandleActiveKeyword(editor, picker, result.StringResult, ref selection))
+                            return;
                         continue;
                     }
                     if (result.Status != PromptStatus.OK) break;
@@ -45,13 +46,36 @@ namespace Tools.VinaCAD.Action.Actions
                             result.ObjectId,
                             result.PickedPoint,
                             selection);
-                        createdCount++;
                         editor.UpdateScreen();
                     }
                     catch (Exception exception)
                     {
                         editor.WriteMessage($"\nAW: {exception.Message} Hãy chọn lại.");
                         continue;
+                    }
+
+                    try
+                    {
+                        PromptStatus directionStatus = WindowOpeningHelper.JigWindowDirection(
+                            editor,
+                            document.Database,
+                            windowId,
+                            selection);
+                        editor.UpdateScreen();
+                        if (directionStatus != PromptStatus.OK)
+                        {
+                            WindowOpeningHelper.CancelOpening(document.Database, windowId);
+                            editor.UpdateScreen();
+                            break;
+                        }
+
+                        createdCount++;
+                        WindowOpeningHelper.CommitOpening(windowId);
+                    }
+                    catch (Exception exception)
+                    {
+                        WindowOpeningHelper.CancelOpening(document.Database, windowId);
+                        editor.WriteMessage($"\nAW: Không thể đổi hướng cửa sổ: {exception.Message}");
                     }
                 }
 
@@ -211,7 +235,7 @@ namespace Tools.VinaCAD.Action.Actions
             return options;
         }
 
-        private static void HandleActiveKeyword(
+        private static bool HandleActiveKeyword(
             Editor editor,
             WindowStylePickerAction picker,
             string keyword,
@@ -221,20 +245,22 @@ namespace Tools.VinaCAD.Action.Actions
             {
                 case "STYLE":
                 case "A":
-                    picker.SelectStyle(selection);
-                    break;
+                    return picker.SelectStyle(selection);
                 case "PARAMETERS":
                 case "W":
                     WindowStyleSelection? changed = picker.EditParameters(selection);
-                    if (changed != null) selection = changed;
-                    break;
+                    if (changed == null) return false;
+                    selection = changed;
+                    return true;
                 case "CENTER":
                 case "C":
                     selection.PlaceAtWallCenter = true;
                     selection.UseEdgeDistance = false;
                     editor.WriteMessage("\n Đã chuyển vị trí cửa sổ về giữa tường.");
-                    break;
+                    return true;
             }
+
+            return true;
         }
     }
 }
