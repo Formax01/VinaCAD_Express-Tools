@@ -689,5 +689,33 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+
+        [CommandMethod("GRILL")]
+        public void ReturnAirGrilleCommand()
+        {
+            try
+            {
+                new ReturnAirGrilleAction().Execute(false);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ReturnAirGrilleCommand), ex);
+            }
+        }
+
+        [CommandMethod("GRILLV")]
+        public void EggCrateGrilleCommand()
+        {
+            try
+            {
+                new ReturnAirGrilleAction().Execute(true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(EggCrateGrilleCommand), ex);
+            }
+        }
     }
 }
