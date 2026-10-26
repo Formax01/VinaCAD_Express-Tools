@@ -117,16 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FDT_MessDialog" xml:space="preserve">
+    <value>Dont find text content</value>
+  </data>
+  <data name="FDT_Title" xml:space="preserve">
+    <value>Draw Pile</value>
+  </data>
+  <data name="FDT_UI_BtnSelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="FDT_UI_BtnWindowSelect" xml:space="preserve">
+    <value>Select by Window</value>
+  </data>
+  <data name="FDT_UI_ChkContains" xml:space="preserve">
+    <value>Find text containing the search text</value>
+  </data>
+  <data name="FDT_UI_ChkExact" xml:space="preserve">
+    <value>Match exact text</value>
+  </data>
+  <data name="FDT_UI_GroupMode" xml:space="preserve">
+    <value>How do you want to search?</value>
+  </data>
+  <data name="FDT_UI_LblInput" xml:space="preserve">
+    <value>Text to find:</value>
+  </data>
+  <data name="FDT_UI_Title" xml:space="preserve">
+    <value>Find and Select Text and MText Objects</value>
+  </data>
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Language changed to {0}.</value>
-  </data>
-  <data name="Msg_RestartForMenu" xml:space="preserve">
-    <value>Menu will change after restarting VinaCAD.</value>
-  </data>
-  <data name="Prompt_ChooseLanguage" xml:space="preserve">
-    <value>Choose language</value>
-  </data>
-  <data name="Ui_PaletteTitle" xml:space="preserve">
-    <value>VinaCAD Tools</value>
   </data>
 </root>
