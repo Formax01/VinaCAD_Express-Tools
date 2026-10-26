@@ -15,7 +15,112 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
-
+        [CommandMethod("Bulon")]
+        public void BulonCommand()
+        {
+            try
+            {
+                new BulonAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("Bulon1")]
+        public void Bulon1Command()
+        {
+            try
+            {
+                new Bulon1Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("Bulon2")]
+        public void Bulon2Command()
+        {
+            try
+            {
+                new Bulon2Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC")]
+        public void DaiOcCommand()
+        {
+            try
+            {
+                new DaiOcAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC1")]
+        public void DaiOc1Command()
+        {
+            try
+            {
+                new DaiOc1Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC2")]
+        public void DaiOc2Command()
+        {
+            try
+            {
+                new DaiOc2Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("OC1")]
+        public void OC1Command()
+        {
+            try
+            {
+                OC1Action action = new OC1Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("OC2")]
+        public void OC2Command()
+        {
+            try
+            {
+                OC2Action action = new OC2Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
         {
