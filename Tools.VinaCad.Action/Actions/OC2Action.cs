@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using System.Collections.Generic;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -24,20 +25,22 @@ namespace Tools.VinaCad.Action.Actions
             Editor ed = doc.Editor;
             Database db = doc.Database;
 
-            PromptPointResult pointRes = ed.GetPoint(new PromptPointOptions("\nChọn điểm: "));
+            // PromptPointResult pointRes = ed.GetPoint(new PromptPointOptions("\nChọn điểm: "));
+            PromptPointResult pointRes = ed.GetPoint(new PromptPointOptions(Lang.OC2_UI_ChonDiem));
 
             if (pointRes.Status != PromptStatus.OK)
                 return;
 
-            if (!TryGetDouble(ed, "\nNhập Size", DEFAULT_SIZE, out double size))
+            if (!TryGetDouble(ed, Lang.OC2_UI_NhapSize, DEFAULT_SIZE, out double size))
                 return;
 
-            if (!TryGetDouble(ed, "\nNhập Length L", DEFAULT_L, out double length))
+            if (!TryGetDouble(ed, Lang.OC2_UI_NhapLengthL, DEFAULT_L, out double length))
                 return;
 
             if (length <= size / 10)
             {
-                ed.WriteMessage($"\nOC2: L phải lớn hơn Size/10 ({size / 10}).");
+                // ed.WriteMessage($"\nOC2: L phải lớn hơn Size/10 ({size / 10}).");
+                ed.WriteMessage(string.Format(Lang.OC2_MessDialog_LPhaiLonHonSize10, size / 10));
                 return;
             }
 
@@ -57,11 +60,12 @@ namespace Tools.VinaCad.Action.Actions
             if (created > 0)
             {
                 ed.Regen();
-                ed.WriteMessage($"\nOC2: đã tạo {created} đối tượng.");
+                // ed.WriteMessage($"\nOC2: đã tạo {created} đối tượng.");
+                ed.WriteMessage(string.Format(Lang.OC2_MessDialog_DaTaoDoiTuong, created));
             }
             else
             {
-                ed.WriteMessage("\nOC2: không thể tạo đối tượng; bản vẽ không bị thay đổi.");
+                ed.WriteMessage(Lang.OC2_MessDialog_KhongTheTaoDoiTuong);
             }
         }
 

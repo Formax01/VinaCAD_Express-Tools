@@ -129,4 +129,94 @@
   <data name="Ui_PaletteTitle" xml:space="preserve">
     <value>VinaCAD Tools</value>
   </data>
+  <data name="BULON_UI_ChonDiem" xml:space="preserve">
+    <value>Select point: </value>
+  </data>
+  <data name="BULON_UI_NhapBanKinhBulon" xml:space="preserve">
+    <value>Enter Bulon radius: </value>
+  </data>
+  <data name="BULON_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>Inserted block {0}.</value>
+  </data>
+  <data name="BULON_HELPER_UI_ChonHuongBulon" xml:space="preserve">
+    <value>Select Bulon direction (center edge - vertex along pointer), click to place: </value>
+  </data>
+  <data name="BULON1_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="BULON1_UI_NhapL" xml:space="preserve">
+    <value>Enter L: </value>
+  </data>
+  <data name="BULON1_HELPER_UI_ChonHuongTrucDoiXung" xml:space="preserve">
+    <value>Select axis direction [Enter = keep upward direction]: </value>
+  </data>
+  <data name="BULON2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="BULON2_UI_NhapL" xml:space="preserve">
+    <value>Enter L: </value>
+  </data>
+  <data name="DAIOC_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="DAIOC_UI_NhapL" xml:space="preserve">
+    <value>Enter L: </value>
+  </data>
+  <data name="DAIOC_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>Inserted block {0}.</value>
+  </data>
+  <data name="DAIOC1_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="DAIOC1_UI_NhapL" xml:space="preserve">
+    <value>Enter L: </value>
+  </data>
+  <data name="DAIOC2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="DAIOC2_UI_NhapL" xml:space="preserve">
+    <value>Enter L: </value>
+  </data>
+  <data name="OC1_UI_ChonDiem" xml:space="preserve">
+    <value>Select point: </value>
+  </data>
+  <data name="OC1_UI_NhapSize" xml:space="preserve">
+    <value>Enter Size</value>
+  </data>
+  <data name="OC1_UI_NhapLengthL" xml:space="preserve">
+    <value>Enter Length L</value>
+  </data>
+  <data name="OC1_UI_NhapLengthl" xml:space="preserve">
+    <value>Enter Length l</value>
+  </data>
+  <data name="OC1_HELPER_UI_ChonGocQuay" xml:space="preserve">
+    <value>Select rotation angle: </value>
+  </data>
+  <data name="OC1_MessDialog_LNhoHonHoacBangL" xml:space="preserve">
+    <value>OC1: l must be less than or equal to L.</value>
+  </data>
+  <data name="OC1_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC1: created {0} objects.</value>
+  </data>
+  <data name="OC1_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC1: could not create object; drawing unchanged.</value>
+  </data>
+  <data name="OC2_UI_ChonDiem" xml:space="preserve">
+    <value>Select point: </value>
+  </data>
+  <data name="OC2_UI_NhapSize" xml:space="preserve">
+    <value>Enter Size</value>
+  </data>
+  <data name="OC2_UI_NhapLengthL" xml:space="preserve">
+    <value>Enter Length L</value>
+  </data>
+  <data name="OC2_MessDialog_LPhaiLonHonSize10" xml:space="preserve">
+    <value>OC2: L must be greater than Size/10 ({0}).</value>
+  </data>
+  <data name="OC2_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC2: created {0} objects.</value>
+  </data>
+  <data name="OC2_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC2: could not create object; drawing unchanged.</value>
+  </data>
 </root>

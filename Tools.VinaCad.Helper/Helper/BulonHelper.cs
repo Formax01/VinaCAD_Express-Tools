@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -112,7 +113,7 @@ namespace Tools.VinaCad.Helper.Helper
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
                 JigPromptPointOptions opt = new JigPromptPointOptions(
-                    "\nChọn hướng Bulon (cạnh tâm - đỉnh theo con trỏ), click để đặt: ")
+                    Lang.BULON_HELPER_UI_ChonHuongBulon)
                 {
                     UseBasePoint = true,
                     BasePoint = _center,

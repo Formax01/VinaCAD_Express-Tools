@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using WorldDraw = Teigha.GraphicsInterface.WorldDraw;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -109,7 +110,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                JigPromptPointOptions options = new JigPromptPointOptions("\nChọn góc quay: ")
+                JigPromptPointOptions options = new JigPromptPointOptions(Lang.OC1_HELPER_UI_ChonGocQuay)
                 {
                     UseBasePoint = true,
                     BasePoint = _originUcs,

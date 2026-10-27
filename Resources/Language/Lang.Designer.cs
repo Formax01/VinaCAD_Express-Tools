@@ -95,5 +95,185 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("Ui_PaletteTitle", resourceCulture);
             }
         }
+
+        public static string BULON_UI_ChonDiem {
+            get {
+                return ResourceManager.GetString("BULON_UI_ChonDiem", resourceCulture);
+            }
+        }
+
+        public static string BULON_UI_NhapBanKinhBulon {
+            get {
+                return ResourceManager.GetString("BULON_UI_NhapBanKinhBulon", resourceCulture);
+            }
+        }
+
+        public static string BULON_MessDialog_DaChenBlock {
+            get {
+                return ResourceManager.GetString("BULON_MessDialog_DaChenBlock", resourceCulture);
+            }
+        }
+
+        public static string BULON_HELPER_UI_ChonHuongBulon {
+            get {
+                return ResourceManager.GetString("BULON_HELPER_UI_ChonHuongBulon", resourceCulture);
+            }
+        }
+
+        public static string BULON1_UI_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("BULON1_UI_ChonDiemDat", resourceCulture);
+            }
+        }
+
+        public static string BULON1_UI_NhapL {
+            get {
+                return ResourceManager.GetString("BULON1_UI_NhapL", resourceCulture);
+            }
+        }
+
+        public static string BULON1_HELPER_UI_ChonHuongTrucDoiXung {
+            get {
+                return ResourceManager.GetString("BULON1_HELPER_UI_ChonHuongTrucDoiXung", resourceCulture);
+            }
+        }
+
+        public static string BULON2_UI_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("BULON2_UI_ChonDiemDat", resourceCulture);
+            }
+        }
+
+        public static string BULON2_UI_NhapL {
+            get {
+                return ResourceManager.GetString("BULON2_UI_NhapL", resourceCulture);
+            }
+        }
+
+        public static string DAIOC_UI_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("DAIOC_UI_ChonDiemDat", resourceCulture);
+            }
+        }
+
+        public static string DAIOC_UI_NhapL {
+            get {
+                return ResourceManager.GetString("DAIOC_UI_NhapL", resourceCulture);
+            }
+        }
+
+        public static string DAIOC_MessDialog_DaChenBlock {
+            get {
+                return ResourceManager.GetString("DAIOC_MessDialog_DaChenBlock", resourceCulture);
+            }
+        }
+
+        public static string DAIOC1_UI_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("DAIOC1_UI_ChonDiemDat", resourceCulture);
+            }
+        }
+
+        public static string DAIOC1_UI_NhapL {
+            get {
+                return ResourceManager.GetString("DAIOC1_UI_NhapL", resourceCulture);
+            }
+        }
+
+        public static string DAIOC2_UI_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("DAIOC2_UI_ChonDiemDat", resourceCulture);
+            }
+        }
+
+        public static string DAIOC2_UI_NhapL {
+            get {
+                return ResourceManager.GetString("DAIOC2_UI_NhapL", resourceCulture);
+            }
+        }
+
+        public static string OC1_UI_ChonDiem {
+            get {
+                return ResourceManager.GetString("OC1_UI_ChonDiem", resourceCulture);
+            }
+        }
+
+        public static string OC1_UI_NhapSize {
+            get {
+                return ResourceManager.GetString("OC1_UI_NhapSize", resourceCulture);
+            }
+        }
+
+        public static string OC1_UI_NhapLengthL {
+            get {
+                return ResourceManager.GetString("OC1_UI_NhapLengthL", resourceCulture);
+            }
+        }
+
+        public static string OC1_UI_NhapLengthl {
+            get {
+                return ResourceManager.GetString("OC1_UI_NhapLengthl", resourceCulture);
+            }
+        }
+
+        public static string OC1_HELPER_UI_ChonGocQuay {
+            get {
+                return ResourceManager.GetString("OC1_HELPER_UI_ChonGocQuay", resourceCulture);
+            }
+        }
+
+        public static string OC1_MessDialog_LNhoHonHoacBangL {
+            get {
+                return ResourceManager.GetString("OC1_MessDialog_LNhoHonHoacBangL", resourceCulture);
+            }
+        }
+
+        public static string OC1_MessDialog_DaTaoDoiTuong {
+            get {
+                return ResourceManager.GetString("OC1_MessDialog_DaTaoDoiTuong", resourceCulture);
+            }
+        }
+
+        public static string OC1_MessDialog_KhongTheTaoDoiTuong {
+            get {
+                return ResourceManager.GetString("OC1_MessDialog_KhongTheTaoDoiTuong", resourceCulture);
+            }
+        }
+
+        public static string OC2_UI_ChonDiem {
+            get {
+                return ResourceManager.GetString("OC2_UI_ChonDiem", resourceCulture);
+            }
+        }
+
+        public static string OC2_UI_NhapSize {
+            get {
+                return ResourceManager.GetString("OC2_UI_NhapSize", resourceCulture);
+            }
+        }
+
+        public static string OC2_UI_NhapLengthL {
+            get {
+                return ResourceManager.GetString("OC2_UI_NhapLengthL", resourceCulture);
+            }
+        }
+
+        public static string OC2_MessDialog_LPhaiLonHonSize10 {
+            get {
+                return ResourceManager.GetString("OC2_MessDialog_LPhaiLonHonSize10", resourceCulture);
+            }
+        }
+
+        public static string OC2_MessDialog_DaTaoDoiTuong {
+            get {
+                return ResourceManager.GetString("OC2_MessDialog_DaTaoDoiTuong", resourceCulture);
+            }
+        }
+
+        public static string OC2_MessDialog_KhongTheTaoDoiTuong {
+            get {
+                return ResourceManager.GetString("OC2_MessDialog_KhongTheTaoDoiTuong", resourceCulture);
+            }
+        }
     }
 }

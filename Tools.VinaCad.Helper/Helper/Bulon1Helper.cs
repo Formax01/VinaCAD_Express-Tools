@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -190,7 +191,7 @@ namespace Tools.VinaCad.Helper.Helper
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
                 JigPromptPointOptions opt = new JigPromptPointOptions(
-                    "\nChọn hướng trục đối xứng [Enter = giữ hướng lên]: ")
+                    Lang.BULON1_HELPER_UI_ChonHuongTrucDoiXung)
                 {
                     UseBasePoint = true,
                     BasePoint = _origin,

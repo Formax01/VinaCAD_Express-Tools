@@ -3,6 +3,7 @@ using Teigha.Geometry;
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -15,15 +16,13 @@ public class Bulon1Action
         Editor ed = doc.Editor;
         Database db = doc.Database;
 
-        
-
-        // Chọn điểm đặt (tâm đáy)
-        PromptPointOptions optP = new PromptPointOptions("\nChọn điểm đặt: ");
+        // PromptPointOptions optP = new PromptPointOptions("\nChọn điểm đặt: ");
+        PromptPointOptions optP = new PromptPointOptions(Lang.BULON1_UI_ChonDiemDat);
         PromptPointResult resP = ed.GetPoint(optP);
         if (resP.Status != PromptStatus.OK) return;
 
-        // B2: nhập L
-        PromptDoubleOptions optL = new PromptDoubleOptions("\nNhập L: ")
+        // PromptDoubleOptions optL = new PromptDoubleOptions("\nNhập L: ")
+        PromptDoubleOptions optL = new PromptDoubleOptions(Lang.BULON1_UI_NhapL)
         {
             AllowNegative = false,
             AllowZero = false,
@@ -34,7 +33,6 @@ public class Bulon1Action
         if (resL.Status != PromptStatus.OK) return;
 
         // B3: vẽ
-        
         Point3d origin = resP.Value.TransformBy(ed.CurrentUserCoordinateSystem);
         if (!Bulon1Helper.PlaceWithJig(doc, resL.Value, origin))
             return;

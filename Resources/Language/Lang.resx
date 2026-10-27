@@ -129,4 +129,94 @@
   <data name="Ui_PaletteTitle" xml:space="preserve">
     <value>Công cụ VinaCAD</value>
   </data>
+  <data name="BULON_UI_ChonDiem" xml:space="preserve">
+    <value>Chọn điểm: </value>
+  </data>
+  <data name="BULON_UI_NhapBanKinhBulon" xml:space="preserve">
+    <value>Nhập bán kính Bulon: </value>
+  </data>
+  <data name="BULON_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>Đã chèn block {0}.</value>
+  </data>
+  <data name="BULON_HELPER_UI_ChonHuongBulon" xml:space="preserve">
+    <value>Chọn hướng Bulon (cạnh tâm - đỉnh theo con trỏ), click để đặt: </value>
+  </data>
+  <data name="BULON1_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="BULON1_UI_NhapL" xml:space="preserve">
+    <value>Nhập L: </value>
+  </data>
+  <data name="BULON1_HELPER_UI_ChonHuongTrucDoiXung" xml:space="preserve">
+    <value>Chọn hướng trục đối xứng [Enter = giữ hướng lên]: </value>
+  </data>
+  <data name="BULON2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="BULON2_UI_NhapL" xml:space="preserve">
+    <value>Nhập L: </value>
+  </data>
+  <data name="DAIOC_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="DAIOC_UI_NhapL" xml:space="preserve">
+    <value>Nhập L: </value>
+  </data>
+  <data name="DAIOC_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>Đã chèn block {0}.</value>
+  </data>
+  <data name="DAIOC1_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="DAIOC1_UI_NhapL" xml:space="preserve">
+    <value>Nhập L: </value>
+  </data>
+  <data name="DAIOC2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="DAIOC2_UI_NhapL" xml:space="preserve">
+    <value>Nhập L: </value>
+  </data>
+  <data name="OC1_UI_ChonDiem" xml:space="preserve">
+    <value>Chọn điểm: </value>
+  </data>
+  <data name="OC1_UI_NhapSize" xml:space="preserve">
+    <value>Nhập Size</value>
+  </data>
+  <data name="OC1_UI_NhapLengthL" xml:space="preserve">
+    <value>Nhập Length L</value>
+  </data>
+  <data name="OC1_UI_NhapLengthl" xml:space="preserve">
+    <value>Nhập Length l</value>
+  </data>
+  <data name="OC1_HELPER_UI_ChonGocQuay" xml:space="preserve">
+    <value>Chọn góc quay: </value>
+  </data>
+  <data name="OC1_MessDialog_LNhoHonHoacBangL" xml:space="preserve">
+    <value>OC1: l phải nhỏ hơn hoặc bằng L.</value>
+  </data>
+  <data name="OC1_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC1: đã tạo {0} đối tượng.</value>
+  </data>
+  <data name="OC1_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC1: không thể tạo đối tượng; bản vẽ không bị thay đổi.</value>
+  </data>
+  <data name="OC2_UI_ChonDiem" xml:space="preserve">
+    <value>Chọn điểm: </value>
+  </data>
+  <data name="OC2_UI_NhapSize" xml:space="preserve">
+    <value>Nhập Size</value>
+  </data>
+  <data name="OC2_UI_NhapLengthL" xml:space="preserve">
+    <value>Nhập Length L</value>
+  </data>
+  <data name="OC2_MessDialog_LPhaiLonHonSize10" xml:space="preserve">
+    <value>OC2: L phải lớn hơn Size/10 ({0}).</value>
+  </data>
+  <data name="OC2_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC2: đã tạo {0} đối tượng.</value>
+  </data>
+  <data name="OC2_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC2: không thể tạo đối tượng; bản vẽ không bị thay đổi.</value>
+  </data>
 </root>
