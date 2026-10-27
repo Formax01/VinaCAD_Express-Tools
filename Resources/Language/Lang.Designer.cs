@@ -1874,6 +1874,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cùng số hiệu .
+        /// </summary>
+        public static string Common_Status_CungSoHieu {
+            get {
+                return ResourceManager.GetString("Common_Status_CungSoHieu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to đối tượng không phải mặt tường hợp lệ..
         /// </summary>
         public static string Common_Status_DoiTuongKhongPhaiMatTuongHopLe {

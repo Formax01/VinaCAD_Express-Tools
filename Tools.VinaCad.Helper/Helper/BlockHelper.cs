@@ -172,7 +172,7 @@ namespace Tools.VinaCad.Helper.Helper
             ed.UpdateScreen();
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
 
             TypedValue[] filterValues =
             {
@@ -235,7 +235,7 @@ namespace Tools.VinaCad.Helper.Helper
             ed.UpdateScreen();
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
 
             TypedValue[] filterValues =
             {

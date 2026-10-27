@@ -700,6 +700,9 @@ block</value>
   <data name="Common_Ribbon_XoaTuongTuDong" xml:space="preserve">
     <value>Xóa tường tự động</value>
   </data>
+  <data name="Common_Status_CungSoHieu" xml:space="preserve">
+    <value>Cùng số hiệu </value>
+  </data>
   <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
     <value>đối tượng không phải mặt tường hợp lệ.</value>
   </data>

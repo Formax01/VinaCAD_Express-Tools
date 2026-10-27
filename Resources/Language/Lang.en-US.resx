@@ -552,7 +552,7 @@ block. block</value>
     <value>You need to enter the starting number to number!</value>
   </data>
   <data name="Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep" xml:space="preserve">
-    <value>Complete all settings before generating the rebar schedule.</value>
+    <value>Complete all settings before generating the rebar table.</value>
   </data>
   <data name="Common_Msg_BanChuaXacLapDanhMuc" xml:space="preserve">
     <value>You have not created a drawing list yet.</value>
@@ -561,7 +561,7 @@ block. block</value>
     <value>The post distance must be a non-negative number.</value>
   </data>
   <data name="Common_Msg_PhatHienTrungSoHieu" xml:space="preserve">
-    <value>Duplicate Number Detected!!!</value>
+    <value>Duplicate Mark Number Detected!!!</value>
   </data>
   <data name="Common_Msg_VuiLongChonBlockKhungTen" xml:space="preserve">
     <value>Please select the frame name block.</value>
@@ -582,7 +582,7 @@ block. block</value>
     <value>Select the point to insert the table:</value>
   </data>
   <data name="Common_Prompt_ChonDiemChenBangThongKeThep" xml:space="preserve">
-    <value>Select the point to insert the steel schedule table:</value>
+    <value>Select the point to insert the steel table:</value>
   </data>
   <data name="Common_Prompt_ChonHaiDiemDoKhoangCachTru" xml:space="preserve">
     <value>Select two points to measure the post distance:</value>
@@ -701,6 +701,9 @@ block. block</value>
   <data name="Common_Ribbon_XoaTuongTuDong" xml:space="preserve">
     <value>Delete walls automatically</value>
   </data>
+  <data name="Common_Status_CungSoHieu" xml:space="preserve">
+    <value>Same mark number {soHieu}</value>
+  </data>
   <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
     <value>The object is not a valid wall face.</value>
   </data>
@@ -795,6 +798,9 @@ Automatic</value>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Mark Number</value>
   </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>No.</value>
+  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Drawing Name</value>
   </data>
@@ -829,7 +835,7 @@ Automatic</value>
     <value>Draw Table</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
-    <value>Draw Rebar Schedule</value>
+    <value>Draw Rebar Table</value>
   </data>
   <data name="Common_UI_XacLap" xml:space="preserve">
     <value>Establish</value>
@@ -1513,7 +1519,7 @@ text. text</value>
     <value>Length plus threading (mm):</value>
   </data>
   <data name="TD_UI_DanhSoHieuVaThongKeThepDauDamPcTuDong" xml:space="preserve">
-    <value>Automatic PC Beam-End Rebar Marking and Scheduling</value>
+    <value>Automated Numbering and Scheduling of Steel for Precast Beam Ends</value>
   </data>
   <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepKhac" xml:space="preserve">
     <value>Starting number (fixed) for other steel types:</value>
@@ -1574,6 +1580,9 @@ CK</value>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>Long</value>
   </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>Height</value>
+  </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>Wide</value>
   </data>
@@ -1596,7 +1605,7 @@ CK</value>
     <value>Same number {a.soHieu} but different rebar shape.</value>
   </data>
   <data name="TS_Msg_PhatHienTrungSoHieu" xml:space="preserve">
-    <value>Detect duplicate numbers</value>
+    <value>Detect duplicate mark numbers</value>
   </data>
   <data name="TS_Msg_VuiLongNhapChieuDaiBeMocCoDinh" xml:space="preserve">
     <value>Please enter the fixed hook break length.</value>
@@ -1620,16 +1629,16 @@ CK</value>
     <value>different diameter</value>
   </data>
   <data name="TS_Status_KhacHinhDangThanhThep" xml:space="preserve">
-    <value>different shape of rebar</value>
+    <value>different rebar shape</value>
   </data>
   <data name="TS_Status_NhungLai" xml:space="preserve">
-    <value>but again</value>
+    <value>but</value>
   </data>
   <data name="TS_UI_ChieuDaiThucTrongBanVe" xml:space="preserve">
     <value>Actual length in drawing</value>
   </data>
   <data name="TS_UI_ChieuDayLopBeTongBaoVe" xml:space="preserve">
-    <value>Thickness of protective concrete layer:</value>
+    <value>Thickness of concrete layer:</value>
   </data>
   <data name="TS_UI_CoDinhChoTatCaThanhThep" xml:space="preserve">
     <value>Fixed for all rebar</value>
@@ -2157,11 +2166,5 @@ axis</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>Restore original value</value>
-  </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>No.</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>Height</value>
   </data>
 </root>

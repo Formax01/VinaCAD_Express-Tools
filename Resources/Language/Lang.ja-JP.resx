@@ -701,6 +701,9 @@
   <data name="Common_Ribbon_XoaTuongTuDong" xml:space="preserve">
     <value>壁を自動的に削除する</value>
   </data>
+  <data name="Common_Status_CungSoHieu" xml:space="preserve">
+    <value>同じマーク番号 {soHieu}</value>
+  </data>
   <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
     <value>オブジェクトは有効な壁面ではありません。</value>
   </data>
@@ -794,6 +797,9 @@
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>モデル番号</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>番号</value>
   </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>図面名</value>
@@ -1513,7 +1519,7 @@ CTカット</value>
     <value>長さプラスねじ山 (mm):</value>
   </data>
   <data name="TD_UI_DanhSoHieuVaThongKeThepDauDamPcTuDong" xml:space="preserve">
-    <value>PC梁端鉄筋の自動マーキング・集計</value>
+    <value>プレキャスト梁端部における鋼材の自動ナンバリングおよび配筋計画</value>
   </data>
   <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepKhac" xml:space="preserve">
     <value>他の鋼種の開始番号 (固定):</value>
@@ -1574,6 +1580,9 @@ CK</value>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>長さ</value>
   </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
+  </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>幅</value>
   </data>
@@ -1596,7 +1605,7 @@ CK</value>
     <value>番号は同じ{a.soHieu}ですが、鉄筋の形状が異なります。</value>
   </data>
   <data name="TS_Msg_PhatHienTrungSoHieu" xml:space="preserve">
-    <value>重複した番号を検出する</value>
+    <value>番号の重複が検出されました</value>
   </data>
   <data name="TS_Msg_VuiLongNhapChieuDaiBeMocCoDinh" xml:space="preserve">
     <value>固定フックの切断長さを入力してください。</value>
@@ -1623,7 +1632,7 @@ CK</value>
     <value>異なる形状の鉄筋</value>
   </data>
   <data name="TS_Status_NhungLai" xml:space="preserve">
-    <value>しかしまた</value>
+    <value>しかし</value>
   </data>
   <data name="TS_UI_ChieuDaiThucTrongBanVe" xml:space="preserve">
     <value>図面上の実際の長さ</value>
@@ -2160,11 +2169,5 @@ CK</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>元の値に戻す</value>
-  </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>番号</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>身長</value>
   </data>
 </root>
