@@ -13,6 +13,8 @@ namespace Tools.ViewModel
         private string _layerName;
         private string _layerColorIndexText;
         private string _thicknessText;
+        private bool _createNewLayer;
+        private string _newLayerName;
         private Brush _layerColorPreview;
         private readonly Dictionary<string, short> _availableLayers;
 
@@ -30,6 +32,35 @@ namespace Tools.ViewModel
                 string normalizedName = value?.Trim() ?? string.Empty;
                 if (_availableLayers.TryGetValue(normalizedName, out short colorIndex))
                     LayerColorIndexText = colorIndex.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        public bool CreateNewLayer
+        {
+            get => _createNewLayer;
+            set
+            {
+                if (_createNewLayer == value) return;
+                _createNewLayer = value;
+                OnPropertyChanged(nameof(CreateNewLayer));
+                OnPropertyChanged(nameof(UseExistingLayer));
+            }
+        }
+
+        public bool UseExistingLayer
+        {
+            get => !CreateNewLayer;
+            set => CreateNewLayer = !value;
+        }
+
+        public string NewLayerName
+        {
+            get => _newLayerName;
+            set
+            {
+                if (_newLayerName == value) return;
+                _newLayerName = value;
+                OnPropertyChanged(nameof(NewLayerName));
             }
         }
 
@@ -84,6 +115,8 @@ namespace Tools.ViewModel
 
             LayerNames = _availableLayers.Keys.OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase).ToList();
             _layerName = source.LayerName;
+            _createNewLayer = source.CreateNewLayer;
+            _newLayerName = source.LayerName;
             _layerColorIndexText = source.LayerColorIndex.ToString(CultureInfo.InvariantCulture);
             _thicknessText = source.Thickness.ToString(CultureInfo.CurrentCulture);
             _layerColorPreview = CreateAciBrush(source.LayerColorIndex);
@@ -94,7 +127,7 @@ namespace Tools.ViewModel
             settings = new StuccoSetting();
             validationMessage = string.Empty;
 
-            string normalizedLayerName = LayerName?.Trim() ?? string.Empty;
+            string normalizedLayerName = (CreateNewLayer ? NewLayerName : LayerName)?.Trim() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(normalizedLayerName))
             {
                 validationMessage = "Layer vữa không được để trống.";
@@ -104,6 +137,12 @@ namespace Tools.ViewModel
             if (ContainsInvalidLayerNameCharacter(normalizedLayerName))
             {
                 validationMessage = "Tên layer chứa ký tự không hợp lệ: < > / \\ \" : ; ? * | , =";
+                return false;
+            }
+
+            if (!CreateNewLayer && !_availableLayers.ContainsKey(normalizedLayerName))
+            {
+                validationMessage = "Hãy chọn một layer có sẵn.";
                 return false;
             }
 
@@ -122,6 +161,7 @@ namespace Tools.ViewModel
             settings = new StuccoSetting
             {
                 LayerName = normalizedLayerName,
+                CreateNewLayer = CreateNewLayer,
                 LayerColorIndex = colorIndex,
                 Thickness = thickness
             };
@@ -132,6 +172,8 @@ namespace Tools.ViewModel
         {
             StuccoSetting defaults = new StuccoSetting();
             LayerName = defaults.LayerName;
+            CreateNewLayer = false;
+            NewLayerName = defaults.LayerName;
             LayerColorIndexText = defaults.LayerColorIndex.ToString(CultureInfo.InvariantCulture);
             ThicknessText = defaults.Thickness.ToString(CultureInfo.CurrentCulture);
         }
