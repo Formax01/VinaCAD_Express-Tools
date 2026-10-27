@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.VinaCad.Modeling;
+using Tools.Resources.Language;
 using WorldDraw = Teigha.GraphicsInterface.WorldDraw;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -19,10 +20,10 @@ namespace Tools.VinaCad.Helper.Helper
         {
             error = null;
 
-            if (m.Width1 <= 0 || m.Width2 <= 0) error = "Bề rộng ống gió phải > 0.";
-            else if (m.Offset <= 0) error = "Cao độ lượn phải > 0.";
-            else if (m.Length <= 0) error = "Chiều dài L phải > 0.";
-            else if (m.Height <= 0) error = "Chiều cao ống gió phải > 0.";
+            if (m.Width1 <= 0 || m.Width2 <= 0) error = Lang.BBZ_UI_BERONGONGGIO;
+            else if (m.Offset <= 0) error = Lang.BBZ_UI_CAODOLUON;
+            else if (m.Length <= 0) error = Lang.BBZ_UI_CHIEUDAIL;
+            else if (m.Height <= 0) error = Lang.BBZ_UI_CHIEUCAOONGGIO;
 
             return error == null;
         }
@@ -89,7 +90,7 @@ namespace Tools.VinaCad.Helper.Helper
                 try
                 {
                     if (regions.Count == 0)
-                        throw new InvalidOperationException("Không tạo được Region từ biên dạng ống gió.");
+                        throw new InvalidOperationException(Lang.BBZ_UI_REGION);
 
                     Region region = (Region)regions[0];
 
@@ -146,7 +147,7 @@ namespace Tools.VinaCad.Helper.Helper
 
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
-            JigPromptPointOptions options = new JigPromptPointOptions("\nChọn hướng đặt ống gió: ")
+            JigPromptPointOptions options = new JigPromptPointOptions(Lang.BBZ_UI_CHONHUONGDATONGGIO)
             {
                 UseBasePoint = true,
                 BasePoint = _model.StartPoint,

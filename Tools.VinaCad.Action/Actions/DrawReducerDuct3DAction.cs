@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -13,8 +14,8 @@ namespace Tools.VinaCad.Action.Actions
         // Nhớ giá trị lần nhập trước để gõ Enter cho nhanh
         private static double _length = 500, _width = 400, _height = 300,
                               _width2 = 300, _height2 = 200;
-        private static string _yAlign = "Giua";
-        private static string _zAlign = "Giua";
+        private static string _yAlign = Lang.BB2_UI_Giua;
+        private static string _zAlign = Lang.BB2_UI_Mid;
 
         public void Execute()
         {
@@ -25,28 +26,28 @@ namespace Tools.VinaCad.Action.Actions
             Database db = doc.Database;
 
             // B1: điểm đầu (tâm mặt đáy)
-            PromptPointResult pr = ed.GetPoint("\nChọn điểm đầu: ");
+            // PromptPointResult pr = ed.GetPoint("\nChọn điểm đầu: ");
+            PromptPointResult pr = ed.GetPoint(Lang.BB2_UI_ChonDiemDau);
             if (pr.Status != PromptStatus.OK) return;
             Matrix3d ucs2wcs = ed.CurrentUserCoordinateSystem;
             Point3d origin = pr.Value.TransformBy(ucs2wcs);
-         
 
             // B2 -> B6
-            if (!GetPositive(ed, "\nLength (OX)", ref _length)) return;
-            if (!GetPositive(ed, "\nWidth (OY)", ref _width)) return;
-            if (!GetPositive(ed, "\nHeight (OZ)", ref _height)) return;
-            if (!GetPositive(ed, "\nSecond Width (OY)", ref _width2)) return;
-            if (!GetPositive(ed, "\nSecond Height (OZ)", ref _height2)) return;
+            if (!GetPositive(ed, Lang.BB2_UI_NhapLengthOX, ref _length)) return;
+            if (!GetPositive(ed, Lang.BB2_UI_NhapWidthOY, ref _width)) return;
+            if (!GetPositive(ed, Lang.BB2_UI_NhapHeightOZ, ref _height)) return;
+            if (!GetPositive(ed, Lang.BB2_UI_NhapSecondWidthOY, ref _width2)) return;
+            if (!GetPositive(ed, Lang.BB2_UI_NhapSecondHeightOZ, ref _height2)) return;
 
             // B7: vị trí Second Width
-            if (!GetKeyword(ed, "\nVị trí Second Width", ref _yAlign,
-                    new[] { "Giua", "Trai", "Phai" },
-                    new[] { "Giữa", "Trái", "Phải" })) return;
+            if (!GetKeyword(ed, Lang.BB2_UI_ViTriSecondWidth, ref _yAlign,
+                    new[] { Lang.BB2_UI_Giua, Lang.BB2_UI_Trai, Lang.BB2_UI_PHAI },
+                    new[] { Lang.BB2_UI_Giua, Lang.BB2_UI_Trai, Lang.BB2_UI_PHAI })) return;
 
             // B8: vị trí Second Height
-            if (!GetKeyword(ed, "\nVị trí Second Height", ref _zAlign,
-                    new[] { "Tren", "Giua", "Duoi" },
-                    new[] { "Trên", "Giữa", "Dưới" })) return;
+            if (!GetKeyword(ed, Lang.BB2_UI_ViTriSecondHeight, ref _zAlign,
+                    new[] { Lang.BB2_UI_Tren, Lang.BB2_UI_Mid, Lang.BB2_UI_Duoi },
+                    new[] { Lang.BB2_UI_Tren, Lang.BB2_UI_Mid, Lang.BB2_UI_Duoi })) return;
 
             ReducerDuct3DModel model = new ReducerDuct3DModel
             {
@@ -55,11 +56,11 @@ namespace Tools.VinaCad.Action.Actions
                 Height = _height,
                 Width2 = _width2,
                 Height2 = _height2,
-                YAlign = _yAlign == "Trai" ? DuctYAlign.Left
-                       : _yAlign == "Phai" ? DuctYAlign.Right
+                YAlign = _yAlign == Lang.BB2_UI_Trai ? DuctYAlign.Left
+                       : _yAlign == Lang.BB2_UI_PHAI ? DuctYAlign.Right
                        : DuctYAlign.Center,
-                ZAlign = _zAlign == "Tren" ? DuctZAlign.Top
-                       : _zAlign == "Duoi" ? DuctZAlign.Bottom
+                ZAlign = _zAlign == Lang.BB2_UI_Tren ? DuctZAlign.Top
+                       : _zAlign == Lang.BB2_UI_Duoi ? DuctZAlign.Bottom
                        : DuctZAlign.Middle
             };
 
@@ -74,7 +75,7 @@ namespace Tools.VinaCad.Action.Actions
             ReducerDuct3DHelper.CreateMesh(db, world);
 
             ed.Regen();
-            ed.WriteMessage("\nĐã vẽ ống gió giảm cấp 3D.");
+            ed.WriteMessage(Lang.BB2_MessDialog_DaVeOngGioGiamCap3D);
         }
 
         private static bool GetPositive(Editor ed, string message, ref double value)

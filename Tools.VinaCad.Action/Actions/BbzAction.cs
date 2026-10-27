@@ -3,6 +3,7 @@ using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -23,23 +24,24 @@ namespace Tools.VinaCad.Action.Actions
 
             BbzModel model = new BbzModel();
 
-            PromptPointResult pr = ed.GetPoint("\nChọn điểm trên đầu ống gió 1: ");
+            // PromptPointResult pr = ed.GetPoint("\nChọn điểm trên đầu ống gió 1: ");
+            PromptPointResult pr = ed.GetPoint(Lang.BBZ_UI_ChonDiemDauOng1);
             if (pr.Status != PromptStatus.OK)
                 return;
 
             model.StartPoint = pr.Value;
 
             double w1;
-            if (!TryGetDistance(ed, "\nNhập bề rộng ống gió 1: ", model.StartPoint, null, out w1))
+            if (!TryGetDistance(ed, Lang.BBZ_UI_NhapBeRongOng1, model.StartPoint, null, out w1))
                 return;
             model.Width1 = w1;
 
             double w2;
-            if (!TryGetDistance(ed, "\nNhập bề rộng ống gió 2 <Enter = bằng ống 1>: ", model.StartPoint, w1, out w2))
+            if (!TryGetDistance(ed, Lang.BBZ_UI_NhapBeRongOng2, model.StartPoint, w1, out w2))
                 return;
             model.Width2 = w2;
 
-            PromptKeywordOptions side = new PromptKeywordOptions("\nChọn phía lượn [Trái/Phải] <Trái>: ", "Left Right")
+            PromptKeywordOptions side = new PromptKeywordOptions(Lang.BBZ_UI_ChonPhiaLuon, "Left Right")
             {
                 AllowNone = true
             };
@@ -52,24 +54,24 @@ namespace Tools.VinaCad.Action.Actions
             model.Side = sideResult.StringResult == "Right" ? BbzSide.Right : BbzSide.Left;
 
             double offset;
-            if (!TryGetDistance(ed, "\nNhập cao độ lượn: ", model.StartPoint, null, out offset))
+            if (!TryGetDistance(ed, Lang.BBZ_UI_NhapCaoDoLuon, model.StartPoint, null, out offset))
                 return;
             model.Offset = offset;
 
             double length;
-            if (!TryGetDistance(ed, "\nNhập chiều dài L của chi tiết: ", model.StartPoint, null, out length))
+            if (!TryGetDistance(ed, Lang.BBZ_UI_NhapChieuDaiL, model.StartPoint, null, out length))
                 return;
             model.Length = length;
 
             double height;
-            if (!TryGetDistance(ed, "\nNhập chiều cao ống gió : ", model.StartPoint, null, out height))
+            if (!TryGetDistance(ed, Lang.BBZ_UI_NhapChieuCaoOngGio, model.StartPoint, null, out height))
                 return;
             model.Height = height;
 
             string error;
             if (!BbzHelper.Validate(model, out error))
             {
-                ed.WriteMessage("\n" + error);
+                ed.WriteMessage(error);
                 return;
             }
 
@@ -80,7 +82,7 @@ namespace Tools.VinaCad.Action.Actions
 
             if (dragResult.Status != PromptStatus.OK)
             {
-                ed.WriteMessage("\nĐã hủy.");
+                ed.WriteMessage(Lang.BBZ_MessDialog_DaHuy);
                 return;
             }
 
@@ -90,7 +92,7 @@ namespace Tools.VinaCad.Action.Actions
             BbzHelper.AppendToCurrentSpace(db, solid);
 
             ed.Regen();
-            ed.WriteMessage("\nĐã vẽ ống gió chữ Z 3D.");
+            ed.WriteMessage(Lang.BBZ_MessDialog_DaVeOngGioChuZ3D);
         }
 
         private static bool TryGetDistance(

@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -125,7 +126,7 @@ namespace Tools.VinaCad.Helper.Helper
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
                 JigPromptAngleOptions opt =
-                    new JigPromptAngleOptions("\nXoay hộp quanh điểm bắt đầu (click để đặt): ")
+                    new JigPromptAngleOptions(Lang.BB1_UI_ChonHuong)
                     {
                         BasePoint = _startUcs,
                         UseBasePoint = true,

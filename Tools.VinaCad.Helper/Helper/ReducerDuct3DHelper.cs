@@ -4,6 +4,7 @@ using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -150,7 +151,7 @@ namespace Tools.VinaCad.Helper.Helper
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             JigPromptPointOptions opt = new JigPromptPointOptions(
-                "\nXoay hình quanh điểm đầu, click để chọn vị trí: ")
+                Lang.BBZ_UI_XOAYCHONVITRI)
             {
                 UseBasePoint = true,
                 // BasePoint của prompt tính theo UCS nên phải đổi ngược lại
