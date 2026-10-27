@@ -1921,7 +1921,7 @@ CK</value>
     <value>Bottom to top</value>
   </data>
   <data name="XLDCD_UI_KhoangCachLechGiua2ChanDimChoPhep" xml:space="preserve">
-    <value>Allowed offset between two dimension extension-line endpoints:</value>
+    <value>Allowed offset between two dim endpoints:</value>
   </data>
   <data name="XLDCD_UI_KhoangCachLechPhuongChoPhep" xml:space="preserve">
     <value>Allowable misalignment distance:</value>
