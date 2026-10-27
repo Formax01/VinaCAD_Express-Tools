@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!--
-    Microsoft ResX Schema
-
+  <!-- 
+    Microsoft ResX Schema 
+    
     Version 2.0
-
-    The primary goals of this format is to allow a simple XML format
-    that is mostly human readable. The generation and parsing of the
-    various data types are done through the TypeConverter classes
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
     associated with the data types.
-
+    
     Example:
-
+    
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-
-    There are any number of "resheader" rows that contain simple
+                
+    There are any number of "resheader" rows that contain simple 
     name/value pairs.
-
-    Each data row contains a name, and value. The row also contains a
-    type or mimetype. Type corresponds to a .NET class that support
-    text/value conversion through the TypeConverter architecture.
-    Classes that don't support this are serialized and stored with the
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
     mimetype set.
-
-    The mimetype is used for serialized objects, and tells the
-    ResXResourceReader how to depersist the object. This is currently not
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
     extensible. For a given mimetype the value must be set accordingly:
-
-    Note - application/x-microsoft.net.object.binary.base64 is the format
-    that the ResXResourceWriter will generate, however the reader can
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
     read any of the formats listed below.
-
+    
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-
+    
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array
+    value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -117,7 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>含まれているテキストが見つかりませんでした</value>
   </data>
@@ -796,9 +795,6 @@
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>モデル番号</value>
   </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>番号</value>
-  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>図面名</value>
   </data>
@@ -1192,9 +1188,6 @@
     <value>フェイスペインティング
 CTカット</value>
   </data>
-  <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
-    <value>スケール: {source.BoardThickness:0.####};手すり: {source.RailingHeight:0.####}</value>
-  </data>
   <data name="LTP_Text_ChieuNghi1" xml:space="preserve">
     <value>着陸 1: {settings.Landing1Width:0.####}</value>
   </data>
@@ -1275,9 +1268,6 @@ CTカット</value>
   </data>
   <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
     <value>絵を描いた後にグループ化する</value>
-  </data>
-  <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
-    <value>元の値に戻す</value>
   </data>
   <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
     <value>第1フライトの段数:</value>
@@ -1582,19 +1572,16 @@ CK</value>
     <value>部材集計表</value>
   </data>
   <data name="TKCK_UI_CDai" xml:space="preserve">
-    <value>C.ロング</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>C.高さ</value>
+    <value>長さ</value>
   </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
-    <value>C.ワイド</value>
+    <value>幅</value>
   </data>
   <data name="TKCK_UI_SLuong" xml:space="preserve">
-    <value>S.数量</value>
+    <value>数量</value>
   </data>
   <data name="TKCK_UI_TenCk" xml:space="preserve">
-    <value>名前CK</value>
+    <value>部材名称</value>
   </data>
   <data name="TS_Msg_BanDaDanhSoHieuTuDongThepSanThanhCong" xml:space="preserve">
     <value>これで、スチール製の床に自動的に番号が付けられました。</value>
@@ -1916,13 +1903,13 @@ CK</value>
     <value>画面上のテキストを選択</value>
   </data>
   <data name="XLCK_UI_KCachKiemTraTrung" xml:space="preserve">
-    <value>重複を確認する方法:</value>
+    <value>重複チェック距離:</value>
   </data>
   <data name="XLCK_UI_LayerCuaChu" xml:space="preserve">
     <value>テキストのレイヤー:</value>
   </data>
   <data name="XLCK_UI_XacLapTkck" xml:space="preserve">
-    <value>TKCK設立</value>
+    <value>部材集計の作成</value>
   </data>
   <data name="XLDCD_Ribbon_XacLapDcd" xml:space="preserve">
     <value>DCD のセットアップ</value>
@@ -2167,5 +2154,17 @@ CK</value>
   </data>
   <data name="ZXW_UI_VeKyHieuTrucKichThuoc" xml:space="preserve">
     <value>軸記号+寸法を描画</value>
+  </data>
+  <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
+    <value>スケール: {source.BoardThickness:0.####};手すり: {source.RailingHeight:0.####}</value>
+  </data>
+  <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
+    <value>元の値に戻す</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
   </data>
 </root>

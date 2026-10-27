@@ -1029,9 +1029,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (isValid)
                 return true;
 
-            MessageBox.Show(
-                "Bạn cần chèn block thống kê mẫu vào bản vẽ.",
-                StringDefinition.TITLE_MESSAGE);
+            MessageBox.Show(Lang.Common_Msg_BanCanChenBlockThongKeMauVaoBanVe,Lang.Common_Text_ThongBao);
 
             return false;
         }
