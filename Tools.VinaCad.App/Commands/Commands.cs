@@ -1,16 +1,18 @@
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
+using System.Globalization;
+using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Teigha.Runtime;
-using Application = Prima.VinaCAD.ApplicationServices.Application;
-using System.Windows;
-using PrLogTrackingSystem;
-using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Action.Actions;
+using Tools.VinaCAD.Action.Actions;
 
+using Application = Prima.VinaCAD.ApplicationServices.Application;
+using AcadApp = Prima.VinaCAD.ApplicationServices.Application;
 namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
@@ -70,6 +72,41 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(ex.ToString());
             }
         }
+
+        
+        
+        [CommandMethod("LG")]
+        public void BanisterCommand()
+        {
+            try
+            {
+                new BanisterAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.Info(ex.ToString());
+            }
+        }
+
+        //[CommandMethod("CPD")]
+        //public void CopyElevation()
+        //{
+        //    try
+        //    {
+        //        CopyElevationAction action = new CopyElevationAction();
+        //        action.Execute();
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
+        //    }
+        //}
+        
+
+
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
@@ -629,7 +666,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 TrimFixWallAction action = new TrimFixWallAction();
-                action.Execute();
+                while (action.Execute()) { }
             }
             catch (System.Exception ex)
             {
@@ -709,5 +746,6 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+
     }
 }

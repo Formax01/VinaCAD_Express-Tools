@@ -32,7 +32,8 @@ namespace Tools.VinaCAD.Action.Actions
                     PromptEntityResult result = editor.GetEntity(options);
                     if (result.Status == PromptStatus.Keyword)
                     {
-                        HandleActiveKeyword(editor, picker, result.StringResult, ref selection);
+                        if (!HandleActiveKeyword(editor, picker, result.StringResult, ref selection))
+                            return;
                         continue;
                     }
                     if (result.Status != PromptStatus.OK) break;
@@ -45,7 +46,6 @@ namespace Tools.VinaCAD.Action.Actions
                             result.ObjectId,
                             result.PickedPoint,
                             selection);
-                        createdCount++;
                         editor.UpdateScreen();
                     }
                     catch (Exception exception)
@@ -62,10 +62,19 @@ namespace Tools.VinaCAD.Action.Actions
                             doorId,
                             selection);
                         editor.UpdateScreen();
-                        if (directionStatus == PromptStatus.Cancel) break;
+                        if (directionStatus != PromptStatus.OK)
+                        {
+                            OpenDoorHelper.CancelOpening(document.Database, doorId);
+                            editor.UpdateScreen();
+                            break;
+                        }
+
+                        createdCount++;
+                        OpenDoorHelper.CommitOpening(doorId);
                     }
                     catch (Exception exception)
                     {
+                        OpenDoorHelper.CancelOpening(document.Database, doorId);
                         editor.WriteMessage($"\nAD: Không thể đổi hướng cửa: {exception.Message}");
                     }
                 }
@@ -101,7 +110,7 @@ namespace Tools.VinaCAD.Action.Actions
             return options;
         }
 
-        private static void HandleActiveKeyword(
+        private static bool HandleActiveKeyword(
             Editor editor,
             DoorStylePickerAction picker,
             string keyword,
@@ -111,20 +120,22 @@ namespace Tools.VinaCAD.Action.Actions
             {
                 case "STYLE":
                 case "A":
-                    picker.SelectStyle(selection);
-                    break;
+                    return picker.SelectStyle(selection);
                 case "PARAMETERS":
                 case "W":
                     DoorStyleSelection? changed = picker.EditParameters(selection);
-                    if (changed != null) selection = changed;
-                    break;
+                    if (changed == null) return false;
+                    selection = changed;
+                    return true;
                 case "CENTER":
                 case "C":
                     selection.PlaceAtWallCenter = true;
                     selection.UseEdgeDistance = false;
                     editor.WriteMessage("\n Đã chuyển vị trí cửa về giữa tường.");
-                    break;
+                    return true;
             }
+
+            return true;
         }
     }
 }
