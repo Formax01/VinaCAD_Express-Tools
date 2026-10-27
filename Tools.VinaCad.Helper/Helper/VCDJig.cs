@@ -5,7 +5,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Tools.VinaCad.Helper.Helper;
-
+using Tools.Resources.Language;
 namespace Tools.VinaCad.Action.Actions
 {
     /// <summary>
@@ -36,7 +36,7 @@ namespace Tools.VinaCad.Action.Actions
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             JigPromptPointOptions opt =
-                new JigPromptPointOptions("\nChọn hướng xoay : ")
+                new JigPromptPointOptions(Lang.VCD_UI_CHONHUONGXOAY)
                 {
                     BasePoint = _origin,
                     UseBasePoint = true,

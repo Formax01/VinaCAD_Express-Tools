@@ -61,6 +61,123 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bán kính r ({0:0.##}) phải nhỏ hơn L ({1:0.##})..
+        /// </summary>
+        public static string CLG_MessDialog_BanKinhNhoHonChieuDai {
+            get {
+                return ResourceManager.GetString("CLG_MessDialog_BanKinhNhoHonChieuDai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ {0} cánh lượn gió..
+        /// </summary>
+        public static string CLG_MessDialog_DaVeCanh {
+            get {
+                return ResourceManager.GetString("CLG_MessDialog_DaVeCanh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Điểm cuối trùng điểm đầu..
+        /// </summary>
+        public static string CLG_MessDialog_DiemCuoiTrungDiemDau {
+            get {
+                return ResourceManager.GetString("CLG_MessDialog_DiemCuoiTrungDiemDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể tạo entity CLG trong database..
+        /// </summary>
+        public static string CLG_MessDialog_KhongTheTaoEntity {
+            get {
+                return ResourceManager.GetString("CLG_MessDialog_KhongTheTaoEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CLG.
+        /// </summary>
+        public static string CLG_Title {
+            get {
+                return ResourceManager.GetString("CLG_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm cuối:.
+        /// </summary>
+        public static string CLG_UI_ChonDiemCuoi {
+            get {
+                return ResourceManager.GetString("CLG_UI_ChonDiemCuoi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đầu:.
+        /// </summary>
+        public static string CLG_UI_ChonDiemDau {
+            get {
+                return ResourceManager.GetString("CLG_UI_ChonDiemDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Co.
+        /// </summary>
+        public static string CLG_UI_Co {
+            get {
+                return ResourceManager.GetString("CLG_UI_Co", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Khong.
+        /// </summary>
+        public static string CLG_UI_Khong {
+            get {
+                return ResourceManager.GetString("CLG_UI_Khong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều dài L và bán kính r phải lớn hơn 0..
+        /// </summary>
+        public static string CLG_UI_LvaRphailonhon0 {
+            get {
+                return ResourceManager.GetString("CLG_UI_LvaRphailonhon0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập góc quay (0-360).
+        /// </summary>
+        public static string CLG_UI_NhapGocQuay {
+            get {
+                return ResourceManager.GetString("CLG_UI_NhapGocQuay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập khoảng cách giữa các cánh.
+        /// </summary>
+        public static string CLG_UI_NhapKhoangCachGiuaCacCanh {
+            get {
+                return ResourceManager.GetString("CLG_UI_NhapKhoangCachGiuaCacCanh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sẽ vẽ {0} cánh, tiếp tục?.
+        /// </summary>
+        public static string CLG_UI_XacNhanVeCanh {
+            get {
+                return ResourceManager.GetString("CLG_UI_XacNhanVeCanh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tìm thấy text chứa.
         /// </summary>
         public static string FDT_MessDialog {
@@ -142,11 +259,209 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đã tạo block..
+        /// </summary>
+        public static string HG_MessDialog_DaTaoBlock {
+            get {
+                return ResourceManager.GetString("HG_MessDialog_DaTaoBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Khoảng cách phải &gt;= {0}..
+        /// </summary>
+        public static string HG_MessDialog_KhoangCachPhaiLonHon {
+            get {
+                return ResourceManager.GetString("HG_MessDialog_KhoangCachPhaiLonHon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể tạo block HG trong database..
+        /// </summary>
+        public static string HG_MessDialog_KhongTheTaoBlock {
+            get {
+                return ResourceManager.GetString("HG_MessDialog_KhongTheTaoBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HG.
+        /// </summary>
+        public static string HG_Title {
+            get {
+                return ResourceManager.GetString("HG_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm cuối:.
+        /// </summary>
+        public static string HG_UI_CHONDIEMCUOI {
+            get {
+                return ResourceManager.GetString("HG_UI_CHONDIEMCUOI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đầu:.
+        /// </summary>
+        public static string HG_UI_ChonDiemDau {
+            get {
+                return ResourceManager.GetString("HG_UI_ChonDiemDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập góc quay (0-360).
+        /// </summary>
+        public static string HG_UI_NHAPGOCQUAY {
+            get {
+                return ResourceManager.GetString("HG_UI_NHAPGOCQUAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ {0} đoạn thẳng..
+        /// </summary>
+        public static string LIL_MessDialog_DaVeDoanThang {
+            get {
+                return ResourceManager.GetString("LIL_MessDialog_DaVeDoanThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hai điểm trùng nhau, không thể vẽ..
+        /// </summary>
+        public static string LIL_MessDialog_HaiDiemTrungNhau {
+            get {
+                return ResourceManager.GetString("LIL_MessDialog_HaiDiemTrungNhau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể tạo entity LiL trong database..
+        /// </summary>
+        public static string LIL_MessDialog_KhongTheTaoEntity {
+            get {
+                return ResourceManager.GetString("LIL_MessDialog_KhongTheTaoEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LiL.
+        /// </summary>
+        public static string LIL_Title {
+            get {
+                return ResourceManager.GetString("LIL_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm cuối:.
+        /// </summary>
+        public static string LIL_UI_ChonDiemCuoi {
+            get {
+                return ResourceManager.GetString("LIL_UI_ChonDiemCuoi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đầu:.
+        /// </summary>
+        public static string LIL_UI_ChonDiemDau {
+            get {
+                return ResourceManager.GetString("LIL_UI_ChonDiemDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập khoảng cách L:.
+        /// </summary>
+        public static string LIL_UI_NhapKhoangCachL {
+            get {
+                return ResourceManager.GetString("LIL_UI_NhapKhoangCachL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Đã chuyển ngôn ngữ sang {0}..
         /// </summary>
         public static string Msg_LanguageChanged {
             get {
                 return ResourceManager.GetString("Msg_LanguageChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ 1 hình chữ nhật và {0} block..
+        /// </summary>
+        public static string VCD_MessDialog_DaVeHinhChuNhatVaBlock {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_DaVeHinhChuNhatVaBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể tạo entity VCD trong database..
+        /// </summary>
+        public static string VCD_MessDialog_KhongTheTaoEntity {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_KhongTheTaoEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length phải lớn hơn hoặc bằng Width..
+        /// </summary>
+        public static string VCD_MessDialog_LengthPhaiLonHonHoacBangWidth {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_LengthPhaiLonHonHoacBangWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VCD.
+        /// </summary>
+        public static string VCD_Title {
+            get {
+                return ResourceManager.GetString("VCD_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm bắt đầu:.
+        /// </summary>
+        public static string VCD_UI_ChonDiemBatDau {
+            get {
+                return ResourceManager.GetString("VCD_UI_ChonDiemBatDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập góc quay (0-360).
+        /// </summary>
+        public static string VCD_UI_CHONHUONGXOAY {
+            get {
+                return ResourceManager.GetString("VCD_UI_CHONHUONGXOAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập Length:.
+        /// </summary>
+        public static string VCD_UI_NhapLength {
+            get {
+                return ResourceManager.GetString("VCD_UI_NhapLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập Width:.
+        /// </summary>
+        public static string VCD_UI_NhapWidth {
+            get {
+                return ResourceManager.GetString("VCD_UI_NhapWidth", resourceCulture);
             }
         }
     }

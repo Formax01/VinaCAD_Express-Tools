@@ -4,7 +4,7 @@ using Teigha.DatabaseServices;
 using Teigha.GraphicsInterface;
 using Teigha.Geometry;
 using Tools.VinaCad.Helper;
-
+using Tools.Resources.Language;
 namespace Tools.VinaCad.Helper.Helper
 {
     public class HGJig : DrawJig
@@ -51,7 +51,7 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (_mode == Mode.EndPoint)
             {
-                JigPromptPointOptions po = new JigPromptPointOptions("\nChọn điểm cuối: ")
+                JigPromptPointOptions po = new JigPromptPointOptions(Lang.HG_UI_CHONDIEMCUOI)
                 {
                     UseBasePoint = true,
                     BasePoint = _startUcs,
@@ -73,7 +73,7 @@ namespace Tools.VinaCad.Helper.Helper
             else
             {
                 JigPromptAngleOptions ao = new JigPromptAngleOptions(
-                    "\nNhập góc quay : ")
+                    Lang.HG_UI_NHAPGOCQUAY)
                 {
                     UseBasePoint = true,
                     BasePoint = _startUcs,

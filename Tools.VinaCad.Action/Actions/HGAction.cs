@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -20,7 +21,7 @@ namespace Tools.VinaCad.Action.Actions
             Matrix3d ucs = ed.CurrentUserCoordinateSystem;
 
             // B2: điểm đầu
-            PromptPointResult p1 = ed.GetPoint(new PromptPointOptions("\nChọn điểm đầu: "));
+            PromptPointResult p1 = ed.GetPoint(new PromptPointOptions("\n" + Lang.HG_UI_ChonDiemDau));
             if (p1.Status != PromptStatus.OK) return;
 
             Point3d startWcs = p1.Value.TransformBy(ucs);
@@ -34,7 +35,7 @@ namespace Tools.VinaCad.Action.Actions
             double length = dir.Length;
             if (length < HGHelper.LineLength)
             {
-                ed.WriteMessage($"\nHG: Khoảng cách phải >= {HGHelper.LineLength}.");
+                ed.WriteMessage("\n" + string.Format(Lang.HG_MessDialog_KhoangCachPhaiLonHon, HGHelper.LineLength));
                 return;
             }
             double axisAngle = Math.Atan2(dir.Y, dir.X);
@@ -56,7 +57,7 @@ namespace Tools.VinaCad.Action.Actions
             if (brId.IsNull) return;
 
             ed.Regen();
-            ed.WriteMessage("\nHG: Đã tạo block.");
+            ed.WriteMessage("\n" + Lang.HG_MessDialog_DaTaoBlock);
         }
     }
 }

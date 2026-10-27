@@ -4,6 +4,7 @@ using System.Globalization;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -89,7 +90,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Không thể tạo entity VCD trong database.", ex);
+                throw new InvalidOperationException(Lang.VCD_MessDialog_KhongTheTaoEntity, ex);
             }
 
             return count;

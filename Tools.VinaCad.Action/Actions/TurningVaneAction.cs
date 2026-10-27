@@ -1,7 +1,9 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
@@ -34,13 +36,13 @@ namespace Tools.VinaCad.Action.Actions
             }
 
             // B2: chọn điểm đầu (tâm quay của cánh đầu tiên)
-            PromptPointResult startRes = _ed.GetPoint("\nChọn điểm đầu : ");
+            PromptPointResult startRes = _ed.GetPoint("\n" + Lang.CLG_UI_ChonDiemDau);
             if (startRes.Status != PromptStatus.OK) return;
             Point3d startUcs = startRes.Value;
             Point3d start = startUcs.TransformBy(ucs);
 
             // B3: chọn điểm cuối
-            var endOpt = new PromptPointOptions("\nChọn điểm cuối: ")
+            var endOpt = new PromptPointOptions("\n" + Lang.CLG_UI_ChonDiemCuoi)
             {
                 UseBasePoint = true,
                 BasePoint = startUcs,
@@ -54,13 +56,13 @@ namespace Tools.VinaCad.Action.Actions
             double total = v.Length;
             if (total < 1e-9)
             {
-                _ed.WriteMessage("\nĐiểm cuối trùng điểm đầu.");
+                _ed.WriteMessage("\n" + Lang.CLG_MessDialog_DiemCuoiTrungDiemDau);
                 return;
             }
             Vector3d dir = v.DivideBy(total);
 
             // B4: khoảng cách giữa các đối tượng (gõ số hoặc click 2 điểm)
-            var distOpt = new PromptDistanceOptions("\nNhập khoảng cách giữa các cánh")
+            var distOpt = new PromptDistanceOptions("\n" + Lang.CLG_UI_NhapKhoangCachGiuaCacCanh)
             {
                 BasePoint = startUcs,
                 UseBasePoint = true,
@@ -89,11 +91,13 @@ namespace Tools.VinaCad.Action.Actions
 
             if (count > ConfirmCount)
             {
-                var kw = new PromptKeywordOptions($"\nSẽ vẽ {count} cánh, tiếp tục? [Co/Khong]", "Co Khong")
+                var kw = new PromptKeywordOptions(
+                    "\n" + string.Format(Lang.CLG_UI_XacNhanVeCanh, count),
+                    string.Format("{0} {1}", Lang.CLG_UI_Co, Lang.CLG_UI_Khong))
                 { AllowNone = false };
-                kw.Keywords.Default = "Khong";
+                kw.Keywords.Default = Lang.CLG_UI_Khong;
                 PromptResult kr = _ed.GetKeywords(kw);
-                if (kr.Status != PromptStatus.OK || kr.StringResult != "Co") return;
+                if (kr.Status != PromptStatus.OK || !string.Equals(kr.StringResult, Lang.CLG_UI_Co, StringComparison.OrdinalIgnoreCase)) return;
             }
 
             var pivots = new List<Point3d>(count);
@@ -102,12 +106,12 @@ namespace Tools.VinaCad.Action.Actions
 
             TurningVaneHelper.CreateMany(_db, _setting, pivots, rotation);
             _ed.Regen();
-            _ed.WriteMessage($"\nĐã vẽ {count} cánh lượn gió.");
+            _ed.WriteMessage("\n" + string.Format(Lang.CLG_MessDialog_DaVeCanh, count));
         }
         // ---------- Nhập góc quay 0-360 ----------
         private bool PromptRotation(Point3d basePoint, out double rotation)
         {
-            var opt = new PromptAngleOptions("\nNhập góc quay (0-360)")
+            var opt = new PromptAngleOptions("\n" + Lang.CLG_UI_NhapGocQuay)
             {
                 BasePoint = basePoint,
                 UseBasePoint = true,

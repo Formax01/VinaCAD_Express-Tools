@@ -1,6 +1,7 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -17,23 +18,23 @@ namespace Tools.VinaCad.Action.Actions
             Editor ed = doc.Editor;
             Database db = doc.Database;
 
-            PromptPointResult ppr = ed.GetPoint(new PromptPointOptions("\nChọn điểm bắt đầu: "));
+            PromptPointResult ppr = ed.GetPoint(new PromptPointOptions("\n" + Lang.VCD_UI_ChonDiemBatDau));
             if (ppr.Status != PromptStatus.OK)
                 return;
 
             PromptDoubleResult lenRes = ed.GetDouble(
-                new PromptDoubleOptions("\nNhập Length: ") { AllowNegative = false, AllowZero = false });
+                new PromptDoubleOptions("\n" + Lang.VCD_UI_NhapLength) { AllowNegative = false, AllowZero = false });
             if (lenRes.Status != PromptStatus.OK)
                 return;
 
             PromptDoubleResult widRes = ed.GetDouble(
-                new PromptDoubleOptions("\nNhập Width: ") { AllowNegative = false, AllowZero = false });
+                new PromptDoubleOptions("\n" + Lang.VCD_UI_NhapWidth) { AllowNegative = false, AllowZero = false });
             if (widRes.Status != PromptStatus.OK)
                 return;
 
             if (lenRes.Value < widRes.Value)
             {
-                ed.WriteMessage("\nLength phải lớn hơn hoặc bằng Width.");
+                ed.WriteMessage("\n" + Lang.VCD_MessDialog_LengthPhaiLonHonHoacBangWidth);
                 return;
             }
 
@@ -54,7 +55,7 @@ namespace Tools.VinaCad.Action.Actions
                 ed.CurrentUserCoordinateSystem);
 
             ed.Regen();
-            ed.WriteMessage($"\nĐã vẽ 1 hình chữ nhật và {count} block.");
+            ed.WriteMessage("\n" + string.Format(Lang.VCD_MessDialog_DaVeHinhChuNhatVaBlock, count));
         }
     }
 }

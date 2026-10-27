@@ -2,6 +2,7 @@
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -63,7 +64,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Không thể tạo entity LiL trong database.", ex);
+                throw new InvalidOperationException(Lang.LIL_MessDialog_KhongTheTaoEntity, ex);
             }
 
             return count;

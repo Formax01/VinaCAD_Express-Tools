@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Tools.Resources.Language;
 namespace Tools.VinaCad.Modeling
 {
     public class TurningVaneSetting
@@ -18,9 +18,16 @@ namespace Tools.VinaCad.Modeling
         {
             error = null;
             if (Length <= 0 || InnerRadius <= 0)
-            { error = "Chiều dài L và bán kính r phải lớn hơn 0."; return false; }
+            { error = Lang.CLG_UI_LvaRphailonhon0; return false; }
             if (InnerRadius >= Length)
-            { error = $"Bán kính r ({InnerRadius:0.##}) phải nhỏ hơn L ({Length:0.##})."; return false; }
+            {
+                error = string.Format(
+        Lang.CLG_MessDialog_BanKinhNhoHonChieuDai,
+        InnerRadius,
+        Length
+    );
+                return false;
+            }
             return true;
         }
     }

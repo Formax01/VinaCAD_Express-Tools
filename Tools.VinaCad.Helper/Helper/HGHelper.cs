@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper
 {
@@ -88,7 +89,7 @@ namespace Tools.VinaCad.Helper
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Không thể tạo block HG trong database.", ex);
+                throw new InvalidOperationException(Lang.HG_MessDialog_KhongTheTaoBlock, ex);
             }
         }
     }

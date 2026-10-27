@@ -1,6 +1,7 @@
 ﻿using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Modeling;
 
 namespace Tools.VinaCad.Helper
@@ -63,7 +64,7 @@ namespace Tools.VinaCad.Helper
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Không thể tạo entity CLG trong database.", ex);
+                throw new InvalidOperationException(Lang.CLG_MessDialog_KhongTheTaoEntity, ex);
             }
             return ids;
         }
