@@ -564,7 +564,7 @@ block. block</value>
     <value>Duplicate Number Detected!!!</value>
   </data>
   <data name="Common_Msg_VuiLongChonBlockKhungTen" xml:space="preserve">
-    <value>Please select the name frame block.</value>
+    <value>Please select the frame name block.</value>
   </data>
   <data name="Common_Msg_VuiLongCopyDuLieuVaoBang" xml:space="preserve">
     <value>Please copy the data into the table.</value>
@@ -735,7 +735,7 @@ block. block</value>
     <value>Error</value>
   </data>
   <data name="Common_Text_ThongBao" xml:space="preserve">
-    <value>Notice</value>
+    <value>Notification</value>
   </data>
   <data name="Common_Text_ThongSoChuaHopLe" xml:space="preserve">
     <value>Parameters are not valid</value>
@@ -793,7 +793,7 @@ Automatic</value>
     <value>S. Hieu</value>
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
-    <value>mark number</value>
+    <value>Mark number</value>
   </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Drawing Name</value>
@@ -826,7 +826,7 @@ Automatic</value>
     <value>Drawing scale:</value>
   </data>
   <data name="Common_UI_VeBang" xml:space="preserve">
-    <value>Draw the board</value>
+    <value>Draw Table</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
     <value>Draw Rebar Schedule</value>
@@ -1954,9 +1954,7 @@ CK</value>
     <value>Select Name Frame</value>
   </data>
   <data name="XLDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
-    <value>Check the error number
-allow
-(mm).</value>
+    <value>Allowable error (mm) :</value>
   </data>
   <data name="XLDM_UI_KiHieuBanVe" xml:space="preserve">
     <value>Drawing symbols:</value>
@@ -2031,8 +2029,7 @@ allow
     <value>Select the drawing list block</value>
   </data>
   <data name="XLSDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
-    <value>Note the allowable error
-(mm).</value>
+    <value>The allowable error (mm).</value>
   </data>
   <data name="XLSDM_UI_ThuocTinh1" xml:space="preserve">
     <value>Attribute 1:</value>

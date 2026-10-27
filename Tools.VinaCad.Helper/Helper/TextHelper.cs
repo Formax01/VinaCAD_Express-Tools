@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -64,7 +65,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn text: ";
+            opt.MessageForAdding = "\n" + Lang.FDT_RenameText_Prompt_QuetChonText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
@@ -128,7 +129,7 @@ namespace Tools.VinaCad.Helper.Helper
             ed.SetImpliedSelection(Array.Empty<ObjectId>());
             ed.SetImpliedSelection(validIds);
 
-            ed.WriteMessage($"\nĐã chọn {validIds.Length} đối tượng text.");
+            ed.WriteMessage("\n" + Lang.FDT_RenameText_Output_DaChonDoiTuongText.Replace("{validIds.Length}", validIds.Length.ToString()));
             ed.UpdateScreen();
         }
 

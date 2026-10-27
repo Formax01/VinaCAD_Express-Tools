@@ -1954,9 +1954,7 @@ CK</value>
     <value>Chọn Khung Tên</value>
   </data>
   <data name="XLDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
-    <value>K/c sai số
-cho phép
-(mm).</value>
+    <value>K/c sai số cho phép (mm).</value>
   </data>
   <data name="XLDM_UI_KiHieuBanVe" xml:space="preserve">
     <value>Kí hiệu bản vẽ:</value>
@@ -2031,8 +2029,7 @@ cho phép
     <value>Chọn block danh mục</value>
   </data>
   <data name="XLSDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
-    <value>K/c sai số cho phép
-(mm).</value>
+    <value>K/c sai số cho phép (mm).</value>
   </data>
   <data name="XLSDM_UI_ThuocTinh1" xml:space="preserve">
     <value>Thuộc tính 1:</value>

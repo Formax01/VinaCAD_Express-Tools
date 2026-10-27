@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Teigha.DatabaseServices;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -88,7 +89,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nChọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_ChonBlock;
             opt.SingleOnly = true;
             opt.RejectObjectsOnLockedLayers = true;
 
@@ -115,7 +116,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return resultIds;
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
             opt.RejectObjectsOnLockedLayers = true;
 
             TypedValue[] filterValues =

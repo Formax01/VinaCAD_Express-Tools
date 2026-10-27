@@ -5557,9 +5557,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to K/c sai số
-        ///cho phép
-        ///(mm)..
+        ///   Looks up a localized string similar to K/c sai số cho phép (mm)..
         /// </summary>
         public static string XLDM_UI_KCSaiSoChoPhepMm {
             get {
@@ -5784,8 +5782,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to K/c sai số cho phép
-        ///(mm)..
+        ///   Looks up a localized string similar to K/c sai số cho phép (mm)..
         /// </summary>
         public static string XLSDM_UI_KCSaiSoChoPhepMm {
             get {
