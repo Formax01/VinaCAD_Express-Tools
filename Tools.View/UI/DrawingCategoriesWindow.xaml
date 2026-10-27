@@ -35,7 +35,7 @@
                 <DataGridTextColumn
                     Width="80"
                     Binding="{Binding STT, UpdateSourceTrigger=PropertyChanged}"
-                    Header="STT"
+                    Header="{x:Static res:Lang.Common_UI_Stt}"
                     SortMemberPath="STT">
 
                     <DataGridTextColumn.HeaderStyle>

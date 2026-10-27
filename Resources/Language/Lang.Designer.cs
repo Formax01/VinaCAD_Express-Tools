@@ -2170,6 +2170,15 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("Common_UI_SoHieu", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to STT.
+        /// </summary>
+        public static string Common_UI_Stt {
+            get {
+                return ResourceManager.GetString("Common_UI_Stt", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Tên Bản Vẽ.
@@ -4418,6 +4427,15 @@ namespace Tools.Resources.Language {
         public static string TKCK_UI_CDai {
             get {
                 return ResourceManager.GetString("TKCK_UI_CDai", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to C.Cao.
+        /// </summary>
+        public static string TKCK_UI_CCao {
+            get {
+                return ResourceManager.GetString("TKCK_UI_CCao", resourceCulture);
             }
         }
         

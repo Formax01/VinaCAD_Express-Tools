@@ -794,6 +794,9 @@ Tự Động</value>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Số Hiệu</value>
   </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>STT</value>
+  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Tên Bản Vẽ</value>
   </data>
@@ -1573,6 +1576,9 @@ CK</value>
   </data>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>C.Dài</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>C.Cao</value>
   </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>C.Rộng</value>
