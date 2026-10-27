@@ -148,4 +148,109 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
   </data>
+  <data name="CLG_Title" xml:space="preserve">
+    <value>CLG</value>
+  </data>
+  <data name="CLG_UI_ChonDiemDau" xml:space="preserve">
+    <value>開始点を選択:</value>
+  </data>
+  <data name="CLG_UI_ChonDiemCuoi" xml:space="preserve">
+    <value>終了点を選択:</value>
+  </data>
+  <data name="CLG_UI_NhapKhoangCachGiuaCacCanh" xml:space="preserve">
+    <value>翼の間隔を入力</value>
+  </data>
+  <data name="CLG_UI_NhapGocQuay" xml:space="preserve">
+    <value>回転角を入力 (0-360)</value>
+  </data>
+  <data name="CLG_UI_XacNhanVeCanh" xml:space="preserve">
+    <value>{0}個の翼を描画します。続行しますか?</value>
+  </data>
+  <data name="CLG_UI_Co" xml:space="preserve">
+    <value>はい</value>
+  </data>
+  <data name="CLG_UI_Khong" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="CLG_MessDialog_DiemCuoiTrungDiemDau" xml:space="preserve">
+    <value>終了点が開始点と重なっています。</value>
+  </data>
+  <data name="CLG_MessDialog_DaVeCanh" xml:space="preserve">
+    <value>{0}個の旋回翼を描画しました。</value>
+  </data>
+  <data name="CLG_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>データベースにCLGエンティティを作成できませんでした。</value>
+  </data>
+  <data name="VCD_Title" xml:space="preserve">
+    <value>VCD</value>
+  </data>
+  <data name="VCD_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>データベースにVCDエンティティを作成できませんでした。</value>
+  </data>
+  <data name="LIL_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>データベースにLiLエンティティを作成できませんでした。</value>
+  </data>
+  <data name="HG_MessDialog_KhongTheTaoBlock" xml:space="preserve">
+    <value>データベースにHGブロックを作成できませんでした。</value>
+  </data>
+  <data name="VCD_MessDialog_DaVeHinhChuNhatVaBlock" xml:space="preserve">
+    <value>長方形 1 個と {0} 個のブロックを描画しました。</value>
+  </data>
+  <data name="LIL_Title" xml:space="preserve">
+    <value>LiL</value>
+  </data>
+  <data name="LIL_UI_NhapKhoangCachL" xml:space="preserve">
+    <value>Lの距離を入力:</value>
+  </data>
+  <data name="LIL_UI_ChonDiemDau" xml:space="preserve">
+    <value>開始点を選択:</value>
+  </data>
+  <data name="LIL_UI_ChonDiemCuoi" xml:space="preserve">
+    <value>終了点を選択:</value>
+  </data>
+  <data name="LIL_MessDialog_HaiDiemTrungNhau" xml:space="preserve">
+    <value>2点が重なっているため描画できません。</value>
+  </data>
+  <data name="LIL_MessDialog_DaVeDoanThang" xml:space="preserve">
+    <value>{0}本の線分を描画しました。</value>
+  </data>
+  <data name="HG_Title" xml:space="preserve">
+    <value>HG</value>
+  </data>
+  <data name="HG_UI_ChonDiemDau" xml:space="preserve">
+    <value>開始点を選択:</value>
+  </data>
+  <data name="HG_MessDialog_KhoangCachPhaiLonHon" xml:space="preserve">
+    <value>距離は{0}以上である必要があります。</value>
+  </data>
+  <data name="HG_MessDialog_DaTaoBlock" xml:space="preserve">
+    <value>ブロックを作成しました。</value>
+  </data>
+  <data name="VCD_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>開始点を選択:</value>
+  </data>
+  <data name="VCD_UI_NhapLength" xml:space="preserve">
+    <value>Lengthを入力:</value>
+  </data>
+  <data name="VCD_UI_NhapWidth" xml:space="preserve">
+    <value>Widthを入力:</value>
+  </data>
+  <data name="VCD_MessDialog_LengthPhaiLonHonHoacBangWidth" xml:space="preserve">
+    <value>LengthはWidth以上である必要があります。</value>
+  </data>
+  <data name="HG_UI_CHONDIEMCUOI" xml:space="preserve">
+    <value>終了点を選択:</value>
+  </data>
+  <data name="HG_UI_NHAPGOCQUAY" xml:space="preserve">
+    <value>回転角を入力 (0-360)</value>
+  </data>
+  <data name="VCD_UI_CHONHUONGXOAY" xml:space="preserve">
+    <value>回転角を入力 (0-360)</value>
+  </data>
+  <data name="CLG_UI_LvaRphailonhon0" xml:space="preserve">
+    <value>長さLと半径rは0より大きくする必要があります。</value>
+  </data>
+  <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
+    <value>半径 r ({0:0.##}) は L ({1:0.##}) より小さくする必要があります。</value>
+  </data>
 </root>

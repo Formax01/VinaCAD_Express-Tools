@@ -147,4 +147,109 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Đã chuyển ngôn ngữ sang {0}.</value>
   </data>
+  <data name="CLG_Title" xml:space="preserve">
+    <value>CLG</value>
+  </data>
+  <data name="CLG_UI_ChonDiemDau" xml:space="preserve">
+    <value>Chọn điểm đầu:</value>
+  </data>
+  <data name="CLG_UI_ChonDiemCuoi" xml:space="preserve">
+    <value>Chọn điểm cuối:</value>
+  </data>
+  <data name="CLG_UI_NhapKhoangCachGiuaCacCanh" xml:space="preserve">
+    <value>Nhập khoảng cách giữa các cánh</value>
+  </data>
+  <data name="CLG_UI_NhapGocQuay" xml:space="preserve">
+    <value>Nhập góc quay (0-360)</value>
+  </data>
+  <data name="CLG_UI_XacNhanVeCanh" xml:space="preserve">
+    <value>Sẽ vẽ {0} cánh, tiếp tục?</value>
+  </data>
+  <data name="CLG_UI_Co" xml:space="preserve">
+    <value>Co</value>
+  </data>
+  <data name="CLG_UI_Khong" xml:space="preserve">
+    <value>Khong</value>
+  </data>
+  <data name="CLG_MessDialog_DiemCuoiTrungDiemDau" xml:space="preserve">
+    <value>Điểm cuối trùng điểm đầu.</value>
+  </data>
+  <data name="CLG_MessDialog_DaVeCanh" xml:space="preserve">
+    <value>Đã vẽ {0} cánh lượn gió.</value>
+  </data>
+  <data name="CLG_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>Không thể tạo entity CLG trong database.</value>
+  </data>
+  <data name="VCD_Title" xml:space="preserve">
+    <value>VCD</value>
+  </data>
+  <data name="VCD_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>Không thể tạo entity VCD trong database.</value>
+  </data>
+  <data name="LIL_MessDialog_KhongTheTaoEntity" xml:space="preserve">
+    <value>Không thể tạo entity LiL trong database.</value>
+  </data>
+  <data name="HG_MessDialog_KhongTheTaoBlock" xml:space="preserve">
+    <value>Không thể tạo block HG trong database.</value>
+  </data>
+  <data name="VCD_MessDialog_DaVeHinhChuNhatVaBlock" xml:space="preserve">
+    <value>Đã vẽ 1 hình chữ nhật và {0} block.</value>
+  </data>
+  <data name="LIL_Title" xml:space="preserve">
+    <value>LiL</value>
+  </data>
+  <data name="LIL_UI_NhapKhoangCachL" xml:space="preserve">
+    <value>Nhập khoảng cách L:</value>
+  </data>
+  <data name="LIL_UI_ChonDiemDau" xml:space="preserve">
+    <value>Chọn điểm đầu:</value>
+  </data>
+  <data name="LIL_UI_ChonDiemCuoi" xml:space="preserve">
+    <value>Chọn điểm cuối:</value>
+  </data>
+  <data name="LIL_MessDialog_HaiDiemTrungNhau" xml:space="preserve">
+    <value>Hai điểm trùng nhau, không thể vẽ.</value>
+  </data>
+  <data name="LIL_MessDialog_DaVeDoanThang" xml:space="preserve">
+    <value>Đã vẽ {0} đoạn thẳng.</value>
+  </data>
+  <data name="HG_Title" xml:space="preserve">
+    <value>HG</value>
+  </data>
+  <data name="HG_UI_ChonDiemDau" xml:space="preserve">
+    <value>Chọn điểm đầu:</value>
+  </data>
+  <data name="HG_MessDialog_KhoangCachPhaiLonHon" xml:space="preserve">
+    <value>Khoảng cách phải &gt;= {0}.</value>
+  </data>
+  <data name="HG_MessDialog_DaTaoBlock" xml:space="preserve">
+    <value>Đã tạo block.</value>
+  </data>
+  <data name="VCD_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>Chọn điểm bắt đầu:</value>
+  </data>
+  <data name="VCD_UI_NhapLength" xml:space="preserve">
+    <value>Nhập Length:</value>
+  </data>
+  <data name="VCD_UI_NhapWidth" xml:space="preserve">
+    <value>Nhập Width:</value>
+  </data>
+  <data name="VCD_MessDialog_LengthPhaiLonHonHoacBangWidth" xml:space="preserve">
+    <value>Length phải lớn hơn hoặc bằng Width.</value>
+  </data>
+  <data name="HG_UI_CHONDIEMCUOI" xml:space="preserve">
+    <value>Chọn điểm cuối:</value>
+  </data>
+  <data name="HG_UI_NHAPGOCQUAY" xml:space="preserve">
+    <value>Nhập góc quay (0-360)</value>
+  </data>
+  <data name="VCD_UI_CHONHUONGXOAY" xml:space="preserve">
+    <value>Nhập góc quay (0-360)</value>
+  </data>
+  <data name="CLG_UI_LvaRphailonhon0" xml:space="preserve">
+    <value>Chiều dài L và bán kính r phải lớn hơn 0.</value>
+  </data>
+  <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
+    <value>Bán kính r ({0:0.##}) phải nhỏ hơn L ({1:0.##}).</value>
+  </data>
 </root>
