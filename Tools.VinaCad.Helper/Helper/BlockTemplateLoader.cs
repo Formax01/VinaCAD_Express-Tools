@@ -10,6 +10,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -27,7 +28,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (dir == null)
-                throw new DirectoryNotFoundException("Không tìm thấy thư mục Resources.");
+                throw new DirectoryNotFoundException(Lang.Common_Error_KhongTimThayThuMucResources);
 
             return Path.Combine(dir.FullName, "Resources", "Templates", templateFileName);
         }
