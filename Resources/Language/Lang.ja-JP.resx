@@ -117,12 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="FDT_MessDialog" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>言語を{0}に変更しました。</value>
   </data>
-  <data name="FDT_Title" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FDT_MessDialog" xml:space="preserve">
+    <value>一致するテキストが見つかりません</value>
+  </data>
+  <data name="FDT_Title" xml:space="preserve">
+    <value>杭を描画</value>
   </data>
   <data name="FDT_UI_BtnSelectAll" xml:space="preserve">
     <value>すべて選択</value>
@@ -131,7 +134,7 @@
     <value>範囲選択</value>
   </data>
   <data name="FDT_UI_ChkContains" xml:space="preserve">
-    <value>部分一致で検索</value>
+    <value>検索文字列を含むテキストを検索</value>
   </data>
   <data name="FDT_UI_ChkExact" xml:space="preserve">
     <value>完全一致で検索</value>
@@ -145,7 +148,31 @@
   <data name="FDT_UI_Title" xml:space="preserve">
     <value>文字とマルチテキストの検索・選択</value>
   </data>
-  <data name="Msg_LanguageChanged" xml:space="preserve">
-    <value>言語を{0}に変更しました。</value>
+  <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
+    <value>新しい配置ポイントを選択し、Enterキーで終了します。</value>
+  </data>
+  <data name="CPD_MessDialog_DaDatBlockMoiNewText" xml:space="preserve">
+    <value>新しいブロックを配置しました — {0}</value>
+  </data>
+  <data name="CPD_MessDialog_DoiTuongChonKhongPhaiBlockCaoDoHopLe" xml:space="preserve">
+    <value>選択したオブジェクトは有効な標高ブロックではありません。</value>
+  </data>
+  <data name="CPD_MessDialog_KhongCoTaiLieuHoatDong" xml:space="preserve">
+    <value>アクティブな図面がありません</value>
+  </data>
+  <data name="CPD_MessDialog_KhongDocDuocGiaTriCaoDoTuOldText" xml:space="preserve">
+    <value>"{0}" から標高値を読み取れませんでした。</value>
+  </data>
+  <data name="CPD_MessDialog_LoiExMessage" xml:space="preserve">
+    <value>エラー: {0}</value>
+  </data>
+  <data name="CPD_UI_ChiDuocChonBlock" xml:space="preserve">
+    <value>ブロックのみ選択できます。</value>
+  </data>
+  <data name="CPD_UI_ChonBlockCaoDo" xml:space="preserve">
+    <value>標高ブロックを選択: </value>
+  </data>
+  <data name="CPD_UI_DiemDatMoiKetThuc" xml:space="preserve">
+    <value>新しい配置ポイント &lt;終了&gt;: </value>
   </data>
 </root>

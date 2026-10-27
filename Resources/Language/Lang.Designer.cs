@@ -61,6 +61,87 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đặt mới, Enter để kết thúc..
+        /// </summary>
+        public static string CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã đặt block mới — {0}.
+        /// </summary>
+        public static string CPD_MessDialog_DaDatBlockMoiNewText {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_DaDatBlockMoiNewText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đối tượng chọn không phải block cao độ hợp lệ..
+        /// </summary>
+        public static string CPD_MessDialog_DoiTuongChonKhongPhaiBlockCaoDoHopLe {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_DoiTuongChonKhongPhaiBlockCaoDoHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không có tài liệu hoạt động.
+        /// </summary>
+        public static string CPD_MessDialog_KhongCoTaiLieuHoatDong {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_KhongCoTaiLieuHoatDong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không đọc được giá trị cao độ từ &quot;{0}&quot;..
+        /// </summary>
+        public static string CPD_MessDialog_KhongDocDuocGiaTriCaoDoTuOldText {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_KhongDocDuocGiaTriCaoDoTuOldText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi: {0}.
+        /// </summary>
+        public static string CPD_MessDialog_LoiExMessage {
+            get {
+                return ResourceManager.GetString("CPD_MessDialog_LoiExMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chỉ được chọn block..
+        /// </summary>
+        public static string CPD_UI_ChiDuocChonBlock {
+            get {
+                return ResourceManager.GetString("CPD_UI_ChiDuocChonBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn block cao độ: .
+        /// </summary>
+        public static string CPD_UI_ChonBlockCaoDo {
+            get {
+                return ResourceManager.GetString("CPD_UI_ChonBlockCaoDo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Điểm đặt mới &lt;Kết thúc&gt;: .
+        /// </summary>
+        public static string CPD_UI_DiemDatMoiKetThuc {
+            get {
+                return ResourceManager.GetString("CPD_UI_DiemDatMoiKetThuc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tìm thấy text chứa.
         /// </summary>
         public static string FDT_MessDialog {

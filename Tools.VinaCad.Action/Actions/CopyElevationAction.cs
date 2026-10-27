@@ -3,6 +3,7 @@ using Prima.VinaCAD.EditorInput;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -24,12 +25,16 @@ namespace Tools.VinaCAD.Action.Actions
                 _database = _document?.Database;
 
                 if (_editor == null || _database == null)
-                    throw new Exception("Không có tài liệu hoạt động");
+                {
+                    // throw new Exception("Không có tài liệu hoạt động");
+                    throw new Exception(Lang.CPD_MessDialog_KhongCoTaiLieuHoatDong);
+                }
 
                 ObjectId sourceBlockId = GetSourceBlock(out ObjectId attributeId);
                 if (sourceBlockId == ObjectId.Null)
                 {
-                    _editor.WriteMessage("\nĐối tượng chọn không phải block cao độ hợp lệ.");
+                    // _editor.WriteMessage("\nĐối tượng chọn không phải block cao độ hợp lệ.");
+                    _editor.WriteMessage(Lang.CPD_MessDialog_DoiTuongChonKhongPhaiBlockCaoDoHopLe);
                     return;
                 }
 
@@ -38,17 +43,20 @@ namespace Tools.VinaCAD.Action.Actions
 
                 if (!ElevationBlockHelper.TryParseElevationText(oldText, out string prefix, out double oldElevation))
                 {
-                    _editor.WriteMessage($"\nKhông đọc được giá trị cao độ từ \"{oldText}\".");
+                    // _editor.WriteMessage($"\nKhông đọc được giá trị cao độ từ \"{oldText}\".");
+                    _editor.WriteMessage(string.Format(Lang.CPD_MessDialog_KhongDocDuocGiaTriCaoDoTuOldText, oldText));
                     return;
                 }
 
                 double unitToMeter = ElevationBlockHelper.GetUnitToMeterFactor(_database);
 
-                _editor.WriteMessage($"\nCao độ gốc: {oldText}. Chọn điểm đặt mới, Enter để kết thúc.");
+                // _editor.WriteMessage($"\n Chọn điểm đặt mới, Enter để kết thúc.");
+                _editor.WriteMessage(Lang.CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc);
 
                 while (true)
                 {
-                    PromptPointOptions ppo = new PromptPointOptions("\nĐiểm đặt mới <Kết thúc>: ")
+                    // PromptPointOptions ppo = new PromptPointOptions("\nĐiểm đặt mới <Kết thúc>: ")
+                    PromptPointOptions ppo = new PromptPointOptions(Lang.CPD_UI_DiemDatMoiKetThuc)
                     {
                         BasePoint = oldPosition,
                         UseBasePoint = true
@@ -70,14 +78,16 @@ namespace Tools.VinaCAD.Action.Actions
                     ObjectId newBlockId = ElevationBlockHelper.CloneBlockWithOffset(_database, sourceBlockId, offset);
                     ElevationBlockHelper.SetSingleAttributeValue(_database, newBlockId, newText);
 
-                    _editor.WriteMessage($"\nĐã đặt block mới — {newText}");
+                    // _editor.WriteMessage($"\nĐã đặt block mới — {newText}");
+                    _editor.WriteMessage(string.Format(Lang.CPD_MessDialog_DaDatBlockMoiNewText, newText));
                 }
 
                 _editor.UpdateScreen();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}");
+                // MessageBox.Show($"Lỗi: {ex.Message}");
+                MessageBox.Show(string.Format(Lang.CPD_MessDialog_LoiExMessage, ex.Message));
             }
         }
 
@@ -95,8 +105,10 @@ namespace Tools.VinaCAD.Action.Actions
             }
             else
             {
-                PromptEntityOptions peo = new PromptEntityOptions("\nChọn block cao độ: ");
-                peo.SetRejectMessage("\nChỉ được chọn block.");
+                // PromptEntityOptions peo = new PromptEntityOptions("\nChọn block cao độ: ");
+                PromptEntityOptions peo = new PromptEntityOptions(Lang.CPD_UI_ChonBlockCaoDo);
+                // peo.SetRejectMessage("\nChỉ được chọn block.");
+                peo.SetRejectMessage(Lang.CPD_UI_ChiDuocChonBlock);
                 peo.AddAllowedClass(typeof(BlockReference), true);
 
                 PromptEntityResult per = _editor.GetEntity(peo);
