@@ -45,11 +45,6 @@ namespace Tools.VinaCad.Action.Actions
 
         private void DrawStucco(StuccoSetting settings)
         {
-            int processedCount = 0;
-            int createdCount = 0;
-            int failedCount = 0;
-            WriteSettings(settings);
-
             while (true)
             {
                 PromptPointOptions pointOptions = new PromptPointOptions(
@@ -74,14 +69,11 @@ namespace Tools.VinaCad.Action.Actions
                         if (operationCount <= 0)
                             continue;
 
-                        createdCount += operationCount;
-                        processedCount++;
                         _editor.UpdateScreen();
                     }
                     catch (Exception ex)
                     {
                         Logger.Info(nameof(DrawStucco), ex);
-                        failedCount++;
                     }
 
                     continue;
@@ -92,12 +84,11 @@ namespace Tools.VinaCad.Action.Actions
                 string selectedMode = pointResult.StringResult;
                 if (IsMode(selectedMode, "Settings", "S"))
                 {
-                    if (TryEditSettings(settings, out StuccoSetting updatedSettings))
-                    {
-                        settings = updatedSettings;
-                        EnsureTargetLayer(settings);
-                        WriteSettings(settings);
-                    }
+                    if (!TryEditSettings(settings, out StuccoSetting updatedSettings))
+                        return;
+
+                    settings = updatedSettings;
+                    EnsureTargetLayer(settings);
 
                     continue;
                 }
@@ -109,21 +100,17 @@ namespace Tools.VinaCad.Action.Actions
                         : DrawExteriorSelection(settings);
                     if (operationCount > 0)
                     {
-                        createdCount += operationCount;
-                        processedCount++;
                         _editor.UpdateScreen();
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Info(nameof(DrawStucco), ex);
-                    failedCount++;
                 }
 
                 break;
             }
 
-            _editor.WriteMessage($"\nFN: {processedCount} vùng, {createdCount} đối tượng vữa, {failedCount} lỗi.");
         }
 
         private static bool IsMode(string value, string globalName, string shortcut)
@@ -217,11 +204,6 @@ namespace Tools.VinaCad.Action.Actions
             _sessionSettings = settings.Clone();
         }
 
-        private void WriteSettings(StuccoSetting settings)
-        {
-            _editor.WriteMessage($"\nFN: Layer={settings.LayerName}, ACI={settings.LayerColorIndex}, " +$"chiều dày={settings.Thickness:0.###}.");
-        }
-
         private bool TryEditSettings(StuccoSetting initialSettings, out StuccoSetting acceptedSettings)
         {
             StuccoSettingsWindow window = new StuccoSettingsWindow(initialSettings.Clone(), GetAvailableLayerColors());
@@ -269,14 +251,16 @@ namespace Tools.VinaCad.Action.Actions
                 ("OSNAPCOORD", 1)
             };
             object[] previousValues = new object[boundaryVariables.Length];
-
-            double retryOffset = Math.Max(0.0001, Math.Abs(thickness) * 0.01);
-            Point3d[] seedPoints =
+            double baseOffset = Math.Max(0.0001, Math.Abs(thickness) * 0.01);
+            List<Point3d> seedPoints = new List<Point3d> { interiorPointInCurrentUcs };
+            foreach (double scale in new[] { 1.0, 10.0, 100.0 })
             {
-                interiorPointInCurrentUcs,
-                new Point3d(interiorPointInCurrentUcs.X + retryOffset, interiorPointInCurrentUcs.Y + retryOffset, interiorPointInCurrentUcs.Z),
-                new Point3d(interiorPointInCurrentUcs.X - retryOffset, interiorPointInCurrentUcs.Y - retryOffset, interiorPointInCurrentUcs.Z)
-            };
+                double offset = baseOffset * scale;
+                seedPoints.Add(new Point3d(interiorPointInCurrentUcs.X + offset, interiorPointInCurrentUcs.Y, interiorPointInCurrentUcs.Z));
+                seedPoints.Add(new Point3d(interiorPointInCurrentUcs.X - offset, interiorPointInCurrentUcs.Y, interiorPointInCurrentUcs.Z));
+                seedPoints.Add(new Point3d(interiorPointInCurrentUcs.X, interiorPointInCurrentUcs.Y + offset, interiorPointInCurrentUcs.Z));
+                seedPoints.Add(new Point3d(interiorPointInCurrentUcs.X, interiorPointInCurrentUcs.Y - offset, interiorPointInCurrentUcs.Z));
+            }
 
             try
             {
@@ -307,19 +291,12 @@ namespace Tools.VinaCad.Action.Actions
         {
             List<ObjectId> newCurveIds = new List<ObjectId>();
             using Transaction transaction = _database.TransactionManager.StartTransaction();
-            BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(
-                _database.CurrentSpaceId,
-                OpenMode.ForRead);
-
+            BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(_database.CurrentSpaceId, OpenMode.ForRead);
             foreach (ObjectId objectId in currentSpace)
             {
-                if (idsBefore.Contains(objectId))
-                    continue;
-
-                if (transaction.GetObject(objectId, OpenMode.ForRead) is Curve)
+                if (!idsBefore.Contains(objectId) && transaction.GetObject(objectId, OpenMode.ForRead) is Curve)
                     newCurveIds.Add(objectId);
             }
-
             return newCurveIds.ToArray();
         }
 
@@ -332,13 +309,9 @@ namespace Tools.VinaCad.Action.Actions
         {
             HashSet<ObjectId> objectIds = new HashSet<ObjectId>();
             using Transaction transaction = _database.TransactionManager.StartTransaction();
-            BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(
-                _database.CurrentSpaceId,
-                OpenMode.ForRead);
-
+            BlockTableRecord currentSpace = (BlockTableRecord)transaction.GetObject(_database.CurrentSpaceId, OpenMode.ForRead);
             foreach (ObjectId objectId in currentSpace)
                 objectIds.Add(objectId);
-
             return objectIds;
         }
 
@@ -372,14 +345,8 @@ namespace Tools.VinaCad.Action.Actions
 
         private static object TryGetSystemVariable(string name, object fallbackValue)
         {
-            try
-            {
-                return Application.GetSystemVariable(name);
-            }
-            catch
-            {
-                return fallbackValue;
-            }
+            try { return Application.GetSystemVariable(name); }
+            catch { return fallbackValue; }
         }
 
         private static void TrySetSystemVariable(string name, object value)
@@ -387,17 +354,12 @@ namespace Tools.VinaCad.Action.Actions
             try
             {
                 object currentValue = Application.GetSystemVariable(name);
-                object compatibleValue = value;
-                if (currentValue != null && currentValue.GetType() != value.GetType())
-                {
-                    compatibleValue = Convert.ChangeType(value, currentValue.GetType());
-                }
-
-                Application.SetSystemVariable(name, compatibleValue);
+                Application.SetSystemVariable(name, currentValue != null && currentValue.GetType() != value.GetType()
+                    ? Convert.ChangeType(value, currentValue.GetType())
+                    : value);
             }
-            catch
-            {
-            }
+            catch { }
         }
+
     }
 }
