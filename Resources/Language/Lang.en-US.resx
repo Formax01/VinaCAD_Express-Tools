@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>Language changed to {0}.</value>
+  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
-    <value>Dont find text content</value>
+    <value>No matching text found</value>
   </data>
   <data name="FDT_Title" xml:space="preserve">
     <value>Draw Pile</value>
@@ -144,7 +147,31 @@
   <data name="FDT_UI_Title" xml:space="preserve">
     <value>Find and Select Text and MText Objects</value>
   </data>
-  <data name="Msg_LanguageChanged" xml:space="preserve">
-    <value>Language changed to {0}.</value>
+  <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
+    <value>Select a new insertion point, press Enter to finish.</value>
+  </data>
+  <data name="CPD_MessDialog_DaDatBlockMoiNewText" xml:space="preserve">
+    <value>New block placed — {0}</value>
+  </data>
+  <data name="CPD_MessDialog_DoiTuongChonKhongPhaiBlockCaoDoHopLe" xml:space="preserve">
+    <value>The selected object is not a valid elevation block.</value>
+  </data>
+  <data name="CPD_MessDialog_KhongCoTaiLieuHoatDong" xml:space="preserve">
+    <value>No active document</value>
+  </data>
+  <data name="CPD_MessDialog_KhongDocDuocGiaTriCaoDoTuOldText" xml:space="preserve">
+    <value>Could not read the elevation value from "{0}".</value>
+  </data>
+  <data name="CPD_MessDialog_LoiExMessage" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="CPD_UI_ChiDuocChonBlock" xml:space="preserve">
+    <value>Only blocks can be selected.</value>
+  </data>
+  <data name="CPD_UI_ChonBlockCaoDo" xml:space="preserve">
+    <value>Select elevation block: </value>
+  </data>
+  <data name="CPD_UI_DiemDatMoiKetThuc" xml:space="preserve">
+    <value>New insertion point &lt;End&gt;: </value>
   </data>
 </root>
