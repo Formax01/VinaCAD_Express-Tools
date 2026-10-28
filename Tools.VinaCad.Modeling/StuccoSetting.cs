@@ -2,7 +2,7 @@ namespace Tools.VinaCad.Modeling
 {
     public sealed class StuccoSetting
     {
-        public const string DefaultLayerName = "Vua";
+        public const string DefaultLayerName = "Stucco_Vua";
         public const short DefaultLayerColorIndex = 31;
         public const double DefaultThickness = 30.0;
 

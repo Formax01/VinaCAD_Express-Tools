@@ -1,20 +1,57 @@
-using Prima.VinaCAD.ApplicationServices;
+﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
+using System.Globalization;
+using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Teigha.Runtime;
-using Application = Prima.VinaCAD.ApplicationServices.Application;
-using System.Windows;
-using PrLogTrackingSystem;
-using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Action.Actions;
+using Tools.VinaCAD.Action.Actions;
 
+using Application = Prima.VinaCAD.ApplicationServices.Application;
+using AcadApp = Prima.VinaCAD.ApplicationServices.Application;
 namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+
+        
+        
+        [CommandMethod("LG")]
+        public void BanisterCommand()
+        {
+            try
+            {
+                new BanisterAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.Info(ex.ToString());
+            }
+        }
+
+        //[CommandMethod("CPD")]
+        //public void CopyElevation()
+        //{
+        //    try
+        //    {
+        //        CopyElevationAction action = new CopyElevationAction();
+        //        action.Execute();
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
+        //    }
+        //}
+        
+
+
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
@@ -748,35 +785,35 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
             }
         }
 
-        [CommandMethod("E2")]
-        public void DuctElbowReducingCommand()
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
         {
             try
             {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+                new SupplyAirDiffuserAction().Execute3D();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
             }
         }
 
-        [CommandMethod("E3")]
-        public void DuctElbowVerticalCommand()
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
         {
             try
             {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+                new SupplyAirDiffuserAction().ExecuteBlock();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
             }
         }
 

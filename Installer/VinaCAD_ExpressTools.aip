@@ -27,16 +27,19 @@
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="AutoRebar.bundle_Dir" Directory_Parent="APPDIR" DefaultDir="EXPRES~1.BUN|ExpressTools.bundle"/>
     <ROW Directory="Contents_Dir" Directory_Parent="AutoRebar.bundle_Dir" DefaultDir="Contents"/>
+    <ROW Directory="DoorAssets_Dir" Directory_Parent="Templates_Dir" DefaultDir="DOORAS~1|Door Assets"/>
     <ROW Directory="Images_Dir" Directory_Parent="Resources_Dir" DefaultDir="Images"/>
     <ROW Directory="Resources_Dir" Directory_Parent="Contents_Dir" DefaultDir="RESOUR~1|Resources"/>
     <ROW Directory="Settings_Dir" Directory_Parent="Resources_Dir" DefaultDir="Settings"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="Templates_Dir" Directory_Parent="Resources_Dir" DefaultDir="TEMPLA~1|Templates"/>
+    <ROW Directory="WindowAssets_Dir" Directory_Parent="Templates_Dir" DefaultDir="WINDOW~1|Window Assets"/>
     <ROW Directory="__1_Dir" Directory_Parent="Contents_Dir" DefaultDir="OUTCOM~1|Outcome_V2026"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="ACCAMERA_26.12_17.tx" ComponentId="{C88B47E4-8ADF-4A73-A81B-D59EF3ADA18C}" Directory_="__1_Dir" Attributes="256" KeyPath="ACCAMERA_26.12_17.tx" Type="0"/>
     <ROW Component="APPDIR" ComponentId="{DBA6AE8E-707F-4A92-A6B0-723EAE368377}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="DF_01.dwg" ComponentId="{03FED901-037B-45A6-8D99-821B7A701623}" Directory_="DoorAssets_Dir" Attributes="0" KeyPath="DF_01.dwg" Type="0"/>
     <ROW Component="PackageContents.xml" ComponentId="{DA68906C-2F40-475C-AE6C-47A3EE349C95}" Directory_="AutoRebar.bundle_Dir" Attributes="0" KeyPath="PackageContents.xml" Type="0"/>
     <ROW Component="PrLogTrackingSystem.dll" ComponentId="{BF932FE7-FE45-47AD-81DD-77B0BE370E46}" Directory_="__1_Dir" Attributes="0" KeyPath="PrLogTrackingSystem.dll"/>
     <ROW Component="PrMVVMCore.dll" ComponentId="{7BC74E9E-9F2C-429E-AA56-604D05D26CB4}" Directory_="__1_Dir" Attributes="0" KeyPath="PrMVVMCore.dll"/>
@@ -44,8 +47,6 @@
     <ROW Component="Sample.xlsx" ComponentId="{D23C923E-F3AD-4759-ADFD-690A2667903E}" Directory_="Settings_Dir" Attributes="0" KeyPath="Sample.xlsx" Type="0"/>
     <ROW Component="Sample.xlsx_1" ComponentId="{845D5BAD-586A-481E-ABCA-795ACC589368}" Directory_="Templates_Dir" Attributes="0" KeyPath="Sample.xlsx_1" Type="0"/>
     <ROW Component="Sample_Image.png" ComponentId="{7F3D7E0F-DE4E-433C-914F-8EB520983D11}" Directory_="Images_Dir" Attributes="0" KeyPath="Setting.png" Type="0"/>
-    <ROW Component="System.Windows.Forms.Primitives.dll" ComponentId="{6962200B-0779-4FAC-B340-D2D0AFA2E9FE}" Directory_="__1_Dir" Attributes="256" KeyPath="System.Windows.Forms.Primitives.dll"/>
-    <ROW Component="System.Windows.Forms.dll" ComponentId="{8120FEAD-A205-4A8B-9CCE-773D60FEBF89}" Directory_="__1_Dir" Attributes="256" KeyPath="System.Windows.Forms.dll"/>
     <ROW Component="TD_Alloc_26.12_17.dll" ComponentId="{F3A4B8EB-E3AD-4DCA-8948-0BF85BF60E9B}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_Alloc_26.12_17.dll"/>
     <ROW Component="TD_DbCore_26.12_17.dll" ComponentId="{8FE97586-E5C6-4D25-B5FC-06B62815316B}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_DbCore_26.12_17.dll"/>
     <ROW Component="TD_DbRoot_26.12_17.dll" ComponentId="{F63FAB00-7C8D-400E-A903-70ABDA20BEFA}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_DbRoot_26.12_17.dll"/>
@@ -65,6 +66,7 @@
     <ROW Component="Tools.VinaCad.Helper.dll" ComponentId="{BDFBB239-E082-4CDF-A900-32B5224A4BAC}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Helper.dll"/>
     <ROW Component="Tools.VinaCad.Modeling.dll" ComponentId="{BD131F09-E514-4786-AFE1-FEFBBB6DB1AA}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.VinaCad.Modeling.dll"/>
     <ROW Component="VinaCADCoreMgd_Net8.dll" ComponentId="{1184DD2A-40CA-4EA2-AC56-DA9D3B0CE00E}" Directory_="__1_Dir" Attributes="256" KeyPath="VinaCADCoreMgd_Net8.dll"/>
+    <ROW Component="WA_B1.dwg" ComponentId="{846BF206-32AC-4DEA-BBAB-668AFF541377}" Directory_="WindowAssets_Dir" Attributes="0" KeyPath="WA_B1.dwg" Type="0"/>
     <ROW Component="log4net.dll" ComponentId="{927454FC-16EE-4925-BF1E-63AFBB07AD01}" Directory_="__1_Dir" Attributes="0" KeyPath="log4net.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -107,8 +109,6 @@
     <ROW File="RecomputeDimBlock_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="RECOMP~1.TX|RecomputeDimBlock_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\RecomputeDimBlock_26.12_17.tx" SelfReg="false"/>
     <ROW File="RText_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="RTEXT_~1.TX|RText_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\RText_26.12_17.tx" SelfReg="false"/>
     <ROW File="SCENEOE_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="SCENEO~1.TX|SCENEOE_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\SCENEOE_26.12_17.tx" SelfReg="false"/>
-    <ROW File="System.Windows.Forms.dll" Component_="System.Windows.Forms.dll" FileName="SYSTEM~1.DLL|System.Windows.Forms.dll" Attributes="0" SourcePath="..\Outcome_V2026\System.Windows.Forms.dll" SelfReg="false"/>
-    <ROW File="System.Windows.Forms.Primitives.dll" Component_="System.Windows.Forms.Primitives.dll" FileName="SYSTEM~2.DLL|System.Windows.Forms.Primitives.dll" Attributes="0" SourcePath="..\Outcome_V2026\System.Windows.Forms.Primitives.dll" SelfReg="false"/>
     <ROW File="TD_Alloc_26.12_17.dll" Component_="TD_Alloc_26.12_17.dll" FileName="TD_ALL~1.DLL|TD_Alloc_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_Alloc_26.12_17.dll" SelfReg="false"/>
     <ROW File="TD_Ave_26.12_17.tx" Component_="ACCAMERA_26.12_17.tx" FileName="TD_AVE~1.TX|TD_Ave_26.12_17.tx" Attributes="0" SourcePath="..\Outcome_V2026\TD_Ave_26.12_17.tx" SelfReg="false"/>
     <ROW File="TD_DbCore_26.12_17.dll" Component_="TD_DbCore_26.12_17.dll" FileName="TD_DBC~1.DLL|TD_DbCore_26.12_17.dll" Attributes="0" SourcePath="..\Outcome_V2026\TD_DbCore_26.12_17.dll" SelfReg="false"/>
@@ -156,6 +156,53 @@
     <ROW File="LNEO.png" Component_="Sample_Image.png" FileName="LNEO.png" Attributes="0" SourcePath="..\Resources\Images\LNEO.png" SelfReg="false"/>
     <ROW File="LNOI.png" Component_="Sample_Image.png" FileName="LNOI.png" Attributes="0" SourcePath="..\Resources\Images\LNOI.png" SelfReg="false"/>
     <ROW File="ExpressTools.pdf" Component_="Sample.xlsx_1" FileName="EXPRES~1.PDF|Express Tools.pdf" Attributes="0" SourcePath="..\Resources\Templates\Express Tools.pdf" SelfReg="false"/>
+    <ROW File="DF_01.dwg" Component_="DF_01.dwg" FileName="DF_01.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_01.dwg" SelfReg="false"/>
+    <ROW File="DF_02.dwg" Component_="DF_01.dwg" FileName="DF_02.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_02.dwg" SelfReg="false"/>
+    <ROW File="DF_03.dwg" Component_="DF_01.dwg" FileName="DF_03.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_03.dwg" SelfReg="false"/>
+    <ROW File="DF_04.dwg" Component_="DF_01.dwg" FileName="DF_04.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_04.dwg" SelfReg="false"/>
+    <ROW File="DF_05.dwg" Component_="DF_01.dwg" FileName="DF_05.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_05.dwg" SelfReg="false"/>
+    <ROW File="DF_06.dwg" Component_="DF_01.dwg" FileName="DF_06.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_06.dwg" SelfReg="false"/>
+    <ROW File="DF_07.dwg" Component_="DF_01.dwg" FileName="DF_07.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_07.dwg" SelfReg="false"/>
+    <ROW File="DF_08.dwg" Component_="DF_01.dwg" FileName="DF_08.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_08.dwg" SelfReg="false"/>
+    <ROW File="DF_09.dwg" Component_="DF_01.dwg" FileName="DF_09.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_09.dwg" SelfReg="false"/>
+    <ROW File="DF_10.dwg" Component_="DF_01.dwg" FileName="DF_10.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_10.dwg" SelfReg="false"/>
+    <ROW File="DF_11.dwg" Component_="DF_01.dwg" FileName="DF_11.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_11.dwg" SelfReg="false"/>
+    <ROW File="DF_12.dwg" Component_="DF_01.dwg" FileName="DF_12.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_12.dwg" SelfReg="false"/>
+    <ROW File="DF_13.dwg" Component_="DF_01.dwg" FileName="DF_13.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_13.dwg" SelfReg="false"/>
+    <ROW File="DF_14.dwg" Component_="DF_01.dwg" FileName="DF_14.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_14.dwg" SelfReg="false"/>
+    <ROW File="DF_15.dwg" Component_="DF_01.dwg" FileName="DF_15.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_15.dwg" SelfReg="false"/>
+    <ROW File="DF_16.DWG" Component_="DF_01.dwg" FileName="DF_16.DWG" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_16.DWG" SelfReg="false"/>
+    <ROW File="DF_17.DWG" Component_="DF_01.dwg" FileName="DF_17.DWG" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_17.DWG" SelfReg="false"/>
+    <ROW File="DF_18.dwg" Component_="DF_01.dwg" FileName="DF_18.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_18.dwg" SelfReg="false"/>
+    <ROW File="DF_19.DWG" Component_="DF_01.dwg" FileName="DF_19.DWG" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_19.DWG" SelfReg="false"/>
+    <ROW File="DF_20.dwg" Component_="DF_01.dwg" FileName="DF_20.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_20.dwg" SelfReg="false"/>
+    <ROW File="DF_21.dwg" Component_="DF_01.dwg" FileName="DF_21.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_21.dwg" SelfReg="false"/>
+    <ROW File="DF_22.dwg" Component_="DF_01.dwg" FileName="DF_22.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_22.dwg" SelfReg="false"/>
+    <ROW File="DF_23.dwg" Component_="DF_01.dwg" FileName="DF_23.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_23.dwg" SelfReg="false"/>
+    <ROW File="DF_24.dwg" Component_="DF_01.dwg" FileName="DF_24.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_24.dwg" SelfReg="false"/>
+    <ROW File="DF_25.dwg" Component_="DF_01.dwg" FileName="DF_25.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_25.dwg" SelfReg="false"/>
+    <ROW File="DF_26.dwg" Component_="DF_01.dwg" FileName="DF_26.dwg" Attributes="0" SourcePath="..\Resources\Templates\Door Assets\DF_26.dwg" SelfReg="false"/>
+    <ROW File="WA_B1.dwg" Component_="WA_B1.dwg" FileName="WA_B1.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B1.dwg" SelfReg="false"/>
+    <ROW File="WA_B10.dwg" Component_="WA_B1.dwg" FileName="WA_B10.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B10.dwg" SelfReg="false"/>
+    <ROW File="WA_B11.dwg" Component_="WA_B1.dwg" FileName="WA_B11.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B11.dwg" SelfReg="false"/>
+    <ROW File="WA_B12.dwg" Component_="WA_B1.dwg" FileName="WA_B12.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B12.dwg" SelfReg="false"/>
+    <ROW File="WA_B13.dwg" Component_="WA_B1.dwg" FileName="WA_B13.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B13.dwg" SelfReg="false"/>
+    <ROW File="WA_B14.dwg" Component_="WA_B1.dwg" FileName="WA_B14.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B14.dwg" SelfReg="false"/>
+    <ROW File="WA_B15.dwg" Component_="WA_B1.dwg" FileName="WA_B15.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B15.dwg" SelfReg="false"/>
+    <ROW File="WA_B16.dwg" Component_="WA_B1.dwg" FileName="WA_B16.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B16.dwg" SelfReg="false"/>
+    <ROW File="WA_B17.dwg" Component_="WA_B1.dwg" FileName="WA_B17.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B17.dwg" SelfReg="false"/>
+    <ROW File="WA_B18.dwg" Component_="WA_B1.dwg" FileName="WA_B18.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B18.dwg" SelfReg="false"/>
+    <ROW File="WA_B19.dwg" Component_="WA_B1.dwg" FileName="WA_B19.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B19.dwg" SelfReg="false"/>
+    <ROW File="WA_B2.dwg" Component_="WA_B1.dwg" FileName="WA_B2.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B2.dwg" SelfReg="false"/>
+    <ROW File="WA_B20.dwg" Component_="WA_B1.dwg" FileName="WA_B20.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B20.dwg" SelfReg="false"/>
+    <ROW File="WA_B21.dwg" Component_="WA_B1.dwg" FileName="WA_B21.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B21.dwg" SelfReg="false"/>
+    <ROW File="WA_B3.dwg" Component_="WA_B1.dwg" FileName="WA_B3.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B3.dwg" SelfReg="false"/>
+    <ROW File="WA_B4.dwg" Component_="WA_B1.dwg" FileName="WA_B4.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B4.dwg" SelfReg="false"/>
+    <ROW File="WA_B5.dwg" Component_="WA_B1.dwg" FileName="WA_B5.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B5.dwg" SelfReg="false"/>
+    <ROW File="WA_B6.dwg" Component_="WA_B1.dwg" FileName="WA_B6.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B6.dwg" SelfReg="false"/>
+    <ROW File="WA_B7.dwg" Component_="WA_B1.dwg" FileName="WA_B7.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B7.dwg" SelfReg="false"/>
+    <ROW File="WA_B8.dwg" Component_="WA_B1.dwg" FileName="WA_B8.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B8.dwg" SelfReg="false"/>
+    <ROW File="WA_B9.dwg" Component_="WA_B1.dwg" FileName="WA_B9.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B9.dwg" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -244,8 +291,6 @@
     <ROW Feature_="MainFeature" Component_="log4net.dll"/>
     <ROW Feature_="MainFeature" Component_="PrLogTrackingSystem.dll"/>
     <ROW Feature_="MainFeature" Component_="PrMVVMCore.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Windows.Forms.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Windows.Forms.Primitives.dll"/>
     <ROW Feature_="MainFeature" Component_="TD_Alloc_26.12_17.dll"/>
     <ROW Feature_="MainFeature" Component_="TD_DbCore_26.12_17.dll"/>
     <ROW Feature_="MainFeature" Component_="TD_DbRoot_26.12_17.dll"/>
@@ -265,6 +310,8 @@
     <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Helper.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Modeling.dll"/>
     <ROW Feature_="MainFeature" Component_="VinaCADCoreMgd_Net8.dll"/>
+    <ROW Feature_="MainFeature" Component_="DF_01.dwg"/>
+    <ROW Feature_="MainFeature" Component_="WA_B1.dwg"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
