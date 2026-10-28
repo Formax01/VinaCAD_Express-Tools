@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:Tools.View.Behaviors"
-        Title="Độ rộng cửa / Khoảng cách mép tường"
+        xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+        Title="{x:Static res:Lang.AD_UI_DoRongCuaKhoangCachMepTuong}"
         Width="400"
         Height="550"
         ResizeMode="NoResize"
@@ -22,7 +23,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Column="0" Header="Chọn độ rộng cửa">
+        <GroupBox Grid.Column="0" Header="{x:Static res:Lang.AD_UI_ChonDoRongCua}">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -30,7 +31,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Danh sách độ rộng" />
+                <TextBlock Text="{x:Static res:Lang.AD_UI_DanhSachDoRong}" />
                 <ListBox x:Name="HoleWidthList" x:FieldModifier="public"
                          HorizontalContentAlignment="Right"
                          Padding="0,2,10,2"
@@ -42,7 +43,7 @@
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="Độ rộng:" />
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.AD_UI_DoRong}" />
                     <TextBox x:Name="HoleWidthText" x:FieldModifier="public"
                              Grid.Column="1"
                              Height="25"
@@ -54,11 +55,11 @@
                 <Button x:Name="MeasureHoleButton" x:FieldModifier="public" Grid.Row="3"
                         Height="25"
                         Margin="0,5,0,0"
-                        Content="Đo độ rộng" />
+                        Content="{x:Static res:Lang.AD_UI_DoDoRong}" />
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="2" Header="Chọn khoảng cách mép tường">
+        <GroupBox Grid.Column="2" Header="{x:Static res:Lang.AD_UI_ChonKhoangCachMepTuong}">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -66,7 +67,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Danh sách khoảng cách" />
+                <TextBlock Text="{x:Static res:Lang.AD_UI_DanhSachKhoangCach}" />
                 <ListBox x:Name="PierWidthList" x:FieldModifier="public"
                          HorizontalContentAlignment="Right"
                          Padding="0,2,10,2"
@@ -78,7 +79,7 @@
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="Khoảng cách mép tường:" />
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.AD_UI_KhoangCachMepTuong}" />
                     <TextBox x:Name="PierWidthText" x:FieldModifier="public"
                              Grid.Column="1"
                              Height="25"
@@ -91,7 +92,7 @@
                         Grid.Row="3"
                         Height="25"
                         Margin="0,5,0,0"
-                        Content="Đo khoảng cách" />
+                        Content="{x:Static res:Lang.AD_UI_DoKhoangCach}" />
             </Grid>
         </GroupBox>
 
@@ -100,7 +101,7 @@
                 Grid.ColumnSpan="3"
                 Height="25"
                 Margin="2,8,2,0"
-                Content="Lấy độ rộng từ cửa có sẵn" />
+                Content="{x:Static res:Lang.AD_UI_LayDoRongTuCuaCoSan}" />
 
         <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="2,8,2,0">
             <Grid.ColumnDefinitions>
@@ -110,11 +111,11 @@
             </Grid.ColumnDefinitions>
             <RadioButton x:Name="PocketWidthCheck" x:FieldModifier="public" GroupName="DoorPlacementMode"
                       VerticalAlignment="Center"
-                      Content="Đo từ mép tường" />
+                      Content="{x:Static res:Lang.AD_UI_DoTuMepTuong}" />
             <RadioButton x:Name="MiddleWallCheck" x:FieldModifier="public" GroupName="DoorPlacementMode"
                       Grid.Column="2"
                       VerticalAlignment="Center"
-                      Content="Cửa giữa tường" />
+                      Content="{x:Static res:Lang.AD_UI_CuaGiuaTuong}" />
         </Grid>
 
         <StackPanel Grid.Row="3"
@@ -123,7 +124,7 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button x:Name="AcceptButton" x:FieldModifier="public" Width="75" Height="28" Margin="0,0,12,0" IsDefault="True" Content="OK" />
-            <Button x:Name="CancelButton" x:FieldModifier="public" Width="75" Height="28" IsCancel="True" Content="Hủy" />
+            <Button x:Name="CancelButton" x:FieldModifier="public" Width="75" Height="28" IsCancel="True" Content="{x:Static res:Lang.Common_UI_Huy}" />
         </StackPanel>
     </Grid>
 </Window>

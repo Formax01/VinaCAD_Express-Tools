@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.VinaCAD.Action.Actions;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -118,7 +118,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 else
                 {
-                    MessageBox.Show("Vui lòng chọn text của cấu kiện cần thống kê.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.XLCK_Msg_VuiLongChonTextCuaCauKienCanThongKe, Lang.Common_Text_ThongBao);
                 }
 
             }
@@ -139,7 +139,7 @@ namespace Tools.VinaCad.Action.Actions
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nChọn text: ";
+            opt.MessageForAdding = "\n" + Lang.XLCK_Prompt_ChonText;
             opt.SingleOnly = true;
             opt.RejectObjectsOnLockedLayers = true;
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -21,7 +22,7 @@ namespace Tools.VinaCad.Helper.Helper
                 .OrderBy(NaturalSortKey)
                 .ToArray();
             if (files.Length == 0)
-                throw new FileNotFoundException("Không tìm thấy bản vẽ cửa *.dwg.", assetsDirectory);
+                throw new FileNotFoundException( Lang.AD_Error_KhongTimThayBanVeCuaDwg, assetsDirectory);
 
             DoorStyleCatalog catalog = new DoorStyleCatalog();
             foreach (string file in files)
@@ -62,7 +63,7 @@ namespace Tools.VinaCad.Helper.Helper
                 if (Directory.Exists(candidate)) return candidate;
                 directory = directory.Parent;
             }
-            throw new DirectoryNotFoundException($"Không tìm thấy thư mục Templates/{AssetsFolderName}.");
+            throw new DirectoryNotFoundException($"" + Lang.Common_Error_KhongTimThayThuMucTemplates + $"/{AssetsFolderName}");
         }
 
         private static List<DoorPreviewPrimitive> ReadPreviewGeometry(string path)
