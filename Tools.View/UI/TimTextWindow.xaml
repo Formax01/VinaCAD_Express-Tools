@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Tìm và chọn đối tượng Text và MText"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.FDT_UI_Title}"
     Width="300"
     ResizeMode="NoResize"
     SizeToContent="Height"
@@ -42,7 +43,7 @@
                 VerticalAlignment="Center"
                 FontWeight="SemiBold"
                 Foreground="Blue"
-                Text="Nhập Text cần tìm:" />
+                Text="{x:Static res:Lang.FDT_UI_LblInput}" />
 
             <TextBox
                 Grid.Column="2"
@@ -60,18 +61,18 @@
                 <TextBlock
                     FontWeight="SemiBold"
                     Foreground="Blue"
-                    Text="Bạn muốn tìm theo kiểu nào?" />
+                    Text="{x:Static res:Lang.FDT_UI_GroupMode}" />
             </GroupBox.Header>
 
             <StackPanel Orientation="Vertical">
                 <CheckBox
                     Margin="0,10,0,10"
-                    Content="Tìm chính xác Text cần tìm"
+                    Content="{x:Static res:Lang.FDT_UI_ChkExact}"
                     IsChecked="{Binding IsExactMatch}" />
 
                 <CheckBox
                     Margin="0,0,0,10"
-                    Content="Tìm Text chứa Text cần tìm"
+                    Content="{x:Static res:Lang.FDT_UI_ChkContains}"
                     IsChecked="{Binding IsContainsMatch}" />
             </StackPanel>
         </GroupBox>
@@ -82,17 +83,17 @@
             Orientation="Horizontal">
 
             <Button
-                Width="70"
+                Width="110"
                 Height="25"
-                Margin="0,0,35,0"
+                Margin="0,0,10,0"
                 Command="{Binding SelectAllCmd}"
-                Content="Chọn All" />
+                Content="{x:Static res:Lang.FDT_UI_BtnSelectAll}" />
 
             <Button
-                Width="70"
+                Width="110"
                 Height="25"
                 Command="{Binding ScanSelectCmd}"
-                Content="Quét Chọn" />
+                Content="{x:Static res:Lang.FDT_UI_BtnWindowSelect}" />
 
         </StackPanel>
     </Grid>

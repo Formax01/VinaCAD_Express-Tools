@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Xác Lập TKCK"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.XLCK_UI_XacLapTkck}"
     Width="400"
     ResizeMode="NoResize"
     SizeToContent="Height"
@@ -29,7 +30,7 @@
             Grid.Row="0"
             Margin="0,0,0,10"
             Command="{Binding PickTextCmd}"
-            Content="Chọn Text Trên Màn Hình"
+            Content="{x:Static res:Lang.XLCK_UI_ChonTextTrenManHinh}"
             FontWeight="SemiBold"
             Foreground="Blue"
             IsDefault="True" />
@@ -40,7 +41,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock VerticalAlignment="Center" Text="Chiều cao của chữ:" />
+            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.XLCK_UI_ChieuCaoCuaChu}" />
 
             <TextBox
                 Grid.Column="1"
@@ -57,7 +58,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock VerticalAlignment="Center" Text="Layer của chữ:" />
+            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.XLCK_UI_LayerCuaChu}" />
 
             <TextBox
                 Grid.Column="1"
@@ -74,7 +75,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock VerticalAlignment="Center" Text="K.cách kiểm tra trùng:" />
+            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.XLCK_UI_KCachKiemTraTrung}" />
 
             <TextBox
                 Grid.Column="1"
@@ -91,7 +92,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock VerticalAlignment="Center" Text="Tỷ lệ bản vẽ:" />
+            <TextBlock VerticalAlignment="Center" Text="{x:Static res:Lang.Common_UI_TyLeBanVe}" />
 
             <TextBox
                 Grid.Column="1"
@@ -116,14 +117,14 @@
                 Height="25"
                 Margin="0,0,70,0"
                 Command="{Binding OkCmd}"
-                Content="Xác Lập"
+                Content="{x:Static res:Lang.Common_UI_XacLap}"
                 Foreground="Blue" />
 
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát"
+                Content="{x:Static res:Lang.Common_UI_Thoat}"
                 Foreground="Blue" />
         </StackPanel>
     </Grid>
