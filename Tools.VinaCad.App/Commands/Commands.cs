@@ -857,6 +857,46 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DuctBranchEEZCommand), ex);
             }
         }
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+            }
+        }
 
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute3D();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
+            }
+        }
     }
 }

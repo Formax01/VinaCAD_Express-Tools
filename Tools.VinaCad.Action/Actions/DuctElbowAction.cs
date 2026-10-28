@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teigha.DatabaseServices;
-using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Teigha.Geometry;
 using Tools.Model;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -39,20 +39,20 @@ namespace Tools.VinaCad.Action.Actions
                 Point3d insert = promptPointResult.Value;
 
                 double w1;
-                string w1Prompt = type == DuctElbowType.Reducing ? "Nhập kích thước đầu vào W1" : "Nhập kích thước 2 đầu W";
+                string w1Prompt = type == DuctElbowType.Reducing ? "Nhập kích thước đầu vào " : "Nhập kích thước 2 đầu ";
                 if (!AskDouble(editor, w1Prompt, vm.Width1, out w1)) return;
                 vm.Width1 = w1;
 
                 if (type == DuctElbowType.Reducing)
                 {
                     double w2;
-                    if (!AskDouble(editor, "Nhập kích thước đầu ra W2", vm.Width2, out w2)) return;
+                    if (!AskDouble(editor, "Nhập kích thước đầu ra ", vm.Width2, out w2)) return;
                     vm.Width2 = w2;
                 }
 
                 double r;
 
-                if (!AskDouble(editor,"Nhập bán kính cong phía trong R",vm.Radius,out r))
+                if (!AskDouble(editor,"Nhập bán kính cong phía trong ",vm.Radius,out r))
                 {
                     return;
                 }
@@ -66,16 +66,16 @@ namespace Tools.VinaCad.Action.Actions
                     vm.DropLength = l;*/
 
                     string v;
-                    if (!AskKeyword(editor, "Chọn kiểu", new[] { "Down", "Up" },
-                        vm.VerticalDir == VerticalDirection.Down ? "Down" : "Up", out v)) return;
-                    vm.VerticalDir = v == "Up" ? VerticalDirection.Up : VerticalDirection.Down;
+                    if (!AskKeyword(editor, "Chọn kiểu", new[] { "Xuống", "Lên" },
+                        vm.VerticalDir == VerticalDirection.Down ? "Xuống" : "Lên", out v)) return;
+                    vm.VerticalDir = v == "Lên" ? VerticalDirection.Up : VerticalDirection.Down;
                 }
                 else
                 {
                     string s;
-                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Left", "Right" },
-                            vm.Side == ElbowSide.Left ? "Left" : "Right", out s)) return;
-                    vm.Side = s == "Right" ? ElbowSide.Right : ElbowSide.Left;
+                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Trái", "Phải" },
+                            vm.Side == ElbowSide.Left ? "Trái" : "Phải", out s)) return;
+                    vm.Side = s == "Phải" ? ElbowSide.Right : ElbowSide.Left;
 
                     double a;
                     if (!AskDouble(editor, "Nhập góc quay (độ)", vm.AngleDeg, out a)) return;
@@ -140,13 +140,13 @@ namespace Tools.VinaCad.Action.Actions
             error = null;
 
             if (vm.Width1 <= 0)
-            { error = "Kích thước đầu W phải lớn hơn 0."; return false; }
+            { error = "Kích thước đầu phải lớn hơn 0."; return false; }
 
             if (vm.Type == DuctElbowType.Reducing && vm.Width2 <= 0)
-            { error = "Kích thước đầu ra W2 phải lớn hơn 0."; return false; }
+            { error = "Kích thước đầu ra phải lớn hơn 0."; return false; }
 
             if (vm.Radius <= 0)
-            { error = "Bán kính cong phía trong R phải lớn hơn 0."; return false; }
+            { error = "Bán kính cong phía trong phải lớn hơn 0."; return false; }
 
             if (vm.Type == DuctElbowType.Vertical)
                 return ValidateVertical(vm, out error);
@@ -170,7 +170,7 @@ namespace Tools.VinaCad.Action.Actions
             // Bán kính cong trong = Rc - W/2 phải >= 0 (cả đầu vào và đầu ra)
             if (rc - vm.Width1 / 2.0 < -1e-9 || rc - w2 / 2.0 < -1e-9)
             {
-                error = "Bán kính R quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh R";
+                error = "Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh ";
                 return false;
             }
             return true;
@@ -184,7 +184,7 @@ namespace Tools.VinaCad.Action.Actions
             { error = "Chiều dài đoạn hạ phải lớn hơn 0."; return false; }
 
             if (vm.ResolveCenterRadius(vm.Width1) < vm.Width1 / 2.0)
-            { error = "Bán kính R phải lớn hơn hoặc bằng W/2."; return false; }
+            { error = "Bán kính phải lớn hơn hoặc bằng lớn hơn hoặc bằng một nửa đầu vào."; return false; }
 
             return true;
         }
