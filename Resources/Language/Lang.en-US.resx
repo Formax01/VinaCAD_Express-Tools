@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -146,5 +146,2025 @@
   </data>
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Language changed to {0}.</value>
+  </data>
+  <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
+    <value>Cannot open the instruction file.
+{ex.Message}</value>
+  </data>
+  <data name="ABOUTEXPRESS_Msg_KhongTimThayFileHuongDan" xml:space="preserve">
+    <value>Instruction file not found:
+{pdfPath}</value>
+  </data>
+  <data name="ABOUTEXPRESS_Ribbon_HuongDanSuDungAboutexpress" xml:space="preserve">
+    <value>Instructions for use (ABOUTEXPRESS)</value>
+  </data>
+  <data name="ABOUTEXPRESS_UI_PhienBanHienTai" xml:space="preserve">
+    <value>Current version</value>
+  </data>
+  <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
+    <value>Express_Tools information</value>
+  </data>
+  <data name="AD_Error_AssetCuaKhongCoHinhHocHopLe" xml:space="preserve">
+    <value>The door asset does not have valid geometry.</value>
+  </data>
+  <data name="AD_Error_AssetCuaKhongCoHinhHocHopLeTheoTrucX" xml:space="preserve">
+    <value>The door asset does not have valid geometry in the X axis.</value>
+  </data>
+  <data name="AD_Error_AssetCuaPhaiDuocVeQuanhGocX0" xml:space="preserve">
+    <value>The door asset must be drawn around the origin X=0.</value>
+  </data>
+  <data name="AD_Error_ChieuCaoCuaPhaiLonHon0" xml:space="preserve">
+    <value>Door height must be greater than 0.</value>
+  </data>
+  <data name="AD_Error_DuLieuChieuRongCuaKhongHopLe" xml:space="preserve">
+    <value>Invalid door width data.</value>
+  </data>
+  <data name="AD_Error_KhongDocDuocDuLieuViTriCua" xml:space="preserve">
+    <value>Unable to read door position data.</value>
+  </data>
+  <data name="AD_Error_KhongTheImportBanVeCua" xml:space="preserve">
+    <value>Cannot import door drawings.</value>
+  </data>
+  <data name="AD_Error_KhongTimThayBanVeCuaDaChon" xml:space="preserve">
+    <value>The selected door drawing could not be found.</value>
+  </data>
+  <data name="AD_Error_KhongTimThayBanVeCuaDwg" xml:space="preserve">
+    <value>Door drawing file *.dwg not found.</value>
+  </data>
+  <data name="AD_Error_ViTriNayChongLenCuaDiDaDatTruocDo" xml:space="preserve">
+    <value>This position overlaps the previously placed door.</value>
+  </data>
+  <data name="AD_Msg_ChieuRongLoCuaPhaiLaSoLonHon0" xml:space="preserve">
+    <value>Door hole width must be a number greater than 0.</value>
+  </data>
+  <data name="AD_Msg_LoiAd" xml:space="preserve">
+    <value>AD error: {exception.Message}</value>
+  </data>
+  <data name="AD_Output_AdDaTaoCuaDi" xml:space="preserve">
+    <value>AD: Created {createdCount} door.</value>
+  </data>
+  <data name="AD_Output_AdHayChonLai" xml:space="preserve">
+    <value>AD: {exception.Message} Please select again.</value>
+  </data>
+  <data name="AD_Output_AdKhongTheDoiHuongCua" xml:space="preserve">
+    <value>AD: Unable to change door direction: {exception.Message}</value>
+  </data>
+  <data name="AD_Output_BlockDuocChonKhongPhaiCuaDoLenhAdCuaVinacadTao" xml:space="preserve">
+    <value>The selected block is not a door created by VinaCAD's AD command.</value>
+  </data>
+  <data name="AD_Output_DaChuyenViTriCuaVeGiuaTuong" xml:space="preserve">
+    <value>The door position has been moved to the middle of the wall.</value>
+  </data>
+  <data name="AD_Prompt_ChonHaiDiemDoDoRongCua" xml:space="preserve">
+    <value>Choose two points to measure door width:</value>
+  </data>
+  <data name="AD_Prompt_ChonMotCuaCuaVinacadTaoSanDeLayDoRong" xml:space="preserve">
+    <value>Select a pre-made VinaCAD door to get the width:</value>
+  </data>
+  <data name="AD_Prompt_ChonTuongHoacSChonCuaWCaiDatThongSoC" xml:space="preserve">
+    <value>Select wall or [S-Select door/W-Parameter settings/C-Center] &lt;Enter: Finish&gt;:</value>
+  </data>
+  <data name="AD_Prompt_Dao" xml:space="preserve">
+    <value>, Reverse</value>
+  </data>
+  <data name="AD_Prompt_DiChuyenChuotVaoGocMuonMoCuaRoiClick" xml:space="preserve">
+    <value>Move the mouse to the corner where you want to open the door and then click:</value>
+  </data>
+  <data name="AD_Prompt_DoiTuongDuocChonPhaiLaBlockCua" xml:space="preserve">
+    <value>The selected object must be a door block.</value>
+  </data>
+  <data name="AD_Prompt_Giua" xml:space="preserve">
+    <value>Middle</value>
+  </data>
+  <data name="AD_Prompt_Lat" xml:space="preserve">
+    <value>, Flip</value>
+  </data>
+  <data name="AD_Ribbon_BoTriCuaDi" xml:space="preserve">
+    <value>Arrange
+door</value>
+  </data>
+  <data name="AD_Ribbon_BoTriCuaDiAd" xml:space="preserve">
+    <value>Door arrangement (AD)</value>
+  </data>
+  <data name="AD_UI_ChonDoRongCua" xml:space="preserve">
+    <value>Choose door width</value>
+  </data>
+  <data name="AD_UI_ChonKhoangCachMepTuong" xml:space="preserve">
+    <value>Choose wall edge distance</value>
+  </data>
+  <data name="AD_UI_ChonLoaiCuaMacDinh" xml:space="preserve">
+    <value>Select default door type</value>
+  </data>
+  <data name="AD_UI_CuaGiuaTuong" xml:space="preserve">
+    <value>Door in the middle of the wall</value>
+  </data>
+  <data name="AD_UI_DanhSachDoRong" xml:space="preserve">
+    <value>Width list</value>
+  </data>
+  <data name="AD_UI_DanhSachKhoangCach" xml:space="preserve">
+    <value>Distance list</value>
+  </data>
+  <data name="AD_UI_DoDoRong" xml:space="preserve">
+    <value>Measure width</value>
+  </data>
+  <data name="AD_UI_DoKhoangCach" xml:space="preserve">
+    <value>Measure distance</value>
+  </data>
+  <data name="AD_UI_DoRong" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="AD_UI_DoRongCuaKhoangCachMepTuong" xml:space="preserve">
+    <value>Door width / Wall edge distance</value>
+  </data>
+  <data name="AD_UI_DoTuMepTuong" xml:space="preserve">
+    <value>Measure from wall edge</value>
+  </data>
+  <data name="AD_UI_KhoangCachMepTuong" xml:space="preserve">
+    <value>Distance:</value>
+  </data>
+  <data name="AD_UI_LayDoRongTuCuaCoSan" xml:space="preserve">
+    <value>Get the width from the existing door</value>
+  </data>
+  <data name="AD_Validation_KhongTheDocAssetCua" xml:space="preserve">
+    <value>Unable to read door asset {Path.GetFileName(style.AssetPath)}: {exception.Message}</value>
+  </data>
+  <data name="AW_Error_AssetCuaSoKhongCoCungHoacHinhHocCanhCuaSo" xml:space="preserve">
+    <value>The window asset does not have a valid window sector or wing geometry.</value>
+  </data>
+  <data name="AW_Error_AssetCuaSoKhongCoHinhHocHopLeTheoTrucX" xml:space="preserve">
+    <value>The window asset does not have valid geometry along the X axis.</value>
+  </data>
+  <data name="AW_Error_ChieuCaoCuaSoPhaiLonHon0" xml:space="preserve">
+    <value>Window height must be greater than 0.</value>
+  </data>
+  <data name="AW_Error_DuLieuChieuRongCuaSoKhongHopLe" xml:space="preserve">
+    <value>Invalid window width data.</value>
+  </data>
+  <data name="AW_Error_DuLieuGocTuongPreviewKhongHopLe" xml:space="preserve">
+    <value>The preview wall's original data is invalid.</value>
+  </data>
+  <data name="AW_Error_KhongDocDuocDuLieuViTriCuaSo" xml:space="preserve">
+    <value>Unable to read window position data.</value>
+  </data>
+  <data name="AW_Error_KhongTheImportBanVeCuaSo" xml:space="preserve">
+    <value>Unable to import window drawings.</value>
+  </data>
+  <data name="AW_Error_KhongTimThayBanVeCuaSoDaChon" xml:space="preserve">
+    <value>The selected window drawing was not found.</value>
+  </data>
+  <data name="AW_Error_KhongTimThayBanVeCuaSoDwg" xml:space="preserve">
+    <value>Window drawing *.dwg not found.</value>
+  </data>
+  <data name="AW_Error_KichThuocPreviewCuaSoKhongHopLe" xml:space="preserve">
+    <value>Invalid window preview size.</value>
+  </data>
+  <data name="AW_Error_ViTriNayChongLenCuaSoDaDatTruocDo" xml:space="preserve">
+    <value>This position overlaps the previously placed window.</value>
+  </data>
+  <data name="AW_Msg_ChieuRongLoCuaSoPhaiLaSoLonHon0" xml:space="preserve">
+    <value>The window hole width must be a number greater than 0.</value>
+  </data>
+  <data name="AW_Msg_KhongTheLayEditor" xml:space="preserve">
+    <value>Unable to get Editor: {ex.Message}</value>
+  </data>
+  <data name="AW_Output_AwDaTaoCuaSo" xml:space="preserve">
+    <value>AW: created {createdCount} window.</value>
+  </data>
+  <data name="AW_Output_AwHayChonLai" xml:space="preserve">
+    <value>AW: {exception.Message} Please select again.</value>
+  </data>
+  <data name="AW_Output_AwKhongTheDoiHuongCuaSo" xml:space="preserve">
+    <value>AW: Unable to change window orientation: {exception.Message}</value>
+  </data>
+  <data name="AW_Output_BlockDuocChonKhongPhaiCuaSoDoLenhAwCuaVinacad" xml:space="preserve">
+    <value>The selected block is not a window created by VinaCAD's AW command.</value>
+  </data>
+  <data name="AW_Output_DaChuyenViTriCuaSoVeGiuaTuong" xml:space="preserve">
+    <value>The window position has been moved to the middle of the wall.</value>
+  </data>
+  <data name="AW_Prompt_ChonHaiDiemDoDoRongCuaSo" xml:space="preserve">
+    <value>Select two points to measure window width:</value>
+  </data>
+  <data name="AW_Prompt_ChonMotCuaSoCuaVinacadTaoSanDeLayDoRong" xml:space="preserve">
+    <value>Select a pre-made VinaCAD window to get the width:</value>
+  </data>
+  <data name="AW_Prompt_ChonTuongHoacSChonCuaSoWCaiDatThongSo" xml:space="preserve">
+    <value>Select wall or [S-Select window/W-Parameter settings/C-Center] &lt;Enter: Finish&gt;:</value>
+  </data>
+  <data name="AW_Prompt_DiChuyenChuotVaoGocMuonMoCuaSoRoiClick" xml:space="preserve">
+    <value>Move the mouse to the corner where you want to open the window and then click:</value>
+  </data>
+  <data name="AW_Prompt_DoiTuongDuocChonPhaiLaBlockCuaSo" xml:space="preserve">
+    <value>The selected object must be a window block.</value>
+  </data>
+  <data name="AW_Ribbon_BoTriCuaSo" xml:space="preserve">
+    <value>Arrange
+window</value>
+  </data>
+  <data name="AW_Ribbon_BoTriCuaSoAw" xml:space="preserve">
+    <value>Window layout (AW)</value>
+  </data>
+  <data name="AW_UI_ChonDoRongCuaSo" xml:space="preserve">
+    <value>Choose window width</value>
+  </data>
+  <data name="AW_UI_ChonLoaiCuaSo" xml:space="preserve">
+    <value>Select window type</value>
+  </data>
+  <data name="AW_UI_CuaSoGiuaTuong" xml:space="preserve">
+    <value>Window in the middle of the wall</value>
+  </data>
+  <data name="AW_UI_DoRongCuaSoKhoangCachMepTuong" xml:space="preserve">
+    <value>Window width/Wall edge distance</value>
+  </data>
+  <data name="AW_UI_KhoangCach" xml:space="preserve">
+    <value>Distance :</value>
+  </data>
+  <data name="AW_UI_LayDoRongTuCuaSoCoSan" xml:space="preserve">
+    <value>Get width from existing window</value>
+  </data>
+  <data name="AW_Validation_KhongTheDocAssetCuaSo" xml:space="preserve">
+    <value>Unable to read window asset {Path.GetFileName(style.AssetPath)}: {exception.Message}</value>
+  </data>
+  <data name="BB_Msg_BanCanNhapTenBlockMoi" xml:space="preserve">
+    <value>You need to enter a new block name.</value>
+  </data>
+  <data name="BB_Msg_KhongTimThayBlockCanCopy" xml:space="preserve">
+    <value>Could not find the block to copy.</value>
+  </data>
+  <data name="BB_Output_DaTaoBlockMoiVoiTen" xml:space="preserve">
+    <value>Created new {count} block with name "{_TaoBlockVM.NewBlockName}".</value>
+  </data>
+  <data name="BB_Ribbon_TaoBlockBb" xml:space="preserve">
+    <value>Create blocks (BB)</value>
+  </data>
+  <data name="BB_UI_ChonBlock" xml:space="preserve">
+    <value>Select block</value>
+  </data>
+  <data name="BB_UI_TaoBlockMoiTuBlockDuocChon" xml:space="preserve">
+    <value>Create a new block from the selected block</value>
+  </data>
+  <data name="BB_UI_TenBlockDuocChon" xml:space="preserve">
+    <value>Selected block name:</value>
+  </data>
+  <data name="BB_UI_TenBlockMoi" xml:space="preserve">
+    <value>New block name:</value>
+  </data>
+  <data name="BBE_Output_BbeChonDoiTuongConCanXoaEnterSpaceXoaEscHuy" xml:space="preserve">
+    <value>BBE: Select the child object to delete | Enter/Space: Delete | Esc: Cancel/Undo</value>
+  </data>
+  <data name="BBE_Output_BbeChuaChonDoiTuongNao" xml:space="preserve">
+    <value>BBE: No objects have been selected yet.</value>
+  </data>
+  <data name="BBE_Output_BbeDaHuyBanVeKhongThayDoi" xml:space="preserve">
+    <value>BBE: Canceled, drawings unchanged.</value>
+  </data>
+  <data name="BBE_Output_BbeDaXoaDoiTuong" xml:space="preserve">
+    <value>BBE: Deleted {result.ErasedCount} object.</value>
+  </data>
+  <data name="BBE_Output_BbeDoiTuongKhongNamTrongBlockCoTheSuaHayChon" xml:space="preserve">
+    <value>BBE: Object is not in an editable block. Please choose again.</value>
+  </data>
+  <data name="BBE_Output_BbeKhongCoDoiTuongHayChonLai" xml:space="preserve">
+    <value>BBE: There is no object. Please choose again.</value>
+  </data>
+  <data name="BBE_Output_KhongXacDinhDuocLyDoTuChoi" xml:space="preserve">
+    <value>Reason for refusal could not be determined.</value>
+  </data>
+  <data name="BBE_Output_LoiBbe" xml:space="preserve">
+    <value>BBE error: {ex.Message}</value>
+  </data>
+  <data name="BBE_Prompt_ChonDoiTuong" xml:space="preserve">
+    <value>Select object</value>
+  </data>
+  <data name="BBE_Ribbon_XoaCacDoiTuongTrongBlockBbe" xml:space="preserve">
+    <value>Delete objects in block (BBE)</value>
+  </data>
+  <data name="BBE_Ribbon_XoaTrongBlock" xml:space="preserve">
+    <value>Delete in
+block. block</value>
+  </data>
+  <data name="BBE_Status_DoiTuongKhongConHopLeDaBiXoaHoacNullKhi" xml:space="preserve">
+    <value>The object is no longer valid (deleted or null when ForWrite was opened).</value>
+  </data>
+  <data name="BBE_Status_KhongTimThayAttributeDefinitionTuongUngTrongBlock" xml:space="preserve">
+    <value>No corresponding Attribute Definition found in the block.</value>
+  </data>
+  <data name="BBE_Status_KhongTimThayDinhNghiaBlockChuaAttribute" xml:space="preserve">
+    <value>No block definition containing Attribute was found.</value>
+  </data>
+  <data name="BBE_Text_DoiTuongDuocChonKhongPhaiHinhHocCoTheXoa" xml:space="preserve">
+    <value>The selected object is not deleteable geometry.</value>
+  </data>
+  <data name="BBE_Text_DoiTuongKhongConHopLe" xml:space="preserve">
+    <value>The object is no longer valid.</value>
+  </data>
+  <data name="BBE_Text_DoiTuongKhongThuocMotBlockDefinitionCoTheChinhSua" xml:space="preserve">
+    <value>The object does not belong to an editable block definition.</value>
+  </data>
+  <data name="BBE_Text_DoiTuongThuocBanBieuDienDynamicBlock" xml:space="preserve">
+    <value>Object belongs to Dynamic Block representation "{owner.Name}";</value>
+  </data>
+  <data name="BBE_Text_DoiTuongThuocBanBieuDienUCuaDynamicBlock" xml:space="preserve">
+    <value>The object belongs to the *U representation of the Dynamic Block;</value>
+  </data>
+  <data name="BBE_Text_HoacSuaDynamicBlockDefinitionGoc" xml:space="preserve">
+    <value>or edit the original Dynamic Block definition.</value>
+  </data>
+  <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
+    <value>Do not fix system block "{owner.Name}"</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
+    <value>Objects located in Xref/Overlay cannot be edited.</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaNoiDungXrefOverlayTrongBanVeHienTai" xml:space="preserve">
+    <value>Cannot edit Xref/Overlay content in the current drawing.</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaTrucTiepAnToanHayChuyenBlockVeStatic" xml:space="preserve">
+    <value>Cannot be repaired directly safely. Let's convert the block to static</value>
+  </data>
+  <data name="BBE_Text_KhongTheXoaDoiTuongTrenLayerDangKhoa" xml:space="preserve">
+    <value>Cannot delete object on locked layer "{layer.Name}".</value>
+  </data>
+  <data name="BBE_Text_KhongTheXoaTrucTiepAnToanHayChuyenBlockVeStatic" xml:space="preserve">
+    <value>cannot be safely deleted directly. Let's convert the block to static</value>
+  </data>
+  <data name="BT_Ribbon_BangCdbt" xml:space="preserve">
+    <value>CDBT table</value>
+  </data>
+  <data name="BT_Ribbon_BangCuongDoBeTongBt" xml:space="preserve">
+    <value>Concrete strength table (BT)</value>
+  </data>
+  <data name="BT_UI_BangTraCuongDoBeTong" xml:space="preserve">
+    <value>Table to look up concrete strength</value>
+  </data>
+  <data name="BTCNN_UI_BangTieuChuanChieuDaiNeoNoiCotThepToiThieu" xml:space="preserve">
+    <value>Standard Table of Minimum Reinforcing Anchor Length</value>
+  </data>
+  <data name="BTCNN_UI_Dong" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_Error_BlockTuongPhaiChuaHaiMatLinePolylineThangSongSongVa" xml:space="preserve">
+    <value>The wall block must contain two Line/Polyline sides that are straight, parallel and of the correct thickness.</value>
+  </data>
+  <data name="Common_Error_ChieuDayTuongPhaiLonHon0" xml:space="preserve">
+    <value>Wall thickness must be greater than 0.</value>
+  </data>
+  <data name="Common_Error_ChieuRongLoMoPhaiLonHon0" xml:space="preserve">
+    <value>The opening width must be greater than 0.</value>
+  </data>
+  <data name="Common_Error_DoanTuongDuocChonQuaNgan" xml:space="preserve">
+    <value>The selected wall section is too short.</value>
+  </data>
+  <data name="Common_Error_DuongDuocChonLaNetBitDauTuongKhongPhaiMatTuong" xml:space="preserve">
+    <value>The line chosen is the one that covers the top of the wall, not the face of the wall.</value>
+  </data>
+  <data name="Common_Error_HayChonLinePolylineThangHoacBlockTuongHopLe" xml:space="preserve">
+    <value>Please select Line, Straight Polyline or valid wall block.</value>
+  </data>
+  <data name="Common_Error_KhoangCachTuMepKhongDuocAm" xml:space="preserve">
+    <value>The distance from the edge cannot be negative.</value>
+  </data>
+  <data name="Common_Error_KhongCoBanVeDangHoatDong" xml:space="preserve">
+    <value>There are no active drawings.</value>
+  </data>
+  <data name="Common_Error_KhongDuChieuDaiTuongDeDatLoMoTaiViTri" xml:space="preserve">
+    <value>There is not enough wall length to place the opening at the selected location.</value>
+  </data>
+  <data name="Common_Error_KhongTimThayMatTuongSongSongTuongUngHayChonTuong" xml:space="preserve">
+    <value>No corresponding parallel wall surface was found. Select the wall created by WW.</value>
+  </data>
+  <data name="Common_Error_KhongTimThayThuMucResources" xml:space="preserve">
+    <value>Resources folder not found.</value>
+  </data>
+  <data name="Common_Error_KhongTimThayThuMucTemplates" xml:space="preserve">
+    <value>Templates/{AssetsFolderName} folder not found.</value>
+  </data>
+  <data name="Common_Error_LoMoQuaGanGocHoacGiaoTuongTX" xml:space="preserve">
+    <value>The opening is too close to the corner or T/X wall intersection.</value>
+  </data>
+  <data name="Common_Error_PolylineTuongPhaiLaMotDoanThangGomDung2Dinh" xml:space="preserve">
+    <value>The wall polyline must be a straight segment with exactly 2 vertices.</value>
+  </data>
+  <data name="Common_Msg_BanCanChenBlockThongKeMauVaoBanVe" xml:space="preserve">
+    <value>You need to insert a sample table block into the drawing.</value>
+  </data>
+  <data name="Common_Msg_BanCanNhapSoHieuBatDauDeDanhSo" xml:space="preserve">
+    <value>You need to enter the starting number to number!</value>
+  </data>
+  <data name="Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep" xml:space="preserve">
+    <value>Complete all settings before generating the rebar table.</value>
+  </data>
+  <data name="Common_Msg_BanChuaXacLapDanhMuc" xml:space="preserve">
+    <value>You have not created a drawing list yet.</value>
+  </data>
+  <data name="Common_Msg_KhoangCachTruPhaiLaSoKhongAm" xml:space="preserve">
+    <value>The post distance must be a non-negative number.</value>
+  </data>
+  <data name="Common_Msg_PhatHienTrungSoHieu" xml:space="preserve">
+    <value>Duplicate Mark Number Detected!!!</value>
+  </data>
+  <data name="Common_Msg_VuiLongChonBlockKhungTen" xml:space="preserve">
+    <value>Please select the frame name block.</value>
+  </data>
+  <data name="Common_Msg_VuiLongCopyDuLieuVaoBang" xml:space="preserve">
+    <value>Please copy the data into the table.</value>
+  </data>
+  <data name="Common_Msg_VuiLongNhapTyLeBanVe" xml:space="preserve">
+    <value>Please enter drawing scale.</value>
+  </data>
+  <data name="Common_Output_DaChonDoiTuong" xml:space="preserve">
+    <value>Selected {objectIds.Length} object.</value>
+  </data>
+  <data name="Common_Prompt_ChiChapNhanLinePolylineThangHoacBlockTuong" xml:space="preserve">
+    <value>Only straight Line, Polyline or wall block are accepted.</value>
+  </data>
+  <data name="Common_Prompt_ChonDiemChenBangThongKe" xml:space="preserve">
+    <value>Select the point to insert the table:</value>
+  </data>
+  <data name="Common_Prompt_ChonDiemChenBangThongKeThep" xml:space="preserve">
+    <value>Select the point to insert the steel table:</value>
+  </data>
+  <data name="Common_Prompt_ChonHaiDiemDoKhoangCachTru" xml:space="preserve">
+    <value>Select two points to measure the post distance:</value>
+  </data>
+  <data name="Common_Prompt_QuetChonVungChuaText" xml:space="preserve">
+    <value>Scan to select text area:</value>
+  </data>
+  <data name="Common_Ribbon_BangCuongDoBeTong" xml:space="preserve">
+    <value>Concrete strength table</value>
+  </data>
+  <data name="Common_Ribbon_BangDienTichCotThep" xml:space="preserve">
+    <value>Reinforcement area table</value>
+  </data>
+  <data name="Common_Ribbon_BangDtct" xml:space="preserve">
+    <value>DTCT table</value>
+  </data>
+  <data name="Common_Ribbon_BoTriCuaDi" xml:space="preserve">
+    <value>Arrange the door</value>
+  </data>
+  <data name="Common_Ribbon_BoTriCuaSo" xml:space="preserve">
+    <value>Window layout</value>
+  </data>
+  <data name="Common_Ribbon_DanhSoBanVe" xml:space="preserve">
+    <value>Number the drawings</value>
+  </data>
+  <data name="Common_Ribbon_DimCongDon" xml:space="preserve">
+    <value>Cumulative dimensions</value>
+  </data>
+  <data name="Common_Ribbon_ImportTuTemplate" xml:space="preserve">
+    <value>Import from template</value>
+  </data>
+  <data name="Common_Ribbon_InHangLoat" xml:space="preserve">
+    <value>Batch printing</value>
+  </data>
+  <data name="Common_Ribbon_KiemTraTrungDim" xml:space="preserve">
+    <value>Check duplicate dimensions</value>
+  </data>
+  <data name="Common_Ribbon_OffsetTuong" xml:space="preserve">
+    <value>Wall offset</value>
+  </data>
+  <data name="Common_Ribbon_SuaDanhMuc" xml:space="preserve">
+    <value>Edit drawing list</value>
+  </data>
+  <data name="Common_Ribbon_SuaThongKeThep" xml:space="preserve">
+    <value>Fix steel schedule</value>
+  </data>
+  <data name="Common_Ribbon_SuaThongKeThepHinh" xml:space="preserve">
+    <value>Edit structural steel schedule</value>
+  </data>
+  <data name="Common_Ribbon_TaoBlock" xml:space="preserve">
+    <value>Create blocks</value>
+  </data>
+  <data name="Common_Ribbon_TaoLuoiTrucNhanh" xml:space="preserve">
+    <value>Create mesh quickly</value>
+  </data>
+  <data name="Common_Ribbon_ThayDoiChieuDayTuong" xml:space="preserve">
+    <value>Change wall thickness</value>
+  </data>
+  <data name="Common_Ribbon_ThepDauDam" xml:space="preserve">
+    <value>Beam head steel</value>
+  </data>
+  <data name="Common_Ribbon_ThepSan" xml:space="preserve">
+    <value>Steel floor</value>
+  </data>
+  <data name="Common_Ribbon_ThongKeCauKien" xml:space="preserve">
+    <value>structural members schedule</value>
+  </data>
+  <data name="Common_Ribbon_TimText" xml:space="preserve">
+    <value>Find text</value>
+  </data>
+  <data name="Common_Ribbon_TinhTongThongKe" xml:space="preserve">
+    <value>Calculate total schedule</value>
+  </data>
+  <data name="Common_Ribbon_TinhTongTk" xml:space="preserve">
+    <value>Calculate total account</value>
+  </data>
+  <data name="Common_Ribbon_ToaDoCoc" xml:space="preserve">
+    <value>Pile coordinates</value>
+  </data>
+  <data name="Common_Ribbon_TrimVaSuaTuong" xml:space="preserve">
+    <value>Trim and repair walls</value>
+  </data>
+  <data name="Common_Ribbon_VeBangDanhMuc" xml:space="preserve">
+    <value>Draw a list table</value>
+  </data>
+  <data name="Common_Ribbon_VeBangDm" xml:space="preserve">
+    <value>Draw the DM table</value>
+  </data>
+  <data name="Common_Ribbon_VeLopVua" xml:space="preserve">
+    <value>Draw the plaster layer</value>
+  </data>
+  <data name="Common_Ribbon_VeTuong" xml:space="preserve">
+    <value>Paint the wall</value>
+  </data>
+  <data name="Common_Ribbon_XacLapCauKien" xml:space="preserve">
+    <value>Set up structural members</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDanhMuc" xml:space="preserve">
+    <value>Set up drawing lists</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDimCongDon" xml:space="preserve">
+    <value>Configure cumulative dimensions</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDm" xml:space="preserve">
+    <value>Set DM</value>
+  </data>
+  <data name="Common_Ribbon_XacLapSuaDanhMuc" xml:space="preserve">
+    <value>Set up and edit drawing lists</value>
+  </data>
+  <data name="Common_Ribbon_XacLapTkct" xml:space="preserve">
+    <value>Establish TKCT</value>
+  </data>
+  <data name="Common_Ribbon_XoaCacDoiTuongTrongBlock" xml:space="preserve">
+    <value>Delete objects in block</value>
+  </data>
+  <data name="Common_Ribbon_XoaTuongTuDong" xml:space="preserve">
+    <value>Delete walls automatically</value>
+  </data>
+  <data name="Common_Status_CungSoHieu" xml:space="preserve">
+    <value>Same mark number {soHieu}</value>
+  </data>
+  <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>The object is not a valid wall face.</value>
+  </data>
+  <data name="Common_Status_HaiMatTuongDangTrungNhau" xml:space="preserve">
+    <value>The two sides of the wall are overlapping.</value>
+  </data>
+  <data name="Common_Status_KhongTimThayMatTuongSongSongTuongUng" xml:space="preserve">
+    <value>No corresponding parallel wall surface was found.</value>
+  </data>
+  <data name="Common_Text_BangTraChieuDaiNeoCotThep" xml:space="preserve">
+    <value>Table to look up rebar anchor length</value>
+  </data>
+  <data name="Common_Text_BangTraChieuDaiNoiCotThep" xml:space="preserve">
+    <value>Table to look up length of reinforcement connection</value>
+  </data>
+  <data name="Common_Text_Coc" xml:space="preserve">
+    <value>Pile</value>
+  </data>
+  <data name="Common_Text_CungSoHieu" xml:space="preserve">
+    <value>Same number</value>
+  </data>
+  <data name="Common_Text_DoiTenLayer" xml:space="preserve">
+    <value>Rename Layer</value>
+  </data>
+  <data name="Common_Text_DoiTenText" xml:space="preserve">
+    <value>Rename Text</value>
+  </data>
+  <data name="Common_Text_HuongDanSuDung" xml:space="preserve">
+    <value>Instructions for use</value>
+  </data>
+  <data name="Common_Text_Loi" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Common_Text_ThongBao" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Common_Text_ThongSoChuaHopLe" xml:space="preserve">
+    <value>Parameters are not valid</value>
+  </data>
+  <data name="Common_Text_VeCoc" xml:space="preserve">
+    <value>Draw piles</value>
+  </data>
+  <data name="Common_Text_VeMatCatCauThang" xml:space="preserve">
+    <value>Draw the staircase section</value>
+  </data>
+  <data name="Common_Text_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Configure Rebar Schedule</value>
+  </data>
+  <data name="Common_UI_CapNhat" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Common_UI_ChonKhoangCachMepTuong" xml:space="preserve">
+    <value>Choose wall edge distance</value>
+  </data>
+  <data name="Common_UI_ChonTheoKieuNaoNhi" xml:space="preserve">
+    <value>Which style to choose?</value>
+  </data>
+  <data name="Common_UI_DanhSachDoRong" xml:space="preserve">
+    <value>Width list</value>
+  </data>
+  <data name="Common_UI_DanhSachKhoangCach" xml:space="preserve">
+    <value>Distance list</value>
+  </data>
+  <data name="Common_UI_DanhSoHieuTuDong" xml:space="preserve">
+    <value>Numbering
+Automatic</value>
+  </data>
+  <data name="Common_UI_DoDoRong" xml:space="preserve">
+    <value>Measure width</value>
+  </data>
+  <data name="Common_UI_DoKhoangCach" xml:space="preserve">
+    <value>Measure distance</value>
+  </data>
+  <data name="Common_UI_DoRong" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="Common_UI_DoTuMepTuong" xml:space="preserve">
+    <value>Measure from the edge of the wall</value>
+  </data>
+  <data name="Common_UI_Huy" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_UI_QuetChon" xml:space="preserve">
+    <value>Scan Select</value>
+  </data>
+  <data name="Common_UI_QuyTacDanhSoHieu" xml:space="preserve">
+    <value>Numbering rules:</value>
+  </data>
+  <data name="Common_UI_SHieu" xml:space="preserve">
+    <value>S. Hieu</value>
+  </data>
+  <data name="Common_UI_SoHieu" xml:space="preserve">
+    <value>Mark Number</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="Common_UI_TenBanVe" xml:space="preserve">
+    <value>Drawing Name</value>
+  </data>
+  <data name="Common_UI_TenBlock" xml:space="preserve">
+    <value>Block Name:</value>
+  </data>
+  <data name="Common_UI_Thoat" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Common_UI_ToaDoX" xml:space="preserve">
+    <value>X Coordinate</value>
+  </data>
+  <data name="Common_UI_ToaDoY" xml:space="preserve">
+    <value>Y Coordinate</value>
+  </data>
+  <data name="Common_UI_TraiSangPhai" xml:space="preserve">
+    <value>Left to right</value>
+  </data>
+  <data name="Common_UI_TrenXuongDuoi" xml:space="preserve">
+    <value>Top to bottom</value>
+  </data>
+  <data name="Common_UI_TuTraiSangPhaiTrenXuongDuoi" xml:space="preserve">
+    <value>From left to right, top to bottom</value>
+  </data>
+  <data name="Common_UI_TuTrenXuongDuoiTraiSangPhai" xml:space="preserve">
+    <value>From top to bottom, left to right</value>
+  </data>
+  <data name="Common_UI_TyLeBanVe" xml:space="preserve">
+    <value>Drawing scale:</value>
+  </data>
+  <data name="Common_UI_VeBang" xml:space="preserve">
+    <value>Draw Table</value>
+  </data>
+  <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
+    <value>Draw Rebar Table</value>
+  </data>
+  <data name="Common_UI_XacLap" xml:space="preserve">
+    <value>Establish</value>
+  </data>
+  <data name="Common_Msg_BlockDaTonTaiTrongBanVe" xml:space="preserve">
+    <value>Block "{newBlockName}" already exists in the drawing.</value>
+  </data>
+  <data name="Common_Prompt_ChonBlock" xml:space="preserve">
+    <value>Select block:</value>
+  </data>
+  <data name="Common_Prompt_QuetChonBlock" xml:space="preserve">
+    <value>Scan and select blocks:</value>
+  </data>
+  <data name="Common_Prompt_QuetChonBlockVaText" xml:space="preserve">
+    <value>Scan to select blocks and text:</value>
+  </data>
+  <data name="Common_Text_TiengViet" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Common_UI_ChonMauAci" xml:space="preserve">
+    <value>Select color (ACI)</value>
+  </data>
+  <data name="DCD_Msg_BanChuaXacLapCaiDatDimCongDon" xml:space="preserve">
+    <value>Cumulative dimension settings have not been configured.</value>
+  </data>
+  <data name="DCD_Ribbon_DimCongDonDcd" xml:space="preserve">
+    <value>Cumulative dimensions (DCD)</value>
+  </data>
+  <data name="DSHBV_Msg_BanChuaChonKieuDanhTen" xml:space="preserve">
+    <value>You have not chosen a name type.</value>
+  </data>
+  <data name="DSHBV_Msg_BanVuiLongNhapDayDuTienToVaHauTo" xml:space="preserve">
+    <value>Please enter the full prefix and suffix.</value>
+  </data>
+  <data name="DSHBV_Msg_HauToPhaiLaSoNguyen" xml:space="preserve">
+    <value>The suffix must be an integer.</value>
+  </data>
+  <data name="DSHBV_Ribbon_DanhSoBanVeDshbv" xml:space="preserve">
+    <value>Drawing numbering (DSHBV)</value>
+  </data>
+  <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
+    <value>Number the hospital</value>
+  </data>
+  <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
+    <value>Reinforcement area table (DTT)</value>
+  </data>
+  <data name="DTT_UI_BangTraDienTichCotThep" xml:space="preserve">
+    <value>Table to look up reinforcement area</value>
+  </data>
+  <data name="EW_Msg_LoiXuLy" xml:space="preserve">
+    <value>Processing error: {ex.Message}</value>
+  </data>
+  <data name="EW_Output_DaXoaBoGocVaVaLoiChoMangTuongBaoGom" xml:space="preserve">
+    <value>Removed, rounded corners and patched {erasedIds.Count} wall panels (Including {autoSelected} debris/opposite panel).</value>
+  </data>
+  <data name="EW_Prompt_QuetChonCacMatTuongCanXoaCoTheChonNhieuNhan" xml:space="preserve">
+    <value>Scan and select the wall faces to be erased (Can select multiple) -&gt; Press Enter:</value>
+  </data>
+  <data name="EW_Ribbon_XoaTuongTuDongEw" xml:space="preserve">
+    <value>Automatic wall clearing (EW)</value>
+  </data>
+  <data name="FDT_Msg_KhongTimThayTextChua" xml:space="preserve">
+    <value>Could not find text containing '{findText}'.</value>
+  </data>
+  <data name="FDT_Msg_VuiLongNhapTextCanTim" xml:space="preserve">
+    <value>Please enter the text you want to search for.</value>
+  </data>
+  <data name="FDT_RenameText_Output_DaChonDoiTuongText" xml:space="preserve">
+    <value>Selected {validIds.Length} text object.</value>
+  </data>
+  <data name="FDT_RenameText_Prompt_QuetChonText" xml:space="preserve">
+    <value>Scan and select text:</value>
+  </data>
+  <data name="FDT_Ribbon_TimTextFdt" xml:space="preserve">
+    <value>Find text (FDT)</value>
+  </data>
+  <data name="FN_Error_ChieuDayVuaPhaiLonHon0" xml:space="preserve">
+    <value>plaster thickness must be greater than 0.</value>
+  </data>
+  <data name="FN_Error_KhongCoKetQuaOffset" xml:space="preserve">
+    <value>No offset results.</value>
+  </data>
+  <data name="FN_Error_KhongTheOffsetBienTuong" xml:space="preserve">
+    <value>Cannot offset wall boundary: {detail}</value>
+  </data>
+  <data name="FN_Error_KhongTimThayBienKinQuanhDiemDaChonHayKiemTra" xml:space="preserve">
+    <value>No closed boundary found around the selected point. Check the gap and make sure all borders are visible on the screen.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLayer" xml:space="preserve">
+    <value>Layer '{targetLayerName}' could not be found.</value>
+  </data>
+  <data name="FN_Error_KhongXacDinhDuocPhiaOffsetTuDiemChiDan" xml:space="preserve">
+    <value>The offset side from the reference point cannot be determined.</value>
+  </data>
+  <data name="FN_Error_LayerDangKhoaHayMoKhoaTruocKhiChayFn" xml:space="preserve">
+    <value>Layer '{targetLayer.Name}' is locked. Please unlock before running FN.</value>
+  </data>
+  <data name="FN_Error_MauAciPhaiNamTrongKhoang1255" xml:space="preserve">
+    <value>The ACI color must be between 1..255.</value>
+  </data>
+  <data name="FN_Error_TenLayerFnKhongHopLe" xml:space="preserve">
+    <value>Invalid FN layer name.</value>
+  </data>
+  <data name="FN_Msg_FnDuLieuKhongHopLe" xml:space="preserve">
+    <value>FN - Invalid data</value>
+  </data>
+  <data name="FN_Msg_LoiFn" xml:space="preserve">
+    <value>FN error: {ex.Message}</value>
+  </data>
+  <data name="FN_Prompt_CaiDat" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="FN_Prompt_ChonCacCanhLienTiepCuaMatNgoaiNhanEnterDeXac" xml:space="preserve">
+    <value>Select consecutive edges of the outer face, press Enter to confirm:</value>
+  </data>
+  <data name="FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua" xml:space="preserve">
+    <value>Select an outside point to determine the plaster direction:</value>
+  </data>
+  <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
+    <value>FN - Select point in room or [O Scan select wall | E Exterior | S Settings] :</value>
+  </data>
+  <data name="FN_Prompt_MatNgoai" xml:space="preserve">
+    <value>Outer side</value>
+  </data>
+  <data name="FN_Prompt_QuetChonToanBoHaiMatCuaCacTuongHoNhanEnter" xml:space="preserve">
+    <value>Scan and select all two sides of open walls, press Enter to confirm:</value>
+  </data>
+  <data name="FN_Prompt_QuetChonTuong" xml:space="preserve">
+    <value>Scan and select walls</value>
+  </data>
+  <data name="FN_Ribbon_VeLopVuaFn" xml:space="preserve">
+    <value>Draw the plaster layer (FN)</value>
+  </data>
+  <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
+    <value>The selected lines cannot be grouted on the exterior.</value>
+  </data>
+  <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
+    <value>The outer contour has not been selected.</value>
+  </data>
+  <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
+    <value>There are no border guards.</value>
+  </data>
+  <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
+    <value>Haven't scanned open walls yet.</value>
+  </data>
+  <data name="FN_Text_KhongTheTaoVuaMatTrong" xml:space="preserve">
+    <value>Cannot create plaster on the inside.</value>
+  </data>
+  <data name="FN_Text_KhongTimThayCapMatTuongHoHopLeTrongVungChon" xml:space="preserve">
+    <value>No valid open wall face pairs were found in the selection.</value>
+  </data>
+  <data name="FN_UI_CaiDatVua" xml:space="preserve">
+    <value>Plaster Settings</value>
+  </data>
+  <data name="FN_UI_ChonLayerCoSan" xml:space="preserve">
+    <value>Select an existing layer</value>
+  </data>
+  <data name="FN_UI_ChonMotLayerDaCo" xml:space="preserve">
+    <value>Select an existing layer</value>
+  </data>
+  <data name="FN_UI_DatLaiGiaTriMacDinh" xml:space="preserve">
+    <value>Reset Default Values</value>
+  </data>
+  <data name="FN_UI_DoDayVua" xml:space="preserve">
+    <value>plaster Thickness:</value>
+  </data>
+  <data name="FN_UI_LayerVua" xml:space="preserve">
+    <value>plaster Layer:</value>
+  </data>
+  <data name="FN_UI_MaMauAci1255" xml:space="preserve">
+    <value>Color code (ACI): 1–255</value>
+  </data>
+  <data name="FN_UI_MauLayer" xml:space="preserve">
+    <value>Layer Color :</value>
+  </data>
+  <data name="FN_UI_NhapTenLayerMoi" xml:space="preserve">
+    <value>Enter a new layer name</value>
+  </data>
+  <data name="FN_UI_TaoLayerMoi" xml:space="preserve">
+    <value>Create new layer</value>
+  </data>
+  <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
+    <value>plaster thickness must be a finite number greater than 0.</value>
+  </data>
+  <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
+    <value>Select an existing layer.</value>
+  </data>
+  <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
+    <value>The plaster layer cannot be left blank.</value>
+  </data>
+  <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
+    <value>Layer color must be an ACI index from 1 to 255.</value>
+  </data>
+  <data name="FN_Validation_TenLayerChuaKyTuKhongHopLe" xml:space="preserve">
+    <value>The layer name contains invalid characters: &lt; &gt; / \ " : ; ? * | , =</value>
+  </data>
+  <data name="IPT_Error_DuongDanFileTemplateKhongHopLe" xml:space="preserve">
+    <value>Invalid template file path.</value>
+  </data>
+  <data name="IPT_Error_KhongTimThayFileTemplateBlock" xml:space="preserve">
+    <value>No template block file found.</value>
+  </data>
+  <data name="IPT_Msg_DaLoadToanBoDoiTuongTuFileTemplate" xml:space="preserve">
+    <value>Loaded all objects from the template file!</value>
+  </data>
+  <data name="IPT_Msg_KhongTimThayBlockTrongBanVe" xml:space="preserve">
+    <value>Block '{blockName}' was not found in the drawing.</value>
+  </data>
+  <data name="IPT_Prompt_ChonDiemDatDoiTuongTuTemplate" xml:space="preserve">
+    <value>Select object placement point from template:</value>
+  </data>
+  <data name="IPT_Ribbon_ImportTuTemplate" xml:space="preserve">
+    <value>Import from
+template</value>
+  </data>
+  <data name="IPT_Ribbon_ImportTuTemplateIpt" xml:space="preserve">
+    <value>Import from template (IPT)</value>
+  </data>
+  <data name="KTD_DCD_Msg_CoCacDimBiChongLanHoSaiGiaTriThucBan" xml:space="preserve">
+    <value>Some dimensions overlap, have gaps, or do not match actual values!
+Please correct them before creating cumulative dimensions.</value>
+  </data>
+  <data name="KTD_DCD_Msg_CoChuoiDimCongDonBiSai" xml:space="preserve">
+    <value>The cumulative dimension chain is invalid!</value>
+  </data>
+  <data name="KTD_DCD_Output_CoDimBiTrung" xml:space="preserve">
+    <value>Duplicate dimensions were found!</value>
+  </data>
+  <data name="KTD_DCD_Output_KhongTimThayDimCongDonSai" xml:space="preserve">
+    <value>No invalid cumulative dimensions were found.</value>
+  </data>
+  <data name="KTD_DCD_Output_KhongTimThayDimNaoBiTrung" xml:space="preserve">
+    <value>No duplicate dimensions were found.</value>
+  </data>
+  <data name="KTD_DCD_Prompt_QuetChonDimCongDon" xml:space="preserve">
+    <value>Select cumulative dimensions:</value>
+  </data>
+  <data name="KTD_DCD_Prompt_QuetChonVungChuaDim" xml:space="preserve">
+    <value>Select an area containing dimensions:</value>
+  </data>
+  <data name="KTD_Ribbon_KiemTraTd" xml:space="preserve">
+    <value>Check TD</value>
+  </data>
+  <data name="KTD_Ribbon_KiemTraTrungDimKtd" xml:space="preserve">
+    <value>Check duplicate dimensions (KTD)</value>
+  </data>
+  <data name="LG_Error_LanCanCoQuaNhieuChiTietHayKiemTraDonVi" xml:space="preserve">
+    <value>The railing has too many details ({rects.Count}). Check the drawing units and the distance between the two selected points.</value>
+  </data>
+  <data name="LG_Output_DaVeDoan" xml:space="preserve">
+    <value>Drawn segment {segments} .</value>
+  </data>
+  <data name="LG_Output_DoiTuongThuocXrefKhongDungDuocLayerNay" xml:space="preserve">
+    <value>The object belongs to xref, this layer cannot be used.</value>
+  </data>
+  <data name="LG_Output_HaiDiemQuaGanNhauTheoPhuongNgangHoacQuaDoc70" xml:space="preserve">
+    <value>If two points are too close to each other horizontally or too steep (&gt; 70 degrees), skip this section.</value>
+  </data>
+  <data name="LG_Output_KetThucLgDoanLanCan" xml:space="preserve">
+    <value>End LG: {segments} railing section.</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemCuoiLanCan" xml:space="preserve">
+    <value>Choose the end of the railing:</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemDauLanCan" xml:space="preserve">
+    <value>Choose the starting point of the railing:</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemDauLanCanNoiTiepTuDiemCuoiTruocT" xml:space="preserve">
+    <value>Select the start point of the handrail [Continue from the previous end point (T)] &lt;Enter to end&gt;:</value>
+  </data>
+  <data name="LG_Prompt_ChonDoiTuongDeLayLayer" xml:space="preserve">
+    <value>Select object to get layer:</value>
+  </data>
+  <data name="LG_Text_ChuaDatCoiLaMm" xml:space="preserve">
+    <value>not set (considered mm)</value>
+  </data>
+  <data name="LG_Text_ColumnGapPhaiLonHonColumnDia" xml:space="preserve">
+    <value>Column Gap must be larger than Column Dia.</value>
+  </data>
+  <data name="LG_Text_GiaTriKhongPhaiLaSo" xml:space="preserve">
+    <value>{label}: value is not a number.</value>
+  </data>
+  <data name="LG_Text_KhongDuocAm" xml:space="preserve">
+    <value>{label} cannot be negative.</value>
+  </data>
+  <data name="LG_Text_MauLayerAciPhaiTu1Den255" xml:space="preserve">
+    <value>Layer color (ACI) must be from 1 to 255.</value>
+  </data>
+  <data name="LG_Text_PhaiLonHon0" xml:space="preserve">
+    <value>{label} must be greater than 0.</value>
+  </data>
+  <data name="LG_Text_TenLayerKhongHopLe" xml:space="preserve">
+    <value>Invalid layer name.</value>
+  </data>
+  <data name="LG_Text_TotalHeightQuaNhoSoVoiHandrailDiaTopGapRailDia" xml:space="preserve">
+    <value>Total Height is too small compared to Handrail Dia + Top Gap + Rail Dia + Bottom Gap.</value>
+  </data>
+  <data name="LG_UI_BamDeChonMau" xml:space="preserve">
+    <value>Click to choose color</value>
+  </data>
+  <data name="LG_UI_ChonMotDoiTuongTrongBanVeDeLayLayerVaMau" xml:space="preserve">
+    <value>Select an object in the drawing to get layers and colors</value>
+  </data>
+  <data name="LG_UI_TichGopLanCanThanh1DoiTuongBoTichVeThanh" xml:space="preserve">
+    <value>Integrate: combine the railing into 1 object. Uncheck: draw as many separate objects.</value>
+  </data>
+  <data name="LTP_Drawing_Bac" xml:space="preserve">
+    <value>{preview.StepNumber}/{source.StepNumber} level</value>
+  </data>
+  <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
+    <value>{source.StepNumber} level</value>
+  </data>
+  <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
+    <value>High-rise: {source.StoreyHeight:0.####}; Step surface: {source.TreadRun:0.####}</value>
+  </data>
+  <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
+    <value>Landing: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+  </data>
+  <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
+    <value>Preview image: {GetPreviewSummary(source, preview)}</value>
+  </data>
+  <data name="LTP_Drawing_Tang" xml:space="preserve">
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} floor</value>
+  </data>
+  <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
+    <value>{source.StoreyNumber} floor</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
+    <value>Select the point to insert the stair section:</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemDichTrenGroupKhac" xml:space="preserve">
+    <value>Select destination on another group:</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemGocTrenCauThangMoi" xml:space="preserve">
+    <value>Select the origin point on the new staircase:</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuCaoTang" xml:space="preserve">
+    <value>Choose two points to measure floor height:</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi1" xml:space="preserve">
+    <value>Select two points to measure landing width 1:</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi2" xml:space="preserve">
+    <value>Select two points to measure landing width 2:</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoKhoangCach" xml:space="preserve">
+    <value>Choose two distance measurement points:</value>
+  </data>
+  <data name="LTP_Prompt_VuiLongNhapDungDinhDangSoChoTatCaThongSo" xml:space="preserve">
+    <value>Please enter the correct number format for all parameters.</value>
+  </data>
+  <data name="LTP_Ribbon_VeMatCatCauThangLtp" xml:space="preserve">
+    <value>Drawing staircase cross section (LTP)</value>
+  </data>
+  <data name="LTP_Ribbon_VeMatCatCt" xml:space="preserve">
+    <value>Face painting
+CT cut</value>
+  </data>
+  <data name="LTP_Text_ChieuNghi1" xml:space="preserve">
+    <value>Landing 1: {settings.Landing1Width:0.####}</value>
+  </data>
+  <data name="LTP_Text_ChieuNghi2" xml:space="preserve">
+    <value>Landing 2: {settings.Landing2Width:0.####}</value>
+  </data>
+  <data name="LTP_Text_Dam1" xml:space="preserve">
+    <value>Beam 1</value>
+  </data>
+  <data name="LTP_Text_Dam2" xml:space="preserve">
+    <value>Beam 2</value>
+  </data>
+  <data name="LTP_UI_CauThang1Ve" xml:space="preserve">
+    <value>Single-flight staircase</value>
+  </data>
+  <data name="LTP_UI_CauThang2Ve" xml:space="preserve">
+    <value>Two-flight staircase</value>
+  </data>
+  <data name="LTP_UI_CauThangChuX" xml:space="preserve">
+    <value>X-shaped stairs</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoDamChinh" xml:space="preserve">
+    <value>Main beam height</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoDamPhu" xml:space="preserve">
+    <value>Secondary beam height</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoLanCan" xml:space="preserve">
+    <value>Handrail height:</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoTang" xml:space="preserve">
+    <value>Floor height:</value>
+  </data>
+  <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
+    <value>Thickness of ladder:</value>
+  </data>
+  <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
+    <value>Landing 1:</value>
+  </data>
+  <data name="LTP_UI_ChieuNghi2" xml:space="preserve">
+    <value>Landing 2:</value>
+  </data>
+  <data name="LTP_UI_ChieuRongChieuNghi1" xml:space="preserve">
+    <value>Landing width 1</value>
+  </data>
+  <data name="LTP_UI_ChieuRongChieuNghi2" xml:space="preserve">
+    <value>Width of landing 2</value>
+  </data>
+  <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
+    <value>Main beam width</value>
+  </data>
+  <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
+    <value>Secondary beam width</value>
+  </data>
+  <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
+    <value>Step width:</value>
+  </data>
+  <data name="LTP_UI_DamChinhC" xml:space="preserve">
+    <value>Main beam C:</value>
+  </data>
+  <data name="LTP_UI_DamChinhR" xml:space="preserve">
+    <value>Main beam R:</value>
+  </data>
+  <data name="LTP_UI_DamPhuC" xml:space="preserve">
+    <value>Secondary beam C:</value>
+  </data>
+  <data name="LTP_UI_DamPhuR" xml:space="preserve">
+    <value>Secondary beam R:</value>
+  </data>
+  <data name="LTP_UI_DiemChen" xml:space="preserve">
+    <value>● Insertion point</value>
+  </data>
+  <data name="LTP_UI_Do" xml:space="preserve">
+    <value>Measure</value>
+  </data>
+  <data name="LTP_UI_DongY" xml:space="preserve">
+    <value>Agreed</value>
+  </data>
+  <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
+    <value>Group together after drawing</value>
+  </data>
+  <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
+    <value>Steps in the first flight:</value>
+  </data>
+  <data name="LTP_UI_SoTang" xml:space="preserve">
+    <value>Number of floors:</value>
+  </data>
+  <data name="LTP_UI_TaoNhom" xml:space="preserve">
+    <value>Create groups</value>
+  </data>
+  <data name="LTP_UI_Thang1Ve" xml:space="preserve">
+    <value>SINGLE-FLIGHT STAIRCASE</value>
+  </data>
+  <data name="LTP_UI_Thang2Ve" xml:space="preserve">
+    <value>TWO-FLIGHT STAIRCASE</value>
+  </data>
+  <data name="LTP_UI_ThangChuX" xml:space="preserve">
+    <value>X-SHAPED LADDER</value>
+  </data>
+  <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
+    <value>Stair specifications:</value>
+  </data>
+  <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
+    <value>Landing specifications:</value>
+  </data>
+  <data name="LTP_UI_TongSoBac" xml:space="preserve">
+    <value>Total number of steps:</value>
+  </data>
+  <data name="LTP_UI_VeDauSangPhai" xml:space="preserve">
+    <value>First flight to the right</value>
+  </data>
+  <data name="LTP_UI_VeDauSangTrai" xml:space="preserve">
+    <value>First flight to the left</value>
+  </data>
+  <data name="LTP_Validation_ChieuCaoTangChieuRongBacPhaiLonHon0ChieuRong" xml:space="preserve">
+    <value>Floor height and step width must be greater than 0; landing width cannot be negative.</value>
+  </data>
+  <data name="LTP_Validation_ChieuCaoVaChieuRongDamPhuPhaiLonHon0Khi" xml:space="preserve">
+    <value>The secondary beam height and width must be greater than 0 when Beam 1 or Beam 2 is enabled.</value>
+  </data>
+  <data name="LTP_Validation_KichThuocKetCauKhongDuocAmVaChieuDayBanPhai" xml:space="preserve">
+    <value>Structural dimensions must not be negative and slab thickness must be greater than 0.</value>
+  </data>
+  <data name="LTP_Validation_KieuCauThangKhongHopLe" xml:space="preserve">
+    <value>Invalid stair type.</value>
+  </data>
+  <data name="LTP_Validation_LoiLtp" xml:space="preserve">
+    <value>LTP error: {0}</value>
+  </data>
+  <data name="LTP_Validation_LtpDaTaoMatCatCauThangGomDuong" xml:space="preserve">
+    <value>LTP: Created a staircase section consisting of {0} lines.</value>
+  </data>
+  <data name="LTP_Validation_MatCatCauThangVinacadLtp" xml:space="preserve">
+    <value>Cross section of VinaCAD LTP stairs</value>
+  </data>
+  <data name="LTP_Validation_SoBacVeDauPhaiNamTrongKhoangTu1DenNho" xml:space="preserve">
+    <value>The first-flight step count must be at least 1 and less than the total step count.</value>
+  </data>
+  <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
+    <value>The number of floors must be from 1 and the total number of steps per floor must be from 2.</value>
+  </data>
+  <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
+    <value>Invalid stair section layer name.</value>
+  </data>
+  <data name="NEO_Ribbon_BangTraCdneoct" xml:space="preserve">
+    <value>CDNeoCT lookup table</value>
+  </data>
+  <data name="NEO_Ribbon_BangTraChieuDaiNeoCotThepNeo" xml:space="preserve">
+    <value>Table to look up the length of rebar anchors (NEO)</value>
+  </data>
+  <data name="NOI_Ribbon_BangTraCdnoict" xml:space="preserve">
+    <value>CDNoiCT lookup table</value>
+  </data>
+  <data name="NOI_Ribbon_BangTraChieuDaiNoiCotThepNoi" xml:space="preserve">
+    <value>Table to look up the length of reinforcement connections (NOI)</value>
+  </data>
+  <data name="PRT_Ribbon_InHangLoatPrt" xml:space="preserve">
+    <value>Bulk printing (PRT)</value>
+  </data>
+  <data name="QD_Ribbon_SuaThongKeThepHinhQd" xml:space="preserve">
+    <value>Edit structural steel schedule (QD)</value>
+  </data>
+  <data name="QD_Ribbon_SuaTkth" xml:space="preserve">
+    <value>Edit TKTH</value>
+  </data>
+  <data name="QD_UI_BangThongKeThepHinh" xml:space="preserve">
+    <value>structural steel schedule table</value>
+  </data>
+  <data name="QD_UI_ChieuDai" xml:space="preserve">
+    <value>Afternoon
+Long</value>
+  </data>
+  <data name="QD_UI_QuyCachThep" xml:space="preserve">
+    <value>Steel Specification</value>
+  </data>
+  <data name="QF_Msg_BlockBanChonKhongCoBlockThongKeTongMauBanCan" xml:space="preserve">
+    <value>The Block you selected does not have a Total Sample schedule Block, you need to review it.</value>
+  </data>
+  <data name="QF_Ribbon_TinhTongThongKeQf" xml:space="preserve">
+    <value>Calculate total schedule (QF)</value>
+  </data>
+  <data name="QS_Ribbon_SuaThongKeThepQs" xml:space="preserve">
+    <value>Fix steel schedule (QS)</value>
+  </data>
+  <data name="QS_Ribbon_SuaTkt" xml:space="preserve">
+    <value>Correction of CWD</value>
+  </data>
+  <data name="RenameLayer_Msg_ChuaCoLayerNaoDeDoi" xml:space="preserve">
+    <value>There are no layers to change yet.</value>
+  </data>
+  <data name="RenameLayer_Msg_LayerDaTonTai" xml:space="preserve">
+    <value>Layer "{newLayerName}" already exists.</value>
+  </data>
+  <data name="RenameLayer_Msg_VuiLongCopyGiaTriVaoCotRenameLayer" xml:space="preserve">
+    <value>Please copy the value into the Rename Layer column.</value>
+  </data>
+  <data name="RenameLayer_Ribbon_DoiTenLayer" xml:space="preserve">
+    <value>Rename
+layer</value>
+  </data>
+  <data name="RenameLayer_Ribbon_DoiTenLayerRenamelayer" xml:space="preserve">
+    <value>Rename layer (RenameLayer)</value>
+  </data>
+  <data name="RenameLayer_UI_TenLayerCu" xml:space="preserve">
+    <value>Old layer name</value>
+  </data>
+  <data name="RenameLayer_UI_TenLayerMoi" xml:space="preserve">
+    <value>New layer name</value>
+  </data>
+  <data name="RenameText_Msg_ChuaCoTextNaoDeDoi" xml:space="preserve">
+    <value>There is no text to change yet.</value>
+  </data>
+  <data name="RenameText_Msg_VuiLongCopyGiaTriVaoCotNewText" xml:space="preserve">
+    <value>Please copy the value into the New Text column.</value>
+  </data>
+  <data name="RenameText_Ribbon_DoiTenText" xml:space="preserve">
+    <value>Rename
+text. text</value>
+  </data>
+  <data name="RenameText_Ribbon_DoiTenTextRenametext" xml:space="preserve">
+    <value>Rename text (RenameText)</value>
+  </data>
+  <data name="RenameText_UI_CongDon" xml:space="preserve">
+    <value>Cumulative</value>
+  </data>
+  <data name="RenameText_UI_GhiDe" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="RenameText_UI_KieuThayThe" xml:space="preserve">
+    <value>Alternative style?</value>
+  </data>
+  <data name="RenameText_UI_TextCu" xml:space="preserve">
+    <value>Old text</value>
+  </data>
+  <data name="RenameText_UI_TextMoi" xml:space="preserve">
+    <value>New text</value>
+  </data>
+  <data name="Common_Ribbon_BangTra" xml:space="preserve">
+    <value>Lookup table</value>
+  </data>
+  <data name="Common_Ribbon_CauKien" xml:space="preserve">
+    <value>structural members</value>
+  </data>
+  <data name="Common_Ribbon_CauThang" xml:space="preserve">
+    <value>Stairs</value>
+  </data>
+  <data name="Common_Ribbon_Cua" xml:space="preserve">
+    <value>Door</value>
+  </data>
+  <data name="Common_Ribbon_DanhMucInAn" xml:space="preserve">
+    <value>drawing list - Printing</value>
+  </data>
+  <data name="Common_Ribbon_DoiTen" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Common_Ribbon_HuongDan" xml:space="preserve">
+    <value>Instructions</value>
+  </data>
+  <data name="Common_Ribbon_LuoiTruc" xml:space="preserve">
+    <value>Axial mesh</value>
+  </data>
+  <data name="Common_Ribbon_Thep" xml:space="preserve">
+    <value>Steel</value>
+  </data>
+  <data name="Common_Ribbon_Tuong" xml:space="preserve">
+    <value>Wall</value>
+  </data>
+  <data name="Common_Ribbon_VinaCauKienThepBangTra" xml:space="preserve">
+    <value>Vina - structural members - Steel - Lookup table</value>
+  </data>
+  <data name="Common_Ribbon_VinaDanhMucInAn" xml:space="preserve">
+    <value>Vina - drawing lists - Printing</value>
+  </data>
+  <data name="Common_Ribbon_VinaKienTruc" xml:space="preserve">
+    <value>Vina - Architecture</value>
+  </data>
+  <data name="Common_Ribbon_VinaTienIchChung" xml:space="preserve">
+    <value>Vina - General utilities</value>
+  </data>
+  <data name="Sample_UI_ChonAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="Sample_UI_NhapTextCanTim" xml:space="preserve">
+    <value>Enter the text to search:</value>
+  </data>
+  <data name="Sample_UI_TimVaChonDoiTuongText" xml:space="preserve">
+    <value>Find and select the Text object.</value>
+  </data>
+  <data name="SDM_Msg_CapNhatBangThongKeThanhCong" xml:space="preserve">
+    <value>Updated schedule table successfully.</value>
+  </data>
+  <data name="SDM_Msg_KhongTimThayBlockPhuHop" xml:space="preserve">
+    <value>No matching block found.</value>
+  </data>
+  <data name="SDM_Msg_VuiLongChonTenBlock" xml:space="preserve">
+    <value>Please select a block name.</value>
+  </data>
+  <data name="SDM_Msg_VuiLongCopyBangThongKeDanhMucThemDong" xml:space="preserve">
+    <value>Please copy the drawing list schedule table and add line {sdms.Count - blockIds.Count}</value>
+  </data>
+  <data name="SDM_Ribbon_SuaDanhMucSdm" xml:space="preserve">
+    <value>Edit drawing lists (SDM)</value>
+  </data>
+  <data name="SDM_Ribbon_SuaDm" xml:space="preserve">
+    <value>Edit DM</value>
+  </data>
+  <data name="SDM_UI_BangSuaDanhMuc" xml:space="preserve">
+    <value>Edit Drawing List</value>
+  </data>
+  <data name="SDM_UI_ChinhSua" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="TD_Msg_BanDaDanhSoHieuTuDongThepDamThanhCong" xml:space="preserve">
+    <value>You have successfully numbered the beam steel automatically!</value>
+  </data>
+  <data name="TD_Msg_NhungLaiKhacThongSoBanCanDungLaiDeKiemTra" xml:space="preserve">
+    <value>but different parameters. You need to stop to check it out!</value>
+  </data>
+  <data name="TD_Msg_VuiLongQuetChonBlockThepDauDam" xml:space="preserve">
+    <value>Please scan and select the steel block at the beam end.</value>
+  </data>
+  <data name="TD_UI_ChieuDaiCongThemPhanTienRenMm" xml:space="preserve">
+    <value>Length plus threading (mm):</value>
+  </data>
+  <data name="TD_UI_DanhSoHieuVaThongKeThepDauDamPcTuDong" xml:space="preserve">
+    <value>Automated Numbering and Scheduling of Steel for Precast Beam Ends</value>
+  </data>
+  <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepKhac" xml:space="preserve">
+    <value>Starting number (fixed) for other steel types:</value>
+  </data>
+  <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepRen" xml:space="preserve">
+    <value>Starting number (fixed) for threaded rebar:</value>
+  </data>
+  <data name="TD_UI_XacLapDanhSoHieuThepTuDong" xml:space="preserve">
+    <value>Set up automatic steel numbering:</value>
+  </data>
+  <data name="TDC_Msg_BanPhaiNhapDayDuTiLeVaKhoangCachLechCho" xml:space="preserve">
+    <value>You must enter the full ratio and allowable deviation distance</value>
+  </data>
+  <data name="TDC_Ribbon_ToaDoCoc" xml:space="preserve">
+    <value>Coordinates
+pile</value>
+  </data>
+  <data name="TDC_Ribbon_ToaDoCocTdc" xml:space="preserve">
+    <value>Pile coordinates (TDC)</value>
+  </data>
+  <data name="TDC_UI_BangToaDoCoc" xml:space="preserve">
+    <value>Pile coordinate table</value>
+  </data>
+  <data name="TDC_UI_GhiChu" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="TDC_UI_KCachLechChoPhepGiuaCocVaKiHieuCoc" xml:space="preserve">
+    <value>Allowable deviation between pile and pile symbol:</value>
+  </data>
+  <data name="TDC_UI_KichThuoc" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="TDC_UI_XacLapToaDoCoc" xml:space="preserve">
+    <value>Set Pile Coordinates</value>
+  </data>
+  <data name="TDD_Ribbon_ThepDauDamTdd" xml:space="preserve">
+    <value>beam-end reinforcement (TDD)</value>
+  </data>
+  <data name="TKCK_Msg_BanChuaXacLapCauKien" xml:space="preserve">
+    <value>You have not defined the structural components.</value>
+  </data>
+  <data name="TKCK_Msg_CanhBaoTrungText" xml:space="preserve">
+    <value>Warning about duplicate text</value>
+  </data>
+  <data name="TKCK_Msg_CoTextBiTrungBanCoMuonTiepTucThongKeKhong" xml:space="preserve">
+    <value>There is {textIds.DuplicateIds.Count} Duplicate text. Do you want to continue listing all component?</value>
+  </data>
+  <data name="TKCK_Ribbon_ThongKeCauKienTkck" xml:space="preserve">
+    <value>Structural schedule (TKCK)</value>
+  </data>
+  <data name="TKCK_Ribbon_ThongKeCk" xml:space="preserve">
+    <value>schedule
+CK</value>
+  </data>
+  <data name="TKCK_UI_BangThongKeCauKien" xml:space="preserve">
+    <value>Structural Component Table</value>
+  </data>
+  <data name="TKCK_UI_CDai" xml:space="preserve">
+    <value>Long</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="TKCK_UI_CRong" xml:space="preserve">
+    <value>Wide</value>
+  </data>
+  <data name="TKCK_UI_SLuong" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="TKCK_UI_TenCk" xml:space="preserve">
+    <value>Component Name</value>
+  </data>
+  <data name="TS_Msg_BanDaDanhSoHieuTuDongThepSanThanhCong" xml:space="preserve">
+    <value>You have successfully numbered the steel floor automatically!</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacChieuDaiThepHoacChieuDaiBe" xml:space="preserve">
+    <value>Same mark number {a.soHieu} but different steel length or hook break length.</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacDuongKinh" xml:space="preserve">
+    <value>Same mark number {a.soHieu} but different diameter.</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacHinhDangThanhThep" xml:space="preserve">
+    <value>Same number {a.soHieu} but different rebar shape.</value>
+  </data>
+  <data name="TS_Msg_PhatHienTrungSoHieu" xml:space="preserve">
+    <value>Detect duplicate mark numbers</value>
+  </data>
+  <data name="TS_Msg_VuiLongNhapChieuDaiBeMocCoDinh" xml:space="preserve">
+    <value>Please enter the fixed hook break length.</value>
+  </data>
+  <data name="TS_Msg_VuiLongQuetChonThepSan" xml:space="preserve">
+    <value>Select the slab reinforcement.</value>
+  </data>
+  <data name="TS_Ribbon_ThepSanTs" xml:space="preserve">
+    <value>Steel floor (TS)</value>
+  </data>
+  <data name="TS_Status_BanCanDungLaiDeKiemTra" xml:space="preserve">
+    <value>. You need to stop to check it out!</value>
+  </data>
+  <data name="TS_Status_KhacChieuDaiBeMoc" xml:space="preserve">
+    <value>different hook break length</value>
+  </data>
+  <data name="TS_Status_KhacChieuDaiThep" xml:space="preserve">
+    <value>different steel length</value>
+  </data>
+  <data name="TS_Status_KhacDuongKinh" xml:space="preserve">
+    <value>different diameter</value>
+  </data>
+  <data name="TS_Status_KhacHinhDangThanhThep" xml:space="preserve">
+    <value>different rebar shape</value>
+  </data>
+  <data name="TS_Status_NhungLai" xml:space="preserve">
+    <value>but</value>
+  </data>
+  <data name="TS_UI_ChieuDaiThucTrongBanVe" xml:space="preserve">
+    <value>Actual length in drawing</value>
+  </data>
+  <data name="TS_UI_ChieuDayLopBeTongBaoVe" xml:space="preserve">
+    <value>Thickness of concrete layer:</value>
+  </data>
+  <data name="TS_UI_CoDinhChoTatCaThanhThep" xml:space="preserve">
+    <value>Fixed for all rebar</value>
+  </data>
+  <data name="TS_UI_DanhSoHieuVaThongKeThepSanTuDong" xml:space="preserve">
+    <value>Automatic Slab Rebar Marking and Scheduling</value>
+  </data>
+  <data name="TS_UI_SoHieuBatDauCoDinh" xml:space="preserve">
+    <value>Starting number (fixed):</value>
+  </data>
+  <data name="TS_UI_XacLapChieuDaiBeMocThepVaChieuDayLopBe" xml:space="preserve">
+    <value>Set the length of the steel hook and the thickness of the protective concrete layer</value>
+  </data>
+  <data name="TS_UI_XacLapDanhSoHieuThepSanTuDong" xml:space="preserve">
+    <value>Set up automatic steel floor numbering</value>
+  </data>
+  <data name="TS_UI_XacLapTyLeBanVe" xml:space="preserve">
+    <value>Set the drawing scale</value>
+  </data>
+  <data name="TW_Drawing_KhoangHo" xml:space="preserve">
+    <value>{summary.HealedGapCount} clearance</value>
+  </data>
+  <data name="TW_Msg_LoiTw" xml:space="preserve">
+    <value>Error TW: {ex.Message}</value>
+  </data>
+  <data name="TW_Output_DaSuaLine" xml:space="preserve">
+    <value>Fixed {summary.ChangedLineCount} line,</value>
+  </data>
+  <data name="TW_Output_GiaoTuong" xml:space="preserve">
+    <value>{summary.JunctionCount} delivered to the wall,</value>
+  </data>
+  <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
+    <value>No valid wall stroke pairs were found in the selection.</value>
+  </data>
+  <data name="TW_Output_TwKeoChonCacTuongCanSuaNhanEnterDeThucHien" xml:space="preserve">
+    <value>TW: Drag and select the walls that need to be repaired, press Enter to execute.</value>
+  </data>
+  <data name="TW_Prompt_QuetChonCacTuongCanSua" xml:space="preserve">
+    <value>Scan and select the walls that need repair:</value>
+  </data>
+  <data name="TW_Ribbon_TrimVaSuaTuongTw" xml:space="preserve">
+    <value>Trim and repair walls (TW)</value>
+  </data>
+  <data name="VBDM_Ribbon_VeBangDanhMucVbdm" xml:space="preserve">
+    <value>Draw a list table (VBDM)</value>
+  </data>
+  <data name="VBDM_UI_ThongKeDanhMuc" xml:space="preserve">
+    <value>Drawing List</value>
+  </data>
+  <data name="VC_Msg_KhongTimThayBlock" xml:space="preserve">
+    <value>Block {blockName} could not be found.</value>
+  </data>
+  <data name="VC_Ribbon_VeCocVc" xml:space="preserve">
+    <value>Pile drawing (VC)</value>
+  </data>
+  <data name="VC_UI_ToaDoCocCuaBanLaMHayMm" xml:space="preserve">
+    <value>Are your pile coordinates m or mm?</value>
+  </data>
+  <data name="WW_Error_KhongCoTaiLieuHoatDong" xml:space="preserve">
+    <value>There are no active documents</value>
+  </data>
+  <data name="WW_Msg_Loi" xml:space="preserve">
+    <value>Error: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_ChonCacDiemLienTiepNhanEnterHoacEscDeKetThuc" xml:space="preserve">
+    <value>Select consecutive points; Press Enter or Esc to finish.</value>
+  </data>
+  <data name="WW_Output_ChonDVeTChieuDayACanLeHoacQThoat" xml:space="preserve">
+    <value>Select D (Draw), T (Thickness), A (Align) or Q (Quit).</value>
+  </data>
+  <data name="WW_Output_DaCapNhatChieuDayTuong" xml:space="preserve">
+    <value>Wall thickness updated: {_wallModel.Thickness}</value>
+  </data>
+  <data name="WW_Output_DaChonCanPhai" xml:space="preserve">
+    <value>Selected: Align Right.</value>
+  </data>
+  <data name="WW_Output_DaChonCanTam" xml:space="preserve">
+    <value>Selected: Can Tam.</value>
+  </data>
+  <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
+    <value>Selected: Align Left.</value>
+  </data>
+  <data name="WW_Output_DaTaoVaChonLayerWall" xml:space="preserve">
+    <value>Created and selected the Wall layer.</value>
+  </data>
+  <data name="WW_Output_DaVeDoanTuong" xml:space="preserve">
+    <value>Drawn {wallPoints.Count - 1} wall segment.</value>
+  </data>
+  <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
+    <value>Wall board error: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_LoiVeTuong" xml:space="preserve">
+    <value>Error drawing wall: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_LuaChonKhongHopLeGiuNguyenCanLeHienTai" xml:space="preserve">
+    <value>Invalid selection, keep the current alignment.</value>
+  </data>
+  <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
+    <value>WW: D = Wall painting | T = Thickness | A = Alignment | Q = Quit.</value>
+  </data>
+  <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
+    <value>Wall alignment [1=Center / 2=Left / 3=Right] &lt;1&gt;:</value>
+  </data>
+  <data name="WW_Prompt_ChonDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
+    <value>Select [ D-Wall Drawing / T-Thickness / A-Alignment / Q-Quit ] :</value>
+  </data>
+  <data name="WW_Prompt_ChonHaiDiemXacDinhChieuDay" xml:space="preserve">
+    <value>Choose two points to determine the thickness:</value>
+  </data>
+  <data name="WW_Prompt_DiemDau" xml:space="preserve">
+    <value>Starting point:</value>
+  </data>
+  <data name="WW_Prompt_DiemTiepTheoKetThuc" xml:space="preserve">
+    <value>Next point &lt;End&gt;:</value>
+  </data>
+  <data name="WW_Ribbon_VeTuongWw" xml:space="preserve">
+    <value>Wall painting (WW)</value>
+  </data>
+  <data name="WWO_Msg_LoiWwo" xml:space="preserve">
+    <value>WWO error: {ex.Message}</value>
+  </data>
+  <data name="WWO_Output_ChonTuongRoiChiPhiaOffset" xml:space="preserve">
+    <value>Select the wall and then point to the offset side.</value>
+  </data>
+  <data name="WWO_Output_KhongTheOffset" xml:space="preserve">
+    <value>Unable to offset: {resultMessage}</value>
+  </data>
+  <data name="WWO_Output_KhongTheOffset_8636EE0D" xml:space="preserve">
+    <value>Unable to offset: {validationMessage}</value>
+  </data>
+  <data name="WWO_Output_WwoDaTaoTuongSongSong" xml:space="preserve">
+    <value>WWO: Created {createdCount} parallel wall.</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachPhaiLaSoLonHon0" xml:space="preserve">
+    <value>WWO: Distance must be a number greater than 0.</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachPhaiLonHon0" xml:space="preserve">
+    <value>WWO: Distance must be greater than 0.</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachTamTam" xml:space="preserve">
+    <value>WWO: Center-center distance = {offsetDistance:0.##}.</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiaoAutohealjunctions" xml:space="preserve">
+    <value>Intersection handling = {(autoHealJunctions ?</value>
+  </data>
+  <data name="WWO_Prompt_ChonDiemVePhiaCanOffset" xml:space="preserve">
+    <value>Select the point on the side that needs offset:</value>
+  </data>
+  <data name="WWO_Prompt_ChonMotMatTuongKetThuc" xml:space="preserve">
+    <value>Select a wall face &lt;End&gt;:</value>
+  </data>
+  <data name="WWO_Prompt_Giu" xml:space="preserve">
+    <value>Hold</value>
+  </data>
+  <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
+    <value>Wall offset distance (center-center) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
+  </data>
+  <data name="WWO_Prompt_WwoChiNhanDuongThangLineCuaTuong" xml:space="preserve">
+    <value>WWO only accepts the Line of the wall.</value>
+  </data>
+  <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
+    <value>Intersection handling [Auto/Hold] &lt;Auto&gt;:</value>
+  </data>
+  <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
+    <value>Wall Offset (WWO)</value>
+  </data>
+  <data name="WWO_Status_DaNoiDauTuongVaXoaNetTrong" xml:space="preserve">
+    <value>Connected {connectedBranchCount} to the top of the wall and deleted the inner stroke</value>
+  </data>
+  <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
+    <value>The wall has been created parallel to the center</value>
+  </data>
+  <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
+    <value>Created a parallel wall away from the center of {offsetDistance:0.##}.</value>
+  </data>
+  <data name="WWO_Status_DaTonTaiTuongTrungTaiViTriOffset" xml:space="preserve">
+    <value>There exists a duplicate wall at the offset position.</value>
+  </data>
+  <data name="WWO_Status_DiemChiHuongNamTrenTimTuongHayChonRoMotPhia" xml:space="preserve">
+    <value>The direction point is located on the center of the wall; Please choose one side clearly.</value>
+  </data>
+  <data name="WWO_Status_KhongTheTaiDungDayDuHaiMatTuong" xml:space="preserve">
+    <value>It is impossible to fully reconstruct both sides of the wall.</value>
+  </data>
+  <data name="WWO_Status_KhongTimThayMatDoiDienCungSegmentid" xml:space="preserve">
+    <value>Could not find opposite side with SegmentId.</value>
+  </data>
+  <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
+    <value>{offsetDistance:0.##}; Do not handle intersections.</value>
+  </data>
+  <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
+    <value>Wall face metadata is incomplete.</value>
+  </data>
+  <data name="WWO_Status_VungGiao" xml:space="preserve">
+    <value>{healedIntersectionCount} intersection area.</value>
+  </data>
+  <data name="WWT_Msg_LoiNhapLieu" xml:space="preserve">
+    <value>Input error</value>
+  </data>
+  <data name="WWT_Msg_LoiWwt" xml:space="preserve">
+    <value>WWT error: {ex.Message}</value>
+  </data>
+  <data name="WWT_Msg_VuiLongNhapMotSoHopLeLonHon0" xml:space="preserve">
+    <value>Please enter a valid number greater than 0.</value>
+  </data>
+  <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
+    <value>keep the face selected.</value>
+  </data>
+  <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
+    <value>Cannot change wall: {message}</value>
+  </data>
+  <data name="WWT_Output_ThayDoiDeuQuaTimTuong" xml:space="preserve">
+    <value>change evenly through the heart and wall.</value>
+  </data>
+  <data name="WWT_Output_WwtChieuDayMoi" xml:space="preserve">
+    <value>WWT: New thickness = {_thickness:0.##};</value>
+  </data>
+  <data name="WWT_Output_WwtDaThayDoiDoanTuong" xml:space="preserve">
+    <value>WWT: Changed {changedCount} wall segment.</value>
+  </data>
+  <data name="WWT_Prompt_CheDoCanCTamSGiuMatDuocChonC" xml:space="preserve">
+    <value>Alignment mode [C=Center/S=Keep selected face] &lt;C&gt;:</value>
+  </data>
+  <data name="WWT_Prompt_ChonHaiDiemXacDinhChieuDayMoi" xml:space="preserve">
+    <value>Select two points to define the new thickness:</value>
+  </data>
+  <data name="WWT_Prompt_ChonMotMatTuongCanDoiChieuDayKetThuc" xml:space="preserve">
+    <value>Select a wall surface that needs to change thickness &lt;Finish&gt;:</value>
+  </data>
+  <data name="WWT_Prompt_WwtChiNhanDuongThangLineCuaTuong" xml:space="preserve">
+    <value>WWT only accepts the Line of the wall.</value>
+  </data>
+  <data name="WWT_Ribbon_ThayDoiCdt" xml:space="preserve">
+    <value>Change CDT</value>
+  </data>
+  <data name="WWT_Ribbon_ThayDoiChieuDayTuongWwt" xml:space="preserve">
+    <value>Wall thickness change (WWT)</value>
+  </data>
+  <data name="WWT_Status_DaDoiTuThanh" xml:space="preserve">
+    <value>Changed from {oldThickness:0.##} to {_thickness:0.##}.</value>
+  </data>
+  <data name="WWT_UI_Chon" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="WWT_UI_DanhSachDoDayTuong" xml:space="preserve">
+    <value>Wall Thickness List</value>
+  </data>
+  <data name="WWT_UI_DoDayTuong" xml:space="preserve">
+    <value>Wall Thickness</value>
+  </data>
+  <data name="WWT_UI_DoDayTuong_63076923" xml:space="preserve">
+    <value>Wall Thickness:</value>
+  </data>
+  <data name="XLCK_Msg_VuiLongChonTextCuaCauKienCanThongKe" xml:space="preserve">
+    <value>Please select the text of the structural component that needs to be list.</value>
+  </data>
+  <data name="XLCK_Prompt_ChonText" xml:space="preserve">
+    <value>Select text:</value>
+  </data>
+  <data name="XLCK_Ribbon_XacLapCauKienXlck" xml:space="preserve">
+    <value>Establishing structural members (XLCK)</value>
+  </data>
+  <data name="XLCK_Ribbon_XacLapCk" xml:space="preserve">
+    <value>Establish
+CK</value>
+  </data>
+  <data name="XLCK_UI_ChieuCaoCuaChu" xml:space="preserve">
+    <value>Height of letters:</value>
+  </data>
+  <data name="XLCK_UI_ChonTextTrenManHinh" xml:space="preserve">
+    <value>Select Text On Screen</value>
+  </data>
+  <data name="XLCK_UI_KCachKiemTraTrung" xml:space="preserve">
+    <value>Duplicate Check Distance:</value>
+  </data>
+  <data name="XLCK_UI_LayerCuaChu" xml:space="preserve">
+    <value>Layers of text:</value>
+  </data>
+  <data name="XLCK_UI_XacLapTkck" xml:space="preserve">
+    <value>Establishing Component Statistics</value>
+  </data>
+  <data name="XLDCD_Ribbon_XacLapDcd" xml:space="preserve">
+    <value>Set up DCD</value>
+  </data>
+  <data name="XLDCD_Ribbon_XacLapDimCongDonXldcd" xml:space="preserve">
+    <value>Configure cumulative dimensions (XLDCD)</value>
+  </data>
+  <data name="XLDCD_UI_DuoiLenTren" xml:space="preserve">
+    <value>Bottom to top</value>
+  </data>
+  <data name="XLDCD_UI_KhoangCachLechGiua2ChanDimChoPhep" xml:space="preserve">
+    <value>Allowed offset between two dim endpoints:</value>
+  </data>
+  <data name="XLDCD_UI_KhoangCachLechPhuongChoPhep" xml:space="preserve">
+    <value>Allowable misalignment distance:</value>
+  </data>
+  <data name="XLDCD_UI_PhaiSangTrai" xml:space="preserve">
+    <value>Right to left</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongDung" xml:space="preserve">
+    <value>Vertical rule:</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongNgang" xml:space="preserve">
+    <value>Horizontal rule:</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongXien" xml:space="preserve">
+    <value>Oblique rule:</value>
+  </data>
+  <data name="XLDCD_UI_SaiSoChoPhepDeXemDimLaLienTiepNhau" xml:space="preserve">
+    <value>Tolerance for treating dimensions as consecutive</value>
+  </data>
+  <data name="XLDCD_UI_SettingDimCongDon" xml:space="preserve">
+    <value>Cumulative Dimension Settings</value>
+  </data>
+  <data name="XLDCD_UI_XacLapQuyTacDimCongDon" xml:space="preserve">
+    <value>Configure cumulative dimension rules</value>
+  </data>
+  <data name="XLDM_Ribbon_XacLapDanhMucXldm" xml:space="preserve">
+    <value>Establishment of drawing lists (XLDM)</value>
+  </data>
+  <data name="XLDM_UI_ChonKhungTen" xml:space="preserve">
+    <value>Select Name Frame</value>
+  </data>
+  <data name="XLDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
+    <value>Allowable error (mm) :</value>
+  </data>
+  <data name="XLDM_UI_KiHieuBanVe" xml:space="preserve">
+    <value>Drawing symbols:</value>
+  </data>
+  <data name="XLDM_UI_SoHieuBanVeBatDau" xml:space="preserve">
+    <value>Starting drawing number:</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong1" xml:space="preserve">
+    <value>Drawing name (line 1):</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong2" xml:space="preserve">
+    <value>Drawing name (line 2):</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong3" xml:space="preserve">
+    <value>Drawing name (line 3):</value>
+  </data>
+  <data name="XLDM_UI_TienToKiHieuBanVe" xml:space="preserve">
+    <value>Drawing symbol prefix:</value>
+  </data>
+  <data name="XLDM_UI_TiLeBanVe" xml:space="preserve">
+    <value>Drawing scale:</value>
+  </data>
+  <data name="XLDM_UI_XacLapDeDanhDanhMucTuDong" xml:space="preserve">
+    <value>Set to automatically index</value>
+  </data>
+  <data name="XLDTC_Msg_CoChuPhaiLonHon0" xml:space="preserve">
+    <value>Font size must be greater than 0.</value>
+  </data>
+  <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
+    <value>The starting number must be greater than 0.</value>
+  </data>
+  <data name="XLDTC_UI_CoChu" xml:space="preserve">
+    <value>Font size:</value>
+  </data>
+  <data name="XLDTC_UI_KieuText" xml:space="preserve">
+    <value>Text Type :</value>
+  </data>
+  <data name="XLDTC_UI_Luu" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="XLDTC_UI_PhaiTraiDuoiTren" xml:space="preserve">
+    <value>Right → Left, Bottom → Top</value>
+  </data>
+  <data name="XLDTC_UI_PhaiTraiTrenDuoi" xml:space="preserve">
+    <value>Right → Left, Top → Bottom</value>
+  </data>
+  <data name="XLDTC_UI_QuyTacSapXep" xml:space="preserve">
+    <value>Sorting rules:</value>
+  </data>
+  <data name="XLDTC_UI_SoBatDau" xml:space="preserve">
+    <value>Starting number:</value>
+  </data>
+  <data name="XLDTC_UI_TienTo" xml:space="preserve">
+    <value>Prefix:</value>
+  </data>
+  <data name="XLDTC_UI_TraiPhaiDuoiTren" xml:space="preserve">
+    <value>Left → Right, Bottom → Top</value>
+  </data>
+  <data name="XLDTC_UI_TraiPhaiTrenDuoi" xml:space="preserve">
+    <value>Left → Right, Top → Bottom</value>
+  </data>
+  <data name="XLDTC_UI_XacLapDatTenCoc" xml:space="preserve">
+    <value>Set Pile Naming</value>
+  </data>
+  <data name="XLSDM_Ribbon_XacLapSuaDanhMucXlsdm" xml:space="preserve">
+    <value>Set up and edit drawing lists (XLSDM)</value>
+  </data>
+  <data name="XLSDM_Ribbon_XacLapSuaDm" xml:space="preserve">
+    <value>Set up and edit DM</value>
+  </data>
+  <data name="XLSDM_UI_ChonBlockDanhMuc" xml:space="preserve">
+    <value>Select the drawing list block</value>
+  </data>
+  <data name="XLSDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
+    <value>Allowable error (mm) :</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh1" xml:space="preserve">
+    <value>Attribute 1:</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh2" xml:space="preserve">
+    <value>Attribute 2:</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh3" xml:space="preserve">
+    <value>Attribute 3:</value>
+  </data>
+  <data name="XLSDM_UI_XacLapDeSuaBangDanhMuc" xml:space="preserve">
+    <value>Set to edit the list table</value>
+  </data>
+  <data name="XLTKCT_Ribbon_XacLapThongKeCotThepXltkct" xml:space="preserve">
+    <value>Configure Rebar Schedule (XLTKCT)</value>
+  </data>
+  <data name="XLTKCT_UI_BangThongKeCotThep" xml:space="preserve">
+    <value>Rebar Schedule</value>
+  </data>
+  <data name="XLTKCT_UI_ChieuDaiBeMocThepDai" xml:space="preserve">
+    <value>Steel Belt Hook Bending Length:</value>
+  </data>
+  <data name="XLTKCT_UI_ChieuDaiMoiNoi" xml:space="preserve">
+    <value>Splice Length:</value>
+  </data>
+  <data name="XLTKCT_UI_KhongTinhDongDat" xml:space="preserve">
+    <value>Excluding Earthquakes:</value>
+  </data>
+  <data name="XLTKCT_UI_PhanDulThem" xml:space="preserve">
+    <value>DUL section adds:</value>
+  </data>
+  <data name="XLTKCT_UI_TinhDongDat" xml:space="preserve">
+    <value>Earthquake Calculator:</value>
+  </data>
+  <data name="ZXW_Msg_DuLieuLuoiTrucKhongHopLe" xml:space="preserve">
+    <value>Invalid axis grid data</value>
+  </data>
+  <data name="ZXW_Output_ZxwDaHuyBanVeKhongThayDoi" xml:space="preserve">
+    <value>ZXW canceled; The drawing does not change.</value>
+  </data>
+  <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
+    <value>ZXW created mesh {input.Breadths.Count + 1} x {input.Depths.Count + 1} axes ({entityCount} objects).</value>
+  </data>
+  <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
+    <value>ZXW error: {ex.Message}</value>
+  </data>
+  <data name="ZXW_Prompt_ChonDiemGocTraiDuoiDeDatLuoiTruc" xml:space="preserve">
+    <value>Select the bottom-left corner point to set the axis grid:</value>
+  </data>
+  <data name="ZXW_Prompt_NhanCocGrid" xml:space="preserve">
+    <value>Grid pile label</value>
+  </data>
+  <data name="ZXW_Ribbon_TaoLuoiTruc" xml:space="preserve">
+    <value>Create mesh
+axis</value>
+  </data>
+  <data name="ZXW_Ribbon_TaoLuoiTrucNhanhZxw" xml:space="preserve">
+    <value>Quick mesh generation (ZXW)</value>
+  </data>
+  <data name="ZXW_Text_ChiHoTroToiDaNhip" xml:space="preserve">
+    <value>{fieldName} only supports up to {MaximumBayCount} spans.</value>
+  </data>
+  <data name="ZXW_Text_HeSoLapTaiMucKhongHopLe" xml:space="preserve">
+    <value>{fieldName}: repetition coefficient in entry {tokenIndex + 1} is invalid.</value>
+  </data>
+  <data name="ZXW_Text_KhongDuocDeTrong" xml:space="preserve">
+    <value>{fieldName} cannot be empty.</value>
+  </data>
+  <data name="ZXW_Text_KhongPhaiKhoangCachDuongHopLe" xml:space="preserve">
+    <value>{fieldName}: '{token}' is not a valid positive distance.</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucChuPhaiGomAZ" xml:space="preserve">
+    <value>The starting character of the letter axis must include A-Z.</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucChuQuaLon" xml:space="preserve">
+    <value>The starting character of the letter axis is too large.</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucSoPhaiLaSoNguyenKhong" xml:space="preserve">
+    <value>The starting character of the number line must be a non-negative integer.</value>
+  </data>
+  <data name="ZXW_Text_PhaiCoItNhatMotNhip" xml:space="preserve">
+    <value>{fieldName} must have at least one span.</value>
+  </data>
+  <data name="ZXW_Text_SoLuongTrucVuotQuaGioiHanNhanChu" xml:space="preserve">
+    <value>The number of axes exceeds the text label limit.</value>
+  </data>
+  <data name="ZXW_Text_ViTriNhanKhongHopLe" xml:space="preserve">
+    <value>Invalid label position.</value>
+  </data>
+  <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
+    <value>Factory Value Setting</value>
+  </data>
+  <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
+    <value>Axis Grid Settings</value>
+  </data>
+  <data name="ZXW_UI_ChieuRong" xml:space="preserve">
+    <value>Width :</value>
+  </data>
+  <data name="ZXW_UI_ChieuSau" xml:space="preserve">
+    <value>Depth :</value>
+  </data>
+  <data name="ZXW_UI_NhipTheoXViDu420025004300Hoac4x3600" xml:space="preserve">
+    <value>Cadence by X, for example: 4200 2500 4300 or 4x3600</value>
+  </data>
+  <data name="ZXW_UI_NhipTheoYNhapTuTrenXuongDuoi" xml:space="preserve">
+    <value>Rhythm according to Y, input from top to bottom</value>
+  </data>
+  <data name="ZXW_UI_SoHoacChuBatDauCuaTrucHoanh" xml:space="preserve">
+    <value>The starting number or letter of the horizontal axis</value>
+  </data>
+  <data name="ZXW_UI_SoHoacChuBatDauCuaTrucTung" xml:space="preserve">
+    <value>The starting number or letter of the vertical axis</value>
+  </data>
+  <data name="ZXW_UI_TrucHoanh" xml:space="preserve">
+    <value>Horizontal axis:</value>
+  </data>
+  <data name="ZXW_UI_TrucTung" xml:space="preserve">
+    <value>Vertical axis:</value>
+  </data>
+  <data name="ZXW_UI_VeKyHieuTrucKichThuoc" xml:space="preserve">
+    <value>Draw axis symbol + Dimension</value>
+  </data>
+  <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
+    <value>Scale: {source.BoardThickness:0.####}; railing: {source.RailingHeight:0.####}</value>
+  </data>
+  <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
+    <value>Restore original value</value>
   </data>
 </root>

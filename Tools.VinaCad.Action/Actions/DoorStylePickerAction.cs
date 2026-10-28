@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.ViewModel;
 using Tools.View.UI;
 using Tools.VinaCad.Helper.Helper;
@@ -104,8 +105,8 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     if (editor == null || document == null) continue;
 
-                    PromptEntityOptions options = new PromptEntityOptions("\nChọn một cửa của VinaCAD tạo sẵn để lấy độ rộng: ");
-                    options.SetRejectMessage("\nĐối tượng được chọn phải là block cửa.");
+                    PromptEntityOptions options = new PromptEntityOptions("\n" + Lang.AD_Prompt_ChonMotCuaCuaVinacadTaoSanDeLayDoRong);
+                    options.SetRejectMessage("\n" + Lang.AD_Prompt_DoiTuongDuocChonPhaiLaBlockCua);
                     options.AddAllowedClass(typeof(BlockReference), true);
                     PromptEntityResult pickedDoor = editor.GetEntity(options);
                     if (pickedDoor.Status == PromptStatus.OK)
@@ -113,7 +114,7 @@ namespace Tools.VinaCAD.Action.Actions
                         if (OpenDoorHelper.TryGetDoorWidth(document.Database, pickedDoor.ObjectId, out double width))
                             result.Width = Math.Round(width, 2);
                         else
-                            editor.WriteMessage("\nBlock được chọn không phải cửa do lệnh AD của VinaCAD tạo.");
+                            editor.WriteMessage("\n" + Lang.AD_Output_BlockDuocChonKhongPhaiCuaDoLenhAdCuaVinacadTao);
                     }
                     continue;
                 }
@@ -122,7 +123,9 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     if (editor == null) continue;
 
-                    string prompt = window.Request == "MeasureHole" ? "\nChọn hai điểm đo độ rộng cửa: " : "\nChọn hai điểm đo khoảng cách trụ: ";
+                    string prompt = "\n" + (window.Request == "MeasureHole"
+                        ? Lang.AD_Prompt_ChonHaiDiemDoDoRongCua
+                        : Lang.Common_Prompt_ChonHaiDiemDoKhoangCachTru);
                     PromptDoubleResult measured = editor.GetDistance(new PromptDistanceOptions(prompt));
                     if (measured.Status == PromptStatus.OK && measured.Value > 0)
                     {
@@ -141,10 +144,6 @@ namespace Tools.VinaCAD.Action.Actions
 
                 break;
             }
-
-            /*string placement = result.PlaceAtWallCenter ? "đặt giữa tường" : result.UseEdgeDistance ? $"khoảng trụ={result.EdgeDistance:0.##} mm"  : "đặt theo điểm chọn";
-
-            editor?.WriteMessage($"\nĐã chọn {result.Style.DisplayName}: độ rộng={result.Width:0.##} mm, " +placement + ".");*/
 
             return result;
         }
@@ -220,14 +219,14 @@ namespace Tools.VinaCAD.Action.Actions
         {
             if (!TryParse(window.HoleWidthText.Text, out double width) || width <= 0)
             {
-                System.Windows.MessageBox.Show(window, "Chiều rộng lỗ cửa phải là số lớn hơn 0.", "Thông số chưa hợp lệ", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(window, Lang.AD_Msg_ChieuRongLoCuaPhaiLaSoLonHon0, Lang.Common_Text_ThongSoChuaHopLe, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
                 return;
             }
             double pier = 0;
             bool usePier = window.PocketWidthCheck.IsChecked == true && window.MiddleWallCheck.IsChecked != true;
             if (usePier && (!TryParse(window.PierWidthText.Text, out pier) || pier < 0))
             {
-                System.Windows.MessageBox.Show(window, "Khoảng cách trụ phải là số không âm.", "Thông số chưa hợp lệ", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(window, Lang.Common_Msg_KhoangCachTruPhaiLaSoKhongAm, Lang.Common_Text_ThongSoChuaHopLe, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
                 return;
             }
             selection.Width = width;
