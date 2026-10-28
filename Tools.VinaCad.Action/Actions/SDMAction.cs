@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teigha.DatabaseServices;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -69,13 +69,13 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (!HasValidData(sdms))
                 {
-                    MessageBox.Show("Vui lòng copy dữ liệu vào bảng.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.Common_Msg_VuiLongCopyDuLieuVaoBang, Lang.Common_Text_ThongBao);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(XLSDMSetting.BlockName))
                 {
-                    MessageBox.Show("Vui lòng chọn tên block.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.SDM_Msg_VuiLongChonTenBlock, Lang.Common_Text_ThongBao);
                     return;
                 }
                 _SDMView.Hide();
@@ -83,13 +83,13 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (blockIds == null || blockIds.Count == 0)
                 {
-                    MessageBox.Show("Không tìm thấy block phù hợp.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.SDM_Msg_KhongTimThayBlockPhuHop, Lang.Common_Text_ThongBao);
                     return;
                 }
 
                 if (sdms.Count > blockIds.Count)
                 {
-                    MessageBox.Show($"Vui lòng copy bảng thống kê danh mục thêm {sdms.Count - blockIds.Count} dòng",StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.SDM_Msg_VuiLongCopyBangThongKeDanhMucThemDong.Replace("{sdms.Count - blockIds.Count}",(sdms.Count - blockIds.Count).ToString()),Lang.Common_Text_ThongBao);
                     return;
                 }
 
@@ -105,7 +105,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 UpdateSDMToBlockAttributes(blockIds, sdms);
                 _SDMView.Close();
-                MessageBox.Show("Cập nhật bảng thống kê thành công.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.SDM_Msg_CapNhatBangThongKeThanhCong, Lang.Common_Text_ThongBao);
             }
             catch (Exception ex)
             {

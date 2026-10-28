@@ -72,7 +72,7 @@ public sealed class FlexDuctAction
         catch (System.Exception ex)
         {
             Logger.Info(nameof(FlexDuctAction), ex);
-            throw;
+            throw new Exception(ex.Message, ex);
         }
     }
 
