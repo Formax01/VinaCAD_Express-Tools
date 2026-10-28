@@ -66,7 +66,7 @@ namespace Tools.VinaCad.Action.Actions
                     vm.DropLength = l;*/
 
                     string v;
-                    if (!AskKeyword(editor, "Chọn kiểu", new[] { "Xuống", "Lên" },
+                    if (!AskKeyword(editor, "Chọn hướng", new[] { "Xuống", "Lên" },
                         vm.VerticalDir == VerticalDirection.Down ? "Xuống" : "Lên", out v)) return;
                     vm.VerticalDir = v == "Lên" ? VerticalDirection.Up : VerticalDirection.Down;
                 }
@@ -140,7 +140,7 @@ namespace Tools.VinaCad.Action.Actions
             error = null;
 
             if (vm.Width1 <= 0)
-            { error = "Kích thước đầu phải lớn hơn 0."; return false; }
+            { error = "Kích thước đầu vào phải lớn hơn 0."; return false; }
 
             if (vm.Type == DuctElbowType.Reducing && vm.Width2 <= 0)
             { error = "Kích thước đầu ra phải lớn hơn 0."; return false; }
@@ -170,7 +170,7 @@ namespace Tools.VinaCad.Action.Actions
             // Bán kính cong trong = Rc - W/2 phải >= 0 (cả đầu vào và đầu ra)
             if (rc - vm.Width1 / 2.0 < -1e-9 || rc - w2 / 2.0 < -1e-9)
             {
-                error = "Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh ";
+                error = "Bán kính cong quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh ";
                 return false;
             }
             return true;
@@ -184,7 +184,7 @@ namespace Tools.VinaCad.Action.Actions
             { error = "Chiều dài đoạn hạ phải lớn hơn 0."; return false; }
 
             if (vm.ResolveCenterRadius(vm.Width1) < vm.Width1 / 2.0)
-            { error = "Bán kính phải lớn hơn hoặc bằng lớn hơn hoặc bằng một nửa đầu vào."; return false; }
+            { error = "Bán kính cong phải lớn hơn hoặc bằng một nửa đầu vào."; return false; }
 
             return true;
         }
