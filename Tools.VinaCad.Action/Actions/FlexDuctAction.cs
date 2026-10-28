@@ -82,16 +82,16 @@ public sealed class FlexDuctAction
         FlexDuctType.TopDown => FlexDuctStyles.S1(),
         FlexDuctType.Horizontal => FlexDuctStyles.S2(),
         FlexDuctType.DoubleTopDown => FlexDuctStyles.S3(),
-        FlexDuctType.TopDownBare => FlexDuctStyles.R1(),   
-        FlexDuctType.HorizontalBare => FlexDuctStyles.R2(),   
-        FlexDuctType.DoubleTopDownBare => FlexDuctStyles.R3(),   
+        FlexDuctType.TopDownBare => FlexDuctStyles.R1(),
+        FlexDuctType.HorizontalBare => FlexDuctStyles.R2(),
+        FlexDuctType.DoubleTopDownBare => FlexDuctStyles.R3(),
         _ => FlexDuctStyles.S1()
     };
 
     private static List<Point3d>? DrawPath(Editor editor, Database database)
     {
         var path = new List<Point3d>();
-        using var preview = new FlexDuctPathPreview(database);   
+        using var preview = new FlexDuctPathPreview(database);
 
         while (true)
         {
@@ -105,8 +105,8 @@ public sealed class FlexDuctAction
             if (path.Count == 0 || result.Value.DistanceTo(path[^1]) > 1e-9)
             {
                 path.Add(result.Value);
-                preview.Update(path);       
-                editor.UpdateScreen();      
+                preview.Update(path);
+                editor.UpdateScreen();
             }
         }
     }
