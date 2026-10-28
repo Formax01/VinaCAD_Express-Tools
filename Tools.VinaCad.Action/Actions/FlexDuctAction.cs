@@ -1,10 +1,11 @@
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
-using Tools.VinaCad.Helper.Helper;
 using Tools.ViewModel;
+using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Action.Actions;
@@ -13,58 +14,66 @@ public sealed class FlexDuctAction
 {
     public void Execute(FlexDuctType type)
     {
-        Document? document = Application.DocumentManager.MdiActiveDocument;
-        if (document == null) return;
-        var vm = new FlexDuctVM { DuctType = type };
-        Editor editor = document.Editor;
-
-        var distanceOptions = new PromptDistanceOptions($"\nĐường kính ống mềm <{vm.Diameter}>: ");
-        distanceOptions.AllowNone = true; 
-        PromptDoubleResult diameter = editor.GetDistance(distanceOptions);
-
-        if (diameter.Status == PromptStatus.None)
+        try
         {
+            Document? document = Application.DocumentManager.MdiActiveDocument;
+            if (document == null) return;
+            var vm = new FlexDuctVM { DuctType = type };
+            Editor editor = document.Editor;
+
+            var distanceOptions = new PromptDistanceOptions($"\nĐường kính ống mềm <{vm.Diameter}>: ");
+            distanceOptions.AllowNone = true;
+            PromptDoubleResult diameter = editor.GetDistance(distanceOptions);
+
+            if (diameter.Status == PromptStatus.None)
+            {
+            }
+            else if (diameter.Status == PromptStatus.OK && diameter.Value > 0)
+            {
+                vm.Diameter = diameter.Value;
+            }
+            else
+            {
+                return;
+            }
+
+            var modeOptions = new PromptKeywordOptions("\nChọn cách lấy đường tâm [Vẽ/Chọn] <Vẽ>: ")
+            {
+                AllowNone = true,
+                AppendKeywordsToMessage = false
+            };
+            modeOptions.Keywords.Add("Draw", "Vẽ", "Vẽ");
+            modeOptions.Keywords.Add("Select", "Chọn", "Chọn");
+
+            PromptResult mode = editor.GetKeywords(modeOptions);
+            if (mode.Status != PromptStatus.OK && mode.Status != PromptStatus.None) return;
+            vm.PathMode = mode.Status == PromptStatus.OK &&
+                (string.Equals(mode.StringResult, "Select", StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(mode.StringResult, "Chọn", StringComparison.OrdinalIgnoreCase))
+                ? FlexDuctPathMode.Select : FlexDuctPathMode.Draw;
+
+            ObjectId sourceId = ObjectId.Null;          // line/polyline gốc (chỉ có khi chọn có sẵn)
+            List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select
+                ? SelectPath(editor, document.Database, out sourceId)
+                : DrawPath(editor, document.Database);
+            if (path == null) return;
+
+            string name = type.ToString();
+            FlexDuctStyle style = ResolveStyle(type);
+
+            (int count, string groupName, string? warning) =
+                FlexDuctHelper.Draw(document.Database, path, vm.Model, style);
+            editor.UpdateScreen();
+            if (count == 0) { editor.WriteMessage("\nKhông thể vẽ ống với đường tâm đã chọn."); return; }
+            if (!sourceId.IsNull) EraseSource(editor, document.Database, sourceId);
+            if (warning != null) editor.WriteMessage($"\n[Cảnh báo] {warning}");
+            editor.WriteMessage($"\n{name}: đã vẽ {count} đối tượng trong group {groupName}.");
         }
-        else if (diameter.Status == PromptStatus.OK && diameter.Value > 0)
+        catch (System.Exception ex)
         {
-            vm.Diameter = diameter.Value;
+            Logger.Info(nameof(FlexDuctAction), ex);
+            throw new Exception(ex.Message, ex);
         }
-        else
-        {
-            return;
-        }
-
-        var modeOptions = new PromptKeywordOptions("\nChọn cách lấy đường tâm [Vẽ/Chọn] <Vẽ>: ")
-        {
-            AllowNone = true,
-            AppendKeywordsToMessage = false
-        };
-        modeOptions.Keywords.Add("Draw", "Vẽ", "Vẽ");
-        modeOptions.Keywords.Add("Select", "Chọn", "Chọn");
-
-        PromptResult mode = editor.GetKeywords(modeOptions);
-        if (mode.Status != PromptStatus.OK && mode.Status != PromptStatus.None) return;
-        vm.PathMode = mode.Status == PromptStatus.OK &&
-            (string.Equals(mode.StringResult, "Select", StringComparison.OrdinalIgnoreCase) ||
-             string.Equals(mode.StringResult, "Chọn", StringComparison.OrdinalIgnoreCase))
-            ? FlexDuctPathMode.Select : FlexDuctPathMode.Draw;
-
-        ObjectId sourceId = ObjectId.Null;          // line/polyline gốc (chỉ có khi chọn có sẵn)
-        List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select
-            ? SelectPath(editor, document.Database, out sourceId)
-            : DrawPath(editor, document.Database);
-        if (path == null) return;
-
-        string name = type.ToString();
-        FlexDuctStyle style = ResolveStyle(type);
-
-        (int count, string groupName, string? warning) =
-            FlexDuctHelper.Draw(document.Database, path, vm.Model, style);
-        editor.UpdateScreen();
-        if (count == 0) { editor.WriteMessage("\nKhông thể vẽ ống với đường tâm đã chọn."); return; }
-        if (!sourceId.IsNull) EraseSource(editor, document.Database, sourceId);
-        if (warning != null) editor.WriteMessage($"\n[Cảnh báo] {warning}");
-        editor.WriteMessage($"\n{name}: đã vẽ {count} đối tượng trong group {groupName}.");
     }
 
 

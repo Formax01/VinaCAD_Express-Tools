@@ -691,6 +691,20 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
+
         [CommandMethod("S1")]
         public void FlexDuctTopDownCommand()
         {
