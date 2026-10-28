@@ -870,8 +870,8 @@ namespace Tools.VinaCad.Helper.Helper
                 if (blockTable.Has(newBlockName))
                 {
                     MessageBox.Show(
-                        $"Block \"{newBlockName}\" đã tồn tại trong bản vẽ.",
-                        StringDefinition.TITLE_MESSAGE);
+                        Lang.Common_Msg_BlockDaTonTaiTrongBanVe.Replace("{newBlockName}", newBlockName),
+                        Lang.Common_Text_ThongBao);
 
                     return createdCount;
                 }

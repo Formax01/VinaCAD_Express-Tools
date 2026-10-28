@@ -1,5 +1,6 @@
 ﻿using Teigha.DatabaseServices;
 using System.Collections.Generic;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -9,24 +10,24 @@ namespace Tools.VinaCad.Helper.Helper
         public static string? ValidateSelection(Transaction transaction,ObjectId entityId,ObjectId[] containerIds)
         {
             if (entityId.IsNull || !entityId.IsValid || entityId.IsErased)
-                return "Đối tượng không còn hợp lệ.";
+                return Lang.BBE_Text_DoiTuongKhongConHopLe;
 
             DBObject? selectedObject = transaction.GetObject(entityId, OpenMode.ForRead, false);
             if (selectedObject is not Entity)
-                return "Đối tượng được chọn không phải hình học có thể xóa.";
+                return Lang.BBE_Text_DoiTuongDuocChonKhongPhaiHinhHocCoTheXoa;
 
             BlockTableRecord? owner = GetDefinitionOwner(transaction, selectedObject, containerIds);
 
             if (owner == null || owner.IsLayout)
-                return "Đối tượng không thuộc một block definition có thể chỉnh sửa.";
+                return Lang.BBE_Text_DoiTuongKhongThuocMotBlockDefinitionCoTheChinhSua;
 
             if (owner.IsFromExternalReference || owner.IsFromOverlayReference)
-                return "Không thể sửa nội dung Xref/Overlay trong bản vẽ hiện tại.";
+                return Lang.BBE_Text_KhongTheSuaNoiDungXrefOverlayTrongBanVeHienTai;
 
             LayerTableRecord? layer = transaction.GetObject(((Entity)selectedObject).LayerId,OpenMode.ForRead,false) as LayerTableRecord;
 
             if (layer != null && layer.IsLocked)
-                return $"Không thể xóa đối tượng trên layer đang khóa \"{layer.Name}\".";
+                return Lang.BBE_Text_KhongTheXoaDoiTuongTrenLayerDangKhoa.Replace("{layer.Name}", layer.Name);
 
             foreach (ObjectId containerId in containerIds ?? System.Array.Empty<ObjectId>())
             {
@@ -37,27 +38,29 @@ namespace Tools.VinaCad.Helper.Helper
 
                 if (blockReference.IsDynamicBlock && blockReference.AnonymousBlockTableRecord == owner.ObjectId)
                 {
-                    return "Đối tượng thuộc bản biểu diễn *U của Dynamic Block; " +
-                           "không thể xóa trực tiếp an toàn. Hãy chuyển block về static " +
-                           "hoặc sửa Dynamic Block definition gốc.";
+                    return Lang.BBE_Text_DoiTuongThuocBanBieuDienUCuaDynamicBlock + " " +
+                           Lang.BBE_Text_KhongTheXoaTrucTiepAnToanHayChuyenBlockVeStatic + " " +
+                           Lang.BBE_Text_HoacSuaDynamicBlockDefinitionGoc;
                 }
 
                 BlockTableRecord? containerDefinition = transaction.GetObject(blockReference.BlockTableRecord,OpenMode.ForRead,false) as BlockTableRecord;
 
                 if (containerDefinition != null && (containerDefinition.IsFromExternalReference || containerDefinition.IsFromOverlayReference))
                 {
-                    return "Không thể sửa đối tượng nằm trong Xref/Overlay.";
+                    return Lang.BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay;
                 }
             }
 
             if (IsProtectedSystemAnonymousBlock(owner))
             {
-                return $"Không sửa block hệ thống \"{owner.Name}\" " +"(Dimension/Hatch/Table).";
+                return Lang.BBE_Text_KhongSuaBlockHeThong.Replace("{owner.Name}", owner.Name) + " (Dimension/Hatch/Table).";
             }
 
             if (owner.IsAnonymous && IsDynamicAnonymousRepresentation(transaction, owner))
             {
-                return $"Đối tượng thuộc bản biểu diễn Dynamic Block \"{owner.Name}\"; " +"không thể sửa trực tiếp an toàn. Hãy chuyển block về static " +"hoặc sửa Dynamic Block definition gốc.";
+                return Lang.BBE_Text_DoiTuongThuocBanBieuDienDynamicBlock.Replace("{owner.Name}", owner.Name) + " " +
+                       Lang.BBE_Text_KhongTheSuaTrucTiepAnToanHayChuyenBlockVeStatic + " " +
+                       Lang.BBE_Text_HoacSuaDynamicBlockDefinitionGoc;
             }
 
             return null;
@@ -117,7 +120,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return new EraseResult
                 {
                     Succeeded = false,
-                    RejectionReason = "Đối tượng không còn hợp lệ (đã bị xóa hoặc null khi mở ForWrite)."
+                    RejectionReason = Lang.BBE_Status_DoiTuongKhongConHopLeDaBiXoaHoacNullKhi
                 };
             }
 
@@ -130,7 +133,7 @@ namespace Tools.VinaCad.Helper.Helper
                     return new EraseResult
                     {
                         Succeeded = false,
-                        RejectionReason = "Không tìm thấy định nghĩa block chứa Attribute."
+                        RejectionReason = Lang.BBE_Status_KhongTimThayDinhNghiaBlockChuaAttribute
                     };
                 }
 
@@ -164,7 +167,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return new EraseResult
                 {
                     Succeeded = erased,
-                    RejectionReason = erased ? null : "Không tìm thấy Attribute Definition tương ứng trong block.",
+                    RejectionReason = erased ? null : Lang.BBE_Status_KhongTimThayAttributeDefinitionTuongUngTrongBlock,
                     DynamicDefinitionId = erased && owner.IsDynamicBlock ? owner.ObjectId : ObjectId.Null
                 };
             }

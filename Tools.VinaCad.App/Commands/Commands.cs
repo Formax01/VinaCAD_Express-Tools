@@ -8,6 +8,7 @@ using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Teigha.Runtime;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Action.Actions;
 using Tools.VinaCAD.Action.Actions;
 
@@ -212,7 +213,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TaoBlockCommand), ex);
             }
         }
@@ -630,7 +631,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BlockEraseCommand), ex);
             }
         }
