@@ -30,9 +30,7 @@ namespace Tools.VinaCAD.Action.Actions
                 Debug.Assert(IsValidSize(width, height));
 
                 Database database = document.Database;
-
-                string prefix = eggCrate ? "GrillV" : "Grill";
-                string baseName = prefix + '_' + FormatSize(width) + "x" + FormatSize(height);
+                string baseName = (eggCrate ? "GrillV" : "Grill") + '_' + FormatSize(width) + "x" + FormatSize(height);
                 string defaultName = GetAvailableName(database, baseName);
                 PromptResult nameResult = editor.GetString(new PromptStringOptions("\nNhập tên block miệng gió : ")
                 {
@@ -42,8 +40,7 @@ namespace Tools.VinaCAD.Action.Actions
                 });
                 if (nameResult.Status != PromptStatus.OK && nameResult.Status != PromptStatus.None) return;
 
-                string name = nameResult.Status == PromptStatus.OK &&
-                    !string.IsNullOrWhiteSpace(nameResult.StringResult)
+                string name = nameResult.Status == PromptStatus.OK && !string.IsNullOrWhiteSpace(nameResult.StringResult)
                     ? nameResult.StringResult.Trim()
                     : defaultName;
                 if (BlockExists(database, name))
@@ -53,50 +50,29 @@ namespace Tools.VinaCAD.Action.Actions
                 }
 
                 ObjectId blockId = ObjectId.Null;
-
                 while (true)
                 {
-                    var jig = new GrillePlacementJig(width,height,eggCrate,editor.CurrentUserCoordinateSystem);
+                    var jig = new GrillePlacementJig(width, height, eggCrate, editor.CurrentUserCoordinateSystem);
+                    if (editor.Drag(jig).Status != PromptStatus.OK) break;
 
-                    PromptResult placement = editor.Drag(jig);
-
-                    // Nhấn Esc hoặc Enter để kết thúc lệnh.
-                    if (placement.Status != PromptStatus.OK)
-                        break;
-
-                    using (Transaction tr =database.TransactionManager.StartTransaction())
+                    using (Transaction tr = database.TransactionManager.StartTransaction())
                     {
-                        BlockTableRecord space =(BlockTableRecord)tr.GetObject(database.CurrentSpaceId,OpenMode.ForWrite);
-
-                        // Chỉ tạo block definition ở điểm đặt đầu tiên.
+                        BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
                         if (blockId.IsNull)
                         {
-                            BlockTable blocks =(BlockTable)tr.GetObject(database.BlockTableId,OpenMode.ForWrite);
-
-                            var definition = new BlockTableRecord
-                            {
-                                Name = name,
-                                Origin = Point3d.Origin
-                            };
-
+                            BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForWrite);
+                            var definition = new BlockTableRecord { Name = name, Origin = Point3d.Origin };
                             blockId = blocks.Add(definition);
                             tr.AddNewlyCreatedDBObject(definition, true);
-
-                            AddGeometry(definition,tr,width,height,eggCrate);
+                            AddGeometry(definition, tr, width, height, eggCrate);
                         }
 
-                        // Mỗi vòng lặp chỉ tạo thêm một block reference.
-                        var reference = new BlockReference(jig.InsertionPoint,blockId);
-
+                        var reference = new BlockReference(jig.InsertionPoint, blockId);
                         reference.SetDatabaseDefaults(database);
-                        string layerName = ReturnAirGrilleSetting.DefaultLayer;
-                        object layerId = GetorCreateLayer(database, tr, layerName);
-                        reference.LayerId = (ObjectId)layerId;
+                        reference.LayerId = GetorCreateLayer(database, tr, ReturnAirGrilleSetting.DefaultLayer);
                         reference.TransformBy(jig.Ucs);
-
                         space.AppendEntity(reference);
                         tr.AddNewlyCreatedDBObject(reference, true);
-
                         tr.Commit();
                     }
                 }
