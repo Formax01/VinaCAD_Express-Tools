@@ -1,0 +1,2173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FDT_MessDialog" xml:space="preserve">
+    <value>含まれているテキストが見つかりませんでした</value>
+  </data>
+  <data name="FDT_Title" xml:space="preserve">
+    <value>杭を描く</value>
+  </data>
+  <data name="FDT_UI_BtnSelectAll" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="FDT_UI_BtnWindowSelect" xml:space="preserve">
+    <value>範囲選択</value>
+  </data>
+  <data name="FDT_UI_ChkContains" xml:space="preserve">
+    <value>部分一致で検索</value>
+  </data>
+  <data name="FDT_UI_ChkExact" xml:space="preserve">
+    <value>完全一致で検索</value>
+  </data>
+  <data name="FDT_UI_GroupMode" xml:space="preserve">
+    <value>検索方法を選択してください</value>
+  </data>
+  <data name="FDT_UI_LblInput" xml:space="preserve">
+    <value>検索する文字列:</value>
+  </data>
+  <data name="FDT_UI_Title" xml:space="preserve">
+    <value>文字とマルチテキストの検索・選択</value>
+  </data>
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>言語を{0}に変更しました。</value>
+  </data>
+  <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
+    <value>指示ファイルを開けません。
+{ex.Message}</value>
+  </data>
+  <data name="ABOUTEXPRESS_Msg_KhongTimThayFileHuongDan" xml:space="preserve">
+    <value>命令ファイルが見つかりません:
+{pdfPath}</value>
+  </data>
+  <data name="ABOUTEXPRESS_Ribbon_HuongDanSuDungAboutexpress" xml:space="preserve">
+    <value>使用上の注意（ABOUTEXPRESS）</value>
+  </data>
+  <data name="ABOUTEXPRESS_UI_PhienBanHienTai" xml:space="preserve">
+    <value>現在のバージョン</value>
+  </data>
+  <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
+    <value>Express_Tools 情報</value>
+  </data>
+  <data name="AD_Error_AssetCuaKhongCoHinhHocHopLe" xml:space="preserve">
+    <value>ドア アセットには有効なジオメトリがありません。</value>
+  </data>
+  <data name="AD_Error_AssetCuaKhongCoHinhHocHopLeTheoTrucX" xml:space="preserve">
+    <value>ドア アセットの X 軸に有効なジオメトリがありません。</value>
+  </data>
+  <data name="AD_Error_AssetCuaPhaiDuocVeQuanhGocX0" xml:space="preserve">
+    <value>ドア アセットは原点 X=0 の周りに描画する必要があります。</value>
+  </data>
+  <data name="AD_Error_ChieuCaoCuaPhaiLonHon0" xml:space="preserve">
+    <value>ドアの高さは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="AD_Error_DuLieuChieuRongCuaKhongHopLe" xml:space="preserve">
+    <value>ドア幅データが無効です。</value>
+  </data>
+  <data name="AD_Error_KhongDocDuocDuLieuViTriCua" xml:space="preserve">
+    <value>ドア位置データを読み取れません。</value>
+  </data>
+  <data name="AD_Error_KhongTheImportBanVeCua" xml:space="preserve">
+    <value>ドア図面をインポートできません。</value>
+  </data>
+  <data name="AD_Error_KhongTimThayBanVeCuaDaChon" xml:space="preserve">
+    <value>選択したドア図面が見つかりませんでした。</value>
+  </data>
+  <data name="AD_Error_KhongTimThayBanVeCuaDwg" xml:space="preserve">
+    <value>ドアの図面 *.dwg が見つかりません。</value>
+  </data>
+  <data name="AD_Error_ViTriNayChongLenCuaDiDaDatTruocDo" xml:space="preserve">
+    <value>この位置は、前に配置したドアと重なります。</value>
+  </data>
+  <data name="AD_Msg_ChieuRongLoCuaPhaiLaSoLonHon0" xml:space="preserve">
+    <value>ドアの穴の幅は 0 より大きい数値にする必要があります。</value>
+  </data>
+  <data name="AD_Msg_LoiAd" xml:space="preserve">
+    <value>AD エラー: {exception.Message}</value>
+  </data>
+  <data name="AD_Output_AdDaTaoCuaDi" xml:space="preserve">
+    <value>AD: {createdCount} ドアを作成しました。</value>
+  </data>
+  <data name="AD_Output_AdHayChonLai" xml:space="preserve">
+    <value>AD: {exception.Message} もう一度選択してください。</value>
+  </data>
+  <data name="AD_Output_AdKhongTheDoiHuongCua" xml:space="preserve">
+    <value>AD: ドアの方向を変更できません: {exception.Message}</value>
+  </data>
+  <data name="AD_Output_BlockDuocChonKhongPhaiCuaDoLenhAdCuaVinacadTao" xml:space="preserve">
+    <value>選択したブロックは、VinaCAD の AD コマンドで作成されたドアではありません。</value>
+  </data>
+  <data name="AD_Output_DaChuyenViTriCuaVeGiuaTuong" xml:space="preserve">
+    <value>ドアの位置が壁の中央に移動されました。</value>
+  </data>
+  <data name="AD_Prompt_ChonHaiDiemDoDoRongCua" xml:space="preserve">
+    <value>ドアの幅を測定するには 2 つの点を選択してください:</value>
+  </data>
+  <data name="AD_Prompt_ChonMotCuaCuaVinacadTaoSanDeLayDoRong" xml:space="preserve">
+    <value>既製の VinaCAD ドアを選択して幅を取得します。</value>
+  </data>
+  <data name="AD_Prompt_ChonTuongHoacSChonCuaWCaiDatThongSoC" xml:space="preserve">
+    <value>壁を選択または [S-ドアを選択/W-パラメータ設定/C-中心] &lt;Enter: 終了&gt;:</value>
+  </data>
+  <data name="AD_Prompt_Dao" xml:space="preserve">
+    <value>、反転</value>
+  </data>
+  <data name="AD_Prompt_DiChuyenChuotVaoGocMuonMoCuaRoiClick" xml:space="preserve">
+    <value>ドアを開く側のコーナーへカーソルを移動してクリックしてください:</value>
+  </data>
+  <data name="AD_Prompt_DoiTuongDuocChonPhaiLaBlockCua" xml:space="preserve">
+    <value>選択したオブジェクトはドア ブロックである必要があります。</value>
+  </data>
+  <data name="AD_Prompt_Giua" xml:space="preserve">
+    <value>中央</value>
+  </data>
+  <data name="AD_Prompt_Lat" xml:space="preserve">
+    <value>、フリップ</value>
+  </data>
+  <data name="AD_Ribbon_BoTriCuaDi" xml:space="preserve">
+    <value>アレンジメント
+ドア</value>
+  </data>
+  <data name="AD_Ribbon_BoTriCuaDiAd" xml:space="preserve">
+    <value>ドア配置（AD）</value>
+  </data>
+  <data name="AD_UI_ChonDoRongCua" xml:space="preserve">
+    <value>ドア幅をお選びください</value>
+  </data>
+  <data name="AD_UI_ChonKhoangCachMepTuong" xml:space="preserve">
+    <value>壁端距離を選択</value>
+  </data>
+  <data name="AD_UI_ChonLoaiCuaMacDinh" xml:space="preserve">
+    <value>既定のドアタイプを選択</value>
+  </data>
+  <data name="AD_UI_CuaGiuaTuong" xml:space="preserve">
+    <value>壁の真ん中にあるドア</value>
+  </data>
+  <data name="AD_UI_DanhSachDoRong" xml:space="preserve">
+    <value>幅の一覧</value>
+  </data>
+  <data name="AD_UI_DanhSachKhoangCach" xml:space="preserve">
+    <value>距離の一覧</value>
+  </data>
+  <data name="AD_UI_DoDoRong" xml:space="preserve">
+    <value>幅を測定</value>
+  </data>
+  <data name="AD_UI_DoKhoangCach" xml:space="preserve">
+    <value>距離を測定</value>
+  </data>
+  <data name="AD_UI_DoRong" xml:space="preserve">
+    <value>幅:</value>
+  </data>
+  <data name="AD_UI_DoRongCuaKhoangCachMepTuong" xml:space="preserve">
+    <value>ドア幅 / 壁端距離</value>
+  </data>
+  <data name="AD_UI_DoTuMepTuong" xml:space="preserve">
+    <value>壁端から測定</value>
+  </data>
+  <data name="AD_UI_KhoangCachMepTuong" xml:space="preserve">
+    <value>壁端の距離:</value>
+  </data>
+  <data name="AD_UI_LayDoRongTuCuaCoSan" xml:space="preserve">
+    <value>既存のドアから幅を取得します</value>
+  </data>
+  <data name="AD_Validation_KhongTheDocAssetCua" xml:space="preserve">
+    <value>ドアアセット {Path.GetFileName(style.AssetPath)} を読み取れません: {exception.Message}</value>
+  </data>
+  <data name="AW_Error_AssetCuaSoKhongCoCungHoacHinhHocCanhCuaSo" xml:space="preserve">
+    <value>窓アセットには有効な窓セクターまたは翼のジオメトリがありません。</value>
+  </data>
+  <data name="AW_Error_AssetCuaSoKhongCoHinhHocHopLeTheoTrucX" xml:space="preserve">
+    <value>ウィンドウ アセットには、X 軸に沿った有効なジオメトリがありません。</value>
+  </data>
+  <data name="AW_Error_ChieuCaoCuaSoPhaiLonHon0" xml:space="preserve">
+    <value>ウィンドウの高さは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="AW_Error_DuLieuChieuRongCuaSoKhongHopLe" xml:space="preserve">
+    <value>ウィンドウ幅データが無効です。</value>
+  </data>
+  <data name="AW_Error_DuLieuGocTuongPreviewKhongHopLe" xml:space="preserve">
+    <value>プレビュー ウォールの元のデータが無効です。</value>
+  </data>
+  <data name="AW_Error_KhongDocDuocDuLieuViTriCuaSo" xml:space="preserve">
+    <value>ウィンドウ位置データを読み取ることができません。</value>
+  </data>
+  <data name="AW_Error_KhongTheImportBanVeCuaSo" xml:space="preserve">
+    <value>窓図面をインポートできません。</value>
+  </data>
+  <data name="AW_Error_KhongTimThayBanVeCuaSoDaChon" xml:space="preserve">
+    <value>選択した窓図面が見つかりませんでした。</value>
+  </data>
+  <data name="AW_Error_KhongTimThayBanVeCuaSoDwg" xml:space="preserve">
+    <value>窓図面 *.dwg が見つかりません。</value>
+  </data>
+  <data name="AW_Error_KichThuocPreviewCuaSoKhongHopLe" xml:space="preserve">
+    <value>ウィンドウのプレビュー サイズが無効です。</value>
+  </data>
+  <data name="AW_Error_ViTriNayChongLenCuaSoDaDatTruocDo" xml:space="preserve">
+    <value>この位置は、前に配置したウィンドウと重なります。</value>
+  </data>
+  <data name="AW_Msg_ChieuRongLoCuaSoPhaiLaSoLonHon0" xml:space="preserve">
+    <value>窓の穴の幅は 0 より大きい数値でなければなりません。</value>
+  </data>
+  <data name="AW_Msg_KhongTheLayEditor" xml:space="preserve">
+    <value>エディタを取得できません: {ex.Message}</value>
+  </data>
+  <data name="AW_Output_AwDaTaoCuaSo" xml:space="preserve">
+    <value>AW: {createdCount} ウィンドウが作成されました。</value>
+  </data>
+  <data name="AW_Output_AwHayChonLai" xml:space="preserve">
+    <value>AW: {exception.Message} もう一度選択してください。</value>
+  </data>
+  <data name="AW_Output_AwKhongTheDoiHuongCuaSo" xml:space="preserve">
+    <value>AW: ウィンドウの向きを変更できません: {exception.Message}</value>
+  </data>
+  <data name="AW_Output_BlockDuocChonKhongPhaiCuaSoDoLenhAwCuaVinacad" xml:space="preserve">
+    <value>選択したブロックは、VinaCAD の AW コマンドで作成されたウィンドウではありません。</value>
+  </data>
+  <data name="AW_Output_DaChuyenViTriCuaSoVeGiuaTuong" xml:space="preserve">
+    <value>窓の位置が壁の中央に移動しました。</value>
+  </data>
+  <data name="AW_Prompt_ChonHaiDiemDoDoRongCuaSo" xml:space="preserve">
+    <value>ウィンドウの幅を測定する 2 つの点を選択します。</value>
+  </data>
+  <data name="AW_Prompt_ChonMotCuaSoCuaVinacadTaoSanDeLayDoRong" xml:space="preserve">
+    <value>幅を取得するには、事前に作成された VinaCAD ウィンドウを選択します。</value>
+  </data>
+  <data name="AW_Prompt_ChonTuongHoacSChonCuaSoWCaiDatThongSo" xml:space="preserve">
+    <value>壁を選択 または [S-ウィンドウを選択/W-パラメータ設定/C-中央] &lt;Enter: 終了&gt;:</value>
+  </data>
+  <data name="AW_Prompt_DiChuyenChuotVaoGocMuonMoCuaSoRoiClick" xml:space="preserve">
+    <value>ウィンドウを開きたい隅にマウスを移動し、次をクリックします。</value>
+  </data>
+  <data name="AW_Prompt_DoiTuongDuocChonPhaiLaBlockCuaSo" xml:space="preserve">
+    <value>選択したオブジェクトは窓ブロックである必要があります。</value>
+  </data>
+  <data name="AW_Ribbon_BoTriCuaSo" xml:space="preserve">
+    <value>アレンジメント
+窓</value>
+  </data>
+  <data name="AW_Ribbon_BoTriCuaSoAw" xml:space="preserve">
+    <value>ウィンドウレイアウト（AW）</value>
+  </data>
+  <data name="AW_UI_ChonDoRongCuaSo" xml:space="preserve">
+    <value>ウィンドウの幅を選択してください</value>
+  </data>
+  <data name="AW_UI_ChonLoaiCuaSo" xml:space="preserve">
+    <value>窓の種類を選ぶ</value>
+  </data>
+  <data name="AW_UI_CuaSoGiuaTuong" xml:space="preserve">
+    <value>壁の真ん中にある窓</value>
+  </data>
+  <data name="AW_UI_DoRongCuaSoKhoangCachMepTuong" xml:space="preserve">
+    <value>窓幅/壁端距離</value>
+  </data>
+  <data name="AW_UI_KhoangCach" xml:space="preserve">
+    <value>距離:</value>
+  </data>
+  <data name="AW_UI_LayDoRongTuCuaSoCoSan" xml:space="preserve">
+    <value>既存のウィンドウから幅を取得</value>
+  </data>
+  <data name="AW_Validation_KhongTheDocAssetCuaSo" xml:space="preserve">
+    <value>ウィンドウ資産 {Path.GetFileName(style.AssetPath)} を読み取れません: {exception.Message}</value>
+  </data>
+  <data name="BB_Msg_BanCanNhapTenBlockMoi" xml:space="preserve">
+    <value>新しいブロック名を入力する必要があります。</value>
+  </data>
+  <data name="BB_Msg_KhongTimThayBlockCanCopy" xml:space="preserve">
+    <value>コピーするブロックが見つかりませんでした。</value>
+  </data>
+  <data name="BB_Output_DaTaoBlockMoiVoiTen" xml:space="preserve">
+    <value>「{_TaoBlockVM.NewBlockName}」という名前の新しい {count} ブロックを作成しました。</value>
+  </data>
+  <data name="BB_Ribbon_TaoBlockBb" xml:space="preserve">
+    <value>ブロック作成(BB)</value>
+  </data>
+  <data name="BB_UI_ChonBlock" xml:space="preserve">
+    <value>ブロックを選択</value>
+  </data>
+  <data name="BB_UI_TaoBlockMoiTuBlockDuocChon" xml:space="preserve">
+    <value>選択したブロックから新しいブロックを作成します</value>
+  </data>
+  <data name="BB_UI_TenBlockDuocChon" xml:space="preserve">
+    <value>選択したブロック名:</value>
+  </data>
+  <data name="BB_UI_TenBlockMoi" xml:space="preserve">
+    <value>新しいブロック名:</value>
+  </data>
+  <data name="BBE_Output_BbeChonDoiTuongConCanXoaEnterSpaceXoaEscHuy" xml:space="preserve">
+    <value>BBE: 削除する子オブジェクトを選択します | Enter/スペース: 削除 | Esc: キャンセル/元に戻す</value>
+  </data>
+  <data name="BBE_Output_BbeChuaChonDoiTuongNao" xml:space="preserve">
+    <value>BBE: まだオブジェクトが選択されていません。</value>
+  </data>
+  <data name="BBE_Output_BbeDaHuyBanVeKhongThayDoi" xml:space="preserve">
+    <value>BBE: キャンセルされ、図面は変更されません。</value>
+  </data>
+  <data name="BBE_Output_BbeDaXoaDoiTuong" xml:space="preserve">
+    <value>BBE: {result.ErasedCount} オブジェクトを削除しました。</value>
+  </data>
+  <data name="BBE_Output_BbeDoiTuongKhongNamTrongBlockCoTheSuaHayChon" xml:space="preserve">
+    <value>BBE: オブジェクトは編集可能なブロック内にありません。もう一度選択してください。</value>
+  </data>
+  <data name="BBE_Output_BbeKhongCoDoiTuongHayChonLai" xml:space="preserve">
+    <value>BBE: 物体はありません。もう一度選択してください。</value>
+  </data>
+  <data name="BBE_Output_KhongXacDinhDuocLyDoTuChoi" xml:space="preserve">
+    <value>拒否理由は特定できなかった。</value>
+  </data>
+  <data name="BBE_Output_LoiBbe" xml:space="preserve">
+    <value>BBE エラー: {ex.Message}</value>
+  </data>
+  <data name="BBE_Prompt_ChonDoiTuong" xml:space="preserve">
+    <value>オブジェクトの選択</value>
+  </data>
+  <data name="BBE_Ribbon_XoaCacDoiTuongTrongBlockBbe" xml:space="preserve">
+    <value>ブロック内のオブジェクトを削除 (BBE)</value>
+  </data>
+  <data name="BBE_Ribbon_XoaTrongBlock" xml:space="preserve">
+    <value>で削除
+ブロック。ブロック</value>
+  </data>
+  <data name="BBE_Status_DoiTuongKhongConHopLeDaBiXoaHoacNullKhi" xml:space="preserve">
+    <value>オブジェクトはもう有効ではありません (ForWrite を開いたときに削除または null)。</value>
+  </data>
+  <data name="BBE_Status_KhongTimThayAttributeDefinitionTuongUngTrongBlock" xml:space="preserve">
+    <value>対応する属性定義がブロック内に見つかりません。</value>
+  </data>
+  <data name="BBE_Status_KhongTimThayDinhNghiaBlockChuaAttribute" xml:space="preserve">
+    <value>属性を含むブロック定義が見つかりませんでした。</value>
+  </data>
+  <data name="BBE_Text_DoiTuongDuocChonKhongPhaiHinhHocCoTheXoa" xml:space="preserve">
+    <value>選択したオブジェクトは削除可能なジオメトリではありません。</value>
+  </data>
+  <data name="BBE_Text_DoiTuongKhongConHopLe" xml:space="preserve">
+    <value>オブジェクトはもう有効ではありません。</value>
+  </data>
+  <data name="BBE_Text_DoiTuongKhongThuocMotBlockDefinitionCoTheChinhSua" xml:space="preserve">
+    <value>オブジェクトは編集可能なブロック定義に属していません。</value>
+  </data>
+  <data name="BBE_Text_DoiTuongThuocBanBieuDienDynamicBlock" xml:space="preserve">
+    <value>オブジェクトはダイナミック ブロック表現 "{owner.Name}" に属します。</value>
+  </data>
+  <data name="BBE_Text_DoiTuongThuocBanBieuDienUCuaDynamicBlock" xml:space="preserve">
+    <value>オブジェクトはダイナミック ブロックの *U 表現に属します。</value>
+  </data>
+  <data name="BBE_Text_HoacSuaDynamicBlockDefinitionGoc" xml:space="preserve">
+    <value>または、元のダイナミック ブロック定義を編集します。</value>
+  </data>
+  <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
+    <value>システムブロック「{owner.Name}」を修正しないでください</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
+    <value>外部参照/オーバーレイにあるオブジェクトは編集できません。</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaNoiDungXrefOverlayTrongBanVeHienTai" xml:space="preserve">
+    <value>現在の図面の外部参照/オーバーレイ コンテンツは編集できません。</value>
+  </data>
+  <data name="BBE_Text_KhongTheSuaTrucTiepAnToanHayChuyenBlockVeStatic" xml:space="preserve">
+    <value>安全に直接修理することはできません。ブロックを静的ブロックに変換しましょう</value>
+  </data>
+  <data name="BBE_Text_KhongTheXoaDoiTuongTrenLayerDangKhoa" xml:space="preserve">
+    <value>ロックされたレイヤー「{layer.Name}」のオブジェクトを削除できません。</value>
+  </data>
+  <data name="BBE_Text_KhongTheXoaTrucTiepAnToanHayChuyenBlockVeStatic" xml:space="preserve">
+    <value>直接安全に削除することはできません。ブロックを静的ブロックに変換しましょう</value>
+  </data>
+  <data name="BT_Ribbon_BangCdbt" xml:space="preserve">
+    <value>CDBT テーブル</value>
+  </data>
+  <data name="BT_Ribbon_BangCuongDoBeTongBt" xml:space="preserve">
+    <value>コンクリート強度表（BT）</value>
+  </data>
+  <data name="BT_UI_BangTraCuongDoBeTong" xml:space="preserve">
+    <value>コンクリートの強度がわかる表</value>
+  </data>
+  <data name="BTCNN_UI_BangTieuChuanChieuDaiNeoNoiCotThepToiThieu" xml:space="preserve">
+    <value>鉄筋アンカー最小長さの基準表</value>
+  </data>
+  <data name="BTCNN_UI_Dong" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Common_Error_BlockTuongPhaiChuaHaiMatLinePolylineThangSongSongVa" xml:space="preserve">
+    <value>壁ブロックには、真っ直ぐで平行で正しい厚さの 2 つの線分/ポリラインの辺が含まれている必要があります。</value>
+  </data>
+  <data name="Common_Error_ChieuDayTuongPhaiLonHon0" xml:space="preserve">
+    <value>壁の厚さは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="Common_Error_ChieuRongLoMoPhaiLonHon0" xml:space="preserve">
+    <value>開口部の幅は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="Common_Error_DoanTuongDuocChonQuaNgan" xml:space="preserve">
+    <value>選択した壁セクションが短すぎます。</value>
+  </data>
+  <data name="Common_Error_DuongDuocChonLaNetBitDauTuongKhongPhaiMatTuong" xml:space="preserve">
+    <value>選択された線は、壁の面ではなく、壁の上部を覆う線です。</value>
+  </data>
+  <data name="Common_Error_HayChonLinePolylineThangHoacBlockTuongHopLe" xml:space="preserve">
+    <value>直線、直線ポリライン、または有効な壁ブロックを選択してください。</value>
+  </data>
+  <data name="Common_Error_KhoangCachTuMepKhongDuocAm" xml:space="preserve">
+    <value>エッジからの距離を負の値にすることはできません。</value>
+  </data>
+  <data name="Common_Error_KhongCoBanVeDangHoatDong" xml:space="preserve">
+    <value>アクティブな図面はありません。</value>
+  </data>
+  <data name="Common_Error_KhongDuChieuDaiTuongDeDatLoMoTaiViTri" xml:space="preserve">
+    <value>壁の長さが不足しているため、選択した位置に開口部を配置できません。</value>
+  </data>
+  <data name="Common_Error_KhongTimThayMatTuongSongSongTuongUngHayChonTuong" xml:space="preserve">
+    <value>対応する平行な壁面が見つかりませんでした。 WW で作成した壁を選択します。</value>
+  </data>
+  <data name="Common_Error_KhongTimThayThuMucResources" xml:space="preserve">
+    <value>リソースフォルダーが見つかりません。</value>
+  </data>
+  <data name="Common_Error_KhongTimThayThuMucTemplates" xml:space="preserve">
+    <value>テンプレート/{AssetsFolderName} フォルダーが見つかりません。</value>
+  </data>
+  <data name="Common_Error_LoMoQuaGanGocHoacGiaoTuongTX" xml:space="preserve">
+    <value>開口部が角または T/X 壁の交差点に近すぎます。</value>
+  </data>
+  <data name="Common_Error_PolylineTuongPhaiLaMotDoanThangGomDung2Dinh" xml:space="preserve">
+    <value>壁ポリラインは、正確に 2 つの頂点を持つ直線セグメントである必要があります。</value>
+  </data>
+  <data name="Common_Msg_BanCanChenBlockThongKeMauVaoBanVe" xml:space="preserve">
+    <value>サンプル集計ブロックを図面に挿入する必要があります。</value>
+  </data>
+  <data name="Common_Msg_BanCanNhapSoHieuBatDauDeDanhSo" xml:space="preserve">
+    <value>番号には開始番号を入力する必要があります。</value>
+  </data>
+  <data name="Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep" xml:space="preserve">
+    <value>鉄筋集計表を作成する前に、すべての設定を完了してください。</value>
+  </data>
+  <data name="Common_Msg_BanChuaXacLapDanhMuc" xml:space="preserve">
+    <value>まだ図面リストを作成していません。</value>
+  </data>
+  <data name="Common_Msg_KhoangCachTruPhaiLaSoKhongAm" xml:space="preserve">
+    <value>柱間距離には0以上の値を入力してください。</value>
+  </data>
+  <data name="Common_Msg_PhatHienTrungSoHieu" xml:space="preserve">
+    <value>重複した番号が検出されました!!!</value>
+  </data>
+  <data name="Common_Msg_VuiLongChonBlockKhungTen" xml:space="preserve">
+    <value>ネームフレームブロックを選択してください。</value>
+  </data>
+  <data name="Common_Msg_VuiLongCopyDuLieuVaoBang" xml:space="preserve">
+    <value>データをテーブルにコピーしてください。</value>
+  </data>
+  <data name="Common_Msg_VuiLongNhapTyLeBanVe" xml:space="preserve">
+    <value>図面縮尺を入力してください。</value>
+  </data>
+  <data name="Common_Output_DaChonDoiTuong" xml:space="preserve">
+    <value>{objectIds.Length} オブジェクトを選択しました。</value>
+  </data>
+  <data name="Common_Prompt_ChiChapNhanLinePolylineThangHoacBlockTuong" xml:space="preserve">
+    <value>直線、ポリライン、または壁ブロックのみが受け入れられます。</value>
+  </data>
+  <data name="Common_Prompt_ChonDiemChenBangThongKe" xml:space="preserve">
+    <value>集計表を挿入するポイントを選択します。</value>
+  </data>
+  <data name="Common_Prompt_ChonDiemChenBangThongKeThep" xml:space="preserve">
+    <value>鋼材集計表を挿入する点を選択します。</value>
+  </data>
+  <data name="Common_Prompt_ChonHaiDiemDoKhoangCachTru" xml:space="preserve">
+    <value>柱間距離を測る2点を選択:</value>
+  </data>
+  <data name="Common_Prompt_QuetChonVungChuaText" xml:space="preserve">
+    <value>スキャンしてテキスト領域を選択します:</value>
+  </data>
+  <data name="Common_Ribbon_BangCuongDoBeTong" xml:space="preserve">
+    <value>コンクリート強度表</value>
+  </data>
+  <data name="Common_Ribbon_BangDienTichCotThep" xml:space="preserve">
+    <value>鉄筋エリア表</value>
+  </data>
+  <data name="Common_Ribbon_BangDtct" xml:space="preserve">
+    <value>DTCTテーブル</value>
+  </data>
+  <data name="Common_Ribbon_BoTriCuaDi" xml:space="preserve">
+    <value>ドアをアレンジする</value>
+  </data>
+  <data name="Common_Ribbon_BoTriCuaSo" xml:space="preserve">
+    <value>ウィンドウのレイアウト</value>
+  </data>
+  <data name="Common_Ribbon_DanhSoBanVe" xml:space="preserve">
+    <value>図面に番号を付ける</value>
+  </data>
+  <data name="Common_Ribbon_DimCongDon" xml:space="preserve">
+    <value>累積寸法</value>
+  </data>
+  <data name="Common_Ribbon_ImportTuTemplate" xml:space="preserve">
+    <value>テンプレートからインポート</value>
+  </data>
+  <data name="Common_Ribbon_InHangLoat" xml:space="preserve">
+    <value>バッチ印刷</value>
+  </data>
+  <data name="Common_Ribbon_KiemTraTrungDim" xml:space="preserve">
+    <value>重複寸法を確認</value>
+  </data>
+  <data name="Common_Ribbon_OffsetTuong" xml:space="preserve">
+    <value>壁オフセット</value>
+  </data>
+  <data name="Common_Ribbon_SuaDanhMuc" xml:space="preserve">
+    <value>図面リストを編集する</value>
+  </data>
+  <data name="Common_Ribbon_SuaThongKeThep" xml:space="preserve">
+    <value>鉄鋼集計を修正</value>
+  </data>
+  <data name="Common_Ribbon_SuaThongKeThepHinh" xml:space="preserve">
+    <value>形鋼集計の編集</value>
+  </data>
+  <data name="Common_Ribbon_TaoBlock" xml:space="preserve">
+    <value>ブロックの作成</value>
+  </data>
+  <data name="Common_Ribbon_TaoLuoiTrucNhanh" xml:space="preserve">
+    <value>メッシュをすばやく作成する</value>
+  </data>
+  <data name="Common_Ribbon_ThayDoiChieuDayTuong" xml:space="preserve">
+    <value>壁の厚さを変更する</value>
+  </data>
+  <data name="Common_Ribbon_ThepDauDam" xml:space="preserve">
+    <value>ビームヘッド鋼</value>
+  </data>
+  <data name="Common_Ribbon_ThepSan" xml:space="preserve">
+    <value>スチール製の床</value>
+  </data>
+  <data name="Common_Ribbon_ThongKeCauKien" xml:space="preserve">
+    <value>部材集計</value>
+  </data>
+  <data name="Common_Ribbon_TimText" xml:space="preserve">
+    <value>テキストの検索</value>
+  </data>
+  <data name="Common_Ribbon_TinhTongThongKe" xml:space="preserve">
+    <value>合計集計を計算する</value>
+  </data>
+  <data name="Common_Ribbon_TinhTongTk" xml:space="preserve">
+    <value>合計アカウントを計算する</value>
+  </data>
+  <data name="Common_Ribbon_ToaDoCoc" xml:space="preserve">
+    <value>パイル座標</value>
+  </data>
+  <data name="Common_Ribbon_TrimVaSuaTuong" xml:space="preserve">
+    <value>壁のトリムと修復</value>
+  </data>
+  <data name="Common_Ribbon_VeBangDanhMuc" xml:space="preserve">
+    <value>リスト表を描く</value>
+  </data>
+  <data name="Common_Ribbon_VeBangDm" xml:space="preserve">
+    <value>DMテーブルを描く</value>
+  </data>
+  <data name="Common_Ribbon_VeLopVua" xml:space="preserve">
+    <value>モルタル層を作図します</value>
+  </data>
+  <data name="Common_Ribbon_VeTuong" xml:space="preserve">
+    <value>壁をペイントする</value>
+  </data>
+  <data name="Common_Ribbon_XacLapCauKien" xml:space="preserve">
+    <value>部材をセットアップする</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDanhMuc" xml:space="preserve">
+    <value>図面リストを設定する</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDimCongDon" xml:space="preserve">
+    <value>累積寸法を設定</value>
+  </data>
+  <data name="Common_Ribbon_XacLapDm" xml:space="preserve">
+    <value>DMを設定する</value>
+  </data>
+  <data name="Common_Ribbon_XacLapSuaDanhMuc" xml:space="preserve">
+    <value>図面リストの設定と編集</value>
+  </data>
+  <data name="Common_Ribbon_XacLapTkct" xml:space="preserve">
+    <value>TKCT設立</value>
+  </data>
+  <data name="Common_Ribbon_XoaCacDoiTuongTrongBlock" xml:space="preserve">
+    <value>ブロック内のオブジェクトを削除する</value>
+  </data>
+  <data name="Common_Ribbon_XoaTuongTuDong" xml:space="preserve">
+    <value>壁を自動的に削除する</value>
+  </data>
+  <data name="Common_Status_CungSoHieu" xml:space="preserve">
+    <value>同じマーク番号 {soHieu}</value>
+  </data>
+  <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>オブジェクトは有効な壁面ではありません。</value>
+  </data>
+  <data name="Common_Status_HaiMatTuongDangTrungNhau" xml:space="preserve">
+    <value>壁の両側が重なっています。</value>
+  </data>
+  <data name="Common_Status_KhongTimThayMatTuongSongSongTuongUng" xml:space="preserve">
+    <value>対応する平行な壁面が見つかりませんでした。</value>
+  </data>
+  <data name="Common_Text_BangTraChieuDaiNeoCotThep" xml:space="preserve">
+    <value>鉄筋アンカーの長さを調べるための表</value>
+  </data>
+  <data name="Common_Text_BangTraChieuDaiNoiCotThep" xml:space="preserve">
+    <value>鉄筋接続の長さを調べるための表</value>
+  </data>
+  <data name="Common_Text_Coc" xml:space="preserve">
+    <value>杭</value>
+  </data>
+  <data name="Common_Text_CungSoHieu" xml:space="preserve">
+    <value>同じ番号</value>
+  </data>
+  <data name="Common_Text_DoiTenLayer" xml:space="preserve">
+    <value>レイヤー名の変更</value>
+  </data>
+  <data name="Common_Text_DoiTenText" xml:space="preserve">
+    <value>テキストの名前を変更</value>
+  </data>
+  <data name="Common_Text_HuongDanSuDung" xml:space="preserve">
+    <value>使用説明書</value>
+  </data>
+  <data name="Common_Text_Loi" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Common_Text_ThongBao" xml:space="preserve">
+    <value>お知らせ</value>
+  </data>
+  <data name="Common_Text_ThongSoChuaHopLe" xml:space="preserve">
+    <value>パラメータが無効です</value>
+  </data>
+  <data name="Common_Text_VeCoc" xml:space="preserve">
+    <value>杭を作図</value>
+  </data>
+  <data name="Common_Text_VeMatCatCauThang" xml:space="preserve">
+    <value>階段部分を描く</value>
+  </data>
+  <data name="Common_Text_XacLapThongKeCotThep" xml:space="preserve">
+    <value>鉄筋集計を設定</value>
+  </data>
+  <data name="Common_UI_CapNhat" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="Common_UI_ChonKhoangCachMepTuong" xml:space="preserve">
+    <value>壁エッジの距離を選択してください</value>
+  </data>
+  <data name="Common_UI_ChonTheoKieuNaoNhi" xml:space="preserve">
+    <value>どのスタイルを選択しますか?</value>
+  </data>
+  <data name="Common_UI_DanhSachDoRong" xml:space="preserve">
+    <value>幅一覧</value>
+  </data>
+  <data name="Common_UI_DanhSachKhoangCach" xml:space="preserve">
+    <value>距離一覧</value>
+  </data>
+  <data name="Common_UI_DanhSoHieuTuDong" xml:space="preserve">
+    <value>番号付け
+自動</value>
+  </data>
+  <data name="Common_UI_DoDoRong" xml:space="preserve">
+    <value>幅を測る</value>
+  </data>
+  <data name="Common_UI_DoKhoangCach" xml:space="preserve">
+    <value>距離を測定する</value>
+  </data>
+  <data name="Common_UI_DoRong" xml:space="preserve">
+    <value>幅:</value>
+  </data>
+  <data name="Common_UI_DoTuMepTuong" xml:space="preserve">
+    <value>壁の端から測ります</value>
+  </data>
+  <data name="Common_UI_Huy" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Common_UI_QuetChon" xml:space="preserve">
+    <value>スキャンセレクト</value>
+  </data>
+  <data name="Common_UI_QuyTacDanhSoHieu" xml:space="preserve">
+    <value>番号付けルール:</value>
+  </data>
+  <data name="Common_UI_SHieu" xml:space="preserve">
+    <value>S.ヒイウ</value>
+  </data>
+  <data name="Common_UI_SoHieu" xml:space="preserve">
+    <value>モデル番号</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="Common_UI_TenBanVe" xml:space="preserve">
+    <value>図面名</value>
+  </data>
+  <data name="Common_UI_TenBlock" xml:space="preserve">
+    <value>ブロック名:</value>
+  </data>
+  <data name="Common_UI_Thoat" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="Common_UI_ToaDoX" xml:space="preserve">
+    <value>X座標</value>
+  </data>
+  <data name="Common_UI_ToaDoY" xml:space="preserve">
+    <value>Y座標</value>
+  </data>
+  <data name="Common_UI_TraiSangPhai" xml:space="preserve">
+    <value>左から右へ</value>
+  </data>
+  <data name="Common_UI_TrenXuongDuoi" xml:space="preserve">
+    <value>上から下へ</value>
+  </data>
+  <data name="Common_UI_TuTraiSangPhaiTrenXuongDuoi" xml:space="preserve">
+    <value>左から右、上から下へ</value>
+  </data>
+  <data name="Common_UI_TuTrenXuongDuoiTraiSangPhai" xml:space="preserve">
+    <value>上から下、左から右へ</value>
+  </data>
+  <data name="Common_UI_TyLeBanVe" xml:space="preserve">
+    <value>図面スケール:</value>
+  </data>
+  <data name="Common_UI_VeBang" xml:space="preserve">
+    <value>ボードを描く</value>
+  </data>
+  <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
+    <value>鉄筋集計表を作成</value>
+  </data>
+  <data name="Common_UI_XacLap" xml:space="preserve">
+    <value>設立</value>
+  </data>
+  <data name="Common_Msg_BlockDaTonTaiTrongBanVe" xml:space="preserve">
+    <value>ブロック "{newBlockName}" は図面内に既に存在します。</value>
+  </data>
+  <data name="Common_Prompt_ChonBlock" xml:space="preserve">
+    <value>ブロックを選択:</value>
+  </data>
+  <data name="Common_Prompt_QuetChonBlock" xml:space="preserve">
+    <value>ブロックをスキャンして選択します。</value>
+  </data>
+  <data name="Common_Prompt_QuetChonBlockVaText" xml:space="preserve">
+    <value>スキャンしてブロックとテキストを選択します。</value>
+  </data>
+  <data name="Common_Text_TiengViet" xml:space="preserve">
+    <value>ベトナム語</value>
+  </data>
+  <data name="Common_UI_ChonMauAci" xml:space="preserve">
+    <value>カラー選択(ACI)</value>
+  </data>
+  <data name="DCD_Msg_BanChuaXacLapCaiDatDimCongDon" xml:space="preserve">
+    <value>累積寸法の設定が未完了です。</value>
+  </data>
+  <data name="DCD_Ribbon_DimCongDonDcd" xml:space="preserve">
+    <value>累積寸法 (DCD)</value>
+  </data>
+  <data name="DSHBV_Msg_BanChuaChonKieuDanhTen" xml:space="preserve">
+    <value>名前の種類が選択されていません。</value>
+  </data>
+  <data name="DSHBV_Msg_BanVuiLongNhapDayDuTienToVaHauTo" xml:space="preserve">
+    <value>完全なプレフィックスとサフィックスを入力してください。</value>
+  </data>
+  <data name="DSHBV_Msg_HauToPhaiLaSoNguyen" xml:space="preserve">
+    <value>サフィックスは整数である必要があります。</value>
+  </data>
+  <data name="DSHBV_Ribbon_DanhSoBanVeDshbv" xml:space="preserve">
+    <value>図面番号付け (DSHBV)</value>
+  </data>
+  <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
+    <value>病院に番号を付けます</value>
+  </data>
+  <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
+    <value>鉄筋エリア表（DTT）</value>
+  </data>
+  <data name="DTT_UI_BangTraDienTichCotThep" xml:space="preserve">
+    <value>鉄筋箇所を調べる表</value>
+  </data>
+  <data name="EW_Msg_LoiXuLy" xml:space="preserve">
+    <value>処理エラー: {ex.Message}</value>
+  </data>
+  <data name="EW_Output_DaXoaBoGocVaVaLoiChoMangTuongBaoGom" xml:space="preserve">
+    <value>取り外して角を丸め、{erasedIds.Count} の壁パネルをパッチしました ({autoSelected} の破片/反対側のパネルを含む)。</value>
+  </data>
+  <data name="EW_Prompt_QuetChonCacMatTuongCanXoaCoTheChonNhieuNhan" xml:space="preserve">
+    <value>消去する壁面をスキャンして選択します (複数選択可能) -&gt; Enter キーを押します:</value>
+  </data>
+  <data name="EW_Ribbon_XoaTuongTuDongEw" xml:space="preserve">
+    <value>自動壁クリアリング(EW)</value>
+  </data>
+  <data name="FDT_Msg_KhongTimThayTextChua" xml:space="preserve">
+    <value>「{findText}」を含むテキストが見つかりませんでした。</value>
+  </data>
+  <data name="FDT_Msg_VuiLongNhapTextCanTim" xml:space="preserve">
+    <value>検索したいテキストを入力してください。</value>
+  </data>
+  <data name="FDT_RenameText_Output_DaChonDoiTuongText" xml:space="preserve">
+    <value>{validIds.Length} テキスト オブジェクトを選択しました。</value>
+  </data>
+  <data name="FDT_RenameText_Prompt_QuetChonText" xml:space="preserve">
+    <value>テキストをスキャンして選択します。</value>
+  </data>
+  <data name="FDT_Ribbon_TimTextFdt" xml:space="preserve">
+    <value>テキストの検索 (FDT)</value>
+  </data>
+  <data name="FN_Error_ChieuDayVuaPhaiLonHon0" xml:space="preserve">
+    <value>モルタルの厚さは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="FN_Error_KhongCoKetQuaOffset" xml:space="preserve">
+    <value>オフセット結果はありません。</value>
+  </data>
+  <data name="FN_Error_KhongTheOffsetBienTuong" xml:space="preserve">
+    <value>壁の境界をオフセットできません: {detail}</value>
+  </data>
+  <data name="FN_Error_KhongTimThayBienKinQuanhDiemDaChonHayKiemTra" xml:space="preserve">
+    <value>選択した点の周囲に閉じた境界が見つかりません。ギャップをチェックし、すべての境界線が画面上に表示されていることを確認します。</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLayer" xml:space="preserve">
+    <value>レイヤー「{targetLayerName}」が見つかりませんでした。</value>
+  </data>
+  <data name="FN_Error_KhongXacDinhDuocPhiaOffsetTuDiemChiDan" xml:space="preserve">
+    <value>基準点からのオフセット側はわかりません。</value>
+  </data>
+  <data name="FN_Error_LayerDangKhoaHayMoKhoaTruocKhiChayFn" xml:space="preserve">
+    <value>レイヤー「{targetLayer.Name}」はロックされています。 FN を実行する前にロックを解除してください。</value>
+  </data>
+  <data name="FN_Error_MauAciPhaiNamTrongKhoang1255" xml:space="preserve">
+    <value>ACI カラーは 1 ～ 255 の間である必要があります。</value>
+  </data>
+  <data name="FN_Error_TenLayerFnKhongHopLe" xml:space="preserve">
+    <value>FN レイヤ名が無効です。</value>
+  </data>
+  <data name="FN_Msg_FnDuLieuKhongHopLe" xml:space="preserve">
+    <value>FN - 無効なデータ</value>
+  </data>
+  <data name="FN_Msg_LoiFn" xml:space="preserve">
+    <value>FN エラー: {ex.Message}</value>
+  </data>
+  <data name="FN_Prompt_CaiDat" xml:space="preserve">
+    <value>インストール</value>
+  </data>
+  <data name="FN_Prompt_ChonCacCanhLienTiepCuaMatNgoaiNhanEnterDeXac" xml:space="preserve">
+    <value>外側の面の連続するエッジを選択し、Enter キーを押して確定します。</value>
+  </data>
+  <data name="FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua" xml:space="preserve">
+    <value>外側の点を選択してモルタルの方向を決定します。</value>
+  </data>
+  <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
+    <value>FN - 部屋内の点を選択するか、[O 壁を選択してスキャン | E 外観 | S設定]：</value>
+  </data>
+  <data name="FN_Prompt_MatNgoai" xml:space="preserve">
+    <value>外側</value>
+  </data>
+  <data name="FN_Prompt_QuetChonToanBoHaiMatCuaCacTuongHoNhanEnter" xml:space="preserve">
+    <value>開いた壁の 2 つの側面をすべてスキャンして選択し、Enter キーを押して確認します。</value>
+  </data>
+  <data name="FN_Prompt_QuetChonTuong" xml:space="preserve">
+    <value>壁をスキャンして選択する</value>
+  </data>
+  <data name="FN_Ribbon_VeLopVuaFn" xml:space="preserve">
+    <value>モルタル層の作図（FN）</value>
+  </data>
+  <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
+    <value>選択したラインは外側にグラウトできません。</value>
+  </data>
+  <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
+    <value>外側の輪郭が選択されていません。</value>
+  </data>
+  <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
+    <value>国境警備隊はいない。</value>
+  </data>
+  <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
+    <value>開いた壁はまだスキャンしていません。</value>
+  </data>
+  <data name="FN_Text_KhongTheTaoVuaMatTrong" xml:space="preserve">
+    <value>内側にモルタルを作ることはできません。</value>
+  </data>
+  <data name="FN_Text_KhongTimThayCapMatTuongHoHopLeTrongVungChon" xml:space="preserve">
+    <value>有効な開いた壁面のペアが選択範囲内に見つかりませんでした。</value>
+  </data>
+  <data name="FN_UI_CaiDatVua" xml:space="preserve">
+    <value>モルタル設定</value>
+  </data>
+  <data name="FN_UI_ChonLayerCoSan" xml:space="preserve">
+    <value>既存のレイヤーを選択します</value>
+  </data>
+  <data name="FN_UI_ChonMotLayerDaCo" xml:space="preserve">
+    <value>既存のレイヤーを選択します</value>
+  </data>
+  <data name="FN_UI_DatLaiGiaTriMacDinh" xml:space="preserve">
+    <value>デフォルト値にリセット</value>
+  </data>
+  <data name="FN_UI_DoDayVua" xml:space="preserve">
+    <value>モルタルの厚さ:</value>
+  </data>
+  <data name="FN_UI_LayerVua" xml:space="preserve">
+    <value>モルタル層:</value>
+  </data>
+  <data name="FN_UI_MaMauAci1255" xml:space="preserve">
+    <value>カラーコード (ACI): 1 ～ 255</value>
+  </data>
+  <data name="FN_UI_MauLayer" xml:space="preserve">
+    <value>レイヤーカラー:</value>
+  </data>
+  <data name="FN_UI_NhapTenLayerMoi" xml:space="preserve">
+    <value>新しいレイヤー名を入力してください</value>
+  </data>
+  <data name="FN_UI_TaoLayerMoi" xml:space="preserve">
+    <value>新しいレイヤーを作成する</value>
+  </data>
+  <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
+    <value>モルタルの厚さは 0 より大きい有限数でなければなりません。</value>
+  </data>
+  <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
+    <value>既存のレイヤーを選択します。</value>
+  </data>
+  <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
+    <value>モルタル層を空白のままにすることはできません。</value>
+  </data>
+  <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
+    <value>レイヤーの色は 1 ～ 255 の ACI インデックスである必要があります。</value>
+  </data>
+  <data name="FN_Validation_TenLayerChuaKyTuKhongHopLe" xml:space="preserve">
+    <value>レイヤー名に無効な文字が含まれています: &lt; &gt; / \ " : ; ? * | , =</value>
+  </data>
+  <data name="IPT_Error_DuongDanFileTemplateKhongHopLe" xml:space="preserve">
+    <value>テンプレート ファイルのパスが無効です。</value>
+  </data>
+  <data name="IPT_Error_KhongTimThayFileTemplateBlock" xml:space="preserve">
+    <value>テンプレート ブロック ファイルが見つかりません。</value>
+  </data>
+  <data name="IPT_Msg_DaLoadToanBoDoiTuongTuFileTemplate" xml:space="preserve">
+    <value>テンプレート ファイルからすべてのオブジェクトをロードしました。</value>
+  </data>
+  <data name="IPT_Msg_KhongTimThayBlockTrongBanVe" xml:space="preserve">
+    <value>ブロック '{blockName}' が図面内に見つかりませんでした。</value>
+  </data>
+  <data name="IPT_Prompt_ChonDiemDatDoiTuongTuTemplate" xml:space="preserve">
+    <value>テンプレートからオブジェクト配置ポイントを選択します:</value>
+  </data>
+  <data name="IPT_Ribbon_ImportTuTemplate" xml:space="preserve">
+    <value>インポート元
+テンプレート</value>
+  </data>
+  <data name="IPT_Ribbon_ImportTuTemplateIpt" xml:space="preserve">
+    <value>テンプレートからインポート (IPT)</value>
+  </data>
+  <data name="KTD_DCD_Msg_CoCacDimBiChongLanHoSaiGiaTriThucBan" xml:space="preserve">
+    <value>寸法に重なり、隙間、または実測値との不一致があります。
+累積寸法を作成する前に修正してください。</value>
+  </data>
+  <data name="KTD_DCD_Msg_CoChuoiDimCongDonBiSai" xml:space="preserve">
+    <value>累積寸法列が正しくありません。</value>
+  </data>
+  <data name="KTD_DCD_Output_CoDimBiTrung" xml:space="preserve">
+    <value>重複する寸法が見つかりました。</value>
+  </data>
+  <data name="KTD_DCD_Output_KhongTimThayDimCongDonSai" xml:space="preserve">
+    <value>不正な累積寸法は見つかりませんでした。</value>
+  </data>
+  <data name="KTD_DCD_Output_KhongTimThayDimNaoBiTrung" xml:space="preserve">
+    <value>重複する寸法は見つかりませんでした。</value>
+  </data>
+  <data name="KTD_DCD_Prompt_QuetChonDimCongDon" xml:space="preserve">
+    <value>累積寸法を選択:</value>
+  </data>
+  <data name="KTD_DCD_Prompt_QuetChonVungChuaDim" xml:space="preserve">
+    <value>寸法を含む範囲を選択:</value>
+  </data>
+  <data name="KTD_Ribbon_KiemTraTd" xml:space="preserve">
+    <value>TDをチェックする</value>
+  </data>
+  <data name="KTD_Ribbon_KiemTraTrungDimKtd" xml:space="preserve">
+    <value>重複寸法を確認 (KTD)</value>
+  </data>
+  <data name="LG_Error_LanCanCoQuaNhieuChiTietHayKiemTraDonVi" xml:space="preserve">
+    <value>手すりには詳細が多すぎます ({rects.Count})。描画単位と選択した 2 点間の距離を確認してください。</value>
+  </data>
+  <data name="LG_Output_DaVeDoan" xml:space="preserve">
+    <value>描画されたセグメント {segments} 。</value>
+  </data>
+  <data name="LG_Output_DoiTuongThuocXrefKhongDungDuocLayerNay" xml:space="preserve">
+    <value>オブジェクトは外部参照に属しているため、この画層は使用できません。</value>
+  </data>
+  <data name="LG_Output_HaiDiemQuaGanNhauTheoPhuongNgangHoacQuaDoc70" xml:space="preserve">
+    <value>2 つの点が水平方向に近すぎる場合、または傾きが高すぎる (70 度以上) 場合は、このセクションをスキップしてください。</value>
+  </data>
+  <data name="LG_Output_KetThucLgDoanLanCan" xml:space="preserve">
+    <value>終了 LG: {segments} 手すりセクション。</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemCuoiLanCan" xml:space="preserve">
+    <value>手すりの端を選択します。</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemDauLanCan" xml:space="preserve">
+    <value>手すりの始点を選択します。</value>
+  </data>
+  <data name="LG_Prompt_ChonDiemDauLanCanNoiTiepTuDiemCuoiTruocT" xml:space="preserve">
+    <value>手すりの始点を選択 [前の終点から継続(T)] &lt;終点まで入力&gt;:</value>
+  </data>
+  <data name="LG_Prompt_ChonDoiTuongDeLayLayer" xml:space="preserve">
+    <value>レイヤを取得するオブジェクトを選択してください:</value>
+  </data>
+  <data name="LG_Text_ChuaDatCoiLaMm" xml:space="preserve">
+    <value>未設定（mmとみなされる）</value>
+  </data>
+  <data name="LG_Text_ColumnGapPhaiLonHonColumnDia" xml:space="preserve">
+    <value>カラムギャップはカラム直径より大きくなければなりません。</value>
+  </data>
+  <data name="LG_Text_GiaTriKhongPhaiLaSo" xml:space="preserve">
+    <value>{label}: 値は数値ではありません。</value>
+  </data>
+  <data name="LG_Text_KhongDuocAm" xml:space="preserve">
+    <value>{label} を負にすることはできません。</value>
+  </data>
+  <data name="LG_Text_MauLayerAciPhaiTu1Den255" xml:space="preserve">
+    <value>レイヤーカラー (ACI) は 1 ～ 255 である必要があります。</value>
+  </data>
+  <data name="LG_Text_PhaiLonHon0" xml:space="preserve">
+    <value>{label} は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="LG_Text_TenLayerKhongHopLe" xml:space="preserve">
+    <value>無効なレイヤー名です。</value>
+  </data>
+  <data name="LG_Text_TotalHeightQuaNhoSoVoiHandrailDiaTopGapRailDia" xml:space="preserve">
+    <value>手すりの直径 + 上部のギャップ + レールの直径 + 下部のギャップと比較して、全高が小さすぎます。</value>
+  </data>
+  <data name="LG_UI_BamDeChonMau" xml:space="preserve">
+    <value>クリックして色を選択してください</value>
+  </data>
+  <data name="LG_UI_ChonMotDoiTuongTrongBanVeDeLayLayerVaMau" xml:space="preserve">
+    <value>図面内のオブジェクトを選択してレイヤーと色を取得します</value>
+  </data>
+  <data name="LG_UI_TichGopLanCanThanh1DoiTuongBoTichVeThanh" xml:space="preserve">
+    <value>統合: 手すりを 1 つのオブジェクトに結合します。チェックを外すと、別個のオブジェクトをできるだけ多く描画します。</value>
+  </data>
+  <data name="LTP_Drawing_Bac" xml:space="preserve">
+    <value>{preview.StepNumber}/{source.StepNumber} レベル</value>
+  </data>
+  <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
+    <value>{source.StepNumber} レベル</value>
+  </data>
+  <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
+    <value>高層ビル: {source.StoreyHeight:0.####};ステップ面: {source.TreadRun:0.####}</value>
+  </data>
+  <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
+    <value>着陸: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+  </data>
+  <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
+    <value>プレビュー画像: {GetPreviewSummary(source, preview)}</value>
+  </data>
+  <data name="LTP_Drawing_Tang" xml:space="preserve">
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} フロア</value>
+  </data>
+  <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
+    <value>{source.StoreyNumber} フロア</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
+    <value>階段セクションを挿入する点を選択します。</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemDichTrenGroupKhac" xml:space="preserve">
+    <value>別のグループの宛先を選択してください:</value>
+  </data>
+  <data name="LTP_Prompt_ChonDiemGocTrenCauThangMoi" xml:space="preserve">
+    <value>新しい階段の原点を選択します。</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuCaoTang" xml:space="preserve">
+    <value>床の高さを測定するには 2 つの点を選択してください:</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi1" xml:space="preserve">
+    <value>着陸幅 1 を測定する 2 つの点を選択します。</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi2" xml:space="preserve">
+    <value>着陸幅 2 を測定する 2 点を選択します。</value>
+  </data>
+  <data name="LTP_Prompt_ChonHaiDiemDoKhoangCach" xml:space="preserve">
+    <value>2 つの距離測定点を選択します。</value>
+  </data>
+  <data name="LTP_Prompt_VuiLongNhapDungDinhDangSoChoTatCaThongSo" xml:space="preserve">
+    <value>すべてのパラメータに正しい数値形式を入力してください。</value>
+  </data>
+  <data name="LTP_Ribbon_VeMatCatCauThangLtp" xml:space="preserve">
+    <value>階段断面図作成(LTP)</value>
+  </data>
+  <data name="LTP_Ribbon_VeMatCatCt" xml:space="preserve">
+    <value>フェイスペインティング
+CTカット</value>
+  </data>
+  <data name="LTP_Text_ChieuNghi1" xml:space="preserve">
+    <value>着陸 1: {settings.Landing1Width:0.####}</value>
+  </data>
+  <data name="LTP_Text_ChieuNghi2" xml:space="preserve">
+    <value>着陸 2: {settings.Landing2Width:0.####}</value>
+  </data>
+  <data name="LTP_Text_Dam1" xml:space="preserve">
+    <value>ビーム1</value>
+  </data>
+  <data name="LTP_Text_Dam2" xml:space="preserve">
+    <value>ビーム2</value>
+  </data>
+  <data name="LTP_UI_CauThang1Ve" xml:space="preserve">
+    <value>1フライト階段</value>
+  </data>
+  <data name="LTP_UI_CauThang2Ve" xml:space="preserve">
+    <value>2フライト階段</value>
+  </data>
+  <data name="LTP_UI_CauThangChuX" xml:space="preserve">
+    <value>X字型の階段</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoDamChinh" xml:space="preserve">
+    <value>主梁高さ</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoDamPhu" xml:space="preserve">
+    <value>二次ビームの高さ</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoLanCan" xml:space="preserve">
+    <value>手すりの高さ:</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoTang" xml:space="preserve">
+    <value>床の高さ:</value>
+  </data>
+  <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
+    <value>はしごの厚さ:</value>
+  </data>
+  <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
+    <value>着陸 1:</value>
+  </data>
+  <data name="LTP_UI_ChieuNghi2" xml:space="preserve">
+    <value>着陸 2:</value>
+  </data>
+  <data name="LTP_UI_ChieuRongChieuNghi1" xml:space="preserve">
+    <value>踊り場幅1</value>
+  </data>
+  <data name="LTP_UI_ChieuRongChieuNghi2" xml:space="preserve">
+    <value>踊り場幅2</value>
+  </data>
+  <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
+    <value>メインビーム幅</value>
+  </data>
+  <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
+    <value>二次ビーム幅</value>
+  </data>
+  <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
+    <value>ステップ幅:</value>
+  </data>
+  <data name="LTP_UI_DamChinhC" xml:space="preserve">
+    <value>メインビームC:</value>
+  </data>
+  <data name="LTP_UI_DamChinhR" xml:space="preserve">
+    <value>メインビームR:</value>
+  </data>
+  <data name="LTP_UI_DamPhuC" xml:space="preserve">
+    <value>二次ビーム C:</value>
+  </data>
+  <data name="LTP_UI_DamPhuR" xml:space="preserve">
+    <value>二次ビーム R:</value>
+  </data>
+  <data name="LTP_UI_DiemChen" xml:space="preserve">
+    <value>●挿入ポイント</value>
+  </data>
+  <data name="LTP_UI_Do" xml:space="preserve">
+    <value>測定する</value>
+  </data>
+  <data name="LTP_UI_DongY" xml:space="preserve">
+    <value>同意しました</value>
+  </data>
+  <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
+    <value>絵を描いた後にグループ化する</value>
+  </data>
+  <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
+    <value>第1フライトの段数:</value>
+  </data>
+  <data name="LTP_UI_SoTang" xml:space="preserve">
+    <value>階数:</value>
+  </data>
+  <data name="LTP_UI_TaoNhom" xml:space="preserve">
+    <value>グループの作成</value>
+  </data>
+  <data name="LTP_UI_Thang1Ve" xml:space="preserve">
+    <value>1フライト階段</value>
+  </data>
+  <data name="LTP_UI_Thang2Ve" xml:space="preserve">
+    <value>2フライト階段</value>
+  </data>
+  <data name="LTP_UI_ThangChuX" xml:space="preserve">
+    <value>X型はしご</value>
+  </data>
+  <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
+    <value>階段仕様：</value>
+  </data>
+  <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
+    <value>着陸仕様:</value>
+  </data>
+  <data name="LTP_UI_TongSoBac" xml:space="preserve">
+    <value>総ステップ数:</value>
+  </data>
+  <data name="LTP_UI_VeDauSangPhai" xml:space="preserve">
+    <value>第1フライトを右へ</value>
+  </data>
+  <data name="LTP_UI_VeDauSangTrai" xml:space="preserve">
+    <value>第1フライトを左へ</value>
+  </data>
+  <data name="LTP_Validation_ChieuCaoTangChieuRongBacPhaiLonHon0ChieuRong" xml:space="preserve">
+    <value>床の高さとステップ幅は 0 より大きくなければなりません。着陸幅を負の値にすることはできません。</value>
+  </data>
+  <data name="LTP_Validation_ChieuCaoVaChieuRongDamPhuPhaiLonHon0Khi" xml:space="preserve">
+    <value>ビーム 1 またはビーム 2 が有効な場合、二次ビームの高さと幅は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="LTP_Validation_KichThuocKetCauKhongDuocAmVaChieuDayBanPhai" xml:space="preserve">
+    <value>構造寸法は負であってはならず、スラブの厚さは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="LTP_Validation_KieuCauThangKhongHopLe" xml:space="preserve">
+    <value>無効な階段タイプです。</value>
+  </data>
+  <data name="LTP_Validation_LoiLtp" xml:space="preserve">
+    <value>LTP エラー: {0}</value>
+  </data>
+  <data name="LTP_Validation_LtpDaTaoMatCatCauThangGomDuong" xml:space="preserve">
+    <value>LTP: {0} 行で構成される階段セクションを作成しました。</value>
+  </data>
+  <data name="LTP_Validation_MatCatCauThangVinacadLtp" xml:space="preserve">
+    <value>VinaCAD LTP 階段の断面図</value>
+  </data>
+  <data name="LTP_Validation_SoBacVeDauPhaiNamTrongKhoangTu1DenNho" xml:space="preserve">
+    <value>第1フライトの段数は1以上かつ総段数未満である必要があります。</value>
+  </data>
+  <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
+    <value>階数は1～、各階の総段数は2～となります。</value>
+  </data>
+  <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
+    <value>階段セクションのレイヤー名が無効です。</value>
+  </data>
+  <data name="NEO_Ribbon_BangTraCdneoct" xml:space="preserve">
+    <value>CDNeoCT ルックアップ テーブル</value>
+  </data>
+  <data name="NEO_Ribbon_BangTraChieuDaiNeoCotThepNeo" xml:space="preserve">
+    <value>鉄筋アンカー長さ調べ表（NEO）</value>
+  </data>
+  <data name="NOI_Ribbon_BangTraCdnoict" xml:space="preserve">
+    <value>CDNoiCT ルックアップ テーブル</value>
+  </data>
+  <data name="NOI_Ribbon_BangTraChieuDaiNoiCotThepNoi" xml:space="preserve">
+    <value>鉄筋接続長さ（NOI）を調べる表</value>
+  </data>
+  <data name="PRT_Ribbon_InHangLoatPrt" xml:space="preserve">
+    <value>一括印刷 (PRT)</value>
+  </data>
+  <data name="QD_Ribbon_SuaThongKeThepHinhQd" xml:space="preserve">
+    <value>形鋼集計の編集 (QD)</value>
+  </data>
+  <data name="QD_Ribbon_SuaTkth" xml:space="preserve">
+    <value>TKTHを編集</value>
+  </data>
+  <data name="QD_UI_BangThongKeThepHinh" xml:space="preserve">
+    <value>形鋼集計表</value>
+  </data>
+  <data name="QD_UI_ChieuDai" xml:space="preserve">
+    <value>午後
+ロング</value>
+  </data>
+  <data name="QD_UI_QuyCachThep" xml:space="preserve">
+    <value>スチール仕様</value>
+  </data>
+  <data name="QF_Msg_BlockBanChonKhongCoBlockThongKeTongMauBanCan" xml:space="preserve">
+    <value>選択したブロックには合計サンプル集計ブロックがありません。確認する必要があります。</value>
+  </data>
+  <data name="QF_Ribbon_TinhTongThongKeQf" xml:space="preserve">
+    <value>合計集計 (QF) を計算します。</value>
+  </data>
+  <data name="QS_Ribbon_SuaThongKeThepQs" xml:space="preserve">
+    <value>鉄鋼集計 (QS) を修正</value>
+  </data>
+  <data name="QS_Ribbon_SuaTkt" xml:space="preserve">
+    <value>CWDの修正</value>
+  </data>
+  <data name="RenameLayer_Msg_ChuaCoLayerNaoDeDoi" xml:space="preserve">
+    <value>変更するレイヤーはまだありません。</value>
+  </data>
+  <data name="RenameLayer_Msg_LayerDaTonTai" xml:space="preserve">
+    <value>レイヤー「{newLayerName}」はすでに存在します。</value>
+  </data>
+  <data name="RenameLayer_Msg_VuiLongCopyGiaTriVaoCotRenameLayer" xml:space="preserve">
+    <value>値を「レイヤー名の変更」列にコピーしてください。</value>
+  </data>
+  <data name="RenameLayer_Ribbon_DoiTenLayer" xml:space="preserve">
+    <value>名前の変更
+レイヤー</value>
+  </data>
+  <data name="RenameLayer_Ribbon_DoiTenLayerRenamelayer" xml:space="preserve">
+    <value>レイヤの名前を変更 (RenameLayer)</value>
+  </data>
+  <data name="RenameLayer_UI_TenLayerCu" xml:space="preserve">
+    <value>古いレイヤー名</value>
+  </data>
+  <data name="RenameLayer_UI_TenLayerMoi" xml:space="preserve">
+    <value>新しいレイヤー名</value>
+  </data>
+  <data name="RenameText_Msg_ChuaCoTextNaoDeDoi" xml:space="preserve">
+    <value>変更するテキストはまだありません。</value>
+  </data>
+  <data name="RenameText_Msg_VuiLongCopyGiaTriVaoCotNewText" xml:space="preserve">
+    <value>値を「新しいテキスト」列にコピーしてください。</value>
+  </data>
+  <data name="RenameText_Ribbon_DoiTenText" xml:space="preserve">
+    <value>名前の変更
+テキスト。テキスト</value>
+  </data>
+  <data name="RenameText_Ribbon_DoiTenTextRenametext" xml:space="preserve">
+    <value>テキストの名前を変更 (RenameText)</value>
+  </data>
+  <data name="RenameText_UI_CongDon" xml:space="preserve">
+    <value>累積</value>
+  </data>
+  <data name="RenameText_UI_GhiDe" xml:space="preserve">
+    <value>上書き</value>
+  </data>
+  <data name="RenameText_UI_KieuThayThe" xml:space="preserve">
+    <value>代替スタイル?</value>
+  </data>
+  <data name="RenameText_UI_TextCu" xml:space="preserve">
+    <value>古いテキスト</value>
+  </data>
+  <data name="RenameText_UI_TextMoi" xml:space="preserve">
+    <value>新しいテキスト</value>
+  </data>
+  <data name="Common_Ribbon_BangTra" xml:space="preserve">
+    <value>ルックアップテーブル</value>
+  </data>
+  <data name="Common_Ribbon_CauKien" xml:space="preserve">
+    <value>部材</value>
+  </data>
+  <data name="Common_Ribbon_CauThang" xml:space="preserve">
+    <value>階段</value>
+  </data>
+  <data name="Common_Ribbon_Cua" xml:space="preserve">
+    <value>ドア</value>
+  </data>
+  <data name="Common_Ribbon_DanhMucInAn" xml:space="preserve">
+    <value>図面リスト - 印刷</value>
+  </data>
+  <data name="Common_Ribbon_DoiTen" xml:space="preserve">
+    <value>名前の変更</value>
+  </data>
+  <data name="Common_Ribbon_HuongDan" xml:space="preserve">
+    <value>指示</value>
+  </data>
+  <data name="Common_Ribbon_LuoiTruc" xml:space="preserve">
+    <value>軸方向メッシュ</value>
+  </data>
+  <data name="Common_Ribbon_Thep" xml:space="preserve">
+    <value>スチール</value>
+  </data>
+  <data name="Common_Ribbon_Tuong" xml:space="preserve">
+    <value>壁</value>
+  </data>
+  <data name="Common_Ribbon_VinaCauKienThepBangTra" xml:space="preserve">
+    <value>Vina - 部材 - スチール - ルックアップテーブル</value>
+  </data>
+  <data name="Common_Ribbon_VinaDanhMucInAn" xml:space="preserve">
+    <value>Vina - 図面リスト - 印刷</value>
+  </data>
+  <data name="Common_Ribbon_VinaKienTruc" xml:space="preserve">
+    <value>ヴィナ - 建築</value>
+  </data>
+  <data name="Common_Ribbon_VinaTienIchChung" xml:space="preserve">
+    <value>Vina - 一般公共事業</value>
+  </data>
+  <data name="Sample_UI_ChonAll" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="Sample_UI_NhapTextCanTim" xml:space="preserve">
+    <value>検索するテキストを入力してください:</value>
+  </data>
+  <data name="Sample_UI_TimVaChonDoiTuongText" xml:space="preserve">
+    <value>Text オブジェクトを見つけて選択します。</value>
+  </data>
+  <data name="SDM_Msg_CapNhatBangThongKeThanhCong" xml:space="preserve">
+    <value>集計表が正常に更新されました。</value>
+  </data>
+  <data name="SDM_Msg_KhongTimThayBlockPhuHop" xml:space="preserve">
+    <value>一致するブロックが見つかりませんでした。</value>
+  </data>
+  <data name="SDM_Msg_VuiLongChonTenBlock" xml:space="preserve">
+    <value>ブロック名を選択してください。</value>
+  </data>
+  <data name="SDM_Msg_VuiLongCopyBangThongKeDanhMucThemDong" xml:space="preserve">
+    <value>図面リスト集計表をコピーし、行 {sdms.Count - blockIds.Count} を追加してください。</value>
+  </data>
+  <data name="SDM_Ribbon_SuaDanhMucSdm" xml:space="preserve">
+    <value>図面リストの編集 (SDM)</value>
+  </data>
+  <data name="SDM_Ribbon_SuaDm" xml:space="preserve">
+    <value>DMを編集</value>
+  </data>
+  <data name="SDM_UI_BangSuaDanhMuc" xml:space="preserve">
+    <value>図面リストを編集</value>
+  </data>
+  <data name="SDM_UI_ChinhSua" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="TD_Msg_BanDaDanhSoHieuTuDongThepDamThanhCong" xml:space="preserve">
+    <value>これで梁鋼に自動的に番号が付けられました。</value>
+  </data>
+  <data name="TD_Msg_NhungLaiKhacThongSoBanCanDungLaiDeKiemTra" xml:space="preserve">
+    <value>ただしパラメータが異なります。立ち止まって確認する必要があります。</value>
+  </data>
+  <data name="TD_Msg_VuiLongQuetChonBlockThepDauDam" xml:space="preserve">
+    <value>梁端の鋼ブロックをスキャンして選択してください。</value>
+  </data>
+  <data name="TD_UI_ChieuDaiCongThemPhanTienRenMm" xml:space="preserve">
+    <value>長さプラスねじ山 (mm):</value>
+  </data>
+  <data name="TD_UI_DanhSoHieuVaThongKeThepDauDamPcTuDong" xml:space="preserve">
+    <value>プレキャスト梁端部における鋼材の自動ナンバリングおよび配筋計画</value>
+  </data>
+  <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepKhac" xml:space="preserve">
+    <value>他の鋼種の開始番号 (固定):</value>
+  </data>
+  <data name="TD_UI_SoHieuBatDauCoDinhChoLoaiThepRen" xml:space="preserve">
+    <value>ねじ鋼の開始番号 (固定):</value>
+  </data>
+  <data name="TD_UI_XacLapDanhSoHieuThepTuDong" xml:space="preserve">
+    <value>鋼材の自動番号付けを設定します。</value>
+  </data>
+  <data name="TDC_Msg_BanPhaiNhapDayDuTiLeVaKhoangCachLechCho" xml:space="preserve">
+    <value>完全な比率と許容偏差距離を入力する必要があります</value>
+  </data>
+  <data name="TDC_Ribbon_ToaDoCoc" xml:space="preserve">
+    <value>座標
+杭</value>
+  </data>
+  <data name="TDC_Ribbon_ToaDoCocTdc" xml:space="preserve">
+    <value>パイル座標(TDC)</value>
+  </data>
+  <data name="TDC_UI_BangToaDoCoc" xml:space="preserve">
+    <value>杭座標表</value>
+  </data>
+  <data name="TDC_UI_GhiChu" xml:space="preserve">
+    <value>注意事項</value>
+  </data>
+  <data name="TDC_UI_KCachLechChoPhepGiuaCocVaKiHieuCoc" xml:space="preserve">
+    <value>杭と杭記号間の許容偏差:</value>
+  </data>
+  <data name="TDC_UI_KichThuoc" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="TDC_UI_XacLapToaDoCoc" xml:space="preserve">
+    <value>杭座標の設定</value>
+  </data>
+  <data name="TDD_Ribbon_ThepDauDamTdd" xml:space="preserve">
+    <value>ビームエンドスチール（TDD）</value>
+  </data>
+  <data name="TKCK_Msg_BanChuaXacLapCauKien" xml:space="preserve">
+    <value>まだ部材を設定していません。</value>
+  </data>
+  <data name="TKCK_Msg_CanhBaoTrungText" xml:space="preserve">
+    <value>重複テキストに関する警告</value>
+  </data>
+  <data name="TKCK_Msg_CoTextBiTrungBanCoMuonTiepTucThongKeKhong" xml:space="preserve">
+    <value>{textIds.DuplicateIds.Count} 重複したテキストがあります。集計を続行しますか?</value>
+  </data>
+  <data name="TKCK_Ribbon_ThongKeCauKienTkck" xml:space="preserve">
+    <value>部材集計 (TKCK)</value>
+  </data>
+  <data name="TKCK_Ribbon_ThongKeCk" xml:space="preserve">
+    <value>集計
+CK</value>
+  </data>
+  <data name="TKCK_UI_BangThongKeCauKien" xml:space="preserve">
+    <value>部材集計表</value>
+  </data>
+  <data name="TKCK_UI_CDai" xml:space="preserve">
+    <value>長さ</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
+  </data>
+  <data name="TKCK_UI_CRong" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="TKCK_UI_SLuong" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="TKCK_UI_TenCk" xml:space="preserve">
+    <value>部材名称</value>
+  </data>
+  <data name="TS_Msg_BanDaDanhSoHieuTuDongThepSanThanhCong" xml:space="preserve">
+    <value>これで、スチール製の床に自動的に番号が付けられました。</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacChieuDaiThepHoacChieuDaiBe" xml:space="preserve">
+    <value>マーク番号は同じ{a.soHieu}ですが、スチールの長さまたはフックの破断長さが異なります。</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacDuongKinh" xml:space="preserve">
+    <value>マーク番号は同じ{a.soHieu}ですが、直径が異なります。</value>
+  </data>
+  <data name="TS_Msg_CungSoHieuNhungKhacHinhDangThanhThep" xml:space="preserve">
+    <value>番号は同じ{a.soHieu}ですが、鉄筋の形状が異なります。</value>
+  </data>
+  <data name="TS_Msg_PhatHienTrungSoHieu" xml:space="preserve">
+    <value>番号の重複が検出されました</value>
+  </data>
+  <data name="TS_Msg_VuiLongNhapChieuDaiBeMocCoDinh" xml:space="preserve">
+    <value>固定フックの切断長さを入力してください。</value>
+  </data>
+  <data name="TS_Msg_VuiLongQuetChonThepSan" xml:space="preserve">
+    <value>スラブ鉄筋を選択してください。</value>
+  </data>
+  <data name="TS_Ribbon_ThepSanTs" xml:space="preserve">
+    <value>スチール床（TS）</value>
+  </data>
+  <data name="TS_Status_BanCanDungLaiDeKiemTra" xml:space="preserve">
+    <value>。立ち止まって確認する必要があります。</value>
+  </data>
+  <data name="TS_Status_KhacChieuDaiBeMoc" xml:space="preserve">
+    <value>フックブレイクの長さの違い</value>
+  </data>
+  <data name="TS_Status_KhacChieuDaiThep" xml:space="preserve">
+    <value>異なる鋼材の長さ</value>
+  </data>
+  <data name="TS_Status_KhacDuongKinh" xml:space="preserve">
+    <value>異なる直径</value>
+  </data>
+  <data name="TS_Status_KhacHinhDangThanhThep" xml:space="preserve">
+    <value>異なる形状の鉄筋</value>
+  </data>
+  <data name="TS_Status_NhungLai" xml:space="preserve">
+    <value>しかし</value>
+  </data>
+  <data name="TS_UI_ChieuDaiThucTrongBanVe" xml:space="preserve">
+    <value>図面上の実際の長さ</value>
+  </data>
+  <data name="TS_UI_ChieuDayLopBeTongBaoVe" xml:space="preserve">
+    <value>保護コンクリート層の厚さ:</value>
+  </data>
+  <data name="TS_UI_CoDinhChoTatCaThanhThep" xml:space="preserve">
+    <value>すべての棒鋼に固定</value>
+  </data>
+  <data name="TS_UI_DanhSoHieuVaThongKeThepSanTuDong" xml:space="preserve">
+    <value>スラブ鉄筋の自動マーキング・集計</value>
+  </data>
+  <data name="TS_UI_SoHieuBatDauCoDinh" xml:space="preserve">
+    <value>開始番号 (固定):</value>
+  </data>
+  <data name="TS_UI_XacLapChieuDaiBeMocThepVaChieuDayLopBe" xml:space="preserve">
+    <value>スチールフックの長さと保護コンクリート層の厚さを設定します</value>
+  </data>
+  <data name="TS_UI_XacLapDanhSoHieuThepSanTuDong" xml:space="preserve">
+    <value>スチールフロアの自動番号付けを設定する</value>
+  </data>
+  <data name="TS_UI_XacLapTyLeBanVe" xml:space="preserve">
+    <value>描画スケールを設定する</value>
+  </data>
+  <data name="TW_Drawing_KhoangHo" xml:space="preserve">
+    <value>{summary.HealedGapCount} クリアランス</value>
+  </data>
+  <data name="TW_Msg_LoiTw" xml:space="preserve">
+    <value>エラー TW: {ex.Message}</value>
+  </data>
+  <data name="TW_Output_DaSuaLine" xml:space="preserve">
+    <value>{summary.ChangedLineCount} 行を修正しました。</value>
+  </data>
+  <data name="TW_Output_GiaoTuong" xml:space="preserve">
+    <value>{summary.JunctionCount} が壁に届けられ、</value>
+  </data>
+  <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
+    <value>選択範囲内に有効な壁ストロークのペアが見つかりませんでした。</value>
+  </data>
+  <data name="TW_Output_TwKeoChonCacTuongCanSuaNhanEnterDeThucHien" xml:space="preserve">
+    <value>TW: 修復する必要がある壁をドラッグして選択し、Enter キーを押して実行します。</value>
+  </data>
+  <data name="TW_Prompt_QuetChonCacTuongCanSua" xml:space="preserve">
+    <value>修復が必要な壁をスキャンして選択します。</value>
+  </data>
+  <data name="TW_Ribbon_TrimVaSuaTuongTw" xml:space="preserve">
+    <value>壁のトリムと修復 (TW)</value>
+  </data>
+  <data name="VBDM_Ribbon_VeBangDanhMucVbdm" xml:space="preserve">
+    <value>リストテーブルの描画(VBDM)</value>
+  </data>
+  <data name="VBDM_UI_ThongKeDanhMuc" xml:space="preserve">
+    <value>図面リスト</value>
+  </data>
+  <data name="VC_Msg_KhongTimThayBlock" xml:space="preserve">
+    <value>ブロック {blockName} が見つかりませんでした。</value>
+  </data>
+  <data name="VC_Ribbon_VeCocVc" xml:space="preserve">
+    <value>杭絞り（VC）</value>
+  </data>
+  <data name="VC_UI_ToaDoCocCuaBanLaMHayMm" xml:space="preserve">
+    <value>パイルの座標は m ですか、それとも mm ですか?</value>
+  </data>
+  <data name="WW_Error_KhongCoTaiLieuHoatDong" xml:space="preserve">
+    <value>アクティブなドキュメントはありません</value>
+  </data>
+  <data name="WW_Msg_Loi" xml:space="preserve">
+    <value>エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_ChonCacDiemLienTiepNhanEnterHoacEscDeKetThuc" xml:space="preserve">
+    <value>連続した点を選択します。 Enter または Esc を押して終了します。</value>
+  </data>
+  <data name="WW_Output_ChonDVeTChieuDayACanLeHoacQThoat" xml:space="preserve">
+    <value>D (描画)、T (厚さ)、A (整列)、または Q (終了) を選択します。</value>
+  </data>
+  <data name="WW_Output_DaCapNhatChieuDayTuong" xml:space="preserve">
+    <value>更新された壁の厚さ: {_wallModel.Thickness}</value>
+  </data>
+  <data name="WW_Output_DaChonCanPhai" xml:space="preserve">
+    <value>選択時: 右揃え。</value>
+  </data>
+  <data name="WW_Output_DaChonCanTam" xml:space="preserve">
+    <value>選択: カンタム。</value>
+  </data>
+  <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
+    <value>選択時: 左揃え。</value>
+  </data>
+  <data name="WW_Output_DaTaoVaChonLayerWall" xml:space="preserve">
+    <value>壁レイヤーを作成して選択しました。</value>
+  </data>
+  <data name="WW_Output_DaVeDoanTuong" xml:space="preserve">
+    <value>{wallPoints.Count - 1} の壁セグメントを描画しました。</value>
+  </data>
+  <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
+    <value>ウォールボードエラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_LoiVeTuong" xml:space="preserve">
+    <value>壁の描画エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Output_LuaChonKhongHopLeGiuNguyenCanLeHienTai" xml:space="preserve">
+    <value>選択が無効です。現在の位置合わせを維持します。</value>
+  </data>
+  <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
+    <value>WW: D = 壁画 | T = 厚さ | A = 位置合わせ | Q = やめてください。</value>
+  </data>
+  <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
+    <value>壁の位置合わせ [1=中央 / 2=左 / 3=右] &lt;1&gt;:</value>
+  </data>
+  <data name="WW_Prompt_ChonDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
+    <value>[ D-壁描画 / T-厚さ / A-位置合わせ / Q-終了 ] を選択します。</value>
+  </data>
+  <data name="WW_Prompt_ChonHaiDiemXacDinhChieuDay" xml:space="preserve">
+    <value>厚さを決定するには 2 つの点を選択します。</value>
+  </data>
+  <data name="WW_Prompt_DiemDau" xml:space="preserve">
+    <value>出発点:</value>
+  </data>
+  <data name="WW_Prompt_DiemTiepTheoKetThuc" xml:space="preserve">
+    <value>次のポイント &lt;終了&gt;:</value>
+  </data>
+  <data name="WW_Ribbon_VeTuongWw" xml:space="preserve">
+    <value>壁画（WW）</value>
+  </data>
+  <data name="WWO_Msg_LoiWwo" xml:space="preserve">
+    <value>WWO エラー: {ex.Message}</value>
+  </data>
+  <data name="WWO_Output_ChonTuongRoiChiPhiaOffset" xml:space="preserve">
+    <value>壁を選択し、オフセット側をポイントします。</value>
+  </data>
+  <data name="WWO_Output_KhongTheOffset" xml:space="preserve">
+    <value>オフセットできません: {resultMessage}</value>
+  </data>
+  <data name="WWO_Output_KhongTheOffset_8636EE0D" xml:space="preserve">
+    <value>オフセットできません: {validationMessage}</value>
+  </data>
+  <data name="WWO_Output_WwoDaTaoTuongSongSong" xml:space="preserve">
+    <value>WWO: {createdCount} 平行壁を作成しました。</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachPhaiLaSoLonHon0" xml:space="preserve">
+    <value>WWO: 距離は 0 より大きい数値でなければなりません。</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachPhaiLonHon0" xml:space="preserve">
+    <value>WWO: 距離は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="WWO_Output_WwoKhoangCachTamTam" xml:space="preserve">
+    <value>WWO: 中心間距離 = {offsetDistance:0.##}。</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiaoAutohealjunctions" xml:space="preserve">
+    <value>交差処理 = {(autoHealJunctions ?</value>
+  </data>
+  <data name="WWO_Prompt_ChonDiemVePhiaCanOffset" xml:space="preserve">
+    <value>オフセットが必要な側の点を選択します。</value>
+  </data>
+  <data name="WWO_Prompt_ChonMotMatTuongKetThuc" xml:space="preserve">
+    <value>壁面 &lt;終了&gt; を選択します:</value>
+  </data>
+  <data name="WWO_Prompt_Giu" xml:space="preserve">
+    <value>ホールド</value>
+  </data>
+  <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
+    <value>壁オフセット距離 (中心間) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
+  </data>
+  <data name="WWO_Prompt_WwoChiNhanDuongThangLineCuaTuong" xml:space="preserve">
+    <value>WWO は壁のラインのみを受け入れます。</value>
+  </data>
+  <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
+    <value>交差点処理 [自動/ホールド] &lt;自動&gt;:</value>
+  </data>
+  <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
+    <value>壁オフセット (WWO)</value>
+  </data>
+  <data name="WWO_Status_DaNoiDauTuongVaXoaNetTrong" xml:space="preserve">
+    <value>{connectedBranchCount} を壁の上部に接続し、内側のストロークを削除しました</value>
+  </data>
+  <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
+    <value>壁は中心に平行に作成されました</value>
+  </data>
+  <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
+    <value>{offsetDistance:0.##} の中心から離れたところに平行な壁を作成しました。</value>
+  </data>
+  <data name="WWO_Status_DaTonTaiTuongTrungTaiViTriOffset" xml:space="preserve">
+    <value>オフセット位置に重複した壁が存在します。</value>
+  </data>
+  <data name="WWO_Status_DiemChiHuongNamTrenTimTuongHayChonRoMotPhia" xml:space="preserve">
+    <value>方向点は壁の中心にあります。どちらかを明確にお選びください。</value>
+  </data>
+  <data name="WWO_Status_KhongTheTaiDungDayDuHaiMatTuong" xml:space="preserve">
+    <value>壁の両側を完全に再建することは不可能です。</value>
+  </data>
+  <data name="WWO_Status_KhongTimThayMatDoiDienCungSegmentid" xml:space="preserve">
+    <value>SegmentId の反対側が見つかりませんでした。</value>
+  </data>
+  <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
+    <value>{offsetDistance:0.##};交差点は扱わないでください。</value>
+  </data>
+  <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
+    <value>壁面メタデータが不完全です。</value>
+  </data>
+  <data name="WWO_Status_VungGiao" xml:space="preserve">
+    <value>{healedIntersectionCount}交差点エリア。</value>
+  </data>
+  <data name="WWT_Msg_LoiNhapLieu" xml:space="preserve">
+    <value>入力エラー</value>
+  </data>
+  <data name="WWT_Msg_LoiWwt" xml:space="preserve">
+    <value>WWT エラー: {ex.Message}</value>
+  </data>
+  <data name="WWT_Msg_VuiLongNhapMotSoHopLeLonHon0" xml:space="preserve">
+    <value>0 より大きい有効な数値を入力してください。</value>
+  </data>
+  <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
+    <value>面を選択したままにします。</value>
+  </data>
+  <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
+    <value>壁を変更できません: {message}</value>
+  </data>
+  <data name="WWT_Output_ThayDoiDeuQuaTimTuong" xml:space="preserve">
+    <value>心も壁も均等に変化します。</value>
+  </data>
+  <data name="WWT_Output_WwtChieuDayMoi" xml:space="preserve">
+    <value>WWT: 新しい厚さ = {_thickness:0.##};</value>
+  </data>
+  <data name="WWT_Output_WwtDaThayDoiDoanTuong" xml:space="preserve">
+    <value>WWT: {changedCount} の壁セグメントを変更しました。</value>
+  </data>
+  <data name="WWT_Prompt_CheDoCanCTamSGiuMatDuocChonC" xml:space="preserve">
+    <value>位置合わせモード [C=中央/S=選択面を維持] &lt;C&gt;:</value>
+  </data>
+  <data name="WWT_Prompt_ChonHaiDiemXacDinhChieuDayMoi" xml:space="preserve">
+    <value>2 つの点を選択して新しい厚さを定義します。</value>
+  </data>
+  <data name="WWT_Prompt_ChonMotMatTuongCanDoiChieuDayKetThuc" xml:space="preserve">
+    <value>厚さを変更する必要がある壁面を選択してください &lt;仕上げ&gt;:</value>
+  </data>
+  <data name="WWT_Prompt_WwtChiNhanDuongThangLineCuaTuong" xml:space="preserve">
+    <value>WWT は壁のラインのみを受け入れます。</value>
+  </data>
+  <data name="WWT_Ribbon_ThayDoiCdt" xml:space="preserve">
+    <value>CDT の変更</value>
+  </data>
+  <data name="WWT_Ribbon_ThayDoiChieuDayTuongWwt" xml:space="preserve">
+    <value>肉厚変化（WWT）</value>
+  </data>
+  <data name="WWT_Status_DaDoiTuThanh" xml:space="preserve">
+    <value>{oldThickness:0.##} から {_thickness:0.##} に変更されました。</value>
+  </data>
+  <data name="WWT_UI_Chon" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="WWT_UI_DanhSachDoDayTuong" xml:space="preserve">
+    <value>肉厚一覧表</value>
+  </data>
+  <data name="WWT_UI_DoDayTuong" xml:space="preserve">
+    <value>肉厚</value>
+  </data>
+  <data name="WWT_UI_DoDayTuong_63076923" xml:space="preserve">
+    <value>壁の厚さ:</value>
+  </data>
+  <data name="XLCK_Msg_VuiLongChonTextCuaCauKienCanThongKe" xml:space="preserve">
+    <value>集計が必要な部材のテキストを選択してください。</value>
+  </data>
+  <data name="XLCK_Prompt_ChonText" xml:space="preserve">
+    <value>テキストを選択:</value>
+  </data>
+  <data name="XLCK_Ribbon_XacLapCauKienXlck" xml:space="preserve">
+    <value>部材の確立 (XLCK)</value>
+  </data>
+  <data name="XLCK_Ribbon_XacLapCk" xml:space="preserve">
+    <value>確立する
+CK</value>
+  </data>
+  <data name="XLCK_UI_ChieuCaoCuaChu" xml:space="preserve">
+    <value>文字の高さ:</value>
+  </data>
+  <data name="XLCK_UI_ChonTextTrenManHinh" xml:space="preserve">
+    <value>画面上のテキストを選択</value>
+  </data>
+  <data name="XLCK_UI_KCachKiemTraTrung" xml:space="preserve">
+    <value>重複チェック距離:</value>
+  </data>
+  <data name="XLCK_UI_LayerCuaChu" xml:space="preserve">
+    <value>テキストのレイヤー:</value>
+  </data>
+  <data name="XLCK_UI_XacLapTkck" xml:space="preserve">
+    <value>部材集計の作成</value>
+  </data>
+  <data name="XLDCD_Ribbon_XacLapDcd" xml:space="preserve">
+    <value>DCD のセットアップ</value>
+  </data>
+  <data name="XLDCD_Ribbon_XacLapDimCongDonXldcd" xml:space="preserve">
+    <value>累積寸法を設定 (XLDCD)</value>
+  </data>
+  <data name="XLDCD_UI_DuoiLenTren" xml:space="preserve">
+    <value>下から上へ</value>
+  </data>
+  <data name="XLDCD_UI_KhoangCachLechGiua2ChanDimChoPhep" xml:space="preserve">
+    <value>2本の寸法補助線端点間の許容ずれ:</value>
+  </data>
+  <data name="XLDCD_UI_KhoangCachLechPhuongChoPhep" xml:space="preserve">
+    <value>許容ずれ量：</value>
+  </data>
+  <data name="XLDCD_UI_PhaiSangTrai" xml:space="preserve">
+    <value>右から左へ</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongDung" xml:space="preserve">
+    <value>縦罫線：</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongNgang" xml:space="preserve">
+    <value>横罫線:</value>
+  </data>
+  <data name="XLDCD_UI_QuyTacPhuongXien" xml:space="preserve">
+    <value>斜線ルール:</value>
+  </data>
+  <data name="XLDCD_UI_SaiSoChoPhepDeXemDimLaLienTiepNhau" xml:space="preserve">
+    <value>寸法を連続とみなす許容差</value>
+  </data>
+  <data name="XLDCD_UI_SettingDimCongDon" xml:space="preserve">
+    <value>累積寸法設定</value>
+  </data>
+  <data name="XLDCD_UI_XacLapQuyTacDimCongDon" xml:space="preserve">
+    <value>累積寸法の規則を設定</value>
+  </data>
+  <data name="XLDM_Ribbon_XacLapDanhMucXldm" xml:space="preserve">
+    <value>図面リストの設定（XLDM）</value>
+  </data>
+  <data name="XLDM_UI_ChonKhungTen" xml:space="preserve">
+    <value>ネームフレームを選択してください</value>
+  </data>
+  <data name="XLDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
+    <value>エラー番号を確認してください
+許可する
+(mm)。</value>
+  </data>
+  <data name="XLDM_UI_KiHieuBanVe" xml:space="preserve">
+    <value>描画記号:</value>
+  </data>
+  <data name="XLDM_UI_SoHieuBanVeBatDau" xml:space="preserve">
+    <value>開始図面番号:</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong1" xml:space="preserve">
+    <value>図面名(1行目):</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong2" xml:space="preserve">
+    <value>図面名(2行目):</value>
+  </data>
+  <data name="XLDM_UI_TenBanVeDong3" xml:space="preserve">
+    <value>図面名(3行目):</value>
+  </data>
+  <data name="XLDM_UI_TienToKiHieuBanVe" xml:space="preserve">
+    <value>図面記号の接頭辞:</value>
+  </data>
+  <data name="XLDM_UI_TiLeBanVe" xml:space="preserve">
+    <value>図面スケール:</value>
+  </data>
+  <data name="XLDM_UI_XacLapDeDanhDanhMucTuDong" xml:space="preserve">
+    <value>自動的にインデックスを作成するように設定する</value>
+  </data>
+  <data name="XLDTC_Msg_CoChuPhaiLonHon0" xml:space="preserve">
+    <value>フォント サイズは 0 より大きくなければなりません。</value>
+  </data>
+  <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
+    <value>開始番号は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="XLDTC_UI_CoChu" xml:space="preserve">
+    <value>フォントサイズ:</value>
+  </data>
+  <data name="XLDTC_UI_KieuText" xml:space="preserve">
+    <value>テキストタイプ:</value>
+  </data>
+  <data name="XLDTC_UI_Luu" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="XLDTC_UI_PhaiTraiDuoiTren" xml:space="preserve">
+    <value>右→左、下→上</value>
+  </data>
+  <data name="XLDTC_UI_PhaiTraiTrenDuoi" xml:space="preserve">
+    <value>右→左、上→下</value>
+  </data>
+  <data name="XLDTC_UI_QuyTacSapXep" xml:space="preserve">
+    <value>並べ替えルール:</value>
+  </data>
+  <data name="XLDTC_UI_SoBatDau" xml:space="preserve">
+    <value>開始番号:</value>
+  </data>
+  <data name="XLDTC_UI_TienTo" xml:space="preserve">
+    <value>プレフィックス:</value>
+  </data>
+  <data name="XLDTC_UI_TraiPhaiDuoiTren" xml:space="preserve">
+    <value>左→右、下→上</value>
+  </data>
+  <data name="XLDTC_UI_TraiPhaiTrenDuoi" xml:space="preserve">
+    <value>左→右、上→下</value>
+  </data>
+  <data name="XLDTC_UI_XacLapDatTenCoc" xml:space="preserve">
+    <value>杭の名前を設定する</value>
+  </data>
+  <data name="XLSDM_Ribbon_XacLapSuaDanhMucXlsdm" xml:space="preserve">
+    <value>図面リストの設定と編集 (XLSDM)</value>
+  </data>
+  <data name="XLSDM_Ribbon_XacLapSuaDm" xml:space="preserve">
+    <value>DMの設定と編集</value>
+  </data>
+  <data name="XLSDM_UI_ChonBlockDanhMuc" xml:space="preserve">
+    <value>図面リストブロックを選択してください</value>
+  </data>
+  <data name="XLSDM_UI_KCSaiSoChoPhepMm" xml:space="preserve">
+    <value>許容誤差に注意してください
+(mm)。</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh1" xml:space="preserve">
+    <value>属性 1:</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh2" xml:space="preserve">
+    <value>属性 2:</value>
+  </data>
+  <data name="XLSDM_UI_ThuocTinh3" xml:space="preserve">
+    <value>属性 3:</value>
+  </data>
+  <data name="XLSDM_UI_XacLapDeSuaBangDanhMuc" xml:space="preserve">
+    <value>リストテーブルを編集するための設定</value>
+  </data>
+  <data name="XLTKCT_Ribbon_XacLapThongKeCotThepXltkct" xml:space="preserve">
+    <value>鉄筋集計を設定 (XLTKCT)</value>
+  </data>
+  <data name="XLTKCT_UI_BangThongKeCotThep" xml:space="preserve">
+    <value>鉄筋集計表</value>
+  </data>
+  <data name="XLTKCT_UI_ChieuDaiBeMocThepDai" xml:space="preserve">
+    <value>スチールベルトフック曲げ長さ:</value>
+  </data>
+  <data name="XLTKCT_UI_ChieuDaiMoiNoi" xml:space="preserve">
+    <value>スプライスの長さ:</value>
+  </data>
+  <data name="XLTKCT_UI_KhongTinhDongDat" xml:space="preserve">
+    <value>地震を除く：</value>
+  </data>
+  <data name="XLTKCT_UI_PhanDulThem" xml:space="preserve">
+    <value>DUL セクションに以下が追加されます。</value>
+  </data>
+  <data name="XLTKCT_UI_TinhDongDat" xml:space="preserve">
+    <value>地震計算機:</value>
+  </data>
+  <data name="ZXW_Msg_DuLieuLuoiTrucKhongHopLe" xml:space="preserve">
+    <value>無効な軸グリッドデータです</value>
+  </data>
+  <data name="ZXW_Output_ZxwDaHuyBanVeKhongThayDoi" xml:space="preserve">
+    <value>ZXWはキャンセルされました。図面は変わりません。</value>
+  </data>
+  <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
+    <value>ZXW は、メッシュ {input.Breadths.Count + 1} x {input.Depths.Count + 1} 軸 ({entityCount} オブジェクト) を作成しました。</value>
+  </data>
+  <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
+    <value>ZXW エラー: {ex.Message}</value>
+  </data>
+  <data name="ZXW_Prompt_ChonDiemGocTraiDuoiDeDatLuoiTruc" xml:space="preserve">
+    <value>左下隅の点を選択して軸グリッドを設定します。</value>
+  </data>
+  <data name="ZXW_Prompt_NhanCocGrid" xml:space="preserve">
+    <value>グリッドパイルラベル</value>
+  </data>
+  <data name="ZXW_Ribbon_TaoLuoiTruc" xml:space="preserve">
+    <value>メッシュの作成
+軸</value>
+  </data>
+  <data name="ZXW_Ribbon_TaoLuoiTrucNhanhZxw" xml:space="preserve">
+    <value>クイックメッシュ生成(ZXW)</value>
+  </data>
+  <data name="ZXW_Text_ChiHoTroToiDaNhip" xml:space="preserve">
+    <value>{fieldName} は、最大 {MaximumBayCount} スパンのみをサポートします。</value>
+  </data>
+  <data name="ZXW_Text_HeSoLapTaiMucKhongHopLe" xml:space="preserve">
+    <value>{fieldName}: エントリ {tokenIndex + 1} の繰り返し係数が無効です。</value>
+  </data>
+  <data name="ZXW_Text_KhongDuocDeTrong" xml:space="preserve">
+    <value>{fieldName} を空にすることはできません。</value>
+  </data>
+  <data name="ZXW_Text_KhongPhaiKhoangCachDuongHopLe" xml:space="preserve">
+    <value>{fieldName}: '{token}' は有効な正の距離ではありません。</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucChuPhaiGomAZ" xml:space="preserve">
+    <value>文字軸の開始文字には A ～ Z が含まれている必要があります。</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucChuQuaLon" xml:space="preserve">
+    <value>文字軸の開始文字が大きすぎます。</value>
+  </data>
+  <data name="ZXW_Text_KyTuBatDauCuaTrucSoPhaiLaSoNguyenKhong" xml:space="preserve">
+    <value>数直線の開始文字は、負でない整数でなければなりません。</value>
+  </data>
+  <data name="ZXW_Text_PhaiCoItNhatMotNhip" xml:space="preserve">
+    <value>{fieldName} には少なくとも 1 つのスパンが必要です。</value>
+  </data>
+  <data name="ZXW_Text_SoLuongTrucVuotQuaGioiHanNhanChu" xml:space="preserve">
+    <value>軸の数がテキスト ラベルの制限を超えています。</value>
+  </data>
+  <data name="ZXW_Text_ViTriNhanKhongHopLe" xml:space="preserve">
+    <value>ラベルの位置が無効です。</value>
+  </data>
+  <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
+    <value>工場出荷時の設定値</value>
+  </data>
+  <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
+    <value>軸グリッドの設定</value>
+  </data>
+  <data name="ZXW_UI_ChieuRong" xml:space="preserve">
+    <value>幅 :</value>
+  </data>
+  <data name="ZXW_UI_ChieuSau" xml:space="preserve">
+    <value>深さ:</value>
+  </data>
+  <data name="ZXW_UI_NhipTheoXViDu420025004300Hoac4x3600" xml:space="preserve">
+    <value>X によるケイデンス、例: 4200 2500 4300 または 4x3600</value>
+  </data>
+  <data name="ZXW_UI_NhipTheoYNhapTuTrenXuongDuoi" xml:space="preserve">
+    <value>Yに応じたリズム、上から下への入力</value>
+  </data>
+  <data name="ZXW_UI_SoHoacChuBatDauCuaTrucHoanh" xml:space="preserve">
+    <value>横軸の開始番号または文字</value>
+  </data>
+  <data name="ZXW_UI_SoHoacChuBatDauCuaTrucTung" xml:space="preserve">
+    <value>縦軸の開始番号または文字</value>
+  </data>
+  <data name="ZXW_UI_TrucHoanh" xml:space="preserve">
+    <value>横軸:</value>
+  </data>
+  <data name="ZXW_UI_TrucTung" xml:space="preserve">
+    <value>縦軸:</value>
+  </data>
+  <data name="ZXW_UI_VeKyHieuTrucKichThuoc" xml:space="preserve">
+    <value>軸記号+寸法を描画</value>
+  </data>
+  <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
+    <value>スケール: {source.BoardThickness:0.####};手すり: {source.RailingHeight:0.####}</value>
+  </data>
+  <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
+    <value>元の値に戻す</value>
+  </data>
+</root>
