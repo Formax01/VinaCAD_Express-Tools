@@ -1,11 +1,12 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teigha.DatabaseServices;
-using Teigha.GraphicsInterface;
 using Teigha.Geometry;
+using Teigha.GraphicsInterface;
 using Tools.Model;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -129,9 +130,8 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch (System.Exception ex)
             {
-                Document doc = Application.DocumentManager.MdiActiveDocument;
-                Editor ed = doc.Editor;
-                ed.WriteMessage("\nLỗi: " + ex.Message);
+                Logger.Info(nameof(DuctElbowAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
