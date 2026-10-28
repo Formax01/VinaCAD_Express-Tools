@@ -1,15 +1,18 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teigha.DatabaseServices;
-using Teigha.GraphicsInterface;
 using Teigha.Geometry;
+using Teigha.GraphicsInterface;
 using Tools.Model;
+using Tools.Resources.Definitions;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
+using Tools.VinaCAD.Action.Actions;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Action.Actions
@@ -142,9 +145,8 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch (System.Exception ex)
             {
-                Document doc = Application.DocumentManager.MdiActiveDocument;
-                Editor ed = doc.Editor;
-                ed.WriteMessage("\nLỗi: " + ex.Message);
+                Logger.Info(nameof(ReturnAirGrilleAction), ex);
+                MessageBox.Show($"Lỗi: {ex.Message}", StringDefinition.TITLE_ERROR);
             }
         }
 
