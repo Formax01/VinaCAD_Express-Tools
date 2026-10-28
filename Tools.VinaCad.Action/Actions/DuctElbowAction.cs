@@ -1,5 +1,6 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -129,9 +130,8 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch (System.Exception ex)
             {
-                Document doc = Application.DocumentManager.MdiActiveDocument;
-                Editor ed = doc.Editor;
-                ed.WriteMessage("\nLỗi: " + ex.Message);
+                Logger.Info(nameof(DuctElbowAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -241,13 +241,13 @@ namespace Tools.VinaCad.Action.Actions
         private static bool AskKeyword(Editor ed, string msg, string[] keys, string def, out string value)
         {
             value = def;
-            var options = new PromptKeywordOptions("\n" + msg + ": ")
-            {
-                AllowNone = true
-            };
+            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> : ");
 
             foreach (string key in keys)
                 options.Keywords.Add(key);
+
+            options.Keywords.Default = def;
+            options.AllowNone = true;
 
             PromptResult result = ed.GetKeywords(options);
 

@@ -787,7 +787,89 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
-      
+        [CommandMethod("E1")]
+        public void DuctElbowEqualCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
+            }   
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+            }
+        }
+
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+            }
+        }
+
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEX")]
+        public void DuctBranchEEXCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEX);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEXCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEY")]
+        public void DuctBranchEEYCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEY);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEYCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEZ")]
+        public void DuctBranchEEZCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEZ);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEZCommand), ex);
+            }
+        }
         [CommandMethod("DD")]
         public void SupplyAirDiffuserCommand()
         {
