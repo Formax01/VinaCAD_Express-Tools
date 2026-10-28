@@ -19,7 +19,7 @@ namespace Tools.Resources.Language {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Lang {
@@ -57,6 +57,357 @@ namespace Tools.Resources.Language {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã hủy..
+        /// </summary>
+        public static string BB1_MessDialog_DaHuy {
+            get {
+                return ResourceManager.GetString("BB1_MessDialog_DaHuy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ ống gió :{0} x {1} x {2}..
+        /// </summary>
+        public static string BB1_MessDialog_DaVeOngGio {
+            get {
+                return ResourceManager.GetString("BB1_MessDialog_DaVeOngGio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm bắt đầu: .
+        /// </summary>
+        public static string BB1_UI_ChonDiemBatDau {
+            get {
+                return ResourceManager.GetString("BB1_UI_ChonDiemBatDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xoay hộp quanh điểm bắt đầu (click để đặt): .
+        /// </summary>
+        public static string BB1_UI_ChonHuong {
+            get {
+                return ResourceManager.GetString("BB1_UI_ChonHuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height: .
+        /// </summary>
+        public static string BB1_UI_NhapHeight {
+            get {
+                return ResourceManager.GetString("BB1_UI_NhapHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length: .
+        /// </summary>
+        public static string BB1_UI_NhapLength {
+            get {
+                return ResourceManager.GetString("BB1_UI_NhapLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width: .
+        /// </summary>
+        public static string BB1_UI_NhapWidth {
+            get {
+                return ResourceManager.GetString("BB1_UI_NhapWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ ống gió giảm cấp 3D..
+        /// </summary>
+        public static string BB2_MessDialog_DaVeOngGioGiamCap3D {
+            get {
+                return ResourceManager.GetString("BB2_MessDialog_DaVeOngGioGiamCap3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đầu: .
+        /// </summary>
+        public static string BB2_UI_ChonDiemDau {
+            get {
+                return ResourceManager.GetString("BB2_UI_ChonDiemDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dưới.
+        /// </summary>
+        public static string BB2_UI_Duoi {
+            get {
+                return ResourceManager.GetString("BB2_UI_Duoi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giữa.
+        /// </summary>
+        public static string BB2_UI_Giua {
+            get {
+                return ResourceManager.GetString("BB2_UI_Giua", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giữa.
+        /// </summary>
+        public static string BB2_UI_Mid {
+            get {
+                return ResourceManager.GetString("BB2_UI_Mid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height (OZ): .
+        /// </summary>
+        public static string BB2_UI_NhapHeightOZ {
+            get {
+                return ResourceManager.GetString("BB2_UI_NhapHeightOZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length (OX): .
+        /// </summary>
+        public static string BB2_UI_NhapLengthOX {
+            get {
+                return ResourceManager.GetString("BB2_UI_NhapLengthOX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second Height (OZ): .
+        /// </summary>
+        public static string BB2_UI_NhapSecondHeightOZ {
+            get {
+                return ResourceManager.GetString("BB2_UI_NhapSecondHeightOZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second Width (OY): .
+        /// </summary>
+        public static string BB2_UI_NhapSecondWidthOY {
+            get {
+                return ResourceManager.GetString("BB2_UI_NhapSecondWidthOY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width (OY): .
+        /// </summary>
+        public static string BB2_UI_NhapWidthOY {
+            get {
+                return ResourceManager.GetString("BB2_UI_NhapWidthOY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phải.
+        /// </summary>
+        public static string BB2_UI_PHAI {
+            get {
+                return ResourceManager.GetString("BB2_UI_PHAI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trái.
+        /// </summary>
+        public static string BB2_UI_Trai {
+            get {
+                return ResourceManager.GetString("BB2_UI_Trai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trên.
+        /// </summary>
+        public static string BB2_UI_Tren {
+            get {
+                return ResourceManager.GetString("BB2_UI_Tren", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vị trí Second Height: .
+        /// </summary>
+        public static string BB2_UI_ViTriSecondHeight {
+            get {
+                return ResourceManager.GetString("BB2_UI_ViTriSecondHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vị trí Second Width: .
+        /// </summary>
+        public static string BB2_UI_ViTriSecondWidth {
+            get {
+                return ResourceManager.GetString("BB2_UI_ViTriSecondWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã hủy..
+        /// </summary>
+        public static string BBZ_MessDialog_DaHuy {
+            get {
+                return ResourceManager.GetString("BBZ_MessDialog_DaHuy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã hủy..
+        /// </summary>
+        public static string BBZ_MessDialog_DaHuy1 {
+            get {
+                return ResourceManager.GetString("BBZ_MessDialog_DaHuy1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ ống gió chữ Z 3D..
+        /// </summary>
+        public static string BBZ_MessDialog_DaVeOngGioChuZ3D {
+            get {
+                return ResourceManager.GetString("BBZ_MessDialog_DaVeOngGioChuZ3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bề rộng ống gió phải &gt; 0.
+        /// </summary>
+        public static string BBZ_UI_BERONGONGGIO {
+            get {
+                return ResourceManager.GetString("BBZ_UI_BERONGONGGIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cao độ lượn phải &gt; 0..
+        /// </summary>
+        public static string BBZ_UI_CAODOLUON {
+            get {
+                return ResourceManager.GetString("BBZ_UI_CAODOLUON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống gió phải &gt; 0..
+        /// </summary>
+        public static string BBZ_UI_CHIEUCAOONGGIO {
+            get {
+                return ResourceManager.GetString("BBZ_UI_CHIEUCAOONGGIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều dài L phải &gt; 0..
+        /// </summary>
+        public static string BBZ_UI_CHIEUDAIL {
+            get {
+                return ResourceManager.GetString("BBZ_UI_CHIEUDAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm trên đầu ống gió 1: .
+        /// </summary>
+        public static string BBZ_UI_ChonDiemDauOng1 {
+            get {
+                return ResourceManager.GetString("BBZ_UI_ChonDiemDauOng1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn hướng đặt ống gió:.
+        /// </summary>
+        public static string BBZ_UI_CHONHUONGDATONGGIO {
+            get {
+                return ResourceManager.GetString("BBZ_UI_CHONHUONGDATONGGIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn phía lượn [Trái/Phải] &lt;Trái&gt;: .
+        /// </summary>
+        public static string BBZ_UI_ChonPhiaLuon {
+            get {
+                return ResourceManager.GetString("BBZ_UI_ChonPhiaLuon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập bề rộng ống gió 1: .
+        /// </summary>
+        public static string BBZ_UI_NhapBeRongOng1 {
+            get {
+                return ResourceManager.GetString("BBZ_UI_NhapBeRongOng1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập bề rộng ống gió 2 &lt;Enter = bằng ống 1&gt;: .
+        /// </summary>
+        public static string BBZ_UI_NhapBeRongOng2 {
+            get {
+                return ResourceManager.GetString("BBZ_UI_NhapBeRongOng2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập cao độ lượn: .
+        /// </summary>
+        public static string BBZ_UI_NhapCaoDoLuon {
+            get {
+                return ResourceManager.GetString("BBZ_UI_NhapCaoDoLuon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống gió: .
+        /// </summary>
+        public static string BBZ_UI_NhapChieuCaoOngGio {
+            get {
+                return ResourceManager.GetString("BBZ_UI_NhapChieuCaoOngGio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều dài L của chi tiết: .
+        /// </summary>
+        public static string BBZ_UI_NhapChieuDaiL {
+            get {
+                return ResourceManager.GetString("BBZ_UI_NhapChieuDaiL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không tạo được Region từ biên dạng ống gió..
+        /// </summary>
+        public static string BBZ_UI_REGION {
+            get {
+                return ResourceManager.GetString("BBZ_UI_REGION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xoay hình quanh điểm đầu, click để chọn vị trí:.
+        /// </summary>
+        public static string BBZ_UI_XOAYCHONVITRI {
+            get {
+                return ResourceManager.GetString("BBZ_UI_XOAYCHONVITRI", resourceCulture);
             }
         }
         

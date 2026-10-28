@@ -147,4 +147,121 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Đã chuyển ngôn ngữ sang {0}.</value>
   </data>
+  <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>Chọn điểm bắt đầu: </value>
+  </data>
+  <data name="BB1_UI_NhapLength" xml:space="preserve">
+    <value>Length: </value>
+  </data>
+  <data name="BB1_UI_NhapWidth" xml:space="preserve">
+    <value>Width: </value>
+  </data>
+  <data name="BB1_UI_NhapHeight" xml:space="preserve">
+    <value>Height: </value>
+  </data>
+  <data name="BB1_MessDialog_DaHuy" xml:space="preserve">
+    <value>Đã hủy.</value>
+  </data>
+  <data name="BB1_MessDialog_DaVeOngGio" xml:space="preserve">
+    <value>Đã vẽ ống gió :{0} x {1} x {2}.</value>
+  </data>
+  <data name="BB2_UI_ChonDiemDau" xml:space="preserve">
+    <value>Chọn điểm đầu: </value>
+  </data>
+  <data name="BB2_UI_NhapLengthOX" xml:space="preserve">
+    <value>Length (OX): </value>
+  </data>
+  <data name="BB2_UI_NhapWidthOY" xml:space="preserve">
+    <value>Width (OY): </value>
+  </data>
+  <data name="BB2_UI_NhapHeightOZ" xml:space="preserve">
+    <value>Height (OZ): </value>
+  </data>
+  <data name="BB2_UI_NhapSecondWidthOY" xml:space="preserve">
+    <value>Second Width (OY): </value>
+  </data>
+  <data name="BB2_UI_NhapSecondHeightOZ" xml:space="preserve">
+    <value>Second Height (OZ): </value>
+  </data>
+  <data name="BB2_UI_ViTriSecondWidth" xml:space="preserve">
+    <value>Vị trí Second Width: </value>
+  </data>
+  <data name="BB2_UI_ViTriSecondHeight" xml:space="preserve">
+    <value>Vị trí Second Height: </value>
+  </data>
+  <data name="BB2_MessDialog_DaVeOngGioGiamCap3D" xml:space="preserve">
+    <value>Đã vẽ ống gió giảm cấp 3D.</value>
+  </data>
+  <data name="BBZ_UI_ChonDiemDauOng1" xml:space="preserve">
+    <value>Chọn điểm trên đầu ống gió 1: </value>
+  </data>
+  <data name="BBZ_UI_NhapBeRongOng1" xml:space="preserve">
+    <value>Nhập bề rộng ống gió 1: </value>
+  </data>
+  <data name="BBZ_UI_NhapBeRongOng2" xml:space="preserve">
+    <value>Nhập bề rộng ống gió 2 &lt;Enter = bằng ống 1&gt;: </value>
+  </data>
+  <data name="BBZ_UI_ChonPhiaLuon" xml:space="preserve">
+    <value>Chọn phía lượn [Trái/Phải] &lt;Trái&gt;: </value>
+  </data>
+  <data name="BBZ_UI_NhapCaoDoLuon" xml:space="preserve">
+    <value>Nhập cao độ lượn: </value>
+  </data>
+  <data name="BBZ_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Nhập chiều dài L của chi tiết: </value>
+  </data>
+  <data name="BBZ_UI_NhapChieuCaoOngGio" xml:space="preserve">
+    <value>Nhập chiều cao ống gió: </value>
+  </data>
+  <data name="BBZ_MessDialog_DaHuy" xml:space="preserve">
+    <value>Đã hủy.</value>
+  </data>
+  <data name="BBZ_MessDialog_DaHuy1" xml:space="preserve">
+    <value>Đã hủy.</value>
+  </data>
+  <data name="BBZ_MessDialog_DaVeOngGioChuZ3D" xml:space="preserve">
+    <value>Đã vẽ ống gió chữ Z 3D.</value>
+  </data>
+  <data name="BB2_UI_Trai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="BB2_UI_PHAI" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="BB2_UI_Giua" xml:space="preserve">
+    <value>Giữa</value>
+  </data>
+  <data name="BB2_UI_Tren" xml:space="preserve">
+    <value>Trên</value>
+  </data>
+  <data name="BB2_UI_Mid" xml:space="preserve">
+    <value>Giữa</value>
+  </data>
+  <data name="BB2_UI_Duoi" xml:space="preserve">
+    <value>Dưới</value>
+  </data>
+  <data name="BB1_UI_ChonHuong" xml:space="preserve">
+    <value>Xoay hộp quanh điểm bắt đầu (click để đặt): </value>
+  </data>
+  <data name="BBZ_UI_BERONGONGGIO" xml:space="preserve">
+    <value>Bề rộng ống gió phải &gt; 0</value>
+  </data>
+  <data name="BBZ_UI_CAODOLUON" xml:space="preserve">
+    <value>Cao độ lượn phải &gt; 0.</value>
+  </data>
+  <data name="BBZ_UI_CHIEUDAIL" xml:space="preserve">
+    <value>Chiều dài L phải &gt; 0.</value>
+  </data>
+  <data name="BBZ_UI_CHIEUCAOONGGIO" xml:space="preserve">
+    <value>Chiều cao ống gió phải &gt; 0.</value>
+  </data>
+  <data name="BBZ_UI_REGION" xml:space="preserve">
+    <value>Không tạo được Region từ biên dạng ống gió.</value>
+  </data>
+  <data name="BBZ_UI_CHONHUONGDATONGGIO" xml:space="preserve">
+    <value>Chọn hướng đặt ống gió:</value>
+  </data>
+  <data name="BBZ_UI_XOAYCHONVITRI" xml:space="preserve">
+    <value>Xoay hình quanh điểm đầu, click để chọn vị trí:</value>
+  </data>
 </root>

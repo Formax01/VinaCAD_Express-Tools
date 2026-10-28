@@ -148,4 +148,121 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
   </data>
+  <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>開始点を選択: </value>
+  </data>
+  <data name="BB1_UI_NhapLength" xml:space="preserve">
+    <value>長さ</value>
+  </data>
+  <data name="BB1_UI_NhapWidth" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="BB1_UI_NhapHeight" xml:space="preserve">
+    <value>高さ</value>
+  </data>
+  <data name="BB1_MessDialog_DaHuy" xml:space="preserve">
+    <value>キャンセルしました。</value>
+  </data>
+  <data name="BB1_MessDialog_DaVeOngGio" xml:space="preserve">
+    <value>ダクトを描画しました :{0} x {1} x {2}。</value>
+  </data>
+  <data name="BB2_UI_ChonDiemDau" xml:space="preserve">
+    <value>開始点を選択: </value>
+  </data>
+  <data name="BB2_UI_NhapLengthOX" xml:space="preserve">
+    <value>長さ（OX）</value>
+  </data>
+  <data name="BB2_UI_NhapWidthOY" xml:space="preserve">
+    <value>幅（OY）</value>
+  </data>
+  <data name="BB2_UI_NhapHeightOZ" xml:space="preserve">
+    <value>高さ（OZ)</value>
+  </data>
+  <data name="BB2_UI_NhapSecondWidthOY" xml:space="preserve">
+    <value>第2幅（OY）</value>
+  </data>
+  <data name="BB2_UI_NhapSecondHeightOZ" xml:space="preserve">
+    <value>第2高さ（OZ）</value>
+  </data>
+  <data name="BB2_UI_ViTriSecondWidth" xml:space="preserve">
+    <value>第2幅 の位置: </value>
+  </data>
+  <data name="BB2_UI_ViTriSecondHeight" xml:space="preserve">
+    <value>第2高さ の位置: </value>
+  </data>
+  <data name="BB2_MessDialog_DaVeOngGioGiamCap3D" xml:space="preserve">
+    <value>3D 収縮ダクトを描画しました。</value>
+  </data>
+  <data name="BBZ_UI_ChonDiemDauOng1" xml:space="preserve">
+    <value>ダクト1の端点を選択: </value>
+  </data>
+  <data name="BBZ_UI_NhapBeRongOng1" xml:space="preserve">
+    <value>ダクト1の幅を入力: </value>
+  </data>
+  <data name="BBZ_UI_NhapBeRongOng2" xml:space="preserve">
+    <value>ダクト2の幅を入力 &lt;Enter = ダクト1と同じ&gt;: </value>
+  </data>
+  <data name="BBZ_UI_ChonPhiaLuon" xml:space="preserve">
+    <value>曲げ方向を選択 [左/右] &lt;左&gt;: </value>
+  </data>
+  <data name="BBZ_UI_NhapCaoDoLuon" xml:space="preserve">
+    <value>曲げ高さを入力: </value>
+  </data>
+  <data name="BBZ_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>部品の長さ L を入力: </value>
+  </data>
+  <data name="BBZ_UI_NhapChieuCaoOngGio" xml:space="preserve">
+    <value>ダクトの高さを入力: </value>
+  </data>
+  <data name="BBZ_MessDialog_DaHuy" xml:space="preserve">
+    <value>キャンセルしました。</value>
+  </data>
+  <data name="BBZ_MessDialog_DaHuy1" xml:space="preserve">
+    <value>キャンセルしました。</value>
+  </data>
+  <data name="BBZ_MessDialog_DaVeOngGioChuZ3D" xml:space="preserve">
+    <value>Z字型ダクトを描画しました。</value>
+  </data>
+  <data name="BB2_UI_Trai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="BB2_UI_PHAI" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="BB2_UI_Giua" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="BB2_UI_Tren" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="BB2_UI_Mid" xml:space="preserve">
+    <value>中央</value>
+  </data>
+  <data name="BB2_UI_Duoi" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="BB1_UI_ChonHuong" xml:space="preserve">
+    <value>開始点を中心にボックスを回転（クリックして配置）：</value>
+  </data>
+  <data name="BBZ_UI_BERONGONGGIO" xml:space="preserve">
+    <value>ダクト幅は0より大きくする必要があります</value>
+  </data>
+  <data name="BBZ_UI_CAODOLUON" xml:space="preserve">
+    <value>オフセット量は0より大きくする必要があります</value>
+  </data>
+  <data name="BBZ_UI_CHIEUDAIL" xml:space="preserve">
+    <value>長さLは0より大きくする必要があります。</value>
+  </data>
+  <data name="BBZ_UI_CHIEUCAOONGGIO" xml:space="preserve">
+    <value>ダクト高さは0より大きくする必要があります。</value>
+  </data>
+  <data name="BBZ_UI_REGION" xml:space="preserve">
+    <value>ダクトの輪郭からリージョンを作成できませんでした。</value>
+  </data>
+  <data name="BBZ_UI_CHONHUONGDATONGGIO" xml:space="preserve">
+    <value>ダクトの配置方向を指定してください：</value>
+  </data>
+  <data name="BBZ_UI_XOAYCHONVITRI" xml:space="preserve">
+    <value>始点を中心に図形を回転し、クリックして配置位置を指定してください：</value>
+  </data>
 </root>
