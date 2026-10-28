@@ -1,5 +1,6 @@
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using System.Globalization;
 using Teigha.DatabaseServices;
@@ -15,126 +16,142 @@ namespace Tools.VinaCAD.Action.Actions
     {
         public void Execute()
         {
-            Document document = Application.DocumentManager.MdiActiveDocument;
-            if (document == null) return;
-            Editor editor = document.Editor;
-
-            if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp",SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
-
-            while (true)
+            try
             {
-                PromptPointResult result = editor.GetPoint("\nChọn vị trí đặt miệng gió cấp : ");
-                if (result.Status != PromptStatus.OK) break;
+                Document document = Application.DocumentManager.MdiActiveDocument;
+                if (document == null) return;
+                Editor editor = document.Editor;
 
-                Point3d center = result.Value;
-                Matrix3d ucs = editor.CurrentUserCoordinateSystem;
-                Database database = document.Database;
+                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp",SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
 
-                using (Transaction tr = database.TransactionManager.StartTransaction())
+                while (true)
                 {
-                    BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
-                    ObjectIdCollection ids = new ObjectIdCollection();
+                    PromptPointResult result = editor.GetPoint("\nChọn vị trí đặt miệng gió cấp : ");
+                    if (result.Status != PromptStatus.OK) break;
 
-                    double inner = width / 2;
-                    double outer = width * 0.75;
+                    Point3d center = result.Value;
+                    Matrix3d ucs = editor.CurrentUserCoordinateSystem;
+                    Database database = document.Database;
 
-                    AddSquare(space, tr, ids, center, inner, center.Z, ucs);
-                    AddSquare(space, tr, ids, center, outer, center.Z, ucs);
-                    AddCornerLines(space, tr, ids, center, inner, center.Z, outer, center.Z, ucs);
+                    using (Transaction tr = database.TransactionManager.StartTransaction())
+                    {
+                        BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+                        ObjectIdCollection ids = new ObjectIdCollection();
 
-                    double axisHalf = width;
-                    Line ax1 = AddLine(space, tr, ids,
-                        new Point3d(center.X - axisHalf, center.Y, center.Z),
-                        new Point3d(center.X + axisHalf, center.Y, center.Z), ucs);
-                    Line ax2 = AddLine(space, tr, ids,
-                        new Point3d(center.X, center.Y - axisHalf, center.Z),
-                        new Point3d(center.X, center.Y + axisHalf, center.Z), ucs);
-                    ax1.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
-                    ax2.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                        double inner = width / 2;
+                        double outer = width * 0.75;
 
-                    CreateGroup(database, tr, ids, "SupAir");
-                    tr.Commit();
+                        AddSquare(space, tr, ids, center, inner, center.Z, ucs);
+                        AddSquare(space, tr, ids, center, outer, center.Z, ucs);
+                        AddCornerLines(space, tr, ids, center, inner, center.Z, outer, center.Z, ucs);
+
+                        double axisHalf = width;
+                        Line ax1 = AddLine(space, tr, ids,
+                            new Point3d(center.X - axisHalf, center.Y, center.Z),
+                            new Point3d(center.X + axisHalf, center.Y, center.Z), ucs);
+                        Line ax2 = AddLine(space, tr, ids,
+                            new Point3d(center.X, center.Y - axisHalf, center.Z),
+                            new Point3d(center.X, center.Y + axisHalf, center.Z), ucs);
+                        ax1.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                        ax2.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+
+                        CreateGroup(database, tr, ids, "SupAir");
+                        tr.Commit();
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Info(nameof(SupplyAirDiffuserAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
         public void ExecuteBlock()
         {
-            Document document = Application.DocumentManager.MdiActiveDocument;
-            if (document == null) return;
-            Editor editor = document.Editor;
-            if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
-
-            Database database = document.Database;
-            string baseName = "SupAirDiff_" + width.ToString("0.##", CultureInfo.InvariantCulture);
-            string defaultName = baseName;
-            using (Transaction tr = database.TransactionManager.StartTransaction())
+            try
             {
-                BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
-                for (int suffix = 2; blocks.Has(defaultName); suffix++)
-                    defaultName = baseName + "_" + suffix;
-                System.Diagnostics.Debug.Assert(!blocks.Has(defaultName));
-            }
+                Document document = Application.DocumentManager.MdiActiveDocument;
+                if (document == null) return;
+                Editor editor = document.Editor;
+                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
 
-            PromptResult nameResult = editor.GetString(new PromptStringOptions($"\nNhập tên block miệng gió cấp : ")
-            {
-                AllowSpaces = false,
-                DefaultValue = defaultName,
-                UseDefaultValue = true
-            });
-            if (nameResult.Status != PromptStatus.OK && nameResult.Status != PromptStatus.None) return;
-            string name = nameResult.Status == PromptStatus.OK &&
-                !string.IsNullOrWhiteSpace(nameResult.StringResult)
-                ? nameResult.StringResult.Trim() : defaultName;
-
-            using (Transaction tr = database.TransactionManager.StartTransaction())
-            {
-                BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
-                if (blocks.Has(name))
+                Database database = document.Database;
+                string baseName = "SupAirDiff_" + width.ToString("0.##", CultureInfo.InvariantCulture);
+                string defaultName = baseName;
+                using (Transaction tr = database.TransactionManager.StartTransaction())
                 {
-                    editor.WriteMessage("\nTên block đã tồn tại. Hãy nhập tên khác.");
-                    return;
+                    BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
+                    for (int suffix = 2; blocks.Has(defaultName); suffix++)
+                        defaultName = baseName + "_" + suffix;
+                    System.Diagnostics.Debug.Assert(!blocks.Has(defaultName));
                 }
-            }
 
-            ObjectId blockId = ObjectId.Null;
-            while (true)
-            {
-                var jig = new DiffuserPlacementJig(width, editor.CurrentUserCoordinateSystem);
-                PromptResult placement = editor.Drag(jig);
-                if (placement.Status != PromptStatus.OK) break;
+                PromptResult nameResult = editor.GetString(new PromptStringOptions($"\nNhập tên block miệng gió cấp : ")
+                {
+                    AllowSpaces = false,
+                    DefaultValue = defaultName,
+                    UseDefaultValue = true
+                });
+                if (nameResult.Status != PromptStatus.OK && nameResult.Status != PromptStatus.None) return;
+                string name = nameResult.Status == PromptStatus.OK &&
+                    !string.IsNullOrWhiteSpace(nameResult.StringResult)
+                    ? nameResult.StringResult.Trim() : defaultName;
 
                 using (Transaction tr = database.TransactionManager.StartTransaction())
                 {
-                    BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
-                    if (blockId.IsNull)
+                    BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
+                    if (blocks.Has(name))
                     {
-                        BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForWrite);
-                        var definition = new BlockTableRecord { Name = name, Origin = Point3d.Origin };
-                        blockId = blocks.Add(definition);
-                        tr.AddNewlyCreatedDBObject(definition, true);
-
-                        var ids = new ObjectIdCollection();
-                        double inner = width / 2;
-                        double outer = width * 0.75;
-                        AddSquare(definition, tr, ids, Point3d.Origin, inner, 0, Matrix3d.Identity);
-                        AddSquare(definition, tr, ids, Point3d.Origin, outer, 0, Matrix3d.Identity);
-                        AddCornerLines(definition, tr, ids, Point3d.Origin, inner, 0, outer, 0, Matrix3d.Identity);
-                        Line ax1 = AddLine(definition, tr, ids,
-                            new Point3d(-width, 0, 0), new Point3d(width, 0, 0), Matrix3d.Identity);
-                        Line ax2 = AddLine(definition, tr, ids,
-                            new Point3d(0, -width, 0), new Point3d(0, width, 0), Matrix3d.Identity);
-                        ax1.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
-                        ax2.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                        editor.WriteMessage("\nTên block đã tồn tại. Hãy nhập tên khác.");
+                        return;
                     }
-
-                    var reference = new BlockReference(jig.Center, blockId);
-                    reference.SetDatabaseDefaults(database);
-                    reference.TransformBy(jig.Ucs);
-                    space.AppendEntity(reference);
-                    tr.AddNewlyCreatedDBObject(reference, true);
-                    tr.Commit();
                 }
+
+                ObjectId blockId = ObjectId.Null;
+                while (true)
+                {
+                    var jig = new DiffuserPlacementJig(width, editor.CurrentUserCoordinateSystem);
+                    PromptResult placement = editor.Drag(jig);
+                    if (placement.Status != PromptStatus.OK) break;
+
+                    using (Transaction tr = database.TransactionManager.StartTransaction())
+                    {
+                        BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+                        if (blockId.IsNull)
+                        {
+                            BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForWrite);
+                            var definition = new BlockTableRecord { Name = name, Origin = Point3d.Origin };
+                            blockId = blocks.Add(definition);
+                            tr.AddNewlyCreatedDBObject(definition, true);
+
+                            var ids = new ObjectIdCollection();
+                            double inner = width / 2;
+                            double outer = width * 0.75;
+                            AddSquare(definition, tr, ids, Point3d.Origin, inner, 0, Matrix3d.Identity);
+                            AddSquare(definition, tr, ids, Point3d.Origin, outer, 0, Matrix3d.Identity);
+                            AddCornerLines(definition, tr, ids, Point3d.Origin, inner, 0, outer, 0, Matrix3d.Identity);
+                            Line ax1 = AddLine(definition, tr, ids,
+                                new Point3d(-width, 0, 0), new Point3d(width, 0, 0), Matrix3d.Identity);
+                            Line ax2 = AddLine(definition, tr, ids,
+                                new Point3d(0, -width, 0), new Point3d(0, width, 0), Matrix3d.Identity);
+                            ax1.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                            ax2.Color = Teigha.Colors.Color.FromColorIndex(Teigha.Colors.ColorMethod.ByAci, 8);
+                        }
+
+                        var reference = new BlockReference(jig.Center, blockId);
+                        reference.SetDatabaseDefaults(database);
+                        reference.TransformBy(jig.Ucs);
+                        space.AppendEntity(reference);
+                        tr.AddNewlyCreatedDBObject(reference, true);
+                        tr.Commit();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Info(nameof(SupplyAirDiffuserAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -196,50 +213,58 @@ namespace Tools.VinaCAD.Action.Actions
 
         public void Execute3D()
         {
-            Document document = Application.DocumentManager.MdiActiveDocument;
-            if (document == null) return;
-            Editor editor = document.Editor;
-
-            if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double mouthWidth)) return;
-            if (!AskPositive(editor, "Nhập độ cao từ miệng gió đến cột ống", SupplyAirDiffuserSetting.DefaultTransitionHeight, out double transitionHeight)) return;
-            if (!AskPositive(editor, "Nhập chiều cao cột ống", SupplyAirDiffuserSetting.DefaultColumnHeight, out double columnHeight)) return;
-            if (!AskPositive(editor, "Nhập độ rộng miệng cột ống", SupplyAirDiffuserSetting.DefaultColumnWidth, out double columnWidth)) return;
-
-            if (!double.IsFinite(transitionHeight + columnHeight) ||
-                !double.IsFinite(mouthWidth * 1.5) || !double.IsFinite(columnWidth * 1.5))
+            try
             {
-                editor.WriteMessage("\nKích thước 3D vượt giới hạn.");
-                return;
-            }
+                Document document = Application.DocumentManager.MdiActiveDocument;
+                if (document == null) return;
+                Editor editor = document.Editor;
 
-            while (true)
-            {
-                PromptPointResult result = editor.GetPoint("\nChọn tâm miệng gió cấp 3D : ");
-                if (result.Status != PromptStatus.OK) break;
+                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double mouthWidth)) return;
+                if (!AskPositive(editor, "Nhập độ cao từ miệng gió đến cột ống", SupplyAirDiffuserSetting.DefaultTransitionHeight, out double transitionHeight)) return;
+                if (!AskPositive(editor, "Nhập chiều cao cột ống", SupplyAirDiffuserSetting.DefaultColumnHeight, out double columnHeight)) return;
+                if (!AskPositive(editor, "Nhập độ rộng miệng cột ống", SupplyAirDiffuserSetting.DefaultColumnWidth, out double columnWidth)) return;
 
-                Point3d c = result.Value;
-                Matrix3d ucs = editor.CurrentUserCoordinateSystem;
-                Database database = document.Database;
-
-                using (Transaction tr = database.TransactionManager.StartTransaction())
+                if (!double.IsFinite(transitionHeight + columnHeight) ||
+                    !double.IsFinite(mouthWidth * 1.5) || !double.IsFinite(columnWidth * 1.5))
                 {
-                    BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
-                    Solid3d solid = BuildSolid(mouthWidth, transitionHeight, columnHeight, columnWidth);
-                    try
-                    {
-                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(c.X, c.Y, c.Z)));
-                        solid.TransformBy(ucs);
-                        space.AppendEntity(solid);
-                        tr.AddNewlyCreatedDBObject(solid, true);
-                    }
-                    catch
-                    {
-                        if (solid.ObjectId.IsNull) solid.Dispose();
-                        throw;
-                    }
-
-                    tr.Commit();
+                    editor.WriteMessage("\nKích thước 3D vượt giới hạn.");
+                    return;
                 }
+
+                while (true)
+                {
+                    PromptPointResult result = editor.GetPoint("\nChọn tâm miệng gió cấp 3D : ");
+                    if (result.Status != PromptStatus.OK) break;
+
+                    Point3d c = result.Value;
+                    Matrix3d ucs = editor.CurrentUserCoordinateSystem;
+                    Database database = document.Database;
+
+                    using (Transaction tr = database.TransactionManager.StartTransaction())
+                    {
+                        BlockTableRecord space = (BlockTableRecord)tr.GetObject(database.CurrentSpaceId, OpenMode.ForWrite);
+                        Solid3d solid = BuildSolid(mouthWidth, transitionHeight, columnHeight, columnWidth);
+                        try
+                        {
+                            solid.TransformBy(Matrix3d.Displacement(new Vector3d(c.X, c.Y, c.Z)));
+                            solid.TransformBy(ucs);
+                            space.AppendEntity(solid);
+                            tr.AddNewlyCreatedDBObject(solid, true);
+                        }
+                        catch
+                        {
+                            if (solid.ObjectId.IsNull) solid.Dispose();
+                            throw;
+                        }
+
+                        tr.Commit();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Info(nameof(SupplyAirDiffuserAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
