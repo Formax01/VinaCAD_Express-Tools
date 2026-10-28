@@ -654,6 +654,90 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(StaircaseSectionCommand), ex);
             }
         }
+
+        [CommandMethod("S1")]
+        public void FlexDuctTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctTopDownCommand), ex);
+            }
+        }
+        [CommandMethod("S2")]
+        public void FlexDuctHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.Horizontal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("S3")]
+        public void FlexDuctDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R1")]
+        public void FlexDuctBareTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R2")]
+        public void FlexDuctBareHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.HorizontalBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("R3")]
+        public void FlexDuctBareDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
+            }
+        }
+
         [CommandMethod("E1")]
         public void DuctElbowEqualCommand()
         {
@@ -735,6 +819,48 @@ namespace Tools.VinaCAD.App.Commands
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
                 Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+            }
+        }
+
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute3D();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
             }
         }
     }
