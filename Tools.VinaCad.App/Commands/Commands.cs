@@ -691,75 +691,6 @@ namespace Tools.VinaCAD.App.Commands
                   Logger.Info(nameof(StaircaseSectionCommand), ex);
               }
           }
-        [CommandMethod("E1")]
-        public void DuctElbowEqualCommand()
-        {
-            try
-            {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
-            }   
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowEqualCommand), ex);
-            }
-        }
-
-        [CommandMethod("E2")]
-        public void DuctElbowReducingCommand()
-        {
-            try
-            {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowReducingCommand), ex);
-            }
-        }
-
-        [CommandMethod("E3")]
-        public void DuctElbowVerticalCommand()
-        {
-            try
-            {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
-            }
-        }
-        [CommandMethod("E1")]
-        public void DuctElbowEqualCommand()
-        {
-            try
-            {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
-            }   
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowEqualCommand), ex);
-            }
-        }
-
-        [CommandMethod("E2")]
-        public void DuctElbowReducingCommand()
-        {
-            try
-            {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowReducingCommand), ex);
-            }
-        }
-
         [CommandMethod("E3")]
         public void DuctElbowVerticalCommand()
         {
@@ -856,32 +787,46 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
-
-        [CommandMethod("GRILL")]
-        public void ReturnAirGrilleCommand()
+      
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
         {
             try
             {
-                new ReturnAirGrilleAction().Execute(false);
+                new SupplyAirDiffuserAction().Execute();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(ReturnAirGrilleCommand), ex);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
             }
         }
 
-        [CommandMethod("GRILLV")]
-        public void EggCrateGrilleCommand()
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
         {
             try
             {
-                new ReturnAirGrilleAction().Execute(true);
+                new SupplyAirDiffuserAction().Execute3D();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(EggCrateGrilleCommand), ex);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
             }
         }
     }
