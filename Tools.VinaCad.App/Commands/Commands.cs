@@ -22,14 +22,16 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new TurningVaneAction().Execute();
+                TurningVaneAction action = new TurningVaneAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, "CLG");
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(TurningVaneCommand), ex);
             }
         }
+
         [CommandMethod("VCD")]
         public void VCDCommand()
         {
@@ -40,10 +42,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(VCDCommand), ex);
             }
         }
+
         [CommandMethod("LiL")]
         public void LiLCommand()
         {
@@ -54,8 +57,8 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(LiLCommand), ex);
             }
         }
         [CommandMethod("HG")]
@@ -89,21 +92,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        //[CommandMethod("CPD")]
-        //public void CopyElevation()
-        //{
-        //    try
-        //    {
-        //        CopyElevationAction action = new CopyElevationAction();
-        //        action.Execute();
-
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
-        //    }
-        //}
+        
         
 
 
