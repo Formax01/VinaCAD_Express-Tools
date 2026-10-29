@@ -61,38 +61,92 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy text chứa.
+        /// </summary>
+        public static string FDT_MessDialog {
+            get {
+                return ResourceManager.GetString("FDT_MessDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vẽ cọc.
+        /// </summary>
+        public static string FDT_Title {
+            get {
+                return ResourceManager.GetString("FDT_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn All.
+        /// </summary>
+        public static string FDT_UI_BtnSelectAll {
+            get {
+                return ResourceManager.GetString("FDT_UI_BtnSelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quét Chọn.
+        /// </summary>
+        public static string FDT_UI_BtnWindowSelect {
+            get {
+                return ResourceManager.GetString("FDT_UI_BtnWindowSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tìm Text chứa Text cần tìm.
+        /// </summary>
+        public static string FDT_UI_ChkContains {
+            get {
+                return ResourceManager.GetString("FDT_UI_ChkContains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tìm chính xác Text cần tìm.
+        /// </summary>
+        public static string FDT_UI_ChkExact {
+            get {
+                return ResourceManager.GetString("FDT_UI_ChkExact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bạn muốn tìm theo kiểu nào?.
+        /// </summary>
+        public static string FDT_UI_GroupMode {
+            get {
+                return ResourceManager.GetString("FDT_UI_GroupMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập Text cần tìm:.
+        /// </summary>
+        public static string FDT_UI_LblInput {
+            get {
+                return ResourceManager.GetString("FDT_UI_LblInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tìm và chọn đối tượng Text và MText.
+        /// </summary>
+        public static string FDT_UI_Title {
+            get {
+                return ResourceManager.GetString("FDT_UI_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Đã chuyển ngôn ngữ sang {0}..
         /// </summary>
         public static string Msg_LanguageChanged {
             get {
                 return ResourceManager.GetString("Msg_LanguageChanged", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Menu sẽ đổi ngôn ngữ sau khi khởi động lại VinaCAD..
-        /// </summary>
-        public static string Msg_RestartForMenu {
-            get {
-                return ResourceManager.GetString("Msg_RestartForMenu", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Chọn ngôn ngữ.
-        /// </summary>
-        public static string Prompt_ChooseLanguage {
-            get {
-                return ResourceManager.GetString("Prompt_ChooseLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Công cụ VinaCAD.
-        /// </summary>
-        public static string Ui_PaletteTitle {
-            get {
-                return ResourceManager.GetString("Ui_PaletteTitle", resourceCulture);
             }
         }
 
