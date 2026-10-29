@@ -34,21 +34,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        //[CommandMethod("CPD")]
-        //public void CopyElevation()
-        //{
-        //    try
-        //    {
-        //        CopyElevationAction action = new CopyElevationAction();
-        //        action.Execute();
-
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
-        //    }
-        //}
+        
         
 
 
@@ -77,10 +63,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawBoxCommand), ex);
             }
         }
+
         [CommandMethod("BB2")]
         public void DrawReducerDuct3DCommand()
         {
@@ -91,10 +78,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawReducerDuct3DCommand), ex);
             }
         }
+
         [CommandMethod("Bbz")]
         public void BbzCommand()
         {
@@ -105,8 +93,8 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());   // đổi cho đúng chữ ký Logger đang dùng ở các lệnh khác
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BbzCommand), ex);
             }
         }
         [CommandMethod("Sample")]

@@ -1,5 +1,6 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
@@ -17,39 +18,129 @@ namespace Tools.VinaCad.Action.Actions
         private static string _yAlign = Lang.BB2_UI_Giua;
         private static string _zAlign = Lang.BB2_UI_Mid;
 
+        private Document _doc;
+        private Editor _ed;
+        private Database _db;
+        private Matrix3d _ucs;
+
         public void Execute()
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
+            try
+            {
+                UpdateCurrentDocument();
+                if (_doc == null)
+                    return;
 
-            Editor ed = doc.Editor;
-            Database db = doc.Database;
+                // B1: điểm đầu (tâm mặt đáy)
+                PromptPointResult startRes = _ed.GetPoint(Lang.BB2_UI_ChonDiemDau);
+                if (startRes.Status != PromptStatus.OK)
+                    return;
+                Point3d origin = startRes.Value.TransformBy(_ucs);
 
-            // B1: điểm đầu (tâm mặt đáy)
-            // PromptPointResult pr = ed.GetPoint("\nChọn điểm đầu: ");
-            PromptPointResult pr = ed.GetPoint(Lang.BB2_UI_ChonDiemDau);
-            if (pr.Status != PromptStatus.OK) return;
-            Matrix3d ucs2wcs = ed.CurrentUserCoordinateSystem;
-            Point3d origin = pr.Value.TransformBy(ucs2wcs);
+                // B2 -> B6: nhập kích thước
+                if (!TryGetSizes())
+                    return;
 
-            // B2 -> B6
-            if (!GetPositive(ed, Lang.BB2_UI_NhapLengthOX, ref _length)) return;
-            if (!GetPositive(ed, Lang.BB2_UI_NhapWidthOY, ref _width)) return;
-            if (!GetPositive(ed, Lang.BB2_UI_NhapHeightOZ, ref _height)) return;
-            if (!GetPositive(ed, Lang.BB2_UI_NhapSecondWidthOY, ref _width2)) return;
-            if (!GetPositive(ed, Lang.BB2_UI_NhapSecondHeightOZ, ref _height2)) return;
+                // B7, B8: vị trí Second Width và Second Height
+                if (!TryGetAlignments())
+                    return;
 
-            // B7: vị trí Second Width
-            if (!GetKeyword(ed, Lang.BB2_UI_ViTriSecondWidth, ref _yAlign,
-                    new[] { Lang.BB2_UI_Giua, Lang.BB2_UI_Trai, Lang.BB2_UI_PHAI },
-                    new[] { Lang.BB2_UI_Giua, Lang.BB2_UI_Trai, Lang.BB2_UI_PHAI })) return;
+                ReducerDuct3DModel model = BuildModel();
 
-            // B8: vị trí Second Height
-            if (!GetKeyword(ed, Lang.BB2_UI_ViTriSecondHeight, ref _zAlign,
-                    new[] { Lang.BB2_UI_Tren, Lang.BB2_UI_Mid, Lang.BB2_UI_Duoi },
-                    new[] { Lang.BB2_UI_Tren, Lang.BB2_UI_Mid, Lang.BB2_UI_Duoi })) return;
+                // B9 + B10: dựng hình, ướm xoay quanh điểm đầu
+                Point3d[] local = ReducerDuct3DHelper.BuildLocalVertices(model);
 
-            ReducerDuct3DModel model = new ReducerDuct3DModel
+                ReducerDuct3DJig jig = new ReducerDuct3DJig(local, origin, _ucs);
+                if (_ed.Drag(jig).Status != PromptStatus.OK)
+                    return;
+
+                Point3d[] world = ReducerDuct3DHelper.ToWorld(local, origin, jig.Angle);
+                ReducerDuct3DHelper.CreateMesh(_db, world);
+
+                Finish();
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(nameof(DrawReducerDuct3DAction), ex);
+                throw;
+            }
+        }
+
+        private void UpdateCurrentDocument()
+        {
+            _doc = Application.DocumentManager.MdiActiveDocument;
+            if (_doc == null)
+                return;
+
+            _ed = _doc.Editor;
+            _db = _doc.Database;
+            _ucs = _ed.CurrentUserCoordinateSystem;
+        }
+
+        // ---------- Các bước nhập ----------
+
+        // B2 -> B6: năm kích thước, Enter = giá trị lần trước
+        private bool TryGetSizes()
+        {
+            return GetPositive(Lang.BB2_UI_NhapLengthOX, ref _length)
+                && GetPositive(Lang.BB2_UI_NhapWidthOY, ref _width)
+                && GetPositive(Lang.BB2_UI_NhapHeightOZ, ref _height)
+                && GetPositive(Lang.BB2_UI_NhapSecondWidthOY, ref _width2)
+                && GetPositive(Lang.BB2_UI_NhapSecondHeightOZ, ref _height2);
+        }
+
+        // B7, B8: vị trí Second Width (Giữa/Trái/Phải) và Second Height (Trên/Giữa/Dưới)
+        private bool TryGetAlignments()
+        {
+            string[] yNames = { Lang.BB2_UI_Giua, Lang.BB2_UI_Trai, Lang.BB2_UI_PHAI };
+            string[] zNames = { Lang.BB2_UI_Tren, Lang.BB2_UI_Mid, Lang.BB2_UI_Duoi };
+
+            return GetKeyword(Lang.BB2_UI_ViTriSecondWidth, ref _yAlign, yNames, yNames)
+                && GetKeyword(Lang.BB2_UI_ViTriSecondHeight, ref _zAlign, zNames, zNames);
+        }
+
+        private bool GetPositive(string message, ref double value)
+        {
+            PromptDoubleOptions options = new PromptDoubleOptions(message)
+            {
+                AllowNegative = false,
+                AllowZero = false,
+                DefaultValue = value,
+                UseDefaultValue = true
+            };
+
+            PromptDoubleResult result = _ed.GetDouble(options);
+            if (result.Status != PromptStatus.OK)
+                return false;
+
+            value = result.Value;
+            return true;
+        }
+
+        private bool GetKeyword(string message, ref string current,
+                                string[] globalNames, string[] displayNames)
+        {
+            PromptKeywordOptions options = new PromptKeywordOptions(message) { AllowNone = true };
+            for (int i = 0; i < globalNames.Length; i++)
+                options.Keywords.Add(globalNames[i], displayNames[i], displayNames[i]);
+
+            options.Keywords.Default = Array.IndexOf(globalNames, current) >= 0
+                ? current
+                : globalNames[0];
+
+            PromptResult result = _ed.GetKeywords(options);
+            if (result.Status != PromptStatus.OK)
+                return false;
+
+            current = result.StringResult;   // luôn trả về globalName: Giua/Trai/Phai/Tren/Duoi
+            return true;
+        }
+
+        // ---------- Dựng model và kết thúc ----------
+
+        private static ReducerDuct3DModel BuildModel()
+        {
+            return new ReducerDuct3DModel
             {
                 Length = _length,
                 Width = _width,
@@ -63,51 +154,12 @@ namespace Tools.VinaCad.Action.Actions
                        : _zAlign == Lang.BB2_UI_Duoi ? DuctZAlign.Bottom
                        : DuctZAlign.Middle
             };
-
-            // B9 + B10: dựng hình, ướm xoay quanh điểm đầu
-            Point3d[] local = ReducerDuct3DHelper.BuildLocalVertices(model);
-            
-            ReducerDuct3DJig jig = new ReducerDuct3DJig(local, origin, ucs2wcs);
-            PromptResult dragResult = ed.Drag(jig);
-            if (dragResult.Status != PromptStatus.OK) return;
-
-            Point3d[] world = ReducerDuct3DHelper.ToWorld(local, origin, jig.Angle);
-            ReducerDuct3DHelper.CreateMesh(db, world);
-
-            ed.Regen();
-            ed.WriteMessage(Lang.BB2_MessDialog_DaVeOngGioGiamCap3D);
         }
 
-        private static bool GetPositive(Editor ed, string message, ref double value)
+        private void Finish()
         {
-            PromptDoubleOptions opt = new PromptDoubleOptions(message)
-            {
-                AllowNegative = false,
-                AllowZero = false,
-                DefaultValue = value,
-                UseDefaultValue = true
-            };
-            PromptDoubleResult r = ed.GetDouble(opt);
-            if (r.Status != PromptStatus.OK) return false;
-            value = r.Value;
-            return true;
+            _ed.Regen();
+            _ed.WriteMessage(Lang.BB2_MessDialog_DaVeOngGioGiamCap3D);
         }
-
-        private static bool GetKeyword(Editor ed, string message, ref string current,
-                               string[] globalNames, string[] displayNames)
-        {
-            PromptKeywordOptions opt = new PromptKeywordOptions(message) { AllowNone = true };
-            for (int i = 0; i < globalNames.Length; i++)
-                opt.Keywords.Add(globalNames[i], displayNames[i], displayNames[i]);
-
-            opt.Keywords.Default = Array.IndexOf(globalNames, current) >= 0
-                ? current : globalNames[0];
-
-            PromptResult r = ed.GetKeywords(opt);
-            if (r.Status != PromptStatus.OK) return false;
-            current = r.StringResult;   // luôn trả về globalName: Giua/Trai/Phai/Tren/Duoi
-            return true;
-        }
-
     }
 }
