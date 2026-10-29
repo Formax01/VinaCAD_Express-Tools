@@ -1149,25 +1149,25 @@ Please correct them before creating cumulative dimensions.</value>
     <value>Integrate: combine the railing into 1 object. Uncheck: draw as many separate objects.</value>
   </data>
   <data name="LTP_Drawing_Bac" xml:space="preserve">
-    <value>{preview.StepNumber}/{source.StepNumber} level</value>
+    <value>{preview.StepNumber}/{source.StepNumber} Steps</value>
   </data>
   <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
-    <value>{source.StepNumber} level</value>
+    <value>{source.StepNumber} Steps</value>
   </data>
   <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
-    <value>High-rise: {source.StoreyHeight:0.####}; Step surface: {source.TreadRun:0.####}</value>
+    <value>Storey height: {source.StoreyHeight:0.####}; tread width: {source.TreadRun:0.####}</value>
   </data>
   <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
-    <value>Landing: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+    <value>Landing widths: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
-    <value>Preview image: {GetPreviewSummary(source, preview)}</value>
+    <value>Preview: {GetPreviewSummary(source, preview)}</value>
   </data>
   <data name="LTP_Drawing_Tang" xml:space="preserve">
-    <value>{preview.StoreyNumber}/{source.StoreyNumber} floor</value>
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} Storeys</value>
   </data>
   <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
-    <value>{source.StoreyNumber} floor</value>
+    <value>{source.StoreyNumber} Storeys</value>
   </data>
   <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
     <value>Select the point to insert the stair section:</value>
@@ -1234,7 +1234,7 @@ CT cut</value>
     <value>Floor height:</value>
   </data>
   <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
-    <value>Thickness of ladder:</value>
+    <value>Stair slab thickness:</value>
   </data>
   <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
     <value>Landing 1:</value>
@@ -1246,28 +1246,28 @@ CT cut</value>
     <value>Landing width 1</value>
   </data>
   <data name="LTP_UI_ChieuRongChieuNghi2" xml:space="preserve">
-    <value>Width of landing 2</value>
+    <value>Landing width 2</value>
   </data>
   <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
     <value>Main beam width</value>
   </data>
   <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
-    <value>Secondary beam width</value>
+    <value>Sub beam width</value>
   </data>
   <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
-    <value>Step width:</value>
+    <value>Tread width:</value>
   </data>
   <data name="LTP_UI_DamChinhC" xml:space="preserve">
-    <value>Main beam C:</value>
+    <value>Main beam H: </value>
   </data>
   <data name="LTP_UI_DamChinhR" xml:space="preserve">
-    <value>Main beam R:</value>
+    <value>Main beam W:</value>
   </data>
   <data name="LTP_UI_DamPhuC" xml:space="preserve">
-    <value>Secondary beam C:</value>
+    <value>Sub beam H: </value>
   </data>
   <data name="LTP_UI_DamPhuR" xml:space="preserve">
-    <value>Secondary beam R:</value>
+    <value>Sub beam W:</value>
   </data>
   <data name="LTP_UI_DiemChen" xml:space="preserve">
     <value>● Insertion point</value>
@@ -1276,10 +1276,10 @@ CT cut</value>
     <value>Measure</value>
   </data>
   <data name="LTP_UI_DongY" xml:space="preserve">
-    <value>Agreed</value>
+    <value>OK</value>
   </data>
   <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
-    <value>Group together after drawing</value>
+    <value>Join groups after drawing</value>
   </data>
   <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
     <value>Steps in the first flight:</value>
@@ -1297,13 +1297,13 @@ CT cut</value>
     <value>TWO-FLIGHT STAIRCASE</value>
   </data>
   <data name="LTP_UI_ThangChuX" xml:space="preserve">
-    <value>X-SHAPED LADDER</value>
+    <value>X-SHAPED STAIRCASE</value>
   </data>
   <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
-    <value>Stair specifications:</value>
+    <value>Stair Specifications:</value>
   </data>
   <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
-    <value>Landing specifications:</value>
+    <value>Landing Specifications:</value>
   </data>
   <data name="LTP_UI_TongSoBac" xml:space="preserve">
     <value>Total number of steps:</value>
@@ -1339,7 +1339,7 @@ CT cut</value>
     <value>The first-flight step count must be at least 1 and less than the total step count.</value>
   </data>
   <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
-    <value>The number of floors must be from 1 and the total number of steps per floor must be from 2.</value>
+    <value>The number of storeys must be at least 1, and the number of steps per storey must be at least 2.</value>
   </data>
   <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
     <value>Invalid stair section layer name.</value>
@@ -2167,10 +2167,10 @@ axis</value>
     <value>Draw axis symbol + Dimension</value>
   </data>
   <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
-    <value>Scale: {source.BoardThickness:0.####}; railing: {source.RailingHeight:0.####}</value>
+    <value>Stair slab: {source.BoardThickness:0.####}; railing: {source.RailingHeight:0.####}</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
-    <value>Restore original value</value>
+    <value>Restore default values</value>
   </data>
   <data name="Common_UI_Stt" xml:space="preserve">
     <value>No.</value>
@@ -2253,13 +2253,13 @@ axis</value>
   <data name="FN_Error_PhongKhongKin" xml:space="preserve">
     <value>The room is not enclosed: {missedRays}/{coarseRays} rays escape (for example at {firstMissDegrees:0}°). Check openings, doors, or wall lines on another layer.</value>
   </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="FN_UI_DongY" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="WWT_UI_DongY" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="Common_UI_DongY" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="ZXW_Field_ChieuRong" xml:space="preserve">
@@ -2267,5 +2267,8 @@ axis</value>
   </data>
   <data name="ZXW_Field_ChieuSau" xml:space="preserve">
     <value>Depth</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
+    <value>Current riser height: {0:0.####}</value>
   </data>
 </root>

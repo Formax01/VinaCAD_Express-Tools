@@ -3624,6 +3624,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chiều cao cổ bậc hiện tại: {0:0.####}.
+        /// </summary>
+        public static string LTP_UI_ChieuCaoCoBacHienTai {
+            get {
+                return ResourceManager.GetString("LTP_UI_ChieuCaoCoBacHienTai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chiều cao dầm chính.
         /// </summary>
         public static string LTP_UI_ChieuCaoDamChinh {

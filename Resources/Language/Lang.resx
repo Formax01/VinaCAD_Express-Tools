@@ -2213,4 +2213,5 @@ trục</value>
   <data name="WWT_UI_DongY" xml:space="preserve"><value>Đồng ý</value></data>
   <data name="ZXW_Field_ChieuRong" xml:space="preserve"><value>Chiều rộng</value></data>
   <data name="ZXW_Field_ChieuSau" xml:space="preserve"><value>Chiều sâu</value></data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve"><value>Chiều cao cổ bậc hiện tại: {0:0.####}</value></data>
 </root>
