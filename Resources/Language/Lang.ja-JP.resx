@@ -2274,4 +2274,20 @@ CK</value>
   <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
     <value>現在の蹴上げ高さ: {0:0.####}</value>
   </data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve"><value>フレキシブルダクトの直径 &lt;{diameter}&gt;：</value></data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve"><value>中心線の指定方法 [描画/選択] &lt;描画&gt;：</value></data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve"><value>描画</value></data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve"><value>選択</value></data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve"><value>選択した中心線からダクトを作図できません。</value></data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve"><value>[警告] {warning}</value></data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve"><value>{commandName}: グループ {groupName} に {count} 個のオブジェクトを作図しました。</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve"><value>中心線の始点を選択してください：</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve"><value>次の点を選択してください &lt;Enter で終了&gt;：</value></data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve"><value>中心線の Line/Polyline を選択してください：</value></data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve"><value>Line または Polyline のみ選択できます。</value></data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve"><value>元の中心線を削除できませんでした：{ex.Message}</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve"><value>中心線が両端部に対して短すぎるため、端部を省略しました。</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>中心線が短すぎてダクトを作図できません。</value></data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>角 {i}: 線分が短いため、曲げ半径を {r:0.##} に縮小しました。</value></data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>角 {i}: 半径 {r:0.##} ≤ D/2 のため、内側の縁が折れます。</value></data>
 </root>

@@ -2271,4 +2271,20 @@ axis</value>
   <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
     <value>Current riser height: {0:0.####}</value>
   </data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve"><value>Flexible duct diameter &lt;{diameter}&gt;:</value></data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve"><value>Choose centerline method [Draw/Select] &lt;Draw&gt;:</value></data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve"><value>Draw</value></data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve"><value>Select</value></data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve"><value>Cannot draw the duct from the selected centerline.</value></data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve"><value>[Warning] {warning}</value></data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve"><value>{commandName}: drew {count} objects in group {groupName}.</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve"><value>Select the centerline start point:</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve"><value>Select the next point &lt;Enter to finish&gt;:</value></data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve"><value>Select a centerline Line/Polyline:</value></data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve"><value>Only Line or Polyline is accepted.</value></data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve"><value>Could not erase the original centerline: {ex.Message}</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve"><value>The centerline is too short for both end pieces; end pieces were omitted.</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>The centerline is too short to draw the duct.</value></data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>Corner {i}: short segment; bend radius reduced to {r:0.##}</value></data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>Corner {i}: radius {r:0.##} ≤ D/2; the inner edge folds</value></data>
 </root>
