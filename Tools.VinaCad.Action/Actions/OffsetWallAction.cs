@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -35,7 +35,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             try
             {
-                PromptStringOptions distanceOptions = new PromptStringOptions($"\nKhoảng cách offset tường (tâm-tâm) <{DefaultOffsetDistance:0.##}>: ")
+                PromptStringOptions distanceOptions = new PromptStringOptions("\n" + Lang.WWO_Prompt_KhoangCachOffsetTuongTamTam.Replace("{DefaultOffsetDistance:0.##}", DefaultOffsetDistance.ToString("0.##")))
                 {
                     AllowSpaces = false,
                     DefaultValue = DefaultOffsetDistance.ToString("0.##", CultureInfo.CurrentCulture)
@@ -49,21 +49,21 @@ namespace Tools.VinaCAD.Action.Actions
                     (!double.TryParse(distanceResult.StringResult, NumberStyles.Float, CultureInfo.CurrentCulture, out offsetDistance) &&
                      !double.TryParse(distanceResult.StringResult, NumberStyles.Float, CultureInfo.InvariantCulture, out offsetDistance)))
                 {
-                    editor.WriteMessage("\nWWO: Khoảng cách phải là số lớn hơn 0.");
+                    editor.WriteMessage("\n" + Lang.WWO_Output_WwoKhoangCachPhaiLaSoLonHon0);
                     return;
                 }
 
                 if (offsetDistance <= Tolerance)
                 {
-                    editor.WriteMessage("\nWWO: Khoảng cách phải lớn hơn 0.");
+                    editor.WriteMessage("\n" + Lang.WWO_Output_WwoKhoangCachPhaiLonHon0);
                     return;
                 }
-                PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\nXử lý nút giao [Auto/Giữ] <Auto>: ")
+                PromptKeywordOptions junctionOptions = new PromptKeywordOptions("\n" + Lang.WWO_Prompt_XuLyNutGiaoAutoGiuAuto)
                 {
                     AllowNone = true,
                     AppendKeywordsToMessage = false
                 };
-                junctionOptions.Keywords.Add("Keep", "Giữ", "Giữ");
+                junctionOptions.Keywords.Add("Keep", Lang.WWO_Prompt_Giu, Lang.WWO_Prompt_Giu);
                 junctionOptions.Keywords.Add("Auto", "Auto", "Auto");
                 junctionOptions.Keywords.Default = "Auto";
 
@@ -79,12 +79,13 @@ namespace Tools.VinaCAD.Action.Actions
                         "Auto",
                         StringComparison.OrdinalIgnoreCase);
                 int createdCount = 0;
-                editor.WriteMessage($"\nWWO: Khoảng cách tâm-tâm = {offsetDistance:0.##}. " +$"Xử lý nút giao = {(autoHealJunctions ? "Tự động" : "Giữ nguyên")}. " +"Chọn tường rồi chỉ phía offset.");
+                editor.WriteMessage("\n" + Lang.WWO_Output_WwoKhoangCachTamTam.Replace("{offsetDistance:0.##}", offsetDistance.ToString("0.##")) + " " +
+                    Lang.WWO_Output_XuLyNutGiao.Replace("{mode}", autoHealJunctions ? Lang.WWO_Output_TuDong : Lang.WWO_Output_GiuNguyen) + " " + Lang.WWO_Output_ChonTuongRoiChiPhiaOffset);
 
                 while (true)
                 {
-                    PromptEntityOptions entityOptions = new PromptEntityOptions("\nChọn một mặt tường <Kết thúc>: ");
-                    entityOptions.SetRejectMessage("\nWWO chỉ nhận đường thẳng Line của tường.");
+                    PromptEntityOptions entityOptions = new PromptEntityOptions("\n" + Lang.WWO_Prompt_ChonMotMatTuongKetThuc);
+                    entityOptions.SetRejectMessage("\n" + Lang.WWO_Prompt_WwoChiNhanDuongThangLineCuaTuong);
                     entityOptions.AddAllowedClass(typeof(Line), true);
 
                     PromptEntityResult entityResult = editor.GetEntity(entityOptions);
@@ -93,11 +94,11 @@ namespace Tools.VinaCAD.Action.Actions
 
                     if (!TryReadWallDefinition(editor, database, entityResult.ObjectId, out WallDefinition? preview, out string validationMessage))
                     {
-                        editor.WriteMessage($"\nKhông thể offset: {validationMessage}");
+                        editor.WriteMessage("\n" + Lang.WWO_Output_KhongTheOffset_8636EE0D.Replace("{validationMessage}", validationMessage));
                         continue;
                     }
 
-                    PromptPointOptions sideOptions = new PromptPointOptions("\nChọn điểm về phía cần offset: ")
+                    PromptPointOptions sideOptions = new PromptPointOptions("\n" + Lang.WWO_Prompt_ChonDiemVePhiaCanOffset)
                     {
                         UseBasePoint = false,
                         AllowArbitraryInput = false
@@ -122,16 +123,16 @@ namespace Tools.VinaCAD.Action.Actions
                     }
                     else
                     {
-                        editor.WriteMessage($"\nKhông thể offset: {resultMessage}");
+                        editor.WriteMessage("\n" + Lang.WWO_Output_KhongTheOffset.Replace("{resultMessage}", resultMessage));
                     }
                 }
 
-                editor.WriteMessage($"\nWWO: Đã tạo {createdCount} tường song song.");
+                editor.WriteMessage("\n" + Lang.WWO_Output_WwoDaTaoTuongSongSong.Replace("{createdCount}", createdCount.ToString()));
             }
             catch (Exception ex)
             {
                 Logger.Info(nameof(OffsetWallAction), ex);
-                MessageBox.Show($"Lỗi WWO: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.WWO_Msg_LoiWwo.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
             }
         }
 
@@ -155,7 +156,7 @@ namespace Tools.VinaCAD.Action.Actions
                 double side = (sidePoint - source.CenterStart).DotProduct(normal);
                 if (Math.Abs(side) <= Tolerance)
                 {
-                    message = "điểm chỉ hướng nằm trên tim tường; hãy chọn rõ một phía.";
+                    message = Lang.WWO_Status_DiemChiHuongNamTrenTimTuongHayChonRoMotPhia;
                     return false;
                 }
 
@@ -272,7 +273,7 @@ namespace Tools.VinaCAD.Action.Actions
                         secondStart,
                         secondEnd))
                 {
-                    message = "đã tồn tại tường trùng tại vị trí offset.";
+                    message = Lang.WWO_Status_DaTonTaiTuongTrungTaiViTriOffset;
                     return false;
                 }
 
@@ -344,7 +345,9 @@ namespace Tools.VinaCAD.Action.Actions
 
                 transaction.Commit();
 
-                message = autoHealJunctions? $"Đã tạo tường song song cách tim {offsetDistance:0.##}. " +$"Đã nối {connectedBranchCount} đầu tường và xóa nét trong " +$"{healedIntersectionCount} vùng giao.": $"Đã tạo nguyên trạng tường song song cách tim " +$"{offsetDistance:0.##}; không xử lý nút giao.";
+                message = autoHealJunctions
+                    ? Lang.WWO_Status_DaTaoTuongSongSongCachTim.Replace("{offsetDistance:0.##}", offsetDistance.ToString("0.##")) + " " + Lang.WWO_Status_DaNoiDauTuongVaXoaNetTrong.Replace("{connectedBranchCount}", connectedBranchCount.ToString()) + " " + Lang.WWO_Status_VungGiao.Replace("{healedIntersectionCount}", healedIntersectionCount.ToString())
+                    : Lang.WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim + " " + Lang.WWO_Status_KhongXuLyNutGiao.Replace("{offsetDistance:0.##}", offsetDistance.ToString("0.##"));
                 return true;
             }
             catch (Exception ex)
@@ -382,7 +385,7 @@ namespace Tools.VinaCAD.Action.Actions
             Line? selected = transaction.GetObject(selectedId, OpenMode.ForRead) as Line;
             if (selected == null || selected.IsErased || DrawWallHelper.IsWallCap(selected))
             {
-                message = "đối tượng không phải mặt tường hợp lệ.";
+                message = Lang.WWT_Status_DoiTuongKhongPhaiMatTuongHopLe;
                 return false;
             }
 
@@ -402,7 +405,7 @@ namespace Tools.VinaCAD.Action.Actions
             {
                 if (string.IsNullOrEmpty(selectedSide))
                 {
-                    message = "metadata mặt tường không đầy đủ.";
+                    message = Lang.WWO_Status_MetadataMatTuongKhongDayDu;
                     return false;
                 }
 
@@ -419,7 +422,7 @@ namespace Tools.VinaCAD.Action.Actions
                     .FirstOrDefault();
                 if (opposite == null)
                 {
-                    message = "không tìm thấy mặt đối diện cùng SegmentId.";
+                    message = Lang.WWO_Status_KhongTimThayMatDoiDienCungSegmentid;
                     return false;
                 }
 
@@ -455,7 +458,7 @@ namespace Tools.VinaCAD.Action.Actions
                         out oppositeFaceStart,
                         out oppositeFaceEnd))
                 {
-                    message = "không thể tái dựng đầy đủ hai mặt tường.";
+                    message = Lang.WWO_Status_KhongTheTaiDungDayDuHaiMatTuong;
                     return false;
                 }
 
@@ -467,7 +470,7 @@ namespace Tools.VinaCAD.Action.Actions
                 opposite = FindLegacyPairedFace(selected, lines);
                 if (opposite == null)
                 {
-                    message = "không tìm thấy mặt tường song song tương ứng.";
+                    message = Lang.WWT_Status_KhongTimThayMatTuongSongSong;
                     return false;
                 }
 
@@ -491,7 +494,7 @@ namespace Tools.VinaCAD.Action.Actions
             double thickness = DistancePointToInfiniteLine(opposite.StartPoint, selected);
             if (thickness <= Tolerance)
             {
-                message = "hai mặt tường đang trùng nhau.";
+                message = Lang.WWT_Status_HaiMatTuongTrungNhau;
                 return false;
             }
 
