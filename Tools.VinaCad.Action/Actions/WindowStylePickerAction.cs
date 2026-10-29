@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -139,8 +140,8 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     if (editor == null || document == null) continue;
 
-                    PromptEntityOptions options = new PromptEntityOptions("\nChọn một cửa sổ của VinaCAD tạo sẵn để lấy độ rộng: ");
-                    options.SetRejectMessage("\nĐối tượng được chọn phải là block cửa sổ.");
+                    PromptEntityOptions options = new PromptEntityOptions("\n" + Lang.AW_Prompt_ChonMotCuaSoCuaVinacadTaoSanDeLayDoRong);
+                    options.SetRejectMessage("\n" + Lang.AW_Prompt_DoiTuongDuocChonPhaiLaBlockCuaSo);
                     options.AddAllowedClass(typeof(BlockReference), true);
                     PromptEntityResult pickedWindow = editor.GetEntity(options);
                     if (pickedWindow.Status == PromptStatus.OK)
@@ -148,7 +149,7 @@ namespace Tools.VinaCAD.Action.Actions
                         if (WindowOpeningHelper.TryGetWindowWidth(document.Database, pickedWindow.ObjectId, out double width))
                             result.Width = Math.Round(width, 2);
                         else
-                            editor.WriteMessage("\nBlock được chọn không phải cửa sổ do lệnh AW của VinaCAD tạo.");
+                            editor.WriteMessage("\n" + Lang.AW_Output_BlockDuocChonKhongPhaiCuaSoDoLenhAwCuaVinacad);
                     }
                     continue;
                 }
@@ -157,7 +158,7 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     if (editor == null) continue;
 
-                    string prompt = changed.MeasureHoleRequested ? "\nChọn hai điểm đo độ rộng cửa sổ: " : "\nChọn hai điểm đo khoảng cách trụ: ";
+                    string prompt = "\n" + (changed.MeasureHoleRequested ? Lang.AW_Prompt_ChonHaiDiemDoDoRongCuaSo : Lang.Common_Prompt_ChonHaiDiemDoKhoangCachTru);
                     PromptDoubleResult measured = editor.GetDistance(new PromptDistanceOptions(prompt));
                     if (measured.Status == PromptStatus.OK && measured.Value > 0)
                     {

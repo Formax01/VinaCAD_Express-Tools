@@ -162,7 +162,7 @@
     <value>Current version</value>
   </data>
   <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
-    <value>Express_Tools information</value>
+    <value>Express_Tools Information</value>
   </data>
   <data name="AD_Error_AssetCuaKhongCoHinhHocHopLe" xml:space="preserve">
     <value>The door asset does not have valid geometry.</value>
@@ -328,7 +328,7 @@ door</value>
     <value>Unable to get Editor: {ex.Message}</value>
   </data>
   <data name="AW_Output_AwDaTaoCuaSo" xml:space="preserve">
-    <value>AW: created {createdCount} window.</value>
+    <value>AW: Created {createdCount} window.</value>
   </data>
   <data name="AW_Output_AwHayChonLai" xml:space="preserve">
     <value>AW: {exception.Message} Please select again.</value>
@@ -994,7 +994,7 @@ Automatic</value>
     <value>No valid open wall face pairs were found in the selection.</value>
   </data>
   <data name="FN_UI_CaiDatVua" xml:space="preserve">
-    <value>Plaster Settings</value>
+    <value>Stucco Settings</value>
   </data>
   <data name="FN_UI_ChonLayerCoSan" xml:space="preserve">
     <value>Select an existing layer</value>
@@ -2085,7 +2085,7 @@ CK</value>
     <value>ZXW canceled; The drawing does not change.</value>
   </data>
   <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
-    <value>ZXW created mesh {input.Breadths.Count + 1} x {input.Depths.Count + 1} axes ({entityCount} objects).</value>
+    <value>ZXW created grid {input.Breadths.Count + 1} x {input.Depths.Count + 1} axes ({entityCount} objects).</value>
   </data>
   <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
     <value>ZXW error: {ex.Message}</value>
@@ -2134,7 +2134,7 @@ axis</value>
     <value>Invalid label position.</value>
   </data>
   <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
-    <value>Factory Value Setting</value>
+    <value>Restore default values</value>
   </data>
   <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
     <value>Axis Grid Settings</value>
@@ -2158,10 +2158,10 @@ axis</value>
     <value>The starting number or letter of the vertical axis</value>
   </data>
   <data name="ZXW_UI_TrucHoanh" xml:space="preserve">
-    <value>Horizontal axis:</value>
+    <value>Horizontal axis :</value>
   </data>
   <data name="ZXW_UI_TrucTung" xml:space="preserve">
-    <value>Vertical axis:</value>
+    <value>Vertical axis :</value>
   </data>
   <data name="ZXW_UI_VeKyHieuTrucKichThuoc" xml:space="preserve">
     <value>Draw axis symbol + Dimension</value>
@@ -2258,5 +2258,14 @@ axis</value>
   </data>
   <data name="WWT_UI_DongY" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve">
+    <value>Depth</value>
   </data>
 </root>

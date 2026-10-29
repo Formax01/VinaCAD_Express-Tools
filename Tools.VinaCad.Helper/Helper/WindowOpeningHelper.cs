@@ -7,6 +7,7 @@ using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -35,11 +36,11 @@ namespace Tools.VinaCad.Helper.Helper
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
             if (selection == null || selection.Style == null) throw new ArgumentNullException(nameof(selection));
-            if (selection.Width <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), "Chiều rộng lỗ mở phải lớn hơn 0.");
-            if (selection.Height <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), "Chiều cao cửa sổ phải lớn hơn 0.");
-            if (selection.WallThickness <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), "Chiều dày tường phải lớn hơn 0.");
+            if (selection.Width <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), Lang.Common_Error_ChieuRongLoMoPhaiLonHon0);
+            if (selection.Height <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), Lang.AW_Error_ChieuCaoCuaSoPhaiLonHon0);
+            if (selection.WallThickness <= Tolerance) throw new ArgumentOutOfRangeException(nameof(selection), Lang.Common_Error_ChieuDayTuongPhaiLonHon0);
             if (selection.UseEdgeDistance && selection.EdgeDistance < 0)
-                throw new ArgumentOutOfRangeException(nameof(selection), "Khoảng cách từ mép không được âm.");
+                throw new ArgumentOutOfRangeException(nameof(selection), Lang.Common_Error_KhoangCachTuMepKhongDuocAm);
 
             ObjectId blockDefinitionId = GetOrImportWindowAsset(database, selection.Style);
             using Transaction transaction = database.TransactionManager.StartTransaction();
@@ -64,7 +65,7 @@ namespace Tools.VinaCad.Helper.Helper
                 out Line pairedWall);
 
             Vector3d direction = selectedWall.EndPoint - selectedWall.StartPoint;
-            if (direction.Length <= Tolerance) throw new InvalidOperationException("Đoạn tường được chọn quá ngắn.");
+            if (direction.Length <= Tolerance) throw new InvalidOperationException(Lang.Common_Error_KhoangCachTuMepKhongDuocAm);
             direction = direction.GetNormal();
             Vector3d normal = new Vector3d(-direction.Y, direction.X, 0.0);
             Point3d origin = selectedWall.StartPoint;
@@ -88,7 +89,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             double boundaryClearance = selection.UseEdgeDistance ? 0.0 : edgeClearance;
             if (openingStartStation < availableStart + boundaryClearance || openingEndStation > availableEnd - boundaryClearance)
-                throw new InvalidOperationException("Không đủ chiều dài tường để đặt lỗ mở tại vị trí đã chọn.");
+                throw new InvalidOperationException(Lang.Common_Error_KhongDuChieuDaiTuongDeDatLoMoTaiViTri);
 
             Point3d selectedCutStart = PointAtStation(selectedWall, origin, direction, openingStartStation);
             Point3d selectedCutEnd = PointAtStation(selectedWall, origin, direction, openingEndStation);
@@ -98,7 +99,7 @@ namespace Tools.VinaCad.Helper.Helper
             Point3d centerEnd = MidPoint(selectedCutEnd, pairedCutEnd);
             string segmentId = DrawWallHelper.GetWallSegmentId(selectedWall) ?? string.Empty;
             if (OverlapsExistingOpening(transaction, currentSpace, segmentId, centerStart, centerEnd))
-                throw new InvalidOperationException("Vị trí này chồng lên cửa sổ đã đặt trước đó.");
+                throw new InvalidOperationException(Lang.AW_Error_ViTriNayChongLenCuaSoDaDatTruocDo);
             Point3d clearanceStart = MidPoint(
                 PointAtStation(selectedWall, origin, direction, openingStartStation - edgeClearance),
                 PointAtStation(pairedWall, origin, direction, openingStartStation - edgeClearance));
@@ -106,7 +107,7 @@ namespace Tools.VinaCad.Helper.Helper
                 PointAtStation(selectedWall, origin, direction, openingEndStation + edgeClearance),
                 PointAtStation(pairedWall, origin, direction, openingEndStation + edgeClearance));
             if (CrossesAnotherWall(transaction, currentSpace, selectedWall, pairedWall, clearanceStart, clearanceEnd))
-                throw new InvalidOperationException("Lỗ mở quá gần góc hoặc giao tường T/X.");
+                throw new InvalidOperationException(Lang.Common_Error_LoMoQuaGanGocHoacGiaoTuongTX);
 
             SplitWallLine(database, transaction, currentSpace, selectedWall, selectedCutStart, selectedCutEnd, createdIds);
             SplitWallLine(database, transaction, currentSpace, pairedWall, pairedCutStart, pairedCutEnd, createdIds);
@@ -183,7 +184,7 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 if (transaction.GetObject(windowId, OpenMode.ForWrite) is not BlockReference blockReference ||
                     !TryReadOpening(blockReference, out _, out Point3d centerStart, out Point3d centerEnd))
-                    throw new InvalidOperationException("Không đọc được dữ liệu vị trí cửa sổ.");
+                    throw new InvalidOperationException(Lang.AW_Error_KhongDocDuocDuLieuViTriCuaSo);
                 GetAssetHorizontalBounds(
                     transaction,
                     blockReference.BlockTableRecord,
@@ -284,7 +285,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return;
             }
             if (!TryReadOpening(blockReference, out string segmentId, out Point3d centerStart, out Point3d centerEnd))
-                throw new InvalidOperationException("Không đọc được dữ liệu vị trí cửa sổ.");
+                throw new InvalidOperationException(Lang.AW_Error_KhongDocDuocDuLieuViTriCuaSo);
 
             selection.ReverseAlongWall = jig.ReverseAlongWall;
             selection.MirrorAcrossWall = jig.MirrorAcrossWall;
@@ -343,7 +344,7 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 Vector3d direction = centerEnd - centerStart;
                 if (direction.Length <= Tolerance)
-                    throw new InvalidOperationException("Dữ liệu chiều rộng cửa sổ không hợp lệ.");
+                    throw new InvalidOperationException(Lang.AW_Error_DuLieuChieuRongCuaSoKhongHopLe);
                 _centerStart = centerStart;
                 _center = MidPoint(centerStart, centerEnd);
                 _direction = direction.GetNormal();
@@ -363,7 +364,7 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 JigPromptPointOptions options = new JigPromptPointOptions
                 {
-                    Message = "\nDi chuyển chuột vào góc muốn mở cửa sổ rồi click: ",
+                    Message = "\n" + Lang.AW_Prompt_DiChuyenChuotVaoGocMuonMoCuaSoRoiClick,
                     BasePoint = _center,
                     UseBasePoint = true,
                     UserInputControls = UserInputControls.Accept3dCoordinates |
@@ -482,12 +483,12 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (selectedObject is not Entity selectedEntity || !TryGetWallFace(selectedEntity, out _, out _))
-                throw new InvalidOperationException("Hãy chọn Line, Polyline thẳng hoặc block tường hợp lệ.");
+                throw new InvalidOperationException(Lang.Common_Error_HayChonLinePolylineThangHoacBlockTuongHopLe);
             if (selectedEntity is Line selectedLine && DrawWallHelper.IsWallCap(selectedLine))
-                throw new InvalidOperationException("Đường được chọn là nét bịt đầu tường, không phải mặt tường.");
+                throw new InvalidOperationException(Lang.Common_Error_DuongDuocChonLaNetBitDauTuongKhongPhaiMatTuong);
 
             Entity pairedEntity = FindPairedWall(transaction, currentSpace, selectedEntity, pickedPoint, expectedThickness)
-                ?? throw new InvalidOperationException("Không tìm thấy mặt tường song song tương ứng. Hãy chọn tường được tạo bởi WW.");
+                ?? throw new InvalidOperationException(Lang.Common_Error_KhongTimThayMatTuongSongSongTuongUngHayChonTuong);
             selectedWall = MaterializeWallLine(database, transaction, currentSpace, selectedEntity, createdIds, restoreIds);
             pairedWall = MaterializeWallLine(database, transaction, currentSpace, pairedEntity, createdIds, restoreIds);
         }
@@ -577,7 +578,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return line;
             }
             if (!TryGetWallFace(source, out Point3d start, out Point3d end))
-                throw new InvalidOperationException("Polyline tường phải là một đoạn thẳng gồm đúng 2 đỉnh.");
+                throw new InvalidOperationException(Lang.Common_Error_PolylineTuongPhaiLaMotDoanThangGomDung2Dinh);
 
             Line replacement = CreateLineLike(source, start, end);
             currentSpace.AppendEntity(replacement);
@@ -622,7 +623,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (!TrySelectBlockFacePair(entities, pickedPoint, expectedThickness, out Entity? firstFace, out Entity? secondFace))
             {
                 foreach (DBObject item in exploded) item.Dispose();
-                throw new InvalidOperationException("Block tường phải chứa hai mặt Line/Polyline thẳng, song song và đúng chiều dày.");
+                throw new InvalidOperationException(Lang.Common_Error_BlockTuongPhaiChuaHaiMatLinePolylineThangSongSongVa);
             }
 
             selectedWall = null!;
@@ -873,7 +874,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (WindowStylePreview.TryGetReferenceTemplate(style.Id, out double[] lines, out double[] walls))
                 return GetOrCreateReferenceWindowAsset(database, style.Id, lines, walls);
             if (string.IsNullOrWhiteSpace(style.AssetPath) || !File.Exists(style.AssetPath))
-                throw new FileNotFoundException("Không tìm thấy bản vẽ cửa sổ đã chọn.", style?.AssetPath);
+                throw new FileNotFoundException(Lang.AW_Error_KhongTimThayBanVeCuaSoDaChon, style?.AssetPath);
             string safeName = new string(style.Id.Select(character => char.IsLetterOrDigit(character) ? character : '_').ToArray());
             string blockName = "WINDOW_ASSET_" + safeName;
 
@@ -888,12 +889,12 @@ namespace Tools.VinaCad.Helper.Helper
                 using Database sourceDatabase = new Database(false, true);
                 sourceDatabase.ReadDwgFile(style.AssetPath, FileShare.Read, true, null);
                 ObjectId importedId = database.Insert(blockName, sourceDatabase, true);
-                if (importedId.IsNull) throw new InvalidOperationException("Không thể import bản vẽ cửa sổ.");
+                if (importedId.IsNull) throw new InvalidOperationException(Lang.AW_Error_KhongTheImportBanVeCuaSo);
                 return importedId;
             }
             catch (System.Exception exception)
             {
-                throw new InvalidOperationException($"Không thể đọc asset cửa sổ {Path.GetFileName(style.AssetPath)}: {exception.Message}", exception);
+                throw new InvalidOperationException(Lang.AW_Validation_KhongTheDocAssetCuaSo.Replace("{Path.GetFileName(style.AssetPath)}", Path.GetFileName(style.AssetPath)).Replace("{exception.Message}", exception.Message), exception);
             }
         }
 
@@ -908,7 +909,7 @@ namespace Tools.VinaCad.Helper.Helper
             using Transaction transaction = database.TransactionManager.StartTransaction();
             BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
             if (blockTable.Has(blockName)) return blockTable[blockName];
-            if (walls.Length < 8) throw new InvalidOperationException("Dữ liệu gốc tường preview không hợp lệ.");
+            if (walls.Length < 8) throw new InvalidOperationException(Lang.AW_Error_DuLieuGocTuongPreviewKhongHopLe);
 
             double leftInnerX = ResolveReferenceContact(
                 lines,
@@ -929,7 +930,7 @@ namespace Tools.VinaCad.Helper.Helper
                 wallY + wallHeight - 1.0);
             double wallThickness = wallBottomY - wallTopY;
             if (openingWidth <= Tolerance || wallThickness <= Tolerance)
-                throw new InvalidOperationException("Kích thước preview cửa sổ không hợp lệ.");
+                throw new InvalidOperationException(Lang.AW_Error_KichThuocPreviewCuaSoKhongHopLe);
             double wallCenterY = (wallTopY + wallBottomY) * 0.5;
 
             Point3d Map(double x, double y) => new Point3d(
@@ -1034,13 +1035,13 @@ namespace Tools.VinaCad.Helper.Helper
                 bounds.AddRange(details);
             }
             if (bounds.Count == 0)
-                throw new InvalidOperationException("Asset cửa sổ không có cung hoặc hình học cánh cửa sổ hợp lệ.");
+                throw new InvalidOperationException(Lang.AW_Error_AssetCuaSoKhongCoCungHoacHinhHocCanhCuaSo);
 
             minimumX = bounds.Min(item => item.MinPoint.X);
             maximumX = bounds.Max(item => item.MaxPoint.X);
             width = maximumX - minimumX;
             if (double.IsInfinity(minimumX) || double.IsNaN(width) || width <= Tolerance)
-                throw new InvalidOperationException("Asset cửa sổ không có hình học hợp lệ theo trục X.");
+                throw new InvalidOperationException(Lang.AW_Error_AssetCuaSoKhongCoHinhHocHopLeTheoTrucX);
 
             List<double> hingeCoordinates = significantCurves
                 .Where(item => item.HingeY.HasValue)

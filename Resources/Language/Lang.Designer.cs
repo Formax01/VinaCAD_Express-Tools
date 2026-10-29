@@ -2118,6 +2118,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string Common_UI_DongY {
+            get {
+                return ResourceManager.GetString("Common_UI_DongY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Độ rộng:.
         /// </summary>
         public static string Common_UI_DoRong {
@@ -2951,6 +2960,15 @@ namespace Tools.Resources.Language {
         public static string FN_UI_DoDayVua {
             get {
                 return ResourceManager.GetString("FN_UI_DoDayVua", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string FN_UI_DongY {
+            get {
+                return ResourceManager.GetString("FN_UI_DongY", resourceCulture);
             }
         }
         
@@ -5617,6 +5635,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string WWT_UI_DongY {
+            get {
+                return ResourceManager.GetString("WWT_UI_DongY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng chọn text của cấu kiện cần thống kê..
         /// </summary>
         public static string XLCK_Msg_VuiLongChonTextCuaCauKienCanThongKe {
@@ -6172,6 +6199,24 @@ namespace Tools.Resources.Language {
         public static string XLTKCT_UI_XacLapThongKeCotThep {
             get {
                 return ResourceManager.GetString("XLTKCT_UI_XacLapThongKeCotThep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều rộng.
+        /// </summary>
+        public static string ZXW_Field_ChieuRong {
+            get {
+                return ResourceManager.GetString("ZXW_Field_ChieuRong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều sâu.
+        /// </summary>
+        public static string ZXW_Field_ChieuSau {
+            get {
+                return ResourceManager.GetString("ZXW_Field_ChieuSau", resourceCulture);
             }
         }
         

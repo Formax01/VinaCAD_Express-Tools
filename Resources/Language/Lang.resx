@@ -2208,4 +2208,9 @@ trục</value>
   <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve"><value>Không tìm thấy line tường trong bản vẽ.</value></data>
   <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve"><value>Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng).</value></data>
   <data name="FN_Error_PhongKhongKin" xml:space="preserve"><value>Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.</value></data>
+  <data name="Common_UI_DongY" xml:space="preserve"><value>Đồng ý</value></data>
+  <data name="FN_UI_DongY" xml:space="preserve"><value>Đồng ý</value></data>
+  <data name="WWT_UI_DongY" xml:space="preserve"><value>Đồng ý</value></data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve"><value>Chiều rộng</value></data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve"><value>Chiều sâu</value></data>
 </root>
