@@ -798,9 +798,6 @@
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>モデル番号</value>
   </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>番号</value>
-  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>図面名</value>
   </data>
@@ -2169,5 +2166,11 @@ CK</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>元の値に戻す</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
   </data>
 </root>
