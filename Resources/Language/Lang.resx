@@ -797,9 +797,6 @@ Tự Động</value>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Số Hiệu</value>
   </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>STT</value>
-  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Tên Bản Vẽ</value>
   </data>
@@ -834,8 +831,7 @@ Tự Động</value>
     <value>Vẽ bảng</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
-    <value>Vẽ Bảng Thống
-Kê Thép</value>
+    <value>Vẽ Bảng Thống Kê Thép</value>
   </data>
   <data name="Common_UI_XacLap" xml:space="preserve">
     <value>Xác Lập</value>
@@ -1363,8 +1359,7 @@ cắt CT</value>
     <value>Bảng Thống Kê Thép Hình</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>Chiều
-Dài</value>
+    <value>Chiều Dài</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>Quy Cách Thép</value>
@@ -1579,9 +1574,6 @@ CK</value>
   </data>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>C.Dài</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>C.Cao</value>
   </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>C.Rộng</value>
@@ -2166,5 +2158,20 @@ trục</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>Khôi phục giá trị ban đầu</value>
+  </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>STT</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>SL</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>SCK</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>C.Cao</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Xác Lập Thống Kê Cốt Thép</value>
   </data>
 </root>

@@ -793,7 +793,7 @@ Automatic</value>
     <value>Numbering rules:</value>
   </data>
   <data name="Common_UI_SHieu" xml:space="preserve">
-    <value>S. Hieu</value>
+    <value>Mark Number</value>
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Mark Number</value>
@@ -1357,11 +1357,10 @@ CT cut</value>
     <value>Edit TKTH</value>
   </data>
   <data name="QD_UI_BangThongKeThepHinh" xml:space="preserve">
-    <value>structural steel schedule table</value>
+    <value>Structural Steel Table</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>Afternoon
-Long</value>
+    <value>Length</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>Steel Specification</value>
@@ -2169,5 +2168,14 @@ axis</value>
   </data>
   <data name="TKCK_UI_CCao" xml:space="preserve">
     <value>Height</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Configure Rebar Schedule</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>Num of Components</value>
   </data>
 </root>

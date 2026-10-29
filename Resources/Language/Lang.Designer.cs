@@ -2172,11 +2172,29 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SCK.
+        /// </summary>
+        public static string Common_UI_SoCauKien {
+            get {
+                return ResourceManager.GetString("Common_UI_SoCauKien", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số Hiệu.
         /// </summary>
         public static string Common_UI_SoHieu {
             get {
                 return ResourceManager.GetString("Common_UI_SoHieu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SL.
+        /// </summary>
+        public static string Common_UI_SoLuong {
+            get {
+                return ResourceManager.GetString("Common_UI_SoLuong", resourceCulture);
             }
         }
         
@@ -2289,8 +2307,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vẽ Bảng Thống
-        ///Kê Thép.
+        ///   Looks up a localized string similar to Vẽ Bảng Thống Kê Thép.
         /// </summary>
         public static string Common_UI_VeBangThongKeThep {
             get {
@@ -3922,8 +3939,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chiều
-        ///Dài.
+        ///   Looks up a localized string similar to Chiều Dài.
         /// </summary>
         public static string QD_UI_ChieuDai {
             get {
@@ -5913,6 +5929,15 @@ namespace Tools.Resources.Language {
         public static string XLTKCT_UI_TinhDongDat {
             get {
                 return ResourceManager.GetString("XLTKCT_UI_TinhDongDat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xác Lập Thống Kê Cốt Thép.
+        /// </summary>
+        public static string XLTKCT_UI_XacLapThongKeCotThep {
+            get {
+                return ResourceManager.GetString("XLTKCT_UI_XacLapThongKeCotThep", resourceCulture);
             }
         }
         

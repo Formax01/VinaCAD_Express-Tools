@@ -793,7 +793,7 @@
     <value>番号付けルール:</value>
   </data>
   <data name="Common_UI_SHieu" xml:space="preserve">
-    <value>S.ヒイウ</value>
+    <value>モデル番号</value>
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>モデル番号</value>
@@ -832,7 +832,7 @@
     <value>ボードを描く</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
-    <value>鉄筋集計表を作成</value>
+    <value>鉄筋集計表の作成</value>
   </data>
   <data name="Common_UI_XacLap" xml:space="preserve">
     <value>設立</value>
@@ -1360,8 +1360,7 @@ CTカット</value>
     <value>形鋼集計表</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>午後
-ロング</value>
+    <value>長さ</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>スチール仕様</value>
@@ -2172,5 +2171,14 @@ CK</value>
   </data>
   <data name="TKCK_UI_CCao" xml:space="preserve">
     <value>身長</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>鉄筋集計を設定</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>量</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>部材数</value>
   </data>
 </root>
