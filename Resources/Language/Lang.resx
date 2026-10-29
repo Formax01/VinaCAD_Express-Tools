@@ -184,9 +184,6 @@
     <value>Nhập Size</value>
   </data>
   <data name="OC1_UI_NhapLengthL" xml:space="preserve">
-    <value>Nhập Length L</value>
-  </data>
-  <data name="OC1_UI_NhapLengthl" xml:space="preserve">
     <value>Nhập Length l</value>
   </data>
   <data name="OC1_HELPER_UI_ChonGocQuay" xml:space="preserve">
@@ -218,5 +215,11 @@
   </data>
   <data name="OC2_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
     <value>OC2: không thể tạo đối tượng; bản vẽ không bị thay đổi.</value>
+  </data>
+  <data name="OC1_UI_NhapGiaTri" xml:space="preserve">
+    <value>Nhập giá trị :</value>
+  </data>
+  <data name="OC1_UI_NhapLength" xml:space="preserve">
+    <value>Nhập Length l:</value>
   </data>
 </root>

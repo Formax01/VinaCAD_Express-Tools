@@ -1,41 +1,107 @@
-﻿using Teigha.DatabaseServices;
-using Teigha.Geometry;
+﻿
+using System;
 using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
-
+using PrLogTrackingSystem;
+using Teigha.Geometry;
 using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
-public class Bulon1Action
+namespace Tools.VinaCad.Action.Actions
 {
-    public void Execute()
+    public class Bulon1Action
     {
-        Document doc = Application.DocumentManager.MdiActiveDocument;
-        if (doc == null) return;
-        Editor ed = doc.Editor;
-        Database db = doc.Database;
+        private Document _doc;
+        private Editor _ed;
 
-        // PromptPointOptions optP = new PromptPointOptions("\nChọn điểm đặt: ");
-        PromptPointOptions optP = new PromptPointOptions(Lang.BULON1_UI_ChonDiemDat);
-        PromptPointResult resP = ed.GetPoint(optP);
-        if (resP.Status != PromptStatus.OK) return;
-
-        // PromptDoubleOptions optL = new PromptDoubleOptions("\nNhập L: ")
-        PromptDoubleOptions optL = new PromptDoubleOptions(Lang.BULON1_UI_NhapL)
+        public void Execute()
         {
-            AllowNegative = false,
-            AllowZero = false,
-            DefaultValue = 500,
-            UseDefaultValue = true
-        };
-        PromptDoubleResult resL = ed.GetDouble(optL);
-        if (resL.Status != PromptStatus.OK) return;
+            try
+            {
+                UpdateCurrentDocument();
+                if (_doc == null)
+                    return;
 
-        // B3: vẽ
-        Point3d origin = resP.Value.TransformBy(ed.CurrentUserCoordinateSystem);
-        if (!Bulon1Helper.PlaceWithJig(doc, resL.Value, origin))
-            return;
-        ed.Regen();
+                // B1: Chọn điểm đặt
+                if (!TryGetStartPoint(out Point3d origin))
+                    return;
+
+                // B2: Nhập chiều dài L
+                if (!TryGetLength(out double length))
+                    return;
+
+                // B3: Vẽ bu lông bằng Jig
+                if (!Bulon1Helper.PlaceWithJig(_doc, length, origin))
+                    return;
+
+                Finish();
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(nameof(Bulon1Action), ex);
+                throw;
+            }
+        }
+
+        private void UpdateCurrentDocument()
+        {
+            _doc = Application.DocumentManager.MdiActiveDocument;
+            if (_doc == null)
+                return;
+
+            _ed = _doc.Editor;
+        }
+
+        // ---------- Các bước nhập ----------
+
+        private bool TryGetStartPoint(out Point3d origin)
+        {
+            PromptPointOptions options =
+                new PromptPointOptions(Lang.BULON1_UI_ChonDiemDat);
+
+            PromptPointResult result = _ed.GetPoint(options);
+
+            if (result.Status != PromptStatus.OK)
+            {
+                origin = Point3d.Origin;
+                return false;
+            }
+
+            origin = result.Value.TransformBy(
+                _ed.CurrentUserCoordinateSystem);
+
+            return true;
+        }
+
+        private bool TryGetLength(out double length)
+        {
+            PromptDoubleOptions options =
+                new PromptDoubleOptions(Lang.BULON1_UI_NhapL)
+                {
+                    AllowNegative = false,
+                    AllowZero = false,
+                    DefaultValue = 500,
+                    UseDefaultValue = true
+                };
+
+            PromptDoubleResult result = _ed.GetDouble(options);
+
+            if (result.Status != PromptStatus.OK)
+            {
+                length = 0;
+                return false;
+            }
+
+            length = result.Value;
+            return true;
+        }
+
+        // ---------- Kết thúc ----------
+
+        private void Finish()
+        {
+            _ed.Regen();
+        }
     }
 }

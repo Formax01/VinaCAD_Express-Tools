@@ -1,119 +1,198 @@
-﻿using Prima.VinaCAD.ApplicationServices;
-using Prima.VinaCAD.EditorInput;
+﻿
+using System;
 using System.Collections.Generic;
+using Prima.VinaCAD.ApplicationServices;
+using Prima.VinaCAD.EditorInput;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using PrLogTrackingSystem;
 using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Action.Actions
 {
-
     public class OC1Action
     {
         private const double DEFAULT_SIZE = 800;
         private const double DEFAULT_L = 600;
         private const double DEFAULT_l = 400;
 
+        private Document _doc;
+        private Editor _ed;
+        private Database _db;
+        private Matrix3d _ucs;
+
         public void Execute()
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-
-            if (doc == null)
-                return;
-
-            Editor ed = doc.Editor;
-            Database db = doc.Database;
-
-            // PromptPointOptions pointOpt = new PromptPointOptions("\nChọn điểm: ");
-            PromptPointOptions pointOpt = new PromptPointOptions(Lang.OC1_UI_ChonDiem);
-            PromptPointResult pointRes = ed.GetPoint(pointOpt);
-
-            if (pointRes.Status != PromptStatus.OK)
-                return;
-
-            // B3, B4, B5: nhập số liệu
-            if (!TryGetDouble(ed, Lang.OC1_UI_NhapSize, DEFAULT_SIZE, out double size))
-                return;
-
-            if (!TryGetDouble(ed, Lang.OC1_UI_NhapLengthL, DEFAULT_L, out double length))
-                return;
-
-            if (!TryGetDouble(ed, Lang.OC1_UI_NhapLengthl, DEFAULT_l, out double depth))
-                return;
-
-            if (depth > length)
+            try
             {
-                // ed.WriteMessage("\nOC1: l phải nhỏ hơn hoặc bằng L.");
-                ed.WriteMessage(Lang.OC1_MessDialog_LNhoHonHoacBangL);
-                return;
+                UpdateCurrentDocument();
+
+                if (_doc == null)
+                    return;
+
+                // B1: Chọn điểm đặt OC1
+                if (!TryGetStartPoint(out Point3d origin))
+                    return;
+
+                // B2: Nhập kích thước Size
+                if (!TryGetDouble(
+                    Lang.OC1_UI_NhapSize,
+                    DEFAULT_SIZE,
+                    out double size))
+                    return;
+
+                // B3: Nhập chiều dài L
+                if (!TryGetDouble(
+                    Lang.OC1_UI_NhapLengthL,
+                    DEFAULT_L,
+                    out double length))
+                    return;
+
+                // B4: Nhập chiều sâu l
+                if (!TryGetDouble(
+                    Lang.OC1_UI_NhapLength,
+                    DEFAULT_l,
+                    out double depth))
+                    return;
+
+                // B5: Kiểm tra điều kiện hình học
+                if (depth > length)
+                {
+                    _ed.WriteMessage(
+                        Lang.OC1_MessDialog_LNhoHonHoacBangL);
+                    return;
+                }
+
+                // B6: Tạo dữ liệu hình học và chạy Jig
+                List<OC1Segment> segments =
+                    OC1Helper.BuildSegments(size, length, depth);
+
+                OC1Helper.OC1Jig jig =
+                    new OC1Helper.OC1Jig(origin, _ucs, segments);
+
+                PromptResult dragResult = _ed.Drag(jig);
+
+                if (dragResult.Status != PromptStatus.OK)
+                    return;
+
+                // B7: Tạo dữ liệu đầu vào để vẽ
+                OC1Input input = new OC1Input
+                {
+                    Origin = origin,
+                    Size = size,
+                    Length = length,
+                    Depth = depth,
+                    Angle = jig.Angle
+                };
+
+                // B8: Ghi các đối tượng vào bản vẽ
+                int created = OC1Helper.Create(_db, _ucs, input);
+
+                Finish(created);
             }
-
-            // Điểm prompt và góc jig được giữ trong UCS; OC1Helper thực hiện một phép
-            // quy đổi duy nhất sang WCS cho cả preview lẫn entity được ghi.
-            Matrix3d ucs = ed.CurrentUserCoordinateSystem;
-            Point3d origin = pointRes.Value;
-
-            List<OC1Segment> segments = OC1Helper.BuildSegments(size, length, depth);
-            OC1Helper.OC1Jig jig = new OC1Helper.OC1Jig(origin, ucs, segments);
-
-            PromptResult dragRes = ed.Drag(jig);
-
-            if (dragRes.Status != PromptStatus.OK)
-                return;
-
-            // B7: vẽ hình
-            OC1Input input = new OC1Input
+            catch (Exception ex)
             {
-                Origin = origin,
-                Size = size,
-                Length = length,
-                Depth = depth,
-                Angle = jig.Angle
-            };
-
-            int created = OC1Helper.Create(db, ucs, input);
-
-            if (created > 0)
-            {
-                ed.Regen();
-                // ed.WriteMessage($"\nOC1: đã tạo {created} đối tượng.");
-                ed.WriteMessage(string.Format(Lang.OC1_MessDialog_DaTaoDoiTuong, created));
-            }
-            else
-            {
-                ed.WriteMessage(Lang.OC1_MessDialog_KhongTheTaoDoiTuong);
+                Logger.Info(nameof(OC1Action), ex);
+                throw;
             }
         }
 
-        private static bool TryGetDouble(Editor ed, string message, double defaultValue, out double value)
+        /// <summary>
+        /// Lấy Document, Editor, Database và UCS hiện tại.
+        /// </summary>
+        private void UpdateCurrentDocument()
+        {
+            _doc = Application.DocumentManager.MdiActiveDocument;
+
+            if (_doc == null)
+                return;
+
+            _ed = _doc.Editor;
+            _db = _doc.Database;
+            _ucs = _ed.CurrentUserCoordinateSystem;
+        }
+
+        /// <summary>
+        /// Yêu cầu người dùng chọn điểm đặt.
+        /// Giữ nguyên tọa độ điểm trong UCS để OC1Helper xử lý chuyển đổi.
+        /// </summary>
+        private bool TryGetStartPoint(out Point3d origin)
+        {
+            PromptPointOptions options =
+                new PromptPointOptions(Lang.OC1_UI_ChonDiem);
+
+            PromptPointResult result = _ed.GetPoint(options);
+
+            if (result.Status != PromptStatus.OK)
+            {
+                origin = Point3d.Origin;
+                return false;
+            }
+
+            origin = result.Value;
+            return true;
+        }
+
+        /// <summary>
+        /// Nhập một giá trị dương, cho phép nhấn Enter để dùng giá trị mặc định.
+        /// </summary>
+        private bool TryGetDouble(
+            string message,
+            double defaultValue,
+            out double value)
         {
             value = defaultValue;
 
-            if (ed == null)
+            if (_ed == null)
                 return false;
 
             if (string.IsNullOrWhiteSpace(message))
-                message = "\nNhập giá trị";
+                message = Lang.OC1_UI_NhapGiaTri;
 
-            PromptDoubleOptions opt = new PromptDoubleOptions($"{message} <{defaultValue}>: ")
-            {
-                AllowNegative = false,
-                AllowZero = false,
-                AllowNone = true          // Enter = lấy giá trị mặc định
-            };
+            PromptDoubleOptions options =
+                new PromptDoubleOptions(
+                    $"{message} <{defaultValue}>: ")
+                {
+                    AllowNegative = false,
+                    AllowZero = false,
+                    AllowNone = true
+                };
 
-            PromptDoubleResult res = ed.GetDouble(opt);
+            PromptDoubleResult result = _ed.GetDouble(options);
 
-            if (res.Status == PromptStatus.None)
-                return true;              // Enter -> giữ defaultValue
+            // Nhấn Enter: sử dụng giá trị mặc định.
+            if (result.Status == PromptStatus.None)
+                return true;
 
-            if (res.Status != PromptStatus.OK)
+            if (result.Status != PromptStatus.OK)
                 return false;
 
-            value = res.Value;
+            value = result.Value;
+
             return double.IsFinite(value) && value > 0;
+        }
+
+        /// <summary>
+        /// Hoàn tất sau khi OC1Helper xử lý tạo đối tượng.
+        /// </summary>
+        private void Finish(int created)
+        {
+            if (created > 0)
+            {
+                _ed.Regen();
+
+                _ed.WriteMessage(
+                    string.Format(
+                        Lang.OC1_MessDialog_DaTaoDoiTuong,
+                        created));
+            }
+            else
+            {
+                _ed.WriteMessage(
+                    Lang.OC1_MessDialog_KhongTheTaoDoiTuong);
+            }
         }
     }
 }

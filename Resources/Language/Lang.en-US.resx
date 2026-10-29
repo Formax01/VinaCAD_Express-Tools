@@ -184,9 +184,6 @@
     <value>Enter Size</value>
   </data>
   <data name="OC1_UI_NhapLengthL" xml:space="preserve">
-    <value>Enter Length L</value>
-  </data>
-  <data name="OC1_UI_NhapLengthl" xml:space="preserve">
     <value>Enter Length l</value>
   </data>
   <data name="OC1_HELPER_UI_ChonGocQuay" xml:space="preserve">
@@ -218,5 +215,11 @@
   </data>
   <data name="OC2_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
     <value>OC2: could not create object; drawing unchanged.</value>
+  </data>
+  <data name="OC1_UI_NhapGiaTri" xml:space="preserve">
+    <value>Enter value :</value>
+  </data>
+  <data name="OC1_UI_NhapLength" xml:space="preserve">
+    <value>Enter Length l:</value>
   </data>
 </root>
