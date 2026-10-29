@@ -6,7 +6,7 @@ using Teigha.GraphicsInterface;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
-
+using Lang = Tools.Resources.Language.Lang;
 namespace Tools.VinaCad.Helper
 {
     public class DuctPlacementJig : DrawJig
@@ -31,7 +31,7 @@ namespace Tools.VinaCad.Helper
         {
             JigPromptPointOptions opts =
                 new JigPromptPointOptions(
-                    "\nChọn hướng đặt ống gió: ")
+                    Lang.B1_UI_ChonHuongDatOngGio)
                 {
                     BasePoint = _model.StartPoint,
                     UseBasePoint = true,

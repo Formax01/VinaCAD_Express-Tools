@@ -117,6 +117,318 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe" xml:space="preserve">
+    <value>Chiều dài không hợp lệ. Hãy nhập số dương.</value>
+  </data>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe1" xml:space="preserve">
+    <value>Chiều dài không hợp lệ. Hãy nhập số dương.</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio" xml:space="preserve">
+    <value>Đã vẽ ống gió {0} x {1}.</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio1" xml:space="preserve">
+    <value>Đã vẽ ống gió {0} x {1}.</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>Điểm 2 trùng điểm 1.</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>Điểm 2 trùng điểm 1.</value>
+  </data>
+  <data name="B1_UI_ChonCachVe" xml:space="preserve">
+    <value>Chọn cách vẽ [Nhập/Điểm]:</value>
+  </data>
+  <data name="B1_UI_ChonCachVe1" xml:space="preserve">
+    <value>Chọn cách vẽ [Nhập/Điểm]:</value>
+  </data>
+  <data name="B1_UI_ChonDiem2" xml:space="preserve">
+    <value>Chọn điểm 2 để xác định chiều dài và hướng cạnh:</value>
+  </data>
+  <data name="B1_UI_ChonDiem3" xml:space="preserve">
+    <value>Chọn điểm 2 để xác định chiều dài và hướng cạnh:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio" xml:space="preserve">
+    <value>Chọn điểm bắt đầu ống gió:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio1" xml:space="preserve">
+    <value>Chọn điểm bắt đầu ống gió:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio" xml:space="preserve">
+    <value>Chọn hướng đặt ống gió:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio1" xml:space="preserve">
+    <value>Chọn hướng đặt ống gió:</value>
+  </data>
+  <data name="B1_UI_KeywordDiem" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="B1_UI_KeywordDiem1" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="B1_UI_KeywordNhap" xml:space="preserve">
+    <value>Nhập:</value>
+  </data>
+  <data name="B1_UI_KeywordNhap1" xml:space="preserve">
+    <value>Nhập:</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio" xml:space="preserve">
+    <value>Nhập chiều dài ống gió:</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio1" xml:space="preserve">
+    <value>Nhập chiều dài ống gió:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió:</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon" xml:space="preserve">
+    <value>Đã vẽ ống lượn: rộng {0} / {1}, lượn {2}, L = {3}.</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon1" xml:space="preserve">
+    <value>Đã vẽ ống lượn: rộng {0} / {1}, lượn {2}, L = {3}.</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>L quá ngắn, cần tối thiểu {0}.</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>L quá ngắn, cần tối thiểu {0}.</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon" xml:space="preserve">
+    <value>Chọn chiều lượn [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>Chọn chiều lượn [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai1" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai1" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>Nhập cao độ lượn của ống gió:</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>Nhập cao độ lượn của ống gió:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Nhập chiều dài L cho chi tiết (tối thiểu {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Nhập chiều dài L cho chi tiết (tối thiểu {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu1" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió thứ 1:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu3" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió thứ 1:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu2" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió thứ 2 (Enter nếu giống ống 1):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu4" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió thứ 2 (Enter nếu giống ống 1):</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay" xml:space="preserve">
+    <value>Đã vẽ gót giày: cao {0}, cạnh bé {1}, cạnh đáy {2}.</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay1" xml:space="preserve">
+    <value>Đã vẽ gót giày: cao {0}, cạnh bé {1}, cạnh đáy {2}.</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay" xml:space="preserve">
+    <value>Chọn bên đặt cạnh đáy [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay1" xml:space="preserve">
+    <value>Chọn bên đặt cạnh đáy [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay" xml:space="preserve">
+    <value>Chọn điểm đặt gót giày:</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay1" xml:space="preserve">
+    <value>Chọn điểm đặt gót giày:</value>
+  </data>
+  <data name="B3_UI_KeywordPhai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="B3_UI_KeywordPhai1" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="B3_UI_KeywordTrai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="B3_UI_KeywordTrai1" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe" xml:space="preserve">
+    <value>Nhập cạnh bé:</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe1" xml:space="preserve">
+    <value>Nhập cạnh bé:</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay" xml:space="preserve">
+    <value>Nhập cạnh đáy (Enter để tự tính):</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay1" xml:space="preserve">
+    <value>Nhập cạnh đáy (Enter để tự tính):</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao" xml:space="preserve">
+    <value>Nhập chiều cao:</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao1" xml:space="preserve">
+    <value>Nhập chiều cao:</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon" xml:space="preserve">
+    <value>Đầu nhỏ phải nhỏ hơn đầu lớn.</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon1" xml:space="preserve">
+    <value>Đầu nhỏ phải nhỏ hơn đầu lớn.</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron" xml:space="preserve">
+    <value>Đã vẽ chi tiết vuông ra tròn: đầu lớn {0}, đầu nhỏ {1}, L = {2}.</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron1" xml:space="preserve">
+    <value>Đã vẽ chi tiết vuông ra tròn: đầu lớn {0}, đầu nhỏ {1}, L = {2}.</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>Điểm 2 trùng điểm 1.</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>Điểm 2 trùng điểm 1.</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon" xml:space="preserve">
+    <value>Chọn điểm 2 của đầu lớn:</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon1" xml:space="preserve">
+    <value>Chọn điểm 2 của đầu lớn:</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="B4_UI_KeywordLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="B4_UI_KeywordLength1" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="B4_UI_KeywordPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B4_UI_KeywordPoint1" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Nhập chiều dài L (Enter để tự tính):</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Nhập chiều dài L (Enter để tự tính):</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon" xml:space="preserve">
+    <value>Nhập kích thước đầu lớn:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon1" xml:space="preserve">
+    <value>Nhập kích thước đầu lớn:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang" xml:space="preserve">
+    <value>Nhập kích thước đầu lớn bằng [Point/Length] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang1" xml:space="preserve">
+    <value>Nhập kích thước đầu lớn bằng [Point/Length] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho" xml:space="preserve">
+    <value>Nhập kích thước đầu nhỏ:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho1" xml:space="preserve">
+    <value>Nhập kích thước đầu nhỏ:</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut" xml:space="preserve">
+    <value>2 cút</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut1" xml:space="preserve">
+    <value>2 cút</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang" xml:space="preserve">
+    <value>2 cút + ống thẳng {0}</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang1" xml:space="preserve">
+    <value>2 cút + ống thẳng {0}</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ" xml:space="preserve">
+    <value>Đã vẽ ống chữ Z ({0}): rộng {1}, lượn {2}, L = {3}, góc cút {4}°, R tim {5}.</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ1" xml:space="preserve">
+    <value>Đã vẽ ống chữ Z ({0}): rộng {1}, lượn {2}, L = {3}, góc cút {4}°, R tim {5}.</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc" xml:space="preserve">
+    <value>Không vẽ được với các thông số này.</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc1" xml:space="preserve">
+    <value>Không vẽ được với các thông số này.</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>L quá ngắn, cần tối thiểu {0}.</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>L quá ngắn, cần tối thiểu {0}.</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon" xml:space="preserve">
+    <value>Chọn chiều lượn [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>Chọn chiều lượn [Trái/Phải] &lt;Trái&gt;:</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Chọn điểm đặt :</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai1" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai1" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>Nhập cao độ lượn của ống gió:</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>Nhập cao độ lượn của ống gió:</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Nhập chiều dài L cho chi tiết (tối thiểu {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Nhập chiều dài L cho chi tiết (tối thiểu {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió:</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>Nhập chiều rộng ống gió:</value>
+  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>Không tìm thấy text chứa</value>
   </data>
@@ -146,5 +458,125 @@
   </data>
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Đã chuyển ngôn ngữ sang {0}.</value>
+  </data>
+  <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>Chọn điểm bắt đầu chi tiết giảm:</value>
+  </data>
+  <data name="B2_UI_ChonDiemBatDau1" xml:space="preserve">
+    <value>Chọn điểm bắt đầu chi tiết giảm:</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth1" xml:space="preserve">
+    <value>Chọn cách xác định Width1</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth2" xml:space="preserve">
+    <value>Chọn cách xác định Width1</value>
+  </data>
+  <data name="B2_UI_KeywordDiem" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="B2_UI_KeywordDiem1" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="B2_UI_KeywordNhap" xml:space="preserve">
+    <value>Nhập</value>
+  </data>
+  <data name="B2_UI_KeywordNhap1" xml:space="preserve">
+    <value>Nhập</value>
+  </data>
+  <data name="B2_UI_NhapWidth1" xml:space="preserve">
+    <value>Nhập Width1:</value>
+  </data>
+  <data name="B2_UI_NhapWidth2" xml:space="preserve">
+    <value>Nhập Width1:</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth1" xml:space="preserve">
+    <value>Chọn điểm 2 để lấy Width1:</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth2" xml:space="preserve">
+    <value>Chọn điểm 2 để lấy Width1:</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL" xml:space="preserve">
+    <value>Nhập chiều cao L:</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL1" xml:space="preserve">
+    <value>Nhập chiều cao L:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo2" xml:space="preserve">
+    <value>Nhập giá trị đầu số 2:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo3" xml:space="preserve">
+    <value>Nhập giá trị đầu số 2:</value>
+  </data>
+  <data name="B2_UI_ChonChieu" xml:space="preserve">
+    <value>Chọn chiều</value>
+  </data>
+  <data name="B2_UI_ChonChieu1" xml:space="preserve">
+    <value>Chọn chiều</value>
+  </data>
+  <data name="B2_UI_KeywordGiua" xml:space="preserve">
+    <value>Giữa</value>
+  </data>
+  <data name="B2_UI_KeywordGiua1" xml:space="preserve">
+    <value>Giữa</value>
+  </data>
+  <data name="B2_UI_KeywordTrai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="B2_UI_KeywordTrai1" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="B2_UI_KeywordPhai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="B2_UI_KeywordPhai1" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>Giá trị phải lớn hơn 0. Vui lòng nhập lại hoặc chọn điểm khác.</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon1" xml:space="preserve">
+    <value>Giá trị phải lớn hơn 0. Vui lòng nhập lại hoặc chọn điểm khác.</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau" xml:space="preserve">
+    <value>Điểm 2 phải khác điểm bắt đầu. Vui lòng chọn lại.</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau1" xml:space="preserve">
+    <value>Điểm 2 phải khác điểm bắt đầu. Vui lòng chọn lại.</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam" xml:space="preserve">
+    <value>Đã vẽ chi tiết giảm dài {0}, kích thước {1} → {2}.</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam1" xml:space="preserve">
+    <value>Đã vẽ chi tiết giảm dài {0}, kích thước {1} → {2}.</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong" xml:space="preserve">
+    <value>Kéo vuông góc và click, hoặc nhập chiều rộng:</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong1" xml:space="preserve">
+    <value>Kéo vuông góc và click, hoặc nhập chiều rộng:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong" xml:space="preserve">
+    <value>Chọn hướng:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong1" xml:space="preserve">
+    <value>Chọn hướng:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet" xml:space="preserve">
+    <value>Chọn hướng cho chi tiết [Flip]:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet1" xml:space="preserve">
+    <value>Chọn hướng cho chi tiết [Flip]:</value>
+  </data>
+  <data name="B3_UI_KeywordFlip" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="B3_UI_KeywordFlip1" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam" xml:space="preserve">
+    <value>Chọn hướng cho chi tiết giảm:</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam1" xml:space="preserve">
+    <value>Chọn hướng cho chi tiết giảm:</value>
   </data>
 </root>

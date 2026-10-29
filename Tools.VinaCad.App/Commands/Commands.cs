@@ -34,21 +34,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        //[CommandMethod("CPD")]
-        //public void CopyElevation()
-        //{
-        //    try
-        //    {
-        //        CopyElevationAction action = new CopyElevationAction();
-        //        action.Execute();
-
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
-        //    }
-        //}
+       
         
 
 
@@ -72,12 +58,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new DrawDuctAction().Execute();
+                DrawDuctAction action = new DrawDuctAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawDuctCommand), ex);
             }
         }
         [CommandMethod("B2")]
@@ -85,12 +72,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new ReducerAction().Execute();
+                ReducerAction action = new ReducerAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ReducerCommand), ex);
             }
         }
         [CommandMethod("B3")]
@@ -121,6 +109,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawSquareToRoundCommand), ex);
             }
         }
+
         [CommandMethod("BZ")]
         public void DrawOffsetDuctCommand()
         {
@@ -135,6 +124,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawOffsetDuctCommand), ex);
             }
         }
+
         [CommandMethod("BZ2")]
         public void DrawZElbowDuctCommand()
         {

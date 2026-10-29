@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 
 namespace Tools.VinaCad.Helper
@@ -29,7 +30,7 @@ namespace Tools.VinaCad.Helper
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             JigPromptPointOptions opts = new JigPromptPointOptions(
-    "\nKéo vuông góc và click, hoặc nhập chiều rộng: ")
+    Lang.B1_UI_KeoVuongGocVaClickHoacNhapChieuRong)
             {
                 BasePoint = _p2,
                 UseBasePoint = true,

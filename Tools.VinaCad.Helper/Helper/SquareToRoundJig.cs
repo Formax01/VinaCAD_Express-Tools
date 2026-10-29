@@ -2,6 +2,7 @@
 using System;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -26,7 +27,7 @@ namespace Tools.VinaCad.Helper
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             JigPromptPointOptions opts = new JigPromptPointOptions(
-                "\nChọn hướng cho chi tiết giảm: ")
+                Lang.B4_UI_ChonHuongChoChiTietGiam)
             {
                 BasePoint = _model.StartPoint,
                 UseBasePoint = true,

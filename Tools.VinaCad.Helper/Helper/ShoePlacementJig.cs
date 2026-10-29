@@ -2,6 +2,7 @@
 using System;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -37,7 +38,8 @@ namespace Tools.VinaCad.Helper
                 Cursor = CursorType.RubberBand
             };
             opts.SetMessageAndKeywords(
-                "\nChọn hướng cho chi tiết [Flip]: ", "Flip");
+    Lang.B3_UI_ChonHuongChoChiTiet,
+    Lang.B3_UI_KeywordFlip);
 
             PromptPointResult res = prompts.AcquirePoint(opts);
 

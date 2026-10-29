@@ -153,29 +153,78 @@ namespace Tools.VinaCad.Helper.Helper
             DuctHelper.EnsureLayer(database, transaction, layer);
             BlockTableRecord modelSpace = DuctHelper.GetModelSpace(database, transaction);
 
+
             var polyline = new Polyline();
-            for (int index = 0; index < shape.Vertices.Length; index++)
+
+            // Danh sách đỉnh mới, bao gồm cả đường bao và đường cắt.
+            // Mỗi phần tử gồm tọa độ đỉnh và bulge của đoạn đi tiếp theo.
+            var path = new List<(Point3d Point, double Bulge)>();
+
+            for (int i = 0; i < shape.Vertices.Length; i++)
             {
-                Point3d vertex = shape.Vertices[index];
-                polyline.AddVertexAt(index, new Point2d(vertex.X, vertex.Y), shape.Bulges[index], 0, 0);
+                Point3d vertex = shape.Vertices[i];
+                double originalBulge = shape.Bulges[i];
+
+                // Tìm đường cắt bắt đầu tại đỉnh hiện tại.
+                Point3d[]? cutLine = null;
+
+                foreach (Point3d[] candidate in shape.CutLines)
+                {
+                    if (candidate.Length < 2)
+                        continue;
+
+                    if (vertex.DistanceTo(candidate[0]) < 1e-6)
+                    {
+                        cutLine = candidate;
+                        break;
+                    }
+                }
+
+                if (cutLine == null)
+                {
+                    // Đỉnh bình thường: giữ nguyên hình học.
+                    path.Add((vertex, originalBulge));
+                }
+                else
+                {
+                    // 1. Đi từ đỉnh đường bao đến đầu đường cắt.
+                    // Tạm đặt bulge = 0 để đoạn này là đường thẳng.
+                    path.Add((vertex, 0));
+
+                    // 2. Đi dọc đường cắt đến đầu bên kia.
+                    path.Add((cutLine[1], 0));
+
+                    // 3. Quay ngược về đỉnh ban đầu.
+                    // Đoạn quay về cũng là đường thẳng.
+                    path.Add((vertex, originalBulge));
+                }
+            }
+
+            // Đưa toàn bộ các đỉnh vào cùng một Polyline.
+            for (int i = 0; i < path.Count; i++)
+            {
+                Point3d point = path[i].Point;
+
+                polyline.AddVertexAt(
+                    i,
+                    new Point2d(point.X, point.Y),
+                    path[i].Bulge,
+                    0,
+                    0);
             }
 
             polyline.Closed = true;
             polyline.Elevation = shape.Vertices[0].Z;
             polyline.Layer = layer;
             polyline.TransformBy(ucsToWcs);
+
             modelSpace.AppendEntity(polyline);
             transaction.AddNewlyCreatedDBObject(polyline, true);
 
-            foreach (Point3d[] cutLine in shape.CutLines)
-            {
-                var line = new Line(cutLine[0], cutLine[1]) { Layer = layer };
-                line.TransformBy(ucsToWcs);
-                modelSpace.AppendEntity(line);
-                transaction.AddNewlyCreatedDBObject(line, true);
-            }
+            // Không tạo thêm Line riêng từ shape.CutLines.
 
             transaction.Commit();
+
         }
 
         private static bool TryGetLayout(
