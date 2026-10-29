@@ -2088,7 +2088,7 @@ CK</value>
     <value>ZXWはキャンセルされました。図面は変わりません。</value>
   </data>
   <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
-    <value>ZXW は、メッシュ {input.Breadths.Count + 1} x {input.Depths.Count + 1} 軸 ({entityCount} オブジェクト) を作成しました。</value>
+    <value>ZXWは {input.Breadths.Count + 1} x {input.Depths.Count + 1} のグリッド軸を作成しました（オブジェクト数: {entityCount}）。</value>
   </data>
   <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
     <value>ZXW エラー: {ex.Message}</value>
@@ -2137,7 +2137,7 @@ CK</value>
     <value>ラベルの位置が無効です。</value>
   </data>
   <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
-    <value>工場出荷時の設定値</value>
+    <value>既定値に戻す</value>
   </data>
   <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
     <value>軸グリッドの設定</value>
@@ -2261,5 +2261,14 @@ CK</value>
   </data>
   <data name="WWT_UI_DongY" xml:space="preserve">
     <value>確定</value>
+  </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve">
+    <value>奥行き</value>
   </data>
 </root>
