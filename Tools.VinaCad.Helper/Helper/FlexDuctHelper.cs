@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -95,12 +96,12 @@ namespace Tools.VinaCad.Helper.Helper
             int n = (int)Math.Round(body / pitch);
             if (n < 1)
             {
-                warnings.Add("Đường tâm quá ngắn so với hai đầu ống, bỏ phần đầu ống.");
+                warnings.Add(Lang.FlexDuct_Warning_DuongTamQuaNganHaiDau);
                 startEnd = endEnd = FlexDuctEnd.Flat;
                 startDepth = endDepth = 0;
                 body = totalLength;
                 n = (int)Math.Round(body / pitch);
-                if (n < 1) return (0, string.Empty, "Đường tâm quá ngắn để vẽ ống.");
+                if (n < 1) return (0, string.Empty, Lang.FlexDuct_Warning_DuongTamQuaNganVeOng);
             }
             pitch = body / n;  
 
@@ -319,9 +320,9 @@ namespace Tools.VinaCad.Helper.Helper
                 double r = t / tanHalf;
 
                 if (r < radius - 1e-6)
-                    warnings.Add($"Góc {i}: đoạn ngắn, bán kính bo giảm còn {r:0.##}");
+                    warnings.Add(Lang.FlexDuct_Warning_GocDoanNgan.Replace("{i}", i.ToString()).Replace("{r:0.##}", r.ToString("0.##")));
                 if (r <= halfWidth)
-                    warnings.Add($"Góc {i}: bán kính {r:0.##} <= D/2, mép trong bị gấp");
+                    warnings.Add(Lang.FlexDuct_Warning_GocBanKinh.Replace("{i}", i.ToString()).Replace("{r:0.##}", r.ToString("0.##")));
 
                 Point2d t1 = p1 - uin * t;
                 Point2d t2 = p1 + uout * t;

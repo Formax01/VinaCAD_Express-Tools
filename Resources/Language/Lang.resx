@@ -2214,4 +2214,20 @@ trục</value>
   <data name="ZXW_Field_ChieuRong" xml:space="preserve"><value>Chiều rộng</value></data>
   <data name="ZXW_Field_ChieuSau" xml:space="preserve"><value>Chiều sâu</value></data>
   <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve"><value>Chiều cao cổ bậc hiện tại: {0:0.####}</value></data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve"><value>Đường kính ống mềm &lt;{diameter}&gt;:</value></data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve"><value>Chọn cách lấy đường tâm [Vẽ/Chọn] &lt;Vẽ&gt;:</value></data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve"><value>Vẽ</value></data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve"><value>Chọn</value></data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve"><value>Không thể vẽ ống với đường tâm đã chọn.</value></data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve"><value>[Cảnh báo] {warning}</value></data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve"><value>{commandName}: đã vẽ {count} đối tượng trong nhóm {groupName}.</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve"><value>Chọn điểm đầu đường tâm:</value></data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve"><value>Chọn điểm tiếp theo &lt;Enter kết thúc&gt;:</value></data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve"><value>Chọn Line/Polyline đường tâm:</value></data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve"><value>Chỉ nhận Line hoặc Polyline.</value></data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve"><value>Không xóa được đường tâm gốc: {ex.Message}</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve"><value>Đường tâm quá ngắn so với hai đầu ống, bỏ phần đầu ống.</value></data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>Đường tâm quá ngắn để vẽ ống.</value></data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>Góc {i}: đoạn ngắn, bán kính bo giảm còn {r:0.##}</value></data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>Góc {i}: bán kính {r:0.##} ≤ D/2, mép trong bị gấp</value></data>
 </root>
