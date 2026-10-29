@@ -1664,16 +1664,16 @@ CK</value>
     <value>描画スケールを設定する</value>
   </data>
   <data name="TW_Drawing_KhoangHo" xml:space="preserve">
-    <value>{summary.HealedGapCount} クリアランス</value>
+    <value>隙間 {summary.HealedGapCount} 箇所を修復しました。</value>
   </data>
   <data name="TW_Msg_LoiTw" xml:space="preserve">
     <value>エラー TW: {ex.Message}</value>
   </data>
   <data name="TW_Output_DaSuaLine" xml:space="preserve">
-    <value>{summary.ChangedLineCount} 行を修正しました。</value>
+    <value>線 {summary.ChangedLineCount} 本を修復し、</value>
   </data>
   <data name="TW_Output_GiaoTuong" xml:space="preserve">
-    <value>{summary.JunctionCount} が壁に届けられ、</value>
+    <value>壁の交差部 {summary.JunctionCount} 箇所、</value>
   </data>
   <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
     <value>選択範囲内に有効な壁ストロークのペアが見つかりませんでした。</value>
@@ -1721,7 +1721,7 @@ CK</value>
     <value>選択時: 右揃え。</value>
   </data>
   <data name="WW_Output_DaChonCanTam" xml:space="preserve">
-    <value>選択: カンタム。</value>
+    <value>選択: 中央揃え。</value>
   </data>
   <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
     <value>選択時: 左揃え。</value>
@@ -1733,7 +1733,7 @@ CK</value>
     <value>{wallPoints.Count - 1} の壁セグメントを描画しました。</value>
   </data>
   <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
-    <value>ウォールボードエラー: {ex.Message}</value>
+    <value>壁端の閉鎖エラー: {ex.Message}</value>
   </data>
   <data name="WW_Output_LoiVeTuong" xml:space="preserve">
     <value>壁の描画エラー: {ex.Message}</value>
@@ -1742,7 +1742,7 @@ CK</value>
     <value>選択が無効です。現在の位置合わせを維持します。</value>
   </data>
   <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
-    <value>WW: D = 壁画 | T = 厚さ | A = 位置合わせ | Q = やめてください。</value>
+    <value>WW: D = 壁を作図 | T = 厚さ | A = 位置合わせ | Q = 終了。</value>
   </data>
   <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
     <value>壁の位置合わせ [1=中央 / 2=左 / 3=右] &lt;1&gt;:</value>
@@ -2193,4 +2193,9 @@ CK</value>
   <data name="Common_UI_SoCauKien" xml:space="preserve">
     <value>部材数</value>
   </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve"><value>壁線の作成エラー: {ex.Message}</value></data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve"><value>交点の検索エラー: {ex.Message}</value></data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>交点の処理エラー: {ex.Message}</value></data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>壁端の閉鎖エラー: {ex.Message}</value></data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>古い壁端の閉鎖線の削除エラー: {ex.Message}</value></data>
 </root>

@@ -2186,4 +2186,9 @@ trục</value>
   <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
     <value>Xác Lập Thống Kê Cốt Thép</value>
   </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve"><value>Lỗi tạo nét tường: {ex.Message}</value></data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve"><value>Lỗi tìm giao điểm: {ex.Message}</value></data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>Lỗi xử lý giao điểm: {ex.Message}</value></data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>Lỗi bịt đầu tường: {ex.Message}</value></data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>Lỗi xóa nét bịt đầu tường cũ: {ex.Message}</value></data>
 </root>

@@ -6238,5 +6238,10 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
+        public static string WW_Error_TaoNetTuong { get { return ResourceManager.GetString("WW_Error_TaoNetTuong", resourceCulture); } }
+        public static string WW_Error_TimGiaoDiem { get { return ResourceManager.GetString("WW_Error_TimGiaoDiem", resourceCulture); } }
+        public static string WW_Error_XuLyGiaoDiem { get { return ResourceManager.GetString("WW_Error_XuLyGiaoDiem", resourceCulture); } }
+        public static string WW_Error_BitDauTuong { get { return ResourceManager.GetString("WW_Error_BitDauTuong", resourceCulture); } }
+        public static string WW_Error_XoaNetBitCu { get { return ResourceManager.GetString("WW_Error_XoaNetBitCu", resourceCulture); } }
     }
 }

@@ -1664,16 +1664,16 @@ CK</value>
     <value>Set the drawing scale</value>
   </data>
   <data name="TW_Drawing_KhoangHo" xml:space="preserve">
-    <value>{summary.HealedGapCount} clearance</value>
+    <value>{summary.HealedGapCount} gaps healed.</value>
   </data>
   <data name="TW_Msg_LoiTw" xml:space="preserve">
     <value>Error TW: {ex.Message}</value>
   </data>
   <data name="TW_Output_DaSuaLine" xml:space="preserve">
-    <value>Fixed {summary.ChangedLineCount} line,</value>
+    <value>Repaired {summary.ChangedLineCount} lines,</value>
   </data>
   <data name="TW_Output_GiaoTuong" xml:space="preserve">
-    <value>{summary.JunctionCount} delivered to the wall,</value>
+    <value>{summary.JunctionCount} wall junctions,</value>
   </data>
   <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
     <value>No valid wall stroke pairs were found in the selection.</value>
@@ -1721,7 +1721,7 @@ CK</value>
     <value>Selected: Align Right.</value>
   </data>
   <data name="WW_Output_DaChonCanTam" xml:space="preserve">
-    <value>Selected: Can Tam.</value>
+    <value>Selected: Center alignment.</value>
   </data>
   <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
     <value>Selected: Align Left.</value>
@@ -1730,10 +1730,10 @@ CK</value>
     <value>Created and selected the Wall layer.</value>
   </data>
   <data name="WW_Output_DaVeDoanTuong" xml:space="preserve">
-    <value>Drawn {wallPoints.Count - 1} wall segment.</value>
+    <value>Drawn {wallPoints.Count - 1} wall segments.</value>
   </data>
   <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
-    <value>Wall board error: {ex.Message}</value>
+    <value>Error capping wall end: {ex.Message}</value>
   </data>
   <data name="WW_Output_LoiVeTuong" xml:space="preserve">
     <value>Error drawing wall: {ex.Message}</value>
@@ -1742,7 +1742,7 @@ CK</value>
     <value>Invalid selection, keep the current alignment.</value>
   </data>
   <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
-    <value>WW: D = Wall painting | T = Thickness | A = Alignment | Q = Quit.</value>
+    <value>WW: D = Draw walls | T = Thickness | A = Alignment | Q = Quit.</value>
   </data>
   <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
     <value>Wall alignment [1=Center / 2=Left / 3=Right] &lt;1&gt;:</value>
@@ -2190,4 +2190,9 @@ axis</value>
   <data name="Common_UI_SoCauKien" xml:space="preserve">
     <value>Num of Components</value>
   </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve"><value>Error creating wall lines: {ex.Message}</value></data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve"><value>Error finding intersections: {ex.Message}</value></data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>Error cleaning up intersections: {ex.Message}</value></data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>Error capping wall end: {ex.Message}</value></data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>Error removing old cap: {ex.Message}</value></data>
 </root>

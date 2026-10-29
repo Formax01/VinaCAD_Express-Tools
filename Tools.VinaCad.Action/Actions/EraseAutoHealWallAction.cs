@@ -7,6 +7,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using PrLogTrackingSystem;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -46,7 +47,7 @@ namespace Tools.VinaCAD.Action.Actions
             Editor ed = doc.Editor;
 
             PromptSelectionOptions pso = new PromptSelectionOptions();
-            pso.MessageForAdding = "\nQuét chọn các mặt tường cần xóa (Có thể chọn nhiều) -> Nhấn Enter: ";
+            pso.MessageForAdding = "\n" + Lang.EW_Prompt_QuetChonCacMatTuongCanXoaCoTheChonNhieuNhan;
 
             PromptSelectionResult psr = ed.GetSelection(pso);
             if (psr.Status != PromptStatus.OK) return;
@@ -130,13 +131,13 @@ namespace Tools.VinaCAD.Action.Actions
 
                     tr.Commit();
                     int autoSelected = Math.Max(0, selectedIds.Count - originalCount);
-                    ed.WriteMessage($"\nĐã xóa, bo góc và vá lỗi cho {erasedIds.Count} mảng tường (Bao gồm {autoSelected} mảng vụn/đối diện).");
+                    ed.WriteMessage("\n" + Lang.EW_Output_DaXoaBoGocVaVaLoiChoMangTuongBaoGom.Replace("{erasedIds.Count}", erasedIds.Count.ToString()).Replace("{autoSelected}", autoSelected.ToString()));
                 }
                 catch (Exception ex)
                 {
                     tr.Abort();
                     Logger.Info(nameof(EraseAutoHealWallAction), ex);
-                    MessageBox.Show($"Lỗi xử lý: {ex.Message}", StringDefinition.TITLE_ERROR);
+                    MessageBox.Show(Lang.EW_Msg_LoiXuLy.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
                 }
             }
         }
