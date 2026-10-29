@@ -6,6 +6,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Tools.VinaCAD.UI;
@@ -40,16 +41,16 @@ namespace Tools.VinaCAD.Action.Actions
 
                 if (_database == null || _editor == null)
                 {
-                    throw new Exception("Không có tài liệu hoạt động");
+                    throw new Exception(Lang.WW_Error_KhongCoTaiLieuHoatDong);
                 }
 
                 SelectWallLayer(showCreatedMessage: true);
 
-                _editor.WriteMessage("\nWW: D = Vẽ tường | T = Chiều dày | A = Căn lề | Q = Thoát.");
+                _editor.WriteMessage("\n" + Lang.WW_Output_WwDVeTuongTChieuDayACanLeQThoat);
 
                 while (true)
                 {
-                    PromptStringOptions pso = new PromptStringOptions("\nChọn [ D-Vẽ tường / T-Chiều dày / A-Căn lề / Q-Thoát ] : ")
+                    PromptStringOptions pso = new PromptStringOptions("\n" + Lang.WW_Prompt_ChonDVeTuongTChieuDayACanLeQThoat)
                     {
                         AllowSpaces = false,
                         DefaultValue = "D"
@@ -77,14 +78,14 @@ namespace Tools.VinaCAD.Action.Actions
                         case "Q":
                             return;
                         default:
-                            _editor.WriteMessage("\nChọn D (Vẽ), T (Chiều dày), A (Căn lề) hoặc Q (Thoát).");
+                            _editor.WriteMessage("\n" + Lang.WW_Output_ChonDVeTChieuDayACanLeHoacQThoat);
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.WW_Msg_Loi.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
                 Logger.Info(nameof(DrawWallAction), ex);
             }
         }
@@ -105,7 +106,7 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     if (thicknessWindow.IsPickUpRequested)
                     {
-                        PromptDistanceOptions pdo = new PromptDistanceOptions("\nChọn hai điểm xác định chiều dày: ");
+                        PromptDistanceOptions pdo = new PromptDistanceOptions("\n" + Lang.WW_Prompt_ChonHaiDiemXacDinhChieuDay);
                         PromptDoubleResult distRes = _editor.GetDistance(pdo);
 
                         if (distRes.Status == PromptStatus.OK && distRes.Value > 0)
@@ -126,7 +127,7 @@ namespace Tools.VinaCAD.Action.Actions
                 }
             }
 
-            _editor.WriteMessage($"\nĐã cập nhật chiều dày tường: {_wallModel.Thickness}");
+            _editor.WriteMessage("\n" + Lang.WW_Output_DaCapNhatChieuDayTuong.Replace("{_wallModel.Thickness}", _wallModel.Thickness.ToString()));
             return true;
         }
 
@@ -135,7 +136,7 @@ namespace Tools.VinaCAD.Action.Actions
             if (_editor == null)
                 return;
 
-            PromptStringOptions psoAlign = new PromptStringOptions("\nCăn tường [1=Tâm / 2=Trái / 3=Phải] <1>: ")
+            PromptStringOptions psoAlign = new PromptStringOptions("\n" + Lang.WW_Prompt_CanTuong1Tam2Trai3Phai1)
             {
                 AllowSpaces = false,
                 DefaultValue = "1"
@@ -148,18 +149,18 @@ namespace Tools.VinaCAD.Action.Actions
                 {
                     case "1":
                         _wallModel.Alignment = WallAlignment.Center;
-                        _editor.WriteMessage("\nĐã chọn: Căn Tâm.");
+                        _editor.WriteMessage("\n" + Lang.WW_Output_DaChonCanTam);
                         break;
                     case "2":
                         _wallModel.Alignment = WallAlignment.Left;
-                        _editor.WriteMessage("\nĐã chọn: Căn Trái.");
+                        _editor.WriteMessage("\n" + Lang.WW_Output_DaChonCanTrai);
                         break;
                     case "3":
                         _wallModel.Alignment = WallAlignment.Right;
-                        _editor.WriteMessage("\nĐã chọn: Căn Phải.");
+                        _editor.WriteMessage("\n" + Lang.WW_Output_DaChonCanPhai);
                         break;
                     default:
-                        _editor.WriteMessage("\nLựa chọn không hợp lệ, giữ nguyên căn lề hiện tại.");
+                        _editor.WriteMessage("\n" + Lang.WW_Output_LuaChonKhongHopLeGiuNguyenCanLeHienTai);
                         break;
                 }
             }
@@ -172,15 +173,15 @@ namespace Tools.VinaCAD.Action.Actions
 
             SelectWallLayer(showCreatedMessage: false);
 
-            _editor.WriteMessage("\nChọn các điểm liên tiếp; nhấn Enter hoặc Esc để kết thúc.");
+            _editor.WriteMessage("\n" + Lang.WW_Output_ChonCacDiemLienTiepNhanEnterHoacEscDeKetThuc);
 
             List<Point3d> wallPoints = new List<Point3d>();
 
             while (true)
             {
                 string prompt = wallPoints.Count == 0
-                    ? "\nĐiểm đầu: "
-                    : "\nĐiểm tiếp theo <Kết thúc>: ";
+                    ? "\n" + Lang.WW_Prompt_DiemDau
+                    : "\n" + Lang.WW_Prompt_DiemTiepTheoKetThuc;
                 PromptPointOptions ppo = new PromptPointOptions(prompt)
                 {
                     AllowArbitraryInput = false
@@ -237,11 +238,11 @@ namespace Tools.VinaCAD.Action.Actions
                 }
                 catch (Exception ex)
                 {
-                    _editor.WriteMessage($"\nLỗi bo đầu tường: {ex.Message}");
+                    _editor.WriteMessage("\n" + Lang.WW_Output_LoiBoDauTuong.Replace("{ex.Message}", ex.Message));
                     Logger.Info(nameof(DrawWalls), ex);
                 }
 
-                _editor.WriteMessage($"\nĐã vẽ {wallPoints.Count - 1} đoạn tường.");
+                _editor.WriteMessage("\n" + Lang.WW_Output_DaVeDoanTuong.Replace("{wallPoints.Count - 1}", (wallPoints.Count - 1).ToString()));
             }
         }
 
@@ -253,7 +254,7 @@ namespace Tools.VinaCAD.Action.Actions
                 _database, "Wall", out bool wasCreated);
 
             if (showCreatedMessage && wasCreated)
-                _editor?.WriteMessage("\nĐã tạo và chọn layer Wall.");
+                _editor?.WriteMessage("\n" + Lang.WW_Output_DaTaoVaChonLayerWall);
         }
 
         private void DrawWallSegment(Point3d startPoint, Point3d endPoint)
@@ -322,7 +323,7 @@ namespace Tools.VinaCAD.Action.Actions
                     }
                 }
 
-                _editor.WriteMessage($"\nLỗi vẽ tường: {ex.Message}");
+                _editor.WriteMessage("\n" + Lang.WW_Output_LoiVeTuong.Replace("{ex.Message}", ex.Message));
                 Logger.Info(nameof(DrawWallSegment), ex);
             }
         }
