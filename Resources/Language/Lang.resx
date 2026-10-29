@@ -960,7 +960,7 @@ Tự Động</value>
     <value>Chọn điểm phía ngoài để xác định hướng vữa:</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] :</value>
+    <value>FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Độ dày | S Cài đặt] :</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>Mặt ngoài</value>
@@ -2191,4 +2191,21 @@ trục</value>
   <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>Lỗi xử lý giao điểm: {ex.Message}</value></data>
   <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>Lỗi bịt đầu tường: {ex.Message}</value></data>
   <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>Lỗi xóa nét bịt đầu tường cũ: {ex.Message}</value></data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve"><value>Đối tượng không phải mặt tường hợp lệ.</value></data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve"><value>Không tìm thấy mặt tường song song.</value></data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve"><value>Hai mặt tường trùng nhau.</value></data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve"><value>Xử lý nút giao = {mode}.</value></data>
+  <data name="WWO_Output_TuDong" xml:space="preserve"><value>Tự động</value></data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve"><value>Giữ nguyên</value></data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve"><value>Chọn các cạnh vữa cần đổi độ dày, nhấn Enter để xác nhận:</value></data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve"><value>Nhập độ dày mới cho các cạnh đã chọn &lt;{settings.Thickness}&gt;:</value></data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve"><value>Độ dày</value></data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve"><value>FN: {ex.Message} Thử lại bằng BOUNDARY...</value></data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve"><value>Xem trước màu layer</value></data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve"><value>Không tìm thấy mặt tường quanh điểm đã chọn.</value></data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve"><value>Chưa có mặt tường.</value></data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve"><value>Chưa chọn cạnh vữa.</value></data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve"><value>Không tìm thấy line tường trong bản vẽ.</value></data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve"><value>Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng).</value></data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve"><value>Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.</value></data>
 </root>

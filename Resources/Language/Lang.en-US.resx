@@ -919,7 +919,7 @@ Automatic</value>
     <value>Find text (FDT)</value>
   </data>
   <data name="FN_Error_ChieuDayVuaPhaiLonHon0" xml:space="preserve">
-    <value>plaster thickness must be greater than 0.</value>
+    <value>Stucco thickness must be greater than 0.</value>
   </data>
   <data name="FN_Error_KhongCoKetQuaOffset" xml:space="preserve">
     <value>No offset results.</value>
@@ -940,7 +940,7 @@ Automatic</value>
     <value>Layer '{targetLayer.Name}' is locked. Please unlock before running FN.</value>
   </data>
   <data name="FN_Error_MauAciPhaiNamTrongKhoang1255" xml:space="preserve">
-    <value>The ACI color must be between 1..255.</value>
+    <value>The ACI color must be between 1 - 255.</value>
   </data>
   <data name="FN_Error_TenLayerFnKhongHopLe" xml:space="preserve">
     <value>Invalid FN layer name.</value>
@@ -958,10 +958,10 @@ Automatic</value>
     <value>Select consecutive edges of the outer face, press Enter to confirm:</value>
   </data>
   <data name="FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua" xml:space="preserve">
-    <value>Select an outside point to determine the plaster direction:</value>
+    <value>Select an outside point to determine the Stucco direction:</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - Select point in room or [O Scan select wall | E Exterior | S Settings] :</value>
+    <value>FN - Select a point in the room or [O Scan walls | E Exterior | D Thickness | S Settings]:</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>Outer side</value>
@@ -976,19 +976,19 @@ Automatic</value>
     <value>Draw the plaster layer (FN)</value>
   </data>
   <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
-    <value>The selected lines cannot be grouted on the exterior.</value>
+    <value>The selected lines cannot be used to create an exterior stucco.</value>
   </data>
   <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
-    <value>The outer contour has not been selected.</value>
+    <value>The outer boundary not yet selected.</value>
   </data>
   <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
-    <value>There are no border guards.</value>
+    <value>There are no border in the room.</value>
   </data>
   <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
     <value>Haven't scanned open walls yet.</value>
   </data>
   <data name="FN_Text_KhongTheTaoVuaMatTrong" xml:space="preserve">
-    <value>Cannot create plaster on the inside.</value>
+    <value>Cannot create interior Stucco.</value>
   </data>
   <data name="FN_Text_KhongTimThayCapMatTuongHoHopLeTrongVungChon" xml:space="preserve">
     <value>No valid open wall face pairs were found in the selection.</value>
@@ -1006,10 +1006,10 @@ Automatic</value>
     <value>Reset Default Values</value>
   </data>
   <data name="FN_UI_DoDayVua" xml:space="preserve">
-    <value>plaster Thickness:</value>
+    <value>Stucco Thickness:</value>
   </data>
   <data name="FN_UI_LayerVua" xml:space="preserve">
-    <value>plaster Layer:</value>
+    <value>Stucco Layer:</value>
   </data>
   <data name="FN_UI_MaMauAci1255" xml:space="preserve">
     <value>Color code (ACI): 1–255</value>
@@ -1024,13 +1024,13 @@ Automatic</value>
     <value>Create new layer</value>
   </data>
   <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
-    <value>plaster thickness must be a finite number greater than 0.</value>
+    <value>Stucco thickness must be a finite number greater than 0.</value>
   </data>
   <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
     <value>Select an existing layer.</value>
   </data>
   <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
-    <value>The plaster layer cannot be left blank.</value>
+    <value>The Stucco layer cannot be blank.</value>
   </data>
   <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
     <value>Layer color must be an ACI index from 1 to 255.</value>
@@ -1585,9 +1585,6 @@ CK</value>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>Long</value>
   </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>Height</value>
-  </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>Wide</value>
   </data>
@@ -1796,7 +1793,7 @@ CK</value>
     <value>Select a wall face &lt;End&gt;:</value>
   </data>
   <data name="WWO_Prompt_Giu" xml:space="preserve">
-    <value>Hold</value>
+    <value>Keep</value>
   </data>
   <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
     <value>Wall offset distance (center-center) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
@@ -1805,7 +1802,7 @@ CK</value>
     <value>WWO only accepts the Line of the wall.</value>
   </data>
   <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
-    <value>Intersection handling [Auto/Hold] &lt;Auto&gt;:</value>
+    <value>Junction handling [Auto/Keep] &lt;Auto&gt;:</value>
   </data>
   <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
     <value>Wall Offset (WWO)</value>
@@ -1814,7 +1811,7 @@ CK</value>
     <value>Connected {connectedBranchCount} to the top of the wall and deleted the inner stroke</value>
   </data>
   <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
-    <value>The wall has been created parallel to the center</value>
+    <value>Created a parallel wall at a centerline distance of</value>
   </data>
   <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
     <value>Created a parallel wall away from the center of {offsetDistance:0.##}.</value>
@@ -1832,7 +1829,7 @@ CK</value>
     <value>Could not find opposite side with SegmentId.</value>
   </data>
   <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
-    <value>{offsetDistance:0.##}; Do not handle intersections.</value>
+    <value>{offsetDistance:0.##}; junctions left unchanged.</value>
   </data>
   <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
     <value>Wall face metadata is incomplete.</value>
@@ -1850,13 +1847,13 @@ CK</value>
     <value>Please enter a valid number greater than 0.</value>
   </data>
   <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
-    <value>keep the face selected.</value>
+    <value>keep the selected face.</value>
   </data>
   <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
     <value>Cannot change wall: {message}</value>
   </data>
   <data name="WWT_Output_ThayDoiDeuQuaTimTuong" xml:space="preserve">
-    <value>change evenly through the heart and wall.</value>
+    <value>changes are measured from the centerlines of the walls.</value>
   </data>
   <data name="WWT_Output_WwtChieuDayMoi" xml:space="preserve">
     <value>WWT: New thickness = {_thickness:0.##};</value>
@@ -2178,21 +2175,88 @@ axis</value>
   <data name="Common_UI_Stt" xml:space="preserve">
     <value>No.</value>
   </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>Height</value>
-  </data>
-  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
-    <value>Configure Rebar Schedule</value>
-  </data>
   <data name="Common_UI_SoLuong" xml:space="preserve">
     <value>Quantity</value>
   </data>
   <data name="Common_UI_SoCauKien" xml:space="preserve">
     <value>Num of Components</value>
   </data>
-  <data name="WW_Error_TaoNetTuong" xml:space="preserve"><value>Error creating wall lines: {ex.Message}</value></data>
-  <data name="WW_Error_TimGiaoDiem" xml:space="preserve"><value>Error finding intersections: {ex.Message}</value></data>
-  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>Error cleaning up intersections: {ex.Message}</value></data>
-  <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>Error capping wall end: {ex.Message}</value></data>
-  <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>Error removing old cap: {ex.Message}</value></data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Configure Rebar Schedule</value>
+  </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve">
+    <value>Error creating wall lines: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve">
+    <value>Error finding intersections: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve">
+    <value>Error cleaning up intersections: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve">
+    <value>Error capping wall end: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve">
+    <value>Error removing old cap: {ex.Message}</value>
+  </data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>The selected object is not a valid wall face.</value>
+  </data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve">
+    <value>No parallel wall face was found.</value>
+  </data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve">
+    <value>The two wall faces overlap.</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve">
+    <value>Junction handling = {mode}.</value>
+  </data>
+  <data name="WWO_Output_TuDong" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve">
+    <value>Keep unchanged</value>
+  </data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve">
+    <value>Select stucco edges to change thickness, then press Enter:</value>
+  </data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve">
+    <value>Enter a new thickness for the selected edges &lt;{settings.Thickness}&gt;:</value>
+  </data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve">
+    <value>Thickness</value>
+  </data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve">
+    <value>FN: {ex.Message} Retrying with BOUNDARY...</value>
+  </data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve">
+    <value>Preview layer color</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve">
+    <value>No wall face was found around the selected point.</value>
+  </data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve">
+    <value>No wall face is available.</value>
+  </data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve">
+    <value>No Stucco edge was selected.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve">
+    <value>No wall line was found in the drawing.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve">
+    <value>The original wall face for the selected plaster edges was not found, or the thickness is already correct.</value>
+  </data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve">
+    <value>The room is not enclosed: {missedRays}/{coarseRays} rays escape (for example at {firstMissDegrees:0}°). Check openings, doors, or wall lines on another layer.</value>
+  </data>
+  <data name="FN_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WWT_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

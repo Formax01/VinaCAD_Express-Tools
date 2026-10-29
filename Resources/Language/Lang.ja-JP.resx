@@ -961,7 +961,7 @@
     <value>外側の点を選択してモルタルの方向を決定します。</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - 部屋内の点を選択するか、[O 壁を選択してスキャン | E 外観 | S設定]：</value>
+    <value>FN - 部屋内の点を選択するか、[O 壁を選択 | E 外側 | D 厚さ | S 設定]：</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>外側</value>
@@ -976,13 +976,13 @@
     <value>モルタル層の作図（FN）</value>
   </data>
   <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
-    <value>選択したラインは外側にグラウトできません。</value>
+    <value>選択した線から外装モルタルを作成することはできません。</value>
   </data>
   <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
-    <value>外側の輪郭が選択されていません。</value>
+    <value>外側の境界線が選択されていません。</value>
   </data>
   <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
-    <value>国境警備隊はいない。</value>
+    <value>その部屋に境界線はない。</value>
   </data>
   <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
     <value>開いた壁はまだスキャンしていません。</value>
@@ -1006,10 +1006,10 @@
     <value>デフォルト値にリセット</value>
   </data>
   <data name="FN_UI_DoDayVua" xml:space="preserve">
-    <value>モルタルの厚さ:</value>
+    <value>スタッコの厚み：</value>
   </data>
   <data name="FN_UI_LayerVua" xml:space="preserve">
-    <value>モルタル層:</value>
+    <value>スタッコ層：</value>
   </data>
   <data name="FN_UI_MaMauAci1255" xml:space="preserve">
     <value>カラーコード (ACI): 1 ～ 255</value>
@@ -1024,13 +1024,13 @@
     <value>新しいレイヤーを作成する</value>
   </data>
   <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
-    <value>モルタルの厚さは 0 より大きい有限数でなければなりません。</value>
+    <value>スタッコの厚さは、0より大きい有限の数でなければならない。</value>
   </data>
   <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
     <value>既存のレイヤーを選択します。</value>
   </data>
   <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
-    <value>モルタル層を空白のままにすることはできません。</value>
+    <value>スタッコ層を空にすることはできません。</value>
   </data>
   <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
     <value>レイヤーの色は 1 ～ 255 の ACI インデックスである必要があります。</value>
@@ -1585,9 +1585,6 @@ CK</value>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>長さ</value>
   </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>身長</value>
-  </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>幅</value>
   </data>
@@ -1796,7 +1793,7 @@ CK</value>
     <value>壁面 &lt;終了&gt; を選択します:</value>
   </data>
   <data name="WWO_Prompt_Giu" xml:space="preserve">
-    <value>ホールド</value>
+    <value>維持</value>
   </data>
   <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
     <value>壁オフセット距離 (中心間) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
@@ -1805,7 +1802,7 @@ CK</value>
     <value>WWO は壁のラインのみを受け入れます。</value>
   </data>
   <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
-    <value>交差点処理 [自動/ホールド] &lt;自動&gt;:</value>
+    <value>交差部の処理 [自動/維持] &lt;自動&gt;：</value>
   </data>
   <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
     <value>壁オフセット (WWO)</value>
@@ -1814,7 +1811,7 @@ CK</value>
     <value>{connectedBranchCount} を壁の上部に接続し、内側のストロークを削除しました</value>
   </data>
   <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
-    <value>壁は中心に平行に作成されました</value>
+    <value>中心線間距離</value>
   </data>
   <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
     <value>{offsetDistance:0.##} の中心から離れたところに平行な壁を作成しました。</value>
@@ -1832,7 +1829,7 @@ CK</value>
     <value>SegmentId の反対側が見つかりませんでした。</value>
   </data>
   <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
-    <value>{offsetDistance:0.##};交差点は扱わないでください。</value>
+    <value>{offsetDistance:0.##} で平行な壁を作成しました。交差部は処理していません。</value>
   </data>
   <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
     <value>壁面メタデータが不完全です。</value>
@@ -1850,7 +1847,7 @@ CK</value>
     <value>0 より大きい有効な数値を入力してください。</value>
   </data>
   <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
-    <value>面を選択したままにします。</value>
+    <value>選択した面を保持する。</value>
   </data>
   <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
     <value>壁を変更できません: {message}</value>
@@ -2181,21 +2178,88 @@ CK</value>
   <data name="Common_UI_Stt" xml:space="preserve">
     <value>番号</value>
   </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>身長</value>
-  </data>
-  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
-    <value>鉄筋集計を設定</value>
-  </data>
   <data name="Common_UI_SoLuong" xml:space="preserve">
     <value>量</value>
   </data>
   <data name="Common_UI_SoCauKien" xml:space="preserve">
     <value>部材数</value>
   </data>
-  <data name="WW_Error_TaoNetTuong" xml:space="preserve"><value>壁線の作成エラー: {ex.Message}</value></data>
-  <data name="WW_Error_TimGiaoDiem" xml:space="preserve"><value>交点の検索エラー: {ex.Message}</value></data>
-  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve"><value>交点の処理エラー: {ex.Message}</value></data>
-  <data name="WW_Error_BitDauTuong" xml:space="preserve"><value>壁端の閉鎖エラー: {ex.Message}</value></data>
-  <data name="WW_Error_XoaNetBitCu" xml:space="preserve"><value>古い壁端の閉鎖線の削除エラー: {ex.Message}</value></data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>鉄筋集計を設定</value>
+  </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve">
+    <value>壁線の作成エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve">
+    <value>交点の検索エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve">
+    <value>交点の処理エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve">
+    <value>壁端の閉鎖エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve">
+    <value>古い壁端の閉鎖線の削除エラー: {ex.Message}</value>
+  </data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>選択したオブジェクトは有効な壁面ではありません。</value>
+  </data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve">
+    <value>平行な壁面が見つかりません。</value>
+  </data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve">
+    <value>2つの壁面が重なっています。</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve">
+    <value>交差部の処理 = {mode}。</value>
+  </data>
+  <data name="WWO_Output_TuDong" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve">
+    <value>現状維持</value>
+  </data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve">
+    <value>厚さを変更するモルタルの辺を選択し、Enter キーで確定してください：</value>
+  </data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve">
+    <value>選択した辺の新しい厚さを入力してください &lt;{settings.Thickness}&gt;：</value>
+  </data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve">
+    <value>厚さ</value>
+  </data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve">
+    <value>FN: {ex.Message} BOUNDARY で再試行します...</value>
+  </data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve">
+    <value>レイヤーの色をプレビュー</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve">
+    <value>選択した点の周囲に壁面が見つかりません。</value>
+  </data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve">
+    <value>壁面がありません。</value>
+  </data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve">
+    <value>スタッコの端部は選択されませんでした。</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve">
+    <value>図面に壁の線分が見つかりません。</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve">
+    <value>選択したモルタルの辺の元の壁面が見つからないか、厚さがすでに正しい値です。</value>
+  </data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve">
+    <value>部屋が閉じていません：{missedRays}/{coarseRays} 本の光線が外へ抜けています（例：{firstMissDegrees:0}°方向）。隙間、開口部、または別レイヤーの壁線を確認してください。</value>
+  </data>
+  <data name="FN_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="WWT_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
 </root>
