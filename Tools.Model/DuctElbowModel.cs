@@ -43,6 +43,7 @@ namespace Tools.Model
 
         public VerticalDirection VerticalDir { get; set; }
         public double DropLength { get; set; }
+        public double Height { get; set; }
 
         public string LayerName { get; set; }
         public bool ShowCenterLine { get; set; }

@@ -5,19 +5,21 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teigha.DatabaseServices;
-using Teigha.GraphicsInterface;
 using Teigha.Geometry;
+using Teigha.GraphicsInterface;
 using Tools.Model;
+using Tools.Resources.Definitions;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
+using Tools.VinaCAD.Action.Actions;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Action.Actions
 {
     public class DuctElbowAction
     {
-        public void Execute(DuctElbowType type)
+        public void Execute(DuctElbowType type, bool threeDimensional = false)
         {
             try
             {
@@ -31,7 +33,8 @@ namespace Tools.VinaCad.Action.Actions
                 double oldW2 = vm.Width2;
                 double oldR = vm.Radius;
                 double oldAngle = vm.AngleDeg;
-                /*double oldDrop = vm.DropLength;*/
+                double oldHeight = vm.Height;
+                double oldDrop = vm.DropLength;
 
                 var ppo = new PromptPointOptions("\nChọn điểm chèn: ");
                 PromptPointResult promptPointResult = editor.GetPoint(ppo);
@@ -50,6 +53,12 @@ namespace Tools.VinaCad.Action.Actions
                     vm.Width2 = w2;
                 }
 
+                if (threeDimensional)
+                {
+                    if (!AskDouble(editor, "Nhập chiều cao ống ", vm.Height, out double height)) return;
+                    vm.Height = height;
+                }
+
                 double r;
 
                 if (!AskDouble(editor,"Nhập bán kính cong phía trong ",vm.Radius,out r))
@@ -61,9 +70,11 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (type == DuctElbowType.Vertical)
                 {
-                    /*double l;
-                    if (!AskDouble(editor, "Nhập chiều dài đoạn hạ/ngóc", vm.DropLength, out l)) return;
-                    vm.DropLength = l;*/
+                    if (threeDimensional)
+                    {
+                        if (!AskDouble(editor, "Nhập chiều dài đoạn đứng", vm.DropLength, out double dropLength)) return;
+                        vm.DropLength = dropLength;
+                    }
 
                     string v;
                     if (!AskKeyword(editor, "Chọn hướng", new[] { "Xuống", "Lên" },
@@ -83,13 +94,14 @@ namespace Tools.VinaCad.Action.Actions
                 }
 
                 string err;
-                if (!Validate(vm, out err))
+                if (!Validate(vm, threeDimensional, out err))
                 {
                     vm.Width1 = oldW1;
                     vm.Width2 = oldW2;
                     vm.Radius = oldR;
                     vm.AngleDeg = oldAngle;
-                    /*vm.DropLength = oldDrop;*/
+                    vm.Height = oldHeight;
+                    vm.DropLength = oldDrop;
                     editor.WriteMessage("\n" + err);
                     return;
                 }
@@ -100,7 +112,7 @@ namespace Tools.VinaCad.Action.Actions
                     DuctElbowModel previewModel = vm.BuildModel(insert, currentDirection);
                     previewModel.ShowLabel = false;
                     return previewModel;
-                });
+                }, threeDimensional);
 
                 try
                 {
@@ -124,7 +136,10 @@ namespace Tools.VinaCad.Action.Actions
 
                 using (Transaction tr = db.TransactionManager.StartTransaction())
                 {
-                    DuctElbowHelper.Draw(db, tr, model);
+                    if (threeDimensional)
+                        DuctElbowHelper.Draw3D(db, tr, model);
+                    else
+                        DuctElbowHelper.Draw(db, tr, model);
                     tr.Commit();
                 }
             }
@@ -135,9 +150,12 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        private static bool Validate(DuctElbowVM vm, out string error)
+        private static bool Validate(DuctElbowVM vm, bool threeDimensional, out string error)
         {
             error = null;
+
+            if (threeDimensional && vm.Height <= 0)
+            { error = "Chiều cao ống phải lớn hơn 0."; return false; }
 
             if (vm.Width1 <= 0)
             { error = "Kích thước đầu vào phải lớn hơn 0."; return false; }
@@ -149,7 +167,7 @@ namespace Tools.VinaCad.Action.Actions
             { error = "Bán kính cong phía trong phải lớn hơn 0."; return false; }
 
             if (vm.Type == DuctElbowType.Vertical)
-                return ValidateVertical(vm, out error);
+                return ValidateVertical(vm, threeDimensional, out error);
 
             return ValidateElbow(vm, out error);
         }
@@ -170,13 +188,13 @@ namespace Tools.VinaCad.Action.Actions
             // Bán kính cong trong = Rc - W/2 phải >= 0 (cả đầu vào và đầu ra)
             if (rc - vm.Width1 / 2.0 < -1e-9 || rc - w2 / 2.0 < -1e-9)
             {
-                error = "Bán kính cong quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh ";
+                error = "Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh";
                 return false;
             }
             return true;
         }
 
-        private static bool ValidateVertical(DuctElbowVM vm, out string error)
+        private static bool ValidateVertical(DuctElbowVM vm, bool threeDimensional, out string error)
         {
             error = null;
 
@@ -184,7 +202,10 @@ namespace Tools.VinaCad.Action.Actions
             { error = "Chiều dài đoạn hạ phải lớn hơn 0."; return false; }
 
             if (vm.ResolveCenterRadius(vm.Width1) < vm.Width1 / 2.0)
-            { error = "Bán kính cong phải lớn hơn hoặc bằng một nửa đầu vào."; return false; }
+            { error = "Bán kính phải lớn hơn hoặc bằng một nửa đường kính đầu vào."; return false; }
+
+            if (threeDimensional && vm.ResolveCenterRadius(vm.Width1) <= vm.Width1 / 2.0)
+            { error = "Bán kính cong trong của khối 3D phải lớn hơn 0."; return false; }
 
             return true;
         }
@@ -267,15 +288,17 @@ namespace Tools.VinaCad.Action.Actions
             private readonly Point3d _insertPoint;
             private readonly string _commandName;
             private readonly Func<Vector3d, DuctElbowModel> _modelFactory;
+            private readonly bool _threeDimensional;
 
             private Point3d _lastPoint;
             private bool _hasLastPoint;
 
-            public DuctElbowPreviewJig(Point3d insertPoint,string commandName,Func<Vector3d, DuctElbowModel> modelFactory)
+            public DuctElbowPreviewJig(Point3d insertPoint,string commandName,Func<Vector3d, DuctElbowModel> modelFactory, bool threeDimensional)
             {
                 _insertPoint = insertPoint;
                 _commandName = commandName;
                 _modelFactory = modelFactory;
+                _threeDimensional = threeDimensional;
             }
 
             public Vector3d Direction { get; private set; }
@@ -317,7 +340,9 @@ namespace Tools.VinaCad.Action.Actions
 
                 DuctElbowModel model = _modelFactory(Direction);
                 System.Collections.Generic.List<Entity> entities =
-                    DuctElbowHelper.BuildPreviewEntities(model);
+                    _threeDimensional
+                        ? new System.Collections.Generic.List<Entity> { DuctElbowHelper.BuildSolid(model) }
+                        : DuctElbowHelper.BuildPreviewEntities(model);
 
                 try
                 {
