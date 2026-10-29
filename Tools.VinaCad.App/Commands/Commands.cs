@@ -857,6 +857,49 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DuctBranchEEZCommand), ex);
             }
         }
+
+        [CommandMethod("EE1")]
+        public void DuctElbowEqual3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE2")]
+        public void DuctElbowReducing3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE3")]
+        public void DuctElbowVertical3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+            }
+        }
+
         [CommandMethod("DD")]
         public void SupplyAirDiffuserCommand()
         {
