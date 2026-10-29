@@ -50,21 +50,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        //[CommandMethod("CPD")]
-        //public void CopyElevation()
-        //{
-        //    try
-        //    {
-        //        CopyElevationAction action = new CopyElevationAction();
-        //        action.Execute();
-
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
-        //    }
-        //}
+        
         
 
 
