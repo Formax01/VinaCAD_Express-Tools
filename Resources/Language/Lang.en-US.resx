@@ -876,6 +876,15 @@ Automatic</value>
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>Number the hospital</value>
   </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: No blocks selected.</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: No pile blocks found in selection.</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>Select pile blocks (drag to create window/crossing selection):</value>
+  </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>Reinforcement area table (DTT)</value>
   </data>
@@ -1990,6 +1999,9 @@ CK</value>
   </data>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>The starting number must be greater than 0.</value>
+  </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: Cancelled.</value>
   </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>Font size:</value>

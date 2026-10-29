@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -34,13 +35,13 @@ namespace Tools.VinaCad.Action.Actions
 
                 // Prompt user to select pile block references via crossing/window selection
                 PromptSelectionOptions pso = new PromptSelectionOptions();
-                pso.MessageForAdding = "\nSelect pile blocks (drag to create window/crossing): ";
+                pso.MessageForAdding = "\n" + Lang.DTC_Prompt_QuetChonBlockCoc;
                 pso.AllowDuplicates = false;
                 PromptSelectionResult psr = ed.GetSelection(pso);
 
                 if (psr.Status != PromptStatus.OK || psr.Value.Count == 0)
                 {
-                    ed.WriteMessage("\nDTC: No blocks selected.\n");
+                    ed.WriteMessage("\n" + Lang.DTC_Output_KhongChonBlockNao + "\n");
                     return;
                 }
 
@@ -122,7 +123,7 @@ namespace Tools.VinaCad.Action.Actions
 
                     if (piles.Count == 0)
                     {
-                        ed.WriteMessage("\nDTC: No pile blocks found in selection.\n");
+                        ed.WriteMessage("\n" + Lang.DTC_Output_KhongTimThayBlockCocTrongVungChon + "\n");
                         tr.Commit();
                         return;
                     }
@@ -249,7 +250,7 @@ namespace Tools.VinaCad.Action.Actions
             catch (Exception ex)
             {
                 Logger.Info(nameof(DTCAction), ex);
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
             }
         }
 

@@ -876,6 +876,15 @@
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>病院に番号を付けます</value>
   </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: ブロックが選択されていません。</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: 選択範囲に杭ブロックが見つかりません。</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>杭ブロックを選択してください（ドラッグして窓選択/交差選択を作成）:</value>
+  </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>鉄筋エリア表（DTT）</value>
   </data>
@@ -1992,6 +2001,9 @@ CK</value>
   </data>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>開始番号は 0 より大きくなければなりません。</value>
+  </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: キャンセルしました。</value>
   </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>フォントサイズ:</value>

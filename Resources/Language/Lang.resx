@@ -875,6 +875,15 @@ Tự Động</value>
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>Đánh số BV</value>
   </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: Không có block nào được chọn.</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: Không tìm thấy block cọc trong vùng chọn.</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>Quét chọn các block cọc (kéo chuột để tạo vùng chọn cửa sổ/giao cắt):</value>
+  </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>Bảng diện tích cốt thép (DTT)</value>
   </data>
@@ -1986,6 +1995,9 @@ CK</value>
   </data>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>Số bắt đầu phải lớn hơn 0.</value>
+  </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: Đã hủy.</value>
   </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>Cỡ chữ :</value>

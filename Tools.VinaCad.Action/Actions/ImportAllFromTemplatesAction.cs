@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Teigha.DatabaseServices;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
@@ -41,7 +41,7 @@ namespace Tools.VinaCad.Action.Actions
                 bool ok = BlockTemplateLoader.LoadAllObjectsFromFile(_db,_ed, templatePath, DuplicateRecordCloning.Ignore);
                 if(ok)
                 {
-                    MessageBox.Show("Đã load toàn bộ đối tượng từ file template!", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.IPT_Msg_DaLoadToanBoDoiTuongTuFileTemplate, Lang.Common_Text_ThongBao);
                 }    
             }
             catch (Exception ex)

@@ -2386,6 +2386,33 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("DSHBV_Ribbon_DanhSoBv", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to DTC: Không có block nào được chọn..
+        /// </summary>
+        public static string DTC_Output_KhongChonBlockNao {
+            get {
+                return ResourceManager.GetString("DTC_Output_KhongChonBlockNao", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to DTC: Không tìm thấy block cọc trong vùng chọn..
+        /// </summary>
+        public static string DTC_Output_KhongTimThayBlockCocTrongVungChon {
+            get {
+                return ResourceManager.GetString("DTC_Output_KhongTimThayBlockCocTrongVungChon", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Quét chọn các block cọc (kéo chuột để tạo vùng chọn cửa sổ/giao cắt):.
+        /// </summary>
+        public static string DTC_Prompt_QuetChonBlockCoc {
+            get {
+                return ResourceManager.GetString("DTC_Prompt_QuetChonBlockCoc", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Bảng diện tích cốt thép (DTT).
@@ -5695,6 +5722,15 @@ namespace Tools.Resources.Language {
         public static string XLDTC_Msg_SoBatDauPhaiLonHon0 {
             get {
                 return ResourceManager.GetString("XLDTC_Msg_SoBatDauPhaiLonHon0", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to XLDTC: Đã hủy..
+        /// </summary>
+        public static string XLDTC_Output_DaHuy {
+            get {
+                return ResourceManager.GetString("XLDTC_Output_DaHuy", resourceCulture);
             }
         }
         
