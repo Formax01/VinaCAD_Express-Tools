@@ -1149,43 +1149,43 @@
     <value>統合: 手すりを 1 つのオブジェクトに結合します。チェックを外すと、別個のオブジェクトをできるだけ多く描画します。</value>
   </data>
   <data name="LTP_Drawing_Bac" xml:space="preserve">
-    <value>{preview.StepNumber}/{source.StepNumber} レベル</value>
+    <value>{preview.StepNumber}/{source.StepNumber} 段</value>
   </data>
   <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
-    <value>{source.StepNumber} レベル</value>
+    <value>{source.StepNumber} 段</value>
   </data>
   <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
-    <value>高層ビル: {source.StoreyHeight:0.####};ステップ面: {source.TreadRun:0.####}</value>
+    <value>階高: {source.StoreyHeight:0.####}; 踏面幅: {source.TreadRun:0.####}</value>
   </data>
   <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
-    <value>着陸: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+    <value>踊り場幅: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
-    <value>プレビュー画像: {GetPreviewSummary(source, preview)}</value>
+    <value>プレビュー: {GetPreviewSummary(source, preview)}</value>
   </data>
   <data name="LTP_Drawing_Tang" xml:space="preserve">
-    <value>{preview.StoreyNumber}/{source.StoreyNumber} フロア</value>
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} 階</value>
   </data>
   <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
-    <value>{source.StoreyNumber} フロア</value>
+    <value>{source.StoreyNumber} 階</value>
   </data>
   <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
-    <value>階段セクションを挿入する点を選択します。</value>
+    <value>階段断面の挿入点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonDiemDichTrenGroupKhac" xml:space="preserve">
-    <value>別のグループの宛先を選択してください:</value>
+    <value>移動先の点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonDiemGocTrenCauThangMoi" xml:space="preserve">
-    <value>新しい階段の原点を選択します。</value>
+    <value>新しい階段上の基点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuCaoTang" xml:space="preserve">
-    <value>床の高さを測定するには 2 つの点を選択してください:</value>
+    <value>階高を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi1" xml:space="preserve">
-    <value>着陸幅 1 を測定する 2 つの点を選択します。</value>
+    <value>踊り場1の幅を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi2" xml:space="preserve">
-    <value>着陸幅 2 を測定する 2 点を選択します。</value>
+    <value>踊り場2の幅を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoKhoangCach" xml:space="preserve">
     <value>2 つの距離測定点を選択します。</value>
@@ -1201,16 +1201,16 @@
 CTカット</value>
   </data>
   <data name="LTP_Text_ChieuNghi1" xml:space="preserve">
-    <value>着陸 1: {settings.Landing1Width:0.####}</value>
+    <value>踊り場1: {settings.Landing1Width:0.####}</value>
   </data>
   <data name="LTP_Text_ChieuNghi2" xml:space="preserve">
-    <value>着陸 2: {settings.Landing2Width:0.####}</value>
+    <value>踊り場2: {settings.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Text_Dam1" xml:space="preserve">
-    <value>ビーム1</value>
+    <value>梁1</value>
   </data>
   <data name="LTP_Text_Dam2" xml:space="preserve">
-    <value>ビーム2</value>
+    <value>梁2</value>
   </data>
   <data name="LTP_UI_CauThang1Ve" xml:space="preserve">
     <value>1フライト階段</value>
@@ -1225,22 +1225,22 @@ CTカット</value>
     <value>主梁高さ</value>
   </data>
   <data name="LTP_UI_ChieuCaoDamPhu" xml:space="preserve">
-    <value>二次ビームの高さ</value>
+    <value>補助梁の高さ</value>
   </data>
   <data name="LTP_UI_ChieuCaoLanCan" xml:space="preserve">
     <value>手すりの高さ:</value>
   </data>
   <data name="LTP_UI_ChieuCaoTang" xml:space="preserve">
-    <value>床の高さ:</value>
+    <value>階高:</value>
   </data>
   <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
-    <value>はしごの厚さ:</value>
+    <value>階段スラブ厚:</value>
   </data>
   <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
-    <value>着陸 1:</value>
+    <value>踊り場1:</value>
   </data>
   <data name="LTP_UI_ChieuNghi2" xml:space="preserve">
-    <value>着陸 2:</value>
+    <value>踊り場2:</value>
   </data>
   <data name="LTP_UI_ChieuRongChieuNghi1" xml:space="preserve">
     <value>踊り場幅1</value>
@@ -1249,37 +1249,37 @@ CTカット</value>
     <value>踊り場幅2</value>
   </data>
   <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
-    <value>メインビーム幅</value>
+    <value>主梁の幅</value>
   </data>
   <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
-    <value>二次ビーム幅</value>
+    <value>補助梁の幅</value>
   </data>
   <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
-    <value>ステップ幅:</value>
+    <value>踏面幅:</value>
   </data>
   <data name="LTP_UI_DamChinhC" xml:space="preserve">
-    <value>メインビームC:</value>
+    <value>主桁の高さ</value>
   </data>
   <data name="LTP_UI_DamChinhR" xml:space="preserve">
-    <value>メインビームR:</value>
+    <value>主桁の幅</value>
   </data>
   <data name="LTP_UI_DamPhuC" xml:space="preserve">
-    <value>二次ビーム C:</value>
+    <value>小梁の高さ</value>
   </data>
   <data name="LTP_UI_DamPhuR" xml:space="preserve">
-    <value>二次ビーム R:</value>
+    <value>小梁の幅</value>
   </data>
   <data name="LTP_UI_DiemChen" xml:space="preserve">
     <value>●挿入ポイント</value>
   </data>
   <data name="LTP_UI_Do" xml:space="preserve">
-    <value>測定する</value>
+    <value>測定</value>
   </data>
   <data name="LTP_UI_DongY" xml:space="preserve">
-    <value>同意しました</value>
+    <value>確定</value>
   </data>
   <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
-    <value>絵を描いた後にグループ化する</value>
+    <value>作図後にグループを結合</value>
   </data>
   <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
     <value>第1フライトの段数:</value>
@@ -1297,16 +1297,16 @@ CTカット</value>
     <value>2フライト階段</value>
   </data>
   <data name="LTP_UI_ThangChuX" xml:space="preserve">
-    <value>X型はしご</value>
+    <value>X字型階段</value>
   </data>
   <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
     <value>階段仕様：</value>
   </data>
   <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
-    <value>着陸仕様:</value>
+    <value>踊り場の設定:</value>
   </data>
   <data name="LTP_UI_TongSoBac" xml:space="preserve">
-    <value>総ステップ数:</value>
+    <value>総段数:</value>
   </data>
   <data name="LTP_UI_VeDauSangPhai" xml:space="preserve">
     <value>第1フライトを右へ</value>
@@ -1315,10 +1315,10 @@ CTカット</value>
     <value>第1フライトを左へ</value>
   </data>
   <data name="LTP_Validation_ChieuCaoTangChieuRongBacPhaiLonHon0ChieuRong" xml:space="preserve">
-    <value>床の高さとステップ幅は 0 より大きくなければなりません。着陸幅を負の値にすることはできません。</value>
+    <value>階高と踏面幅は0より大きく、踊り場幅は0以上である必要があります。</value>
   </data>
   <data name="LTP_Validation_ChieuCaoVaChieuRongDamPhuPhaiLonHon0Khi" xml:space="preserve">
-    <value>ビーム 1 またはビーム 2 が有効な場合、二次ビームの高さと幅は 0 より大きくなければなりません。</value>
+    <value>梁1または梁2を有効にする場合、補助梁の高さと幅は0より大きくしてください。</value>
   </data>
   <data name="LTP_Validation_KichThuocKetCauKhongDuocAmVaChieuDayBanPhai" xml:space="preserve">
     <value>構造寸法は負であってはならず、スラブの厚さは 0 より大きくなければなりません。</value>
@@ -1330,7 +1330,7 @@ CTカット</value>
     <value>LTP エラー: {0}</value>
   </data>
   <data name="LTP_Validation_LtpDaTaoMatCatCauThangGomDuong" xml:space="preserve">
-    <value>LTP: {0} 行で構成される階段セクションを作成しました。</value>
+    <value>LTP: {0} 本の線分からなる階段断面を作成しました。</value>
   </data>
   <data name="LTP_Validation_MatCatCauThangVinacadLtp" xml:space="preserve">
     <value>VinaCAD LTP 階段の断面図</value>
@@ -1339,7 +1339,7 @@ CTカット</value>
     <value>第1フライトの段数は1以上かつ総段数未満である必要があります。</value>
   </data>
   <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
-    <value>階数は1～、各階の総段数は2～となります。</value>
+    <value>階数は1以上、各階の段数は2以上にしてください。</value>
   </data>
   <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
     <value>階段セクションのレイヤー名が無効です。</value>
@@ -2170,7 +2170,7 @@ CK</value>
     <value>軸記号+寸法を描画</value>
   </data>
   <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
-    <value>スケール: {source.BoardThickness:0.####};手すり: {source.RailingHeight:0.####}</value>
+    <value>階段スラブ: {source.BoardThickness:0.####}; 手すり: {source.RailingHeight:0.####}</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>元の値に戻す</value>
@@ -2256,13 +2256,13 @@ CK</value>
   <data name="FN_Error_PhongKhongKin" xml:space="preserve">
     <value>部屋が閉じていません：{missedRays}/{coarseRays} 本の光線が外へ抜けています（例：{firstMissDegrees:0}°方向）。隙間、開口部、または別レイヤーの壁線を確認してください。</value>
   </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
   <data name="FN_UI_DongY" xml:space="preserve">
     <value>確定</value>
   </data>
   <data name="WWT_UI_DongY" xml:space="preserve">
-    <value>確定</value>
-  </data>
-  <data name="Common_UI_DongY" xml:space="preserve">
     <value>確定</value>
   </data>
   <data name="ZXW_Field_ChieuRong" xml:space="preserve">
@@ -2270,5 +2270,8 @@ CK</value>
   </data>
   <data name="ZXW_Field_ChieuSau" xml:space="preserve">
     <value>奥行き</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
+    <value>現在の蹴上げ高さ: {0:0.####}</value>
   </data>
 </root>
