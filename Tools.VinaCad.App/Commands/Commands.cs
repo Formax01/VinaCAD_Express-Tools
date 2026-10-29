@@ -774,91 +774,89 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
-
         [CommandMethod("E1")]
         public void DuctElbowEqualCommand()
         {
             try
             {
                 new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
-            }
+            }   
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
             }
         }
 
-        [CommandMethod("DDI")]
-        public void SupplyAirDiffuser3DCommand()
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
         {
             try
             {
-                new SupplyAirDiffuserAction().Execute3D();
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
             }
         }
 
-        [CommandMethod("DIFF")]
-        public void SupplyAirDiffuserBlockCommand()
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
         {
             try
             {
-                new SupplyAirDiffuserAction().ExecuteBlock();
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
             }
         }
 
-        [CommandMethod("EE1")]
-        public void DuctElbowEqual3DCommand()
+        [CommandMethod("EEX")]
+        public void DuctBranchEEXCommand()
         {
             try
             {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal, true);
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEX);
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
+                Logger.Info(nameof(DuctBranchEEXCommand), ex);
             }
         }
 
-        [CommandMethod("EE2")]
-        public void DuctElbowReducing3DCommand()
+        [CommandMethod("EEY")]
+        public void DuctBranchEEYCommand()
         {
             try
             {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing, true);
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEY);
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
+                Logger.Info(nameof(DuctBranchEEYCommand), ex);
             }
         }
 
-        [CommandMethod("EE3")]
-        public void DuctElbowVertical3DCommand()
+        [CommandMethod("EEZ")]
+        public void DuctBranchEEZCommand()
         {
             try
             {
-                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical, true);
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEZ);
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+                Logger.Info(nameof(DuctBranchEEZCommand), ex);
             }
         }
-
         [CommandMethod("DD")]
         public void SupplyAirDiffuserCommand()
         {

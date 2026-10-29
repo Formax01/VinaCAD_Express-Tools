@@ -145,8 +145,8 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch (System.Exception ex)
             {
-                Logger.Info(nameof(ReturnAirGrilleAction), ex);
-                MessageBox.Show($"Lỗi: {ex.Message}", StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowAction), ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -262,13 +262,13 @@ namespace Tools.VinaCad.Action.Actions
         private static bool AskKeyword(Editor ed, string msg, string[] keys, string def, out string value)
         {
             value = def;
-            var options = new PromptKeywordOptions("\n" + msg + ": ")
-            {
-                AllowNone = true
-            };
+            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> : ");
 
             foreach (string key in keys)
                 options.Keywords.Add(key);
+
+            options.Keywords.Default = def;
+            options.AllowNone = true;
 
             PromptResult result = ed.GetKeywords(options);
 
