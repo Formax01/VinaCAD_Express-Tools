@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Xác Lập Thống Kê Cốt Thép"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.XLTKCT_UI_XacLapThongKeCotThep}"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
@@ -25,7 +26,7 @@
         <GroupBox
             Grid.Row="0"
             Margin="10"
-            Header="Chiều Dài Mối Nối:">
+            Header="{x:Static res:Lang.XLTKCT_UI_ChieuDaiMoiNoi}">
 
             <Grid Margin="10">
                 <Grid.RowDefinitions>
@@ -117,7 +118,7 @@
                     Grid.Row="6"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Phần DUL thêm:" />
+                    Text="{x:Static res:Lang.XLTKCT_UI_PhanDulThem}" />
 
                 <TextBox
                     Grid.Row="6"
@@ -135,7 +136,7 @@
         <GroupBox
             Grid.Row="1"
             Margin="10,0,10,0"
-            Header="Chiều Dài Bẻ Móc Thép Đai:">
+            Header="{x:Static res:Lang.XLTKCT_UI_ChieuDaiBeMocThepDai}">
 
             <Grid Margin="10">
                 <Grid.RowDefinitions>
@@ -154,7 +155,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalContentAlignment="Center"
-                    Content="Tính Động Đất:"
+                    Content="{x:Static res:Lang.XLTKCT_UI_TinhDongDat}"
                     GroupName="HookType"
                     IsChecked="{Binding IsDongDat}" />
 
@@ -179,7 +180,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     VerticalContentAlignment="Center"
-                    Content="Không Tính Động Đất:"
+                    Content="{x:Static res:Lang.XLTKCT_UI_KhongTinhDongDat}"
                     GroupName="HookType"
                     IsChecked="{Binding IsNotDongDat}" />
 
@@ -216,7 +217,7 @@
                 Height="25"
                 Click="Button_Click"
                 Command="{Binding XacLapCmd}"
-                Content="Xác Lập"
+                Content="{x:Static res:Lang.Common_UI_XacLap}"
                 Foreground="Blue" />
 
             <Button
@@ -224,7 +225,7 @@
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát"
+                Content="{x:Static res:Lang.Common_UI_Thoat}"
                 Foreground="Blue" />
         </Grid>
 
