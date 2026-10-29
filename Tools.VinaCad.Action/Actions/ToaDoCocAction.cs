@@ -13,6 +13,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -175,7 +176,7 @@ namespace Tools.VinaCad.Action.Actions
 
                     _BangToaDoCocView.Hide();
 
-                    PromptPointResult pointResult = _ed.GetPoint("\nChọn điểm chèn bảng thống kê: ");
+                    PromptPointResult pointResult = _ed.GetPoint("\n" + Lang.Common_Prompt_ChonDiemChenBangThongKe);
 
                    
 
@@ -222,7 +223,7 @@ namespace Tools.VinaCad.Action.Actions
                 else
                 {
                     
-                    MessageBox.Show("Bạn phải nhập đầy đủ tỉ lệ và khoảng cách lệch cho phép", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show( Lang.TDC_Msg_BanPhaiNhapDayDuTiLeVaKhoangCachLechCho, Lang.Common_Text_Loi);
                 }
             }
             catch (Exception ex)

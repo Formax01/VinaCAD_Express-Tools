@@ -1537,7 +1537,7 @@ pile</value>
     <value>Pile coordinates (TDC)</value>
   </data>
   <data name="TDC_UI_BangToaDoCoc" xml:space="preserve">
-    <value>Pile coordinate table</value>
+    <value>Pile Coordinate Table</value>
   </data>
   <data name="TDC_UI_GhiChu" xml:space="preserve">
     <value>Notes</value>

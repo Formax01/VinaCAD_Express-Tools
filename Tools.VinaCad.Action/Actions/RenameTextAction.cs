@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teigha.DatabaseServices;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -79,13 +79,13 @@ namespace Tools.VinaCad.Action.Actions
                 List<RenameTextModel> renameTextModels = _renameTextVM.CauKienItems.ToList();
                 if (renameTextModels.Count == 0)
                 {
-                    MessageBox.Show("Chưa có text nào để đổi.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.RenameText_Msg_ChuaCoTextNaoDeDoi, Lang.Common_Text_ThongBao);
                     return;
                 }
                 bool allNewTextEmpty = renameTextModels.All(x =>x == null || string.IsNullOrWhiteSpace(x.NewText));
                 if (allNewTextEmpty)
                 {
-                    MessageBox.Show("Vui lòng copy giá trị vào cột New Text.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.RenameText_Msg_VuiLongCopyGiaTriVaoCotNewText, Lang.Common_Text_ThongBao);
                     return;
                 }
                 RenameTexts(renameTextModels, _renameTextVM.IsOverride);

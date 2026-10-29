@@ -304,7 +304,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return;
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block và text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlockVaText;
 
             PromptSelectionResult result = ed.GetSelection(opt);
 
@@ -375,7 +375,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonVungChuaText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
@@ -435,7 +435,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonVungChuaText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
