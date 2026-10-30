@@ -2481,4 +2481,14 @@ CK</value>
   <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
     <value>クリックしてダクトの方向を確定: </value>
   </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>給気口の幅を入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>給気口の配置位置を選択: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>給気口ブロック名を入力: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>給気口からダクト立上り部までの高さを入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>ダクト立上り部の高さを入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>ダクト立上り部の開口幅を入力</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D寸法が上限を超えています。</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>3D給気口の中心を選択: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
 </root>

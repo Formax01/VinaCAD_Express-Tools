@@ -7111,5 +7111,15 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
+        public static string SupplyAirDiffuser_Prompt_DoRongMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoRongMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_TenBlockMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_TenBlockMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_TenBlockDaTonTai { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_TenBlockDaTonTai", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChieuCaoCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChieuCaoCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_DoRongMiengCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoRongMiengCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_GiaTriPhaiLonHon0", resourceCulture); } }
     }
 }

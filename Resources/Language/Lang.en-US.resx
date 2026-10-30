@@ -2478,4 +2478,14 @@ axis</value>
   <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
     <value>Click to confirm duct direction: </value>
   </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>Enter supply air diffuser width</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>Select supply air diffuser position: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>Enter supply air diffuser block name: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>Block name already exists. Enter a different name.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>Enter height from diffuser to duct riser</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>Enter duct riser height</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>Enter duct riser opening width</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D dimensions exceed the limit.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Select center of 3D supply air diffuser: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be a number greater than 0.</value></data>
 </root>

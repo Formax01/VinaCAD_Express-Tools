@@ -2477,4 +2477,14 @@ trục</value>
   <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
     <value>Click để xác nhận hướng ống: </value>
   </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>Nhập độ rộng miệng gió cấp</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>Chọn vị trí đặt miệng gió cấp: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>Nhập tên block miệng gió cấp: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>Tên block đã tồn tại. Hãy nhập tên khác.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>Nhập độ cao từ miệng gió đến cột ống</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>Nhập chiều cao cột ống</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>Nhập độ rộng miệng cột ống</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>Kích thước 3D vượt giới hạn.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Chọn tâm miệng gió cấp 3D: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải là số lớn hơn 0.</value></data>
 </root>
