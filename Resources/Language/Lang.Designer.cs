@@ -6886,5 +6886,21 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
+        public static string FlexDuct_Prompt_DuongKinhOngMem { get { return ResourceManager.GetString("FlexDuct_Prompt_DuongKinhOngMem", resourceCulture); } }
+        public static string FlexDuct_Prompt_CachLayDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_CachLayDuongTam", resourceCulture); } }
+        public static string FlexDuct_Keyword_Ve { get { return ResourceManager.GetString("FlexDuct_Keyword_Ve", resourceCulture); } }
+        public static string FlexDuct_Keyword_Chon { get { return ResourceManager.GetString("FlexDuct_Keyword_Chon", resourceCulture); } }
+        public static string FlexDuct_Output_KhongTheVeOng { get { return ResourceManager.GetString("FlexDuct_Output_KhongTheVeOng", resourceCulture); } }
+        public static string FlexDuct_Output_CanhBao { get { return ResourceManager.GetString("FlexDuct_Output_CanhBao", resourceCulture); } }
+        public static string FlexDuct_Output_DaVe { get { return ResourceManager.GetString("FlexDuct_Output_DaVe", resourceCulture); } }
+        public static string FlexDuct_Prompt_ChonDiemDauDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemDauDuongTam", resourceCulture); } }
+        public static string FlexDuct_Prompt_ChonDiemTiepTheo { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemTiepTheo", resourceCulture); } }
+        public static string FlexDuct_Prompt_ChonLinePolylineDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonLinePolylineDuongTam", resourceCulture); } }
+        public static string FlexDuct_Prompt_ChiNhanLinePolyline { get { return ResourceManager.GetString("FlexDuct_Prompt_ChiNhanLinePolyline", resourceCulture); } }
+        public static string FlexDuct_Output_KhongXoaDuongTamGoc { get { return ResourceManager.GetString("FlexDuct_Output_KhongXoaDuongTamGoc", resourceCulture); } }
+        public static string FlexDuct_Warning_DuongTamQuaNganHaiDau { get { return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganHaiDau", resourceCulture); } }
+        public static string FlexDuct_Warning_DuongTamQuaNganVeOng { get { return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganVeOng", resourceCulture); } }
+        public static string FlexDuct_Warning_GocDoanNgan { get { return ResourceManager.GetString("FlexDuct_Warning_GocDoanNgan", resourceCulture); } }
+        public static string FlexDuct_Warning_GocBanKinh { get { return ResourceManager.GetString("FlexDuct_Warning_GocBanKinh", resourceCulture); } }
     }
 }
