@@ -471,7 +471,7 @@
     <value>または、元のダイナミック ブロック定義を編集します。</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>システムブロック「{owner.Name}」を修正しないでください</value>
+    <value>システムブロック「{owner.Name}」（寸法/ハッチング/表）は修正できません。</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>外部参照/オーバーレイにあるオブジェクトは編集できません。</value>

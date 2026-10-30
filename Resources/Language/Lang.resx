@@ -470,7 +470,7 @@ block</value>
     <value>hoặc sửa Dynamic Block definition gốc.</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>Không sửa block hệ thống "{owner.Name}"</value>
+    <value>Không sửa block hệ thống "{owner.Name}" (Dimension/Hatch/Table).</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>Không thể sửa đối tượng nằm trong Xref/Overlay.</value>
@@ -701,7 +701,7 @@ block</value>
     <value>Xóa tường tự động</value>
   </data>
   <data name="Common_Status_CungSoHieu" xml:space="preserve">
-    <value>Cùng số hiệu </value>
+    <value>Cùng số hiệu {soHieu}</value>
   </data>
   <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
     <value>đối tượng không phải mặt tường hợp lệ.</value>

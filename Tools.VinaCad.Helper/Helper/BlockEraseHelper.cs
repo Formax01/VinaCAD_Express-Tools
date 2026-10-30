@@ -53,7 +53,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (IsProtectedSystemAnonymousBlock(owner))
             {
-                return Lang.BBE_Text_KhongSuaBlockHeThong.Replace("{owner.Name}", owner.Name) + " (Dimension/Hatch/Table).";
+                return Lang.BBE_Text_KhongSuaBlockHeThong.Replace("{owner.Name}", owner.Name);
             }
 
             if (owner.IsAnonymous && IsDynamicAnonymousRepresentation(transaction, owner))

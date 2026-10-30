@@ -471,7 +471,7 @@ block. block</value>
     <value>or edit the original Dynamic Block definition.</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>Do not fix system block "{owner.Name}"</value>
+    <value>Do not modify system block "{owner.Name}" (Dimension/Hatch/Table).</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>Objects located in Xref/Overlay cannot be edited.</value>
@@ -2464,7 +2464,7 @@ axis</value>
     <value>Branch duct diameter {name} must be greater than 0.</value>
   </data>
   <data name="DuctBranch_Validation_DuongKinhNhanhQuaLon" xml:space="preserve">
-    <value> Branch duct diameter {name} cannot exceed main duct diameter.</value>
+    <value>Branch duct diameter {name} cannot exceed main duct diameter.</value>
   </data>
   <data name="DuctBranch_Validation_BanKinhNhanhQuaNho" xml:space="preserve">
     <value>Radius {name} is too small (negative inner bend radius). Increase Radius {name}.</value>
