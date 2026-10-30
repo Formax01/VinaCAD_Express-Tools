@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Msg_LanguageChanged" xml:space="preserve">
-    <value>Language changed to {0}.</value>
-  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>No matching text found</value>
   </data>
@@ -147,6 +144,9 @@
   <data name="FDT_UI_Title" xml:space="preserve">
     <value>Find and Select Text and MText Objects</value>
   </data>
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>Language changed to {0}.</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>Select a new insertion point, press Enter to finish.</value>
   </data>
@@ -173,5 +173,131 @@
   </data>
   <data name="CPD_UI_DiemDatMoiKetThuc" xml:space="preserve">
     <value>New insertion point &lt;End&gt;: </value>
+  </data>
+  <data name="LG_Title_LanCan" xml:space="preserve">
+    <value>Banister</value>
+  </data>
+  <data name="LG_UI_ChonDiemCuoiLanCan" xml:space="preserve">
+    <value>Select end point of banister:</value>
+  </data>
+  <data name="LG_MessDialog_HaiDiemQuaGanHoacDoc" xml:space="preserve">
+    <value>Two points are too close horizontally or too steep (&gt; 70°), skipping this segment.</value>
+  </data>
+  <data name="LG_MessDialog_DaVeDoan" xml:space="preserve">
+    <value>Drawn segment {0}.</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCanNoiTiep" xml:space="preserve">
+    <value>Select start point of banister [Continue from previous end (T)] &lt;Enter to finish&gt;:</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCan" xml:space="preserve">
+    <value>Select start point of banister:</value>
+  </data>
+  <data name="LG_MessDialog_KetThucLG" xml:space="preserve">
+    <value>Finished LG: {0} banister segment(s).</value>
+  </data>
+  <data name="LG_MessDialog_TenLayerKhongHopLe" xml:space="preserve">
+    <value>Invalid layer name.</value>
+  </data>
+  <data name="LG_MessDialog_MauLayerKhongHopLe" xml:space="preserve">
+    <value>Layer color (ACI) must be from 1 to 255.</value>
+  </data>
+  <data name="LG_MessDialog_TotalHeightQuaNho" xml:space="preserve">
+    <value>Total Height is too small compared to Handrail Dia + Top Gap + Rail Dia + Bottom Gap.</value>
+  </data>
+  <data name="LG_MessDialog_ColumnGapPhaiLonHon" xml:space="preserve">
+    <value>Column Gap must be greater than Column Dia.</value>
+  </data>
+  <data name="LG_MessDialog_GiaTriKhongPhaiSo" xml:space="preserve">
+    <value>{0}: value is not a number.</value>
+  </data>
+  <data name="LG_MessDialog_PhaiLonHon0" xml:space="preserve">
+    <value>{0} must be greater than 0.</value>
+  </data>
+  <data name="LG_MessDialog_KhongDuocAm" xml:space="preserve">
+    <value>{0} cannot be negative.</value>
+  </data>
+  <data name="LG_UI_TotalHeight" xml:space="preserve">
+    <value>Total Height</value>
+  </data>
+  <data name="LG_UI_HandrailDia" xml:space="preserve">
+    <value>Handrail Dia</value>
+  </data>
+  <data name="LG_UI_HandrailExtend" xml:space="preserve">
+    <value>Handrail Extend</value>
+  </data>
+  <data name="LG_UI_RailDia" xml:space="preserve">
+    <value>Rail Dia</value>
+  </data>
+  <data name="LG_UI_TopGap" xml:space="preserve">
+    <value>Top Gap</value>
+  </data>
+  <data name="LG_UI_BottomGap" xml:space="preserve">
+    <value>Bottom Gap</value>
+  </data>
+  <data name="LG_UI_ColumnDia" xml:space="preserve">
+    <value>Column Dia</value>
+  </data>
+  <data name="LG_UI_ColumnGap" xml:space="preserve">
+    <value>Column Gap</value>
+  </data>
+  <data name="LG_UI_PoleDia" xml:space="preserve">
+    <value>Pole Dia</value>
+  </data>
+  <data name="LG_UI_PoleGap" xml:space="preserve">
+    <value>Pole Gap</value>
+  </data>
+  <data name="LG_UI_BanisterLayer" xml:space="preserve">
+    <value>Banister Layer</value>
+  </data>
+  <data name="LG_UI_LayerColor" xml:space="preserve">
+    <value>Layer Color (ACI)</value>
+  </data>
+  <data name="LG_UI_Pick" xml:space="preserve">
+    <value>Pick</value>
+  </data>
+  <data name="LG_UI_ToGroup" xml:space="preserve">
+    <value>to Group</value>
+  </data>
+  <data name="LG_UI_HasSideColumns" xml:space="preserve">
+    <value>Has Side Columns</value>
+  </data>
+  <data name="LG_UI_ResetDefaults" xml:space="preserve">
+    <value>Reset Defaults</value>
+  </data>
+  <data name="LG_UI_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="LG_UI_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LG_TT_ChooseColor" xml:space="preserve">
+    <value>Click to choose color</value>
+  </data>
+  <data name="LG_TT_Pick" xml:space="preserve">
+    <value>Select an object in the drawing to get layer and color</value>
+  </data>
+  <data name="LG_TT_ToGroup" xml:space="preserve">
+    <value>Checked: group banister into 1 object. Unchecked: draw as separate objects.</value>
+  </data>
+  <data name="LG_AciPicker_Title" xml:space="preserve">
+    <value>Choose Color (ACI)</value>
+  </data>
+  <data name="LG_AciPicker_UI_Header" xml:space="preserve">
+    <value>VinaCad Color Index (ACI):</value>
+  </data>
+  <data name="LG_AciPicker_UI_IndexColor" xml:space="preserve">
+    <value>Color Index:</value>
+  </data>
+  <data name="LG_UI_ChonDoiTuongLayLayer" xml:space="preserve">
+    <value>Select object to get layer:</value>
+  </data>
+  <data name="LG_MessDialog_QuaNhieuChiTiet" xml:space="preserve">
+    <value>Banister has too many details ({0}).Please check the drawing unit and the selected points distance.</value>
+  </data>
+  <data name="LG_MessDialog_DoiTuongThuocXref" xml:space="preserve">
+    <value>Object belongs to an xref, this layer cannot be used.</value>
+  </data>
+  <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
+    <value>not set (treated as mm)</value>
   </data>
 </root>

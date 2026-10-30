@@ -117,10 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Msg_LanguageChanged" xml:space="preserve">
-    <value>言語を{0}に変更しました。</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>一致するテキストが見つかりません</value>
   </data>
@@ -148,6 +144,9 @@
   <data name="FDT_UI_Title" xml:space="preserve">
     <value>文字とマルチテキストの検索・選択</value>
   </data>
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>言語を{0}に変更しました。</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>新しい配置ポイントを選択し、Enterキーで終了します。</value>
   </data>
@@ -174,5 +173,131 @@
   </data>
   <data name="CPD_UI_DiemDatMoiKetThuc" xml:space="preserve">
     <value>新しい配置ポイント &lt;終了&gt;: </value>
+  </data>
+  <data name="LG_Title_LanCan" xml:space="preserve">
+    <value>手すり</value>
+  </data>
+  <data name="LG_UI_ChonDiemCuoiLanCan" xml:space="preserve">
+    <value>手すりの終点を選択:</value>
+  </data>
+  <data name="LG_MessDialog_HaiDiemQuaGanHoacDoc" xml:space="preserve">
+    <value>2点が水平方向に近すぎるか、傾斜が急すぎます（&gt;70度）。このセグメントをスキップします。</value>
+  </data>
+  <data name="LG_MessDialog_DaVeDoan" xml:space="preserve">
+    <value>セグメント {0} を描画しました。</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCanNoiTiep" xml:space="preserve">
+    <value>手すりの始点を選択 [前の終点から続行 (T)] &lt;Enterで終了&gt;:</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCan" xml:space="preserve">
+    <value>手すりの始点を選択:</value>
+  </data>
+  <data name="LG_MessDialog_KetThucLG" xml:space="preserve">
+    <value>LG終了: 手すりセグメント {0} 個。</value>
+  </data>
+  <data name="LG_MessDialog_TenLayerKhongHopLe" xml:space="preserve">
+    <value>レイヤー名が無効です。</value>
+  </data>
+  <data name="LG_MessDialog_MauLayerKhongHopLe" xml:space="preserve">
+    <value>レイヤーの色（ACI）は1～255である必要があります。</value>
+  </data>
+  <data name="LG_MessDialog_TotalHeightQuaNho" xml:space="preserve">
+    <value>Total Height が Handrail Dia + Top Gap + Rail Dia + Bottom Gap に対して小さすぎます。</value>
+  </data>
+  <data name="LG_MessDialog_ColumnGapPhaiLonHon" xml:space="preserve">
+    <value>Column Gap は Column Dia より大きくしてください。</value>
+  </data>
+  <data name="LG_MessDialog_GiaTriKhongPhaiSo" xml:space="preserve">
+    <value>{0}: 値が数値ではありません.</value>
+  </data>
+  <data name="LG_MessDialog_PhaiLonHon0" xml:space="preserve">
+    <value>{0} は0より大きくしてください。</value>
+  </data>
+  <data name="LG_MessDialog_KhongDuocAm" xml:space="preserve">
+    <value>{0} は負の値にできません。</value>
+  </data>
+  <data name="LG_UI_TotalHeight" xml:space="preserve">
+    <value>総高さ</value>
+  </data>
+  <data name="LG_UI_HandrailDia" xml:space="preserve">
+    <value>手すり径</value>
+  </data>
+  <data name="LG_UI_HandrailExtend" xml:space="preserve">
+    <value>手すり延長</value>
+  </data>
+  <data name="LG_UI_RailDia" xml:space="preserve">
+    <value>レール径</value>
+  </data>
+  <data name="LG_UI_TopGap" xml:space="preserve">
+    <value>上部隙間</value>
+  </data>
+  <data name="LG_UI_BottomGap" xml:space="preserve">
+    <value>下部隙間</value>
+  </data>
+  <data name="LG_UI_ColumnDia" xml:space="preserve">
+    <value>柱径</value>
+  </data>
+  <data name="LG_UI_ColumnGap" xml:space="preserve">
+    <value>柱間隔</value>
+  </data>
+  <data name="LG_UI_PoleDia" xml:space="preserve">
+    <value>ポール径</value>
+  </data>
+  <data name="LG_UI_PoleGap" xml:space="preserve">
+    <value>ポール間隔</value>
+  </data>
+  <data name="LG_UI_BanisterLayer" xml:space="preserve">
+    <value>手すりレイヤー</value>
+  </data>
+  <data name="LG_UI_LayerColor" xml:space="preserve">
+    <value>レイヤー色 (ACI)</value>
+  </data>
+  <data name="LG_UI_Pick" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="LG_UI_ToGroup" xml:space="preserve">
+    <value>グループ化</value>
+  </data>
+  <data name="LG_UI_HasSideColumns" xml:space="preserve">
+    <value>両側に柱あり</value>
+  </data>
+  <data name="LG_UI_ResetDefaults" xml:space="preserve">
+    <value>デフォルトに戻す</value>
+  </data>
+  <data name="LG_UI_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="LG_UI_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="LG_TT_ChooseColor" xml:space="preserve">
+    <value>クリックして色を選択</value>
+  </data>
+  <data name="LG_TT_Pick" xml:space="preserve">
+    <value>図面内のオブジェクトを選択してレイヤーと色を取得</value>
+  </data>
+  <data name="LG_TT_ToGroup" xml:space="preserve">
+    <value>チェック: 手すりを1つのオブジェクトにグループ化。未チェック: 個別オブジェクトとして描画。</value>
+  </data>
+  <data name="LG_AciPicker_Title" xml:space="preserve">
+    <value>色を選択 (ACI)</value>
+  </data>
+  <data name="LG_AciPicker_UI_Header" xml:space="preserve">
+    <value>VinaCadカラーインデックス (ACI):</value>
+  </data>
+  <data name="LG_AciPicker_UI_IndexColor" xml:space="preserve">
+    <value>カラーインデックス:</value>
+  </data>
+  <data name="LG_UI_ChonDoiTuongLayLayer" xml:space="preserve">
+    <value>レイヤーを取得するオブジェクトを選択:</value>
+  </data>
+  <data name="LG_MessDialog_QuaNhieuChiTiet" xml:space="preserve">
+    <value>手すりに詳細が多すぎます（{0}）。図面の単位と選択した2点間の距離を確認してください。</value>
+  </data>
+  <data name="LG_MessDialog_DoiTuongThuocXref" xml:space="preserve">
+    <value>オブジェクトはxrefに属しているため、このレイヤーは使用できません。</value>
+  </data>
+  <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
+    <value>未設定（mmとして扱う）</value>
   </data>
 </root>

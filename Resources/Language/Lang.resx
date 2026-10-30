@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Msg_LanguageChanged" xml:space="preserve">
-    <value>Đã chuyển ngôn ngữ sang {0}.</value>
-  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>Không tìm thấy text chứa</value>
   </data>
@@ -147,6 +144,9 @@
   <data name="FDT_UI_Title" xml:space="preserve">
     <value>Tìm và chọn đối tượng Text và MText</value>
   </data>
+  <data name="Msg_LanguageChanged" xml:space="preserve">
+    <value>Đã chuyển ngôn ngữ sang {0}.</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>Chọn điểm đặt mới, Enter để kết thúc.</value>
   </data>
@@ -173,5 +173,131 @@
   </data>
   <data name="CPD_UI_DiemDatMoiKetThuc" xml:space="preserve">
     <value>Điểm đặt mới &lt;Kết thúc&gt;: </value>
+  </data>
+  <data name="LG_Title_LanCan" xml:space="preserve">
+    <value>Lan can</value>
+  </data>
+  <data name="LG_UI_ChonDiemCuoiLanCan" xml:space="preserve">
+    <value>Chọn điểm cuối lan can:</value>
+  </data>
+  <data name="LG_MessDialog_HaiDiemQuaGanHoacDoc" xml:space="preserve">
+    <value>Hai điểm quá gần nhau theo phương ngang hoặc quá dốc (&gt; 70 độ), bỏ qua đoạn này.</value>
+  </data>
+  <data name="LG_MessDialog_DaVeDoan" xml:space="preserve">
+    <value>Đã vẽ đoạn {0}.</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCanNoiTiep" xml:space="preserve">
+    <value>Chọn điểm đầu lan can [Nối tiếp từ điểm cuối trước (T)] &lt;Enter để kết thúc&gt;:</value>
+  </data>
+  <data name="LG_UI_ChonDiemDauLanCan" xml:space="preserve">
+    <value>Chọn điểm đầu lan can:</value>
+  </data>
+  <data name="LG_MessDialog_KetThucLG" xml:space="preserve">
+    <value>Kết thúc LG: {0} đoạn lan can.</value>
+  </data>
+  <data name="LG_MessDialog_TenLayerKhongHopLe" xml:space="preserve">
+    <value>Tên layer không hợp lệ.</value>
+  </data>
+  <data name="LG_MessDialog_MauLayerKhongHopLe" xml:space="preserve">
+    <value>Màu layer (ACI) phải từ 1 đến 255.</value>
+  </data>
+  <data name="LG_MessDialog_TotalHeightQuaNho" xml:space="preserve">
+    <value>Total Height quá nhỏ so với Handrail Dia + Top Gap + Rail Dia + Bottom Gap.</value>
+  </data>
+  <data name="LG_MessDialog_ColumnGapPhaiLonHon" xml:space="preserve">
+    <value>Column Gap phải lớn hơn Column Dia.</value>
+  </data>
+  <data name="LG_MessDialog_GiaTriKhongPhaiSo" xml:space="preserve">
+    <value>{0}: giá trị không phải là số.</value>
+  </data>
+  <data name="LG_MessDialog_PhaiLonHon0" xml:space="preserve">
+    <value>{0} phải lớn hơn 0.</value>
+  </data>
+  <data name="LG_MessDialog_KhongDuocAm" xml:space="preserve">
+    <value>{0} không được âm.</value>
+  </data>
+  <data name="LG_UI_TotalHeight" xml:space="preserve">
+    <value>Chiều cao tổng</value>
+  </data>
+  <data name="LG_UI_HandrailDia" xml:space="preserve">
+    <value>Đường kính tay vịn</value>
+  </data>
+  <data name="LG_UI_HandrailExtend" xml:space="preserve">
+    <value>Chiều dài kéo dài tay vịn</value>
+  </data>
+  <data name="LG_UI_RailDia" xml:space="preserve">
+    <value>Đường kính thanh ngang</value>
+  </data>
+  <data name="LG_UI_TopGap" xml:space="preserve">
+    <value>Khoảng cách trên</value>
+  </data>
+  <data name="LG_UI_BottomGap" xml:space="preserve">
+    <value>Khoảng cách dưới</value>
+  </data>
+  <data name="LG_UI_ColumnDia" xml:space="preserve">
+    <value>Đường kính cột</value>
+  </data>
+  <data name="LG_UI_ColumnGap" xml:space="preserve">
+    <value>Khoảng cách cột</value>
+  </data>
+  <data name="LG_UI_PoleDia" xml:space="preserve">
+    <value>Đường kính trụ</value>
+  </data>
+  <data name="LG_UI_PoleGap" xml:space="preserve">
+    <value>Khoảng cách trụ</value>
+  </data>
+  <data name="LG_UI_BanisterLayer" xml:space="preserve">
+    <value>Layer lan can</value>
+  </data>
+  <data name="LG_UI_LayerColor" xml:space="preserve">
+    <value>Màu layer (ACI)</value>
+  </data>
+  <data name="LG_UI_Pick" xml:space="preserve">
+    <value>Chọn</value>
+  </data>
+  <data name="LG_UI_ToGroup" xml:space="preserve">
+    <value>Gộp nhóm</value>
+  </data>
+  <data name="LG_UI_HasSideColumns" xml:space="preserve">
+    <value>Có cột hai bên</value>
+  </data>
+  <data name="LG_UI_ResetDefaults" xml:space="preserve">
+    <value>Đặt lại mặc định</value>
+  </data>
+  <data name="LG_UI_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="LG_UI_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="LG_TT_ChooseColor" xml:space="preserve">
+    <value>Bấm để chọn màu</value>
+  </data>
+  <data name="LG_TT_Pick" xml:space="preserve">
+    <value>Chọn một đối tượng trong bản vẽ để lấy layer và màu</value>
+  </data>
+  <data name="LG_TT_ToGroup" xml:space="preserve">
+    <value>Tích: gộp lan can thành 1 đối tượng. Bỏ tích: vẽ thành nhiều đối tượng rời.</value>
+  </data>
+  <data name="LG_AciPicker_Title" xml:space="preserve">
+    <value>Chọn màu (ACI)</value>
+  </data>
+  <data name="LG_AciPicker_UI_Header" xml:space="preserve">
+    <value>VinaCad Color Index (ACI):</value>
+  </data>
+  <data name="LG_AciPicker_UI_IndexColor" xml:space="preserve">
+    <value>Chỉ số màu:</value>
+  </data>
+  <data name="LG_UI_ChonDoiTuongLayLayer" xml:space="preserve">
+    <value>Chọn đối tượng để lấy layer:</value>
+  </data>
+  <data name="LG_MessDialog_QuaNhieuChiTiet" xml:space="preserve">
+    <value>Lan can có quá nhiều chi tiết ({0}). Hãy kiểm tra đơn vị bản vẽ và khoảng cách hai điểm đã chọn.</value>
+  </data>
+  <data name="LG_MessDialog_DoiTuongThuocXref" xml:space="preserve">
+    <value>Đối tượng thuộc xref, không dùng được layer này.</value>
+  </data>
+  <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
+    <value>chưa đặt (coi là mm)</value>
   </data>
 </root>

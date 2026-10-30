@@ -34,24 +34,25 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        
-        
+
+
         [CommandMethod("LG")]
         public void BanisterCommand()
         {
             try
             {
-                new BanisterAction().Execute();
+                BanisterAction action = new BanisterAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
             }
         }
 
-        
-        
+
+
 
 
 
