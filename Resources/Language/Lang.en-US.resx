@@ -2419,4 +2419,32 @@ axis</value>
   <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>The centerline is too short to draw the duct.</value></data>
   <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>Corner {i}: short segment; bend radius reduced to {r:0.##}</value></data>
   <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>Corner {i}: radius {r:0.##} ≤ D/2; the inner edge folds</value></data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve"><value>Select insertion point: </value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve"><value>Enter inlet size</value></data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve"><value>Enter size for both ends</value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve"><value>Enter outlet size</value></data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve"><value>Enter duct height</value></data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve"><value>Enter inner bend radius</value></data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve"><value>Enter vertical segment length</value></data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve"><value>Choose direction</value></data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve"><value>Down</value></data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve"><value>Up</value></data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve"><value>Choose turn direction</value></data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve"><value>Left</value></data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve"><value>Right</value></data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve"><value>Enter turn angle (degrees)</value></data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve"><value>Invalid duct direction.</value></data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve"><value>Duct height must be greater than 0.</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve"><value>Inlet size must be greater than 0.</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve"><value>Outlet size must be greater than 0.</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve"><value>Inner bend radius must be greater than 0.</value></data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve"><value>Turn angle must be between {minAngle} and {maxAngle} degrees.</value></data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve"><value>Radius is too small: the inner bend radius is less than 0. Increase the radius.</value></data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve"><value>Vertical drop length must be greater than 0.</value></data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve"><value>Radius must be at least half the inlet diameter.</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve"><value>The 3D solid's inner bend radius must be greater than 0.</value></data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be greater than 0.</value></data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve"><value>Invalid input value.</value></data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve"><value>Click to confirm duct direction: </value></data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve"><value>Could not create the 3D duct cross-section.</value></data>
 </root>

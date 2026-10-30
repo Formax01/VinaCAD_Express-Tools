@@ -6902,5 +6902,33 @@ namespace Tools.Resources.Language {
         public static string FlexDuct_Warning_DuongTamQuaNganVeOng { get { return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganVeOng", resourceCulture); } }
         public static string FlexDuct_Warning_GocDoanNgan { get { return ResourceManager.GetString("FlexDuct_Warning_GocDoanNgan", resourceCulture); } }
         public static string FlexDuct_Warning_GocBanKinh { get { return ResourceManager.GetString("FlexDuct_Warning_GocBanKinh", resourceCulture); } }
+        public static string DuctElbow_Prompt_ChonDiemChen { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonDiemChen", resourceCulture); } }
+        public static string DuctElbow_Prompt_KichThuocDauVao { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauVao", resourceCulture); } }
+        public static string DuctElbow_Prompt_KichThuocHaiDau { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocHaiDau", resourceCulture); } }
+        public static string DuctElbow_Prompt_KichThuocDauRa { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauRa", resourceCulture); } }
+        public static string DuctElbow_Prompt_ChieuCaoOng { get { return ResourceManager.GetString("DuctElbow_Prompt_ChieuCaoOng", resourceCulture); } }
+        public static string DuctElbow_Prompt_BanKinhCongTrong { get { return ResourceManager.GetString("DuctElbow_Prompt_BanKinhCongTrong", resourceCulture); } }
+        public static string DuctElbow_Prompt_ChieuDaiDoanDung { get { return ResourceManager.GetString("DuctElbow_Prompt_ChieuDaiDoanDung", resourceCulture); } }
+        public static string DuctElbow_Prompt_ChonHuong { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonHuong", resourceCulture); } }
+        public static string DuctElbow_Keyword_Xuong { get { return ResourceManager.GetString("DuctElbow_Keyword_Xuong", resourceCulture); } }
+        public static string DuctElbow_Keyword_Len { get { return ResourceManager.GetString("DuctElbow_Keyword_Len", resourceCulture); } }
+        public static string DuctElbow_Prompt_ChonHuongRe { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonHuongRe", resourceCulture); } }
+        public static string DuctElbow_Keyword_Trai { get { return ResourceManager.GetString("DuctElbow_Keyword_Trai", resourceCulture); } }
+        public static string DuctElbow_Keyword_Phai { get { return ResourceManager.GetString("DuctElbow_Keyword_Phai", resourceCulture); } }
+        public static string DuctElbow_Prompt_GocQuay { get { return ResourceManager.GetString("DuctElbow_Prompt_GocQuay", resourceCulture); } }
+        public static string DuctElbow_Output_HuongOngKhongHopLe { get { return ResourceManager.GetString("DuctElbow_Output_HuongOngKhongHopLe", resourceCulture); } }
+        public static string DuctElbow_Validation_ChieuCaoOng { get { return ResourceManager.GetString("DuctElbow_Validation_ChieuCaoOng", resourceCulture); } }
+        public static string DuctElbow_Validation_KichThuocDauVao { get { return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauVao", resourceCulture); } }
+        public static string DuctElbow_Validation_KichThuocDauRa { get { return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauRa", resourceCulture); } }
+        public static string DuctElbow_Validation_BanKinhCongTrong { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong", resourceCulture); } }
+        public static string DuctElbow_Validation_GocQuay { get { return ResourceManager.GetString("DuctElbow_Validation_GocQuay", resourceCulture); } }
+        public static string DuctElbow_Validation_BanKinhQuaNho { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhQuaNho", resourceCulture); } }
+        public static string DuctElbow_Validation_ChieuDaiDoanHa { get { return ResourceManager.GetString("DuctElbow_Validation_ChieuDaiDoanHa", resourceCulture); } }
+        public static string DuctElbow_Validation_BanKinhNuaDuongKinh { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhNuaDuongKinh", resourceCulture); } }
+        public static string DuctElbow_Validation_BanKinhCongTrong3D { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong3D", resourceCulture); } }
+        public static string DuctElbow_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("DuctElbow_Output_GiaTriPhaiLonHon0", resourceCulture); } }
+        public static string DuctElbow_Output_GiaTriNhapKhongHopLe { get { return ResourceManager.GetString("DuctElbow_Output_GiaTriNhapKhongHopLe", resourceCulture); } }
+        public static string DuctElbow_Prompt_XacNhanHuongOng { get { return ResourceManager.GetString("DuctElbow_Prompt_XacNhanHuongOng", resourceCulture); } }
+        public static string DuctElbow_Error_KhongTaoDuocMatCat3D { get { return ResourceManager.GetString("DuctElbow_Error_KhongTaoDuocMatCat3D", resourceCulture); } }
     }
 }
