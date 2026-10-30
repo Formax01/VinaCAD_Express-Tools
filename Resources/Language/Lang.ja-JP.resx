@@ -147,6 +147,98 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
   </data>
+  <data name="BULON_UI_ChonDiem" xml:space="preserve">
+    <value>点を選択: </value>
+  </data>
+  <data name="BULON_UI_NhapBanKinhBulon" xml:space="preserve">
+    <value>ボルトの半径を入力: </value>
+  </data>
+  <data name="BULON_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>ブロック {0} を挿入しました。</value>
+  </data>
+  <data name="BULON_HELPER_UI_ChonHuongBulon" xml:space="preserve">
+    <value>ボルトの方向を選択（中心から頂点へポインター方向）、クリックして配置: </value>
+  </data>
+  <data name="BULON1_UI_ChonDiemDat" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="BULON1_UI_NhapL" xml:space="preserve">
+    <value>L を入力: </value>
+  </data>
+  <data name="BULON1_HELPER_UI_ChonHuongTrucDoiXung" xml:space="preserve">
+    <value>対称軸の方向を選択 [Enter = 上方向を維持]: </value>
+  </data>
+  <data name="BULON2_UI_ChonDiemDat" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="BULON2_UI_NhapL" xml:space="preserve">
+    <value>L を入力: </value>
+  </data>
+  <data name="DAIOC_UI_ChonDiemDat" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="DAIOC_UI_NhapL" xml:space="preserve">
+    <value>L を入力: </value>
+  </data>
+  <data name="DAIOC_MessDialog_DaChenBlock" xml:space="preserve">
+    <value>ブロック {0} を挿入しました。</value>
+  </data>
+  <data name="DAIOC1_UI_ChonDiemDat" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="DAIOC1_UI_NhapL" xml:space="preserve">
+    <value>L を入力: </value>
+  </data>
+  <data name="DAIOC2_UI_ChonDiemDat" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="DAIOC2_UI_NhapL" xml:space="preserve">
+    <value>L を入力: </value>
+  </data>
+  <data name="OC1_UI_ChonDiem" xml:space="preserve">
+    <value>点を選択: </value>
+  </data>
+  <data name="OC1_UI_NhapSize" xml:space="preserve">
+    <value>サイズ を入力</value>
+  </data>
+  <data name="OC1_UI_NhapLengthL" xml:space="preserve">
+    <value>長さ l を入力</value>
+  </data>
+  <data name="OC1_HELPER_UI_ChonGocQuay" xml:space="preserve">
+    <value>回転角度を選択: </value>
+  </data>
+  <data name="OC1_MessDialog_LNhoHonHoacBangL" xml:space="preserve">
+    <value>OC1: l は L 以下である必要があります。</value>
+  </data>
+  <data name="OC1_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC1: {0} 個のオブジェクトを作成しました。</value>
+  </data>
+  <data name="OC1_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC1: オブジェクトを作成できませんでした。図面は変更されていません。</value>
+  </data>
+  <data name="OC2_UI_ChonDiem" xml:space="preserve">
+    <value>点を選択: </value>
+  </data>
+  <data name="OC2_UI_NhapSize" xml:space="preserve">
+    <value>Size を入力</value>
+  </data>
+  <data name="OC2_UI_NhapLengthL" xml:space="preserve">
+    <value>長さ L を入力</value>
+  </data>
+  <data name="OC2_MessDialog_LPhaiLonHonSize10" xml:space="preserve">
+    <value>OC2: L は Size/10 ({0}) より大きくなければなりません。</value>
+  </data>
+  <data name="OC2_MessDialog_DaTaoDoiTuong" xml:space="preserve">
+    <value>OC2: {0} 個のオブジェクトを作成しました。</value>
+  </data>
+  <data name="OC2_MessDialog_KhongTheTaoDoiTuong" xml:space="preserve">
+    <value>OC2: オブジェクトを作成できませんでした。図面は変更されていません。</value>
+  </data>
+  <data name="OC1_UI_NhapGiaTri" xml:space="preserve">
+    <value>値を入力 :</value>
+  </data>
+  <data name="OC1_UI_NhapLength" xml:space="preserve">
+    <value>長さを入力:</value> </data>
   <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
     <value>指示ファイルを開けません。
 {ex.Message}</value>
