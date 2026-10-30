@@ -2442,6 +2442,231 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phải.
+        /// </summary>
+        public static string DuctBranch_Keyword_Phai {
+            get {
+                return ResourceManager.GetString("DuctBranch_Keyword_Phai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trái.
+        /// </summary>
+        public static string DuctBranch_Keyword_Trai {
+            get {
+                return ResourceManager.GetString("DuctBranch_Keyword_Trai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị phải là số không âm..
+        /// </summary>
+        public static string DuctBranch_Output_GiaTriKhongAm {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_GiaTriKhongAm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị phải là số lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Output_GiaTriLonHon0 {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_GiaTriLonHon0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hướng ống không hợp lệ..
+        /// </summary>
+        public static string DuctBranch_Output_HuongOngKhongHopLe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_HuongOngKhongHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi: {message}.
+        /// </summary>
+        public static string DuctBranch_Output_Loi {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_Loi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập bán kính cong nhánh rẽ {name}.
+        /// </summary>
+        public static string DuctBranch_Prompt_BanKinhOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_BanKinhOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống chính (đoạn thẳng trước chỗ rẽ).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống đi tiếp (đoạn thẳng vượt qua miệng nhánh).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống rẽ (đoạn thẳng sau cung rẽ).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đặt: .
+        /// </summary>
+        public static string DuctBranch_Prompt_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChonDiemDat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn hướng rẽ.
+        /// </summary>
+        public static string DuctBranch_Prompt_ChonHuongRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChonHuongRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống chính.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống đi thẳng đi tiếp.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống rẽ {name}.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click để xác nhận hướng ống: .
+        /// </summary>
+        public static string DuctBranch_Prompt_XacNhanHuongOng {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_XacNhanHuongOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính {name} quá nhỏ (bán kính cong trong âm), hãy tăng bán kính{name}..
+        /// </summary>
+        public static string DuctBranch_Validation_BanKinhNhanhQuaNho {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_BanKinhNhanhQuaNho", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống chính không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống đi thẳng không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống rẽ không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống rẽ {name} phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhNhanhPhaiDuong {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhNhanhPhaiDuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống rẽ {name} không được lớn hơn W..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhNhanhQuaLon {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhNhanhQuaLon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống chính phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống đi thẳng phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống đi thẳng không được lớn hơn đường kính ống chính..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngDiThangQuaLon {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngDiThangQuaLon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tạo được mặt cắt ống gió 3D..
         /// </summary>
         public static string DuctElbow_Error_KhongTaoDuocMatCat3D {
@@ -6886,49 +7111,5 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
-        public static string FlexDuct_Prompt_DuongKinhOngMem { get { return ResourceManager.GetString("FlexDuct_Prompt_DuongKinhOngMem", resourceCulture); } }
-        public static string FlexDuct_Prompt_CachLayDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_CachLayDuongTam", resourceCulture); } }
-        public static string FlexDuct_Keyword_Ve { get { return ResourceManager.GetString("FlexDuct_Keyword_Ve", resourceCulture); } }
-        public static string FlexDuct_Keyword_Chon { get { return ResourceManager.GetString("FlexDuct_Keyword_Chon", resourceCulture); } }
-        public static string FlexDuct_Output_KhongTheVeOng { get { return ResourceManager.GetString("FlexDuct_Output_KhongTheVeOng", resourceCulture); } }
-        public static string FlexDuct_Output_CanhBao { get { return ResourceManager.GetString("FlexDuct_Output_CanhBao", resourceCulture); } }
-        public static string FlexDuct_Output_DaVe { get { return ResourceManager.GetString("FlexDuct_Output_DaVe", resourceCulture); } }
-        public static string FlexDuct_Prompt_ChonDiemDauDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemDauDuongTam", resourceCulture); } }
-        public static string FlexDuct_Prompt_ChonDiemTiepTheo { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemTiepTheo", resourceCulture); } }
-        public static string FlexDuct_Prompt_ChonLinePolylineDuongTam { get { return ResourceManager.GetString("FlexDuct_Prompt_ChonLinePolylineDuongTam", resourceCulture); } }
-        public static string FlexDuct_Prompt_ChiNhanLinePolyline { get { return ResourceManager.GetString("FlexDuct_Prompt_ChiNhanLinePolyline", resourceCulture); } }
-        public static string FlexDuct_Output_KhongXoaDuongTamGoc { get { return ResourceManager.GetString("FlexDuct_Output_KhongXoaDuongTamGoc", resourceCulture); } }
-        public static string FlexDuct_Warning_DuongTamQuaNganHaiDau { get { return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganHaiDau", resourceCulture); } }
-        public static string FlexDuct_Warning_DuongTamQuaNganVeOng { get { return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganVeOng", resourceCulture); } }
-        public static string FlexDuct_Warning_GocDoanNgan { get { return ResourceManager.GetString("FlexDuct_Warning_GocDoanNgan", resourceCulture); } }
-        public static string FlexDuct_Warning_GocBanKinh { get { return ResourceManager.GetString("FlexDuct_Warning_GocBanKinh", resourceCulture); } }
-        public static string DuctElbow_Prompt_ChonDiemChen { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonDiemChen", resourceCulture); } }
-        public static string DuctElbow_Prompt_KichThuocDauVao { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauVao", resourceCulture); } }
-        public static string DuctElbow_Prompt_KichThuocHaiDau { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocHaiDau", resourceCulture); } }
-        public static string DuctElbow_Prompt_KichThuocDauRa { get { return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauRa", resourceCulture); } }
-        public static string DuctElbow_Prompt_ChieuCaoOng { get { return ResourceManager.GetString("DuctElbow_Prompt_ChieuCaoOng", resourceCulture); } }
-        public static string DuctElbow_Prompt_BanKinhCongTrong { get { return ResourceManager.GetString("DuctElbow_Prompt_BanKinhCongTrong", resourceCulture); } }
-        public static string DuctElbow_Prompt_ChieuDaiDoanDung { get { return ResourceManager.GetString("DuctElbow_Prompt_ChieuDaiDoanDung", resourceCulture); } }
-        public static string DuctElbow_Prompt_ChonHuong { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonHuong", resourceCulture); } }
-        public static string DuctElbow_Keyword_Xuong { get { return ResourceManager.GetString("DuctElbow_Keyword_Xuong", resourceCulture); } }
-        public static string DuctElbow_Keyword_Len { get { return ResourceManager.GetString("DuctElbow_Keyword_Len", resourceCulture); } }
-        public static string DuctElbow_Prompt_ChonHuongRe { get { return ResourceManager.GetString("DuctElbow_Prompt_ChonHuongRe", resourceCulture); } }
-        public static string DuctElbow_Keyword_Trai { get { return ResourceManager.GetString("DuctElbow_Keyword_Trai", resourceCulture); } }
-        public static string DuctElbow_Keyword_Phai { get { return ResourceManager.GetString("DuctElbow_Keyword_Phai", resourceCulture); } }
-        public static string DuctElbow_Prompt_GocQuay { get { return ResourceManager.GetString("DuctElbow_Prompt_GocQuay", resourceCulture); } }
-        public static string DuctElbow_Output_HuongOngKhongHopLe { get { return ResourceManager.GetString("DuctElbow_Output_HuongOngKhongHopLe", resourceCulture); } }
-        public static string DuctElbow_Validation_ChieuCaoOng { get { return ResourceManager.GetString("DuctElbow_Validation_ChieuCaoOng", resourceCulture); } }
-        public static string DuctElbow_Validation_KichThuocDauVao { get { return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauVao", resourceCulture); } }
-        public static string DuctElbow_Validation_KichThuocDauRa { get { return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauRa", resourceCulture); } }
-        public static string DuctElbow_Validation_BanKinhCongTrong { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong", resourceCulture); } }
-        public static string DuctElbow_Validation_GocQuay { get { return ResourceManager.GetString("DuctElbow_Validation_GocQuay", resourceCulture); } }
-        public static string DuctElbow_Validation_BanKinhQuaNho { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhQuaNho", resourceCulture); } }
-        public static string DuctElbow_Validation_ChieuDaiDoanHa { get { return ResourceManager.GetString("DuctElbow_Validation_ChieuDaiDoanHa", resourceCulture); } }
-        public static string DuctElbow_Validation_BanKinhNuaDuongKinh { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhNuaDuongKinh", resourceCulture); } }
-        public static string DuctElbow_Validation_BanKinhCongTrong3D { get { return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong3D", resourceCulture); } }
-        public static string DuctElbow_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("DuctElbow_Output_GiaTriPhaiLonHon0", resourceCulture); } }
-        public static string DuctElbow_Output_GiaTriNhapKhongHopLe { get { return ResourceManager.GetString("DuctElbow_Output_GiaTriNhapKhongHopLe", resourceCulture); } }
-        public static string DuctElbow_Prompt_XacNhanHuongOng { get { return ResourceManager.GetString("DuctElbow_Prompt_XacNhanHuongOng", resourceCulture); } }
-        public static string DuctElbow_Error_KhongTaoDuocMatCat3D { get { return ResourceManager.GetString("DuctElbow_Error_KhongTaoDuocMatCat3D", resourceCulture); } }
     }
 }
