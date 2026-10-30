@@ -7121,5 +7121,12 @@ namespace Tools.Resources.Language {
         public static string SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan", resourceCulture); } }
         public static string SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D", resourceCulture); } }
         public static string SupplyAirDiffuser_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_GiaTriPhaiLonHon0", resourceCulture); } }
+        public static string Grille_Prompt_ChieuRongKhungTrong { get { return ResourceManager.GetString("Grille_Prompt_ChieuRongKhungTrong", resourceCulture); } }
+        public static string Grille_Prompt_ChieuCaoKhungTrong { get { return ResourceManager.GetString("Grille_Prompt_ChieuCaoKhungTrong", resourceCulture); } }
+        public static string Grille_Prompt_TenBlock { get { return ResourceManager.GetString("Grille_Prompt_TenBlock", resourceCulture); } }
+        public static string Grille_Output_TenBlockDaTonTai { get { return ResourceManager.GetString("Grille_Output_TenBlockDaTonTai", resourceCulture); } }
+        public static string Grille_Output_Loi { get { return ResourceManager.GetString("Grille_Output_Loi", resourceCulture); } }
+        public static string Grille_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("Grille_Output_GiaTriPhaiLonHon0", resourceCulture); } }
+        public static string Grille_Prompt_ChonDiemDatTam { get { return ResourceManager.GetString("Grille_Prompt_ChonDiemDatTam", resourceCulture); } }
     }
 }

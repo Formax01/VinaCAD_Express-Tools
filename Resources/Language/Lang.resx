@@ -2487,4 +2487,11 @@ trục</value>
   <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>Kích thước 3D vượt giới hạn.</value></data>
   <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Chọn tâm miệng gió cấp 3D: </value></data>
   <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải là số lớn hơn 0.</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>Nhập chiều rộng khung trong miệng gió</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>Nhập chiều cao khung trong miệng gió</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>Nhập tên block miệng gió: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>Tên block đã tồn tại. Hãy nhập tên khác.</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>Lỗi: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải là số lớn hơn 0.</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>Chọn điểm đặt tâm miệng gió: </value></data>
 </root>

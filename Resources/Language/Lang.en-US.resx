@@ -2488,4 +2488,11 @@ axis</value>
   <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D dimensions exceed the limit.</value></data>
   <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Select center of 3D supply air diffuser: </value></data>
   <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be a number greater than 0.</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>Enter inner frame width of return air grille</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>Enter inner frame height of return air grille</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>Enter return air grille block name: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>Block name already exists. Enter a different name.</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>Error: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be a number greater than 0.</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>Select return air grille center point: </value></data>
 </root>

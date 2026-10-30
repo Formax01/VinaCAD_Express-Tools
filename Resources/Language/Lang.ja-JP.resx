@@ -2491,4 +2491,11 @@ CK</value>
   <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D寸法が上限を超えています。</value></data>
   <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>3D給気口の中心を選択: </value></data>
   <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>還気グリルの内枠幅を入力</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>還気グリルの内枠高さを入力</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>還気グリルのブロック名を入力: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>エラー: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>還気グリルの中心点を選択: </value></data>
 </root>
