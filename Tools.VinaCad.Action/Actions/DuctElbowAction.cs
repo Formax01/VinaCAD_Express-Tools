@@ -8,7 +8,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
@@ -36,32 +36,32 @@ namespace Tools.VinaCad.Action.Actions
                 double oldHeight = vm.Height;
                 double oldDrop = vm.DropLength;
 
-                var ppo = new PromptPointOptions("\nChọn điểm chèn: ");
+                var ppo = new PromptPointOptions("\n" + Lang.DuctElbow_Prompt_ChonDiemChen);
                 PromptPointResult promptPointResult = editor.GetPoint(ppo);
                 if (promptPointResult.Status != PromptStatus.OK) return;
                 Point3d insert = promptPointResult.Value;
 
                 double w1;
-                string w1Prompt = type == DuctElbowType.Reducing ? "Nhập kích thước đầu vào " : "Nhập kích thước 2 đầu ";
+                string w1Prompt = type == DuctElbowType.Reducing ? Lang.DuctElbow_Prompt_KichThuocDauVao : Lang.DuctElbow_Prompt_KichThuocHaiDau;
                 if (!AskDouble(editor, w1Prompt, vm.Width1, out w1)) return;
                 vm.Width1 = w1;
 
                 if (type == DuctElbowType.Reducing)
                 {
                     double w2;
-                    if (!AskDouble(editor, "Nhập kích thước đầu ra ", vm.Width2, out w2)) return;
+                    if (!AskDouble(editor, Lang.DuctElbow_Prompt_KichThuocDauRa, vm.Width2, out w2)) return;
                     vm.Width2 = w2;
                 }
 
                 if (threeDimensional)
                 {
-                    if (!AskDouble(editor, "Nhập chiều cao ống ", vm.Height, out double height)) return;
+                    if (!AskDouble(editor, Lang.DuctElbow_Prompt_ChieuCaoOng, vm.Height, out double height)) return;
                     vm.Height = height;
                 }
 
                 double r;
 
-                if (!AskDouble(editor,"Nhập bán kính cong phía trong ",vm.Radius,out r))
+                if (!AskDouble(editor, Lang.DuctElbow_Prompt_BanKinhCongTrong, vm.Radius, out r))
                 {
                     return;
                 }
@@ -72,24 +72,26 @@ namespace Tools.VinaCad.Action.Actions
                 {
                     if (threeDimensional)
                     {
-                        if (!AskDouble(editor, "Nhập chiều dài đoạn đứng", vm.DropLength, out double dropLength)) return;
+                        if (!AskDouble(editor, Lang.DuctElbow_Prompt_ChieuDaiDoanDung, vm.DropLength, out double dropLength)) return;
                         vm.DropLength = dropLength;
                     }
 
                     string v;
-                    if (!AskKeyword(editor, "Chọn hướng", new[] { "Xuống", "Lên" },
-                        vm.VerticalDir == VerticalDirection.Down ? "Xuống" : "Lên", out v)) return;
-                    vm.VerticalDir = v == "Lên" ? VerticalDirection.Up : VerticalDirection.Down;
+                    if (!AskKeyword(editor, Lang.DuctElbow_Prompt_ChonHuong,
+                        "Down", Lang.DuctElbow_Keyword_Xuong, "Up", Lang.DuctElbow_Keyword_Len,
+                        vm.VerticalDir == VerticalDirection.Down ? "Down" : "Up", out v)) return;
+                    vm.VerticalDir = v == "Up" || v == Lang.DuctElbow_Keyword_Len ? VerticalDirection.Up : VerticalDirection.Down;
                 }
                 else
                 {
                     string s;
-                    if (!AskKeyword(editor, "Chọn hướng rẽ", new[] { "Trái", "Phải" },
-                            vm.Side == ElbowSide.Left ? "Trái" : "Phải", out s)) return;
-                    vm.Side = s == "Phải" ? ElbowSide.Right : ElbowSide.Left;
+                    if (!AskKeyword(editor, Lang.DuctElbow_Prompt_ChonHuongRe,
+                            "Left", Lang.DuctElbow_Keyword_Trai, "Right", Lang.DuctElbow_Keyword_Phai,
+                            vm.Side == ElbowSide.Left ? "Left" : "Right", out s)) return;
+                    vm.Side = s == "Right" || s == Lang.DuctElbow_Keyword_Phai ? ElbowSide.Right : ElbowSide.Left;
 
                     double a;
-                    if (!AskDouble(editor, "Nhập góc quay (độ)", vm.AngleDeg, out a)) return;
+                    if (!AskDouble(editor, Lang.DuctElbow_Prompt_GocQuay, vm.AngleDeg, out a)) return;
                     vm.AngleDeg = a;
                 }
 
@@ -127,7 +129,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (direction.Length < 1e-6)
                 {
-                    editor.WriteMessage("\nHướng ống không hợp lệ.");
+                    editor.WriteMessage("\n" + Lang.DuctElbow_Output_HuongOngKhongHopLe);
                     return;
                 }
 
@@ -155,16 +157,16 @@ namespace Tools.VinaCad.Action.Actions
             error = null;
 
             if (threeDimensional && vm.Height <= 0)
-            { error = "Chiều cao ống phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_ChieuCaoOng; return false; }
 
             if (vm.Width1 <= 0)
-            { error = "Kích thước đầu vào phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_KichThuocDauVao; return false; }
 
             if (vm.Type == DuctElbowType.Reducing && vm.Width2 <= 0)
-            { error = "Kích thước đầu ra phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_KichThuocDauRa; return false; }
 
             if (vm.Radius <= 0)
-            { error = "Bán kính cong phía trong phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_BanKinhCongTrong; return false; }
 
             if (vm.Type == DuctElbowType.Vertical)
                 return ValidateVertical(vm, threeDimensional, out error);
@@ -178,7 +180,9 @@ namespace Tools.VinaCad.Action.Actions
 
             if (vm.AngleDeg < DuctElbowSettings.MinAngle || vm.AngleDeg > DuctElbowSettings.MaxAngle)
             {
-                error = "Góc quay phải trong khoảng " + DuctElbowSettings.MinAngle + " - " + DuctElbowSettings.MaxAngle + " độ.";
+                error = Lang.DuctElbow_Validation_GocQuay
+                    .Replace("{minAngle}", DuctElbowSettings.MinAngle.ToString(CultureInfo.CurrentCulture))
+                    .Replace("{maxAngle}", DuctElbowSettings.MaxAngle.ToString(CultureInfo.CurrentCulture));
                 return false;
             }
 
@@ -188,7 +192,7 @@ namespace Tools.VinaCad.Action.Actions
             // Bán kính cong trong = Rc - W/2 phải >= 0 (cả đầu vào và đầu ra)
             if (rc - vm.Width1 / 2.0 < -1e-9 || rc - w2 / 2.0 < -1e-9)
             {
-                error = "Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kinh";
+                error = Lang.DuctElbow_Validation_BanKinhQuaNho;
                 return false;
             }
             return true;
@@ -199,13 +203,13 @@ namespace Tools.VinaCad.Action.Actions
             error = null;
 
             if (vm.DropLength <= 0)
-            { error = "Chiều dài đoạn hạ phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_ChieuDaiDoanHa; return false; }
 
             if (vm.ResolveCenterRadius(vm.Width1) < vm.Width1 / 2.0)
-            { error = "Bán kính phải lớn hơn hoặc bằng một nửa đường kính đầu vào."; return false; }
+            { error = Lang.DuctElbow_Validation_BanKinhNuaDuongKinh; return false; }
 
             if (threeDimensional && vm.ResolveCenterRadius(vm.Width1) <= vm.Width1 / 2.0)
-            { error = "Bán kính cong trong của khối 3D phải lớn hơn 0."; return false; }
+            { error = Lang.DuctElbow_Validation_BanKinhCongTrong3D; return false; }
 
             return true;
         }
@@ -247,7 +251,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 if (parsedValue <= 0)
                 {
-                    ed.WriteMessage("\nGiá trị phải lớn hơn 0.");
+                    ed.WriteMessage("\n" + Lang.DuctElbow_Output_GiaTriPhaiLonHon0);
                     return false;
                 }
 
@@ -255,19 +259,23 @@ namespace Tools.VinaCad.Action.Actions
                 return true;
             }
 
-            ed.WriteMessage("\nGiá trị nhập vào không hợp lệ.");
+            ed.WriteMessage("\n" + Lang.DuctElbow_Output_GiaTriNhapKhongHopLe);
             return false;
         }
 
-        private static bool AskKeyword(Editor ed, string msg, string[] keys, string def, out string value)
+        private static bool AskKeyword(Editor ed, string msg,
+            string firstGlobal, string firstLocal, string secondGlobal, string secondLocal,
+            string defaultGlobal, out string value)
         {
-            value = def;
-            var options = new PromptKeywordOptions("\n" + msg + " [" + string.Join("/", keys) + "] <" + def + "> : ");
-
-            foreach (string key in keys)
-                options.Keywords.Add(key);
-
-            options.Keywords.Default = def;
+            value = defaultGlobal;
+            string defaultLocal = defaultGlobal == firstGlobal ? firstLocal : secondLocal;
+            var options = new PromptKeywordOptions("\n" + msg + " [" + firstLocal + "/" + secondLocal + "] <" + defaultLocal + ">: ")
+            {
+                AppendKeywordsToMessage = false
+            };
+            options.Keywords.Add(firstGlobal, firstLocal, firstLocal);
+            options.Keywords.Add(secondGlobal, secondLocal, secondLocal);
+            options.Keywords.Default = defaultGlobal;
             options.AllowNone = true;
 
             PromptResult result = ed.GetKeywords(options);
@@ -305,7 +313,7 @@ namespace Tools.VinaCad.Action.Actions
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                var options = new JigPromptPointOptions("\n Click chuột để xác nhận hướng ống: ");
+                var options = new JigPromptPointOptions("\n" + Lang.DuctElbow_Prompt_XacNhanHuongOng);
 
                 options.BasePoint = _insertPoint;
                 options.UseBasePoint = true;

@@ -2290,4 +2290,32 @@ CK</value>
   <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>中心線が短すぎてダクトを作図できません。</value></data>
   <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>角 {i}: 線分が短いため、曲げ半径を {r:0.##} に縮小しました。</value></data>
   <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>角 {i}: 半径 {r:0.##} ≤ D/2 のため、内側の縁が折れます。</value></data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve"><value>挿入点を選択: </value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve"><value>入口寸法を入力</value></data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve"><value>両端の寸法を入力</value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve"><value>出口寸法を入力</value></data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve"><value>ダクトの高さを入力</value></data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve"><value>内側の曲げ半径を入力</value></data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve"><value>垂直部分の長さを入力</value></data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve"><value>方向を選択</value></data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve"><value>下</value></data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve"><value>上</value></data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve"><value>曲がる方向を選択</value></data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve"><value>左</value></data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve"><value>右</value></data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve"><value>曲がり角度（度）を入力</value></data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve"><value>ダクトの方向が無効です。</value></data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve"><value>ダクトの高さは0より大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve"><value>入口寸法は0より大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve"><value>出口寸法は0より大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve"><value>内側の曲げ半径は0より大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve"><value>曲がり角度は{minAngle}～{maxAngle}度の範囲にしてください。</value></data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve"><value>半径が小さすぎます。内側の曲げ半径が0未満です。半径を大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve"><value>下がり部分の長さは0より大きくしてください。</value></data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve"><value>半径は入口径の半分以上にしてください。</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve"><value>3Dソリッドの内側の曲げ半径は0より大きくしてください。</value></data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>値は0より大きくしてください。</value></data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve"><value>入力値が無効です。</value></data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve"><value>クリックしてダクトの方向を確定: </value></data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve"><value>3Dダクトの断面を作成できませんでした。</value></data>
 </root>

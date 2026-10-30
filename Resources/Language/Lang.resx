@@ -2230,4 +2230,32 @@ trục</value>
   <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve"><value>Đường tâm quá ngắn để vẽ ống.</value></data>
   <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve"><value>Góc {i}: đoạn ngắn, bán kính bo giảm còn {r:0.##}</value></data>
   <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve"><value>Góc {i}: bán kính {r:0.##} ≤ D/2, mép trong bị gấp</value></data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve"><value>Chọn điểm chèn: </value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve"><value>Nhập kích thước đầu vào</value></data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve"><value>Nhập kích thước 2 đầu</value></data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve"><value>Nhập kích thước đầu ra</value></data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve"><value>Nhập chiều cao ống</value></data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve"><value>Nhập bán kính cong phía trong</value></data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve"><value>Nhập chiều dài đoạn đứng</value></data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve"><value>Chọn hướng</value></data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve"><value>Xuống</value></data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve"><value>Lên</value></data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve"><value>Chọn hướng rẽ</value></data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve"><value>Trái</value></data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve"><value>Phải</value></data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve"><value>Nhập góc quay (độ)</value></data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve"><value>Hướng ống không hợp lệ.</value></data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve"><value>Chiều cao ống phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve"><value>Kích thước đầu vào phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve"><value>Kích thước đầu ra phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve"><value>Bán kính cong phía trong phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve"><value>Góc quay phải trong khoảng {minAngle} - {maxAngle} độ.</value></data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve"><value>Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kính.</value></data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve"><value>Chiều dài đoạn hạ phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve"><value>Bán kính phải lớn hơn hoặc bằng một nửa đường kính đầu vào.</value></data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve"><value>Bán kính cong trong của khối 3D phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải lớn hơn 0.</value></data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve"><value>Giá trị nhập vào không hợp lệ.</value></data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve"><value>Click chuột để xác nhận hướng ống: </value></data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve"><value>Không tạo được mặt cắt ống gió 3D.</value></data>
 </root>
