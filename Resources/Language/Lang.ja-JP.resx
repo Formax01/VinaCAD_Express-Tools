@@ -238,7 +238,7 @@
     <value>値を入力 :</value>
   </data>
   <data name="OC1_UI_NhapLength" xml:space="preserve">
-    <value>長さを入力:</value>
+    <value>長さを入力:</value> </data>
   <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
     <value>指示ファイルを開けません。
 {ex.Message}</value>

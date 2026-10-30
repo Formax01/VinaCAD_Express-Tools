@@ -240,7 +240,7 @@
   <data name="OC1_UI_NhapLength" xml:space="preserve">
     <value>Nhập Length l:</value>
   </data>
-</root>
+
   <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
     <value>Không thể mở file hướng dẫn.
 {ex.Message}</value>

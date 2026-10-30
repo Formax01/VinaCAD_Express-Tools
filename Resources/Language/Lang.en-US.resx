@@ -238,7 +238,7 @@
     <value>Enter value :</value>
   </data>
   <data name="OC1_UI_NhapLength" xml:space="preserve">
-    <value>Enter Length l:</value>
+    <value>Enter Length l:</value></data>
   <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
     <value>Cannot open the instruction file.
 {ex.Message}</value>
