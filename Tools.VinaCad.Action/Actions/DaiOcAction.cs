@@ -7,7 +7,7 @@ using PrLogTrackingSystem;
 using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
-
+using Tools.Resources.Definitions;
 namespace Tools.VinaCad.Action.Actions
 {
     public class DaiOcAction
@@ -37,7 +37,7 @@ namespace Tools.VinaCad.Action.Actions
                     _ed,
                     startPoint,
                     length,
-                    BulonHelper.DAIOC_BLOCK_NAME,
+                    StringDefinition.blockNameDaiOc,
                     true);
 
                 if (count > 0)
@@ -104,7 +104,7 @@ namespace Tools.VinaCad.Action.Actions
             _ed.WriteMessage(
                 string.Format(
                     Lang.DAIOC_MessDialog_DaChenBlock,
-                    BulonHelper.DAIOC_BLOCK_NAME));
+                    StringDefinition.blockNameDaiOc));
 
             _ed.Regen();
         }

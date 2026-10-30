@@ -3,12 +3,12 @@ using Prima.VinaCAD.EditorInput;
 using System;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-
+using Tools.Resources.Definitions;
 namespace Tools.VinaCad.Helper.Helper
 {
     public static class DaiOc1Helper
     {
-        public const string BLOCK_NAME = "$mb-daioc1";
+        
 
         private const double HALF_HEIGHT_RATIO = 0.4;     // nửa cao = 0.4 L (200 khi L = 500)
         private const double HALF_TOP_RATIO = 0.8723;  // nửa đường đỉnh = 0.8723 L
@@ -82,8 +82,8 @@ namespace Tools.VinaCad.Helper.Helper
             BlockTable bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead, false) as BlockTable;
             if (bt == null)
                 return ObjectId.Null;
-            if (bt.Has(BLOCK_NAME))
-                return bt[BLOCK_NAME];
+            if (bt.Has(StringDefinition.blockNameDaiOc1))
+                return bt[StringDefinition.blockNameDaiOc1];
 
             const double L = 1.0;
             double H = HALF_HEIGHT_RATIO * L;
@@ -91,7 +91,7 @@ namespace Tools.VinaCad.Helper.Helper
             double yc = H - (L - halfTop) * Tan30;
             double oy = H;
 
-            BlockTableRecord btr = new BlockTableRecord { Name = BLOCK_NAME, Origin = Point3d.Origin };
+            BlockTableRecord btr = new BlockTableRecord { Name = StringDefinition.blockNameDaiOc1, Origin = Point3d.Origin };
 
             bt.UpgradeOpen();
             ObjectId btrId = bt.Add(btr);

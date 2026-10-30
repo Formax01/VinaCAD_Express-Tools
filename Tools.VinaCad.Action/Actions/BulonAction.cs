@@ -7,7 +7,7 @@ using PrLogTrackingSystem;
 using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
-
+using Tools.Resources.Definitions;
 namespace Tools.VinaCad.Action.Actions
 {
     public class BulonAction
@@ -100,7 +100,7 @@ namespace Tools.VinaCad.Action.Actions
             _ed.WriteMessage(
                 string.Format(
                     Lang.BULON_MessDialog_DaChenBlock,
-                    BulonHelper.BLOCK_NAME));
+                    StringDefinition.blockNameBulon1));
 
             _ed.Regen();
         }

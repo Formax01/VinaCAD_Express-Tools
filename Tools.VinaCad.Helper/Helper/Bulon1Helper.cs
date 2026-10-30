@@ -5,12 +5,12 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Language;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
-
+using Tools.Resources.Definitions;
 namespace Tools.VinaCad.Helper.Helper
 {
     public static class Bulon1Helper
     {
-        public const string BLOCK_NAME = "$bulon1";
+        //public const string BLOCK_NAME1 = "$bulon1";
 
         private const double HEIGHT_RATIO = 0.7;     // H = 0.7 L
         private const double HALF_TOP_RATIO = 0.8723;  // nửa đường đỉnh = 0.8723 L
@@ -52,15 +52,15 @@ namespace Tools.VinaCad.Helper.Helper
             BlockTable bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead, false) as BlockTable;
             if (bt == null)
                 return ObjectId.Null;
-            if (bt.Has(BLOCK_NAME))
-                return bt[BLOCK_NAME];
+            if (bt.Has(StringDefinition.blockNameBulon1))
+                return bt[StringDefinition.blockNameBulon1];
 
             const double L = 1.0;
             double H = HEIGHT_RATIO * L;
             double halfTop = HALF_TOP_RATIO * L;
             double yc = H - (L - halfTop) * Tan30;
 
-            BlockTableRecord btr = new BlockTableRecord { Name = BLOCK_NAME, Origin = Point3d.Origin };
+            BlockTableRecord btr = new BlockTableRecord { Name = StringDefinition.blockNameBulon1, Origin = Point3d.Origin };
 
             bt.UpgradeOpen();
             ObjectId btrId = bt.Add(btr);

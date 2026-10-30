@@ -1,28 +1,24 @@
-﻿using System;
-using Prima.VinaCAD.EditorInput;
+﻿using Prima.VinaCAD.EditorInput;
+using System;
 using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Definitions;
 using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
     public class BulonHelper
     {
-        public const string BLOCK_NAME = "$mb-bulon";
-        public const string DAIOC_BLOCK_NAME = "$mb-daioc";
+        private const double AXIS_EXTEND = 1.25;
+        private const short AXIS_COLOR_INDEX = 8;
 
-        private const string CENTER_LT = "CENTER";
-        private const double AXIS_EXTEND = 1.25;      // đường tâm dài 2.5 (đơn vị L = 1)
-        private const short AXIS_COLOR_INDEX = 8;     // Color 8
-
-        
         public static int CreateBolt(Database db, Editor ed, Point3d centerUcs, double l)
         {
-            return CreateBolt(db, ed, centerUcs, l, BLOCK_NAME, false);
+            return CreateBolt(db, ed, centerUcs, l, StringDefinition.blockNameBulon, false);
         }
 
-        
+
         public static int CreateBolt(
             Database db, Editor ed, Point3d centerUcs, double l,
             string blockName, bool withInnerCircle)
@@ -199,7 +195,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             // 3. Hai đường tâm: Polyline CENTER, Color 8, scale 1, Plinegen Disabled
-            ObjectId ltId = GetLinetypeId(db, tr, CENTER_LT);
+            ObjectId ltId = GetLinetypeId(db, tr, StringDefinition.linetypeCenter);
             AddCenterPolyline(btr, tr, db, ltId, true);     // ngang
             AddCenterPolyline(btr, tr, db, ltId, false);    // dọc
 
@@ -249,7 +245,7 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 LinetypeTable lt = tr.GetObject(
                     db.LinetypeTableId, OpenMode.ForRead, false) as LinetypeTable;
-                exists = lt != null && lt.Has(CENTER_LT);
+                exists = lt != null && lt.Has(StringDefinition.linetypeCenter);
             }
 
             if (exists)
@@ -258,7 +254,7 @@ namespace Tools.VinaCad.Helper.Helper
             try
             {
                 
-                db.LoadLineTypeFile(CENTER_LT, "acad.lin");
+                db.LoadLineTypeFile(StringDefinition.linetypeCenter, "acad.lin");
             }
             catch { /* đường tâm sẽ dùng nét liền */ }
         }
