@@ -117,6 +117,318 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe" xml:space="preserve">
+    <value>Invalid length. Please enter a positive number.</value>
+  </data>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe1" xml:space="preserve">
+    <value>Invalid length. Please enter a positive number.</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio" xml:space="preserve">
+    <value>Duct drawn {0} x {1}.</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio1" xml:space="preserve">
+    <value>Duct drawn {0} x {1}.</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>Point 2 coincides with point 1.</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>Point 2 coincides with point 1.</value>
+  </data>
+  <data name="B1_UI_ChonCachVe" xml:space="preserve">
+    <value>Select draw mode [Input/Point]:</value>
+  </data>
+  <data name="B1_UI_ChonCachVe1" xml:space="preserve">
+    <value>Select draw mode [Input/Point]:</value>
+  </data>
+  <data name="B1_UI_ChonDiem2" xml:space="preserve">
+    <value>Select point 2 to determine length and edge direction:</value>
+  </data>
+  <data name="B1_UI_ChonDiem3" xml:space="preserve">
+    <value>Select point 2 to determine length and edge direction:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio" xml:space="preserve">
+    <value>Select start point of duct:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio1" xml:space="preserve">
+    <value>Select start point of duct:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio" xml:space="preserve">
+    <value>Select duct placement direction:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio1" xml:space="preserve">
+    <value>Select duct placement direction:</value>
+  </data>
+  <data name="B1_UI_KeywordDiem" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B1_UI_KeywordDiem1" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B1_UI_KeywordNhap" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="B1_UI_KeywordNhap1" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio" xml:space="preserve">
+    <value>Enter duct length:</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio1" xml:space="preserve">
+    <value>Enter duct length:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>Enter duct width:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>Enter duct width:</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon" xml:space="preserve">
+    <value>Offset duct drawn: width {0} / {1}, offset {2}, L = {3}.</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon1" xml:space="preserve">
+    <value>Offset duct drawn: width {0} / {1}, offset {2}, L = {3}.</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>L is too short, minimum required is {0}</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>L is too short, minimum required is {0}</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon" xml:space="preserve">
+    <value>Select offset side [Left/Right] :</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>Select offset side [Left/Right] :</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select placement point:</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Select placement point:</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai1" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai1" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>Enter duct offset height:</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>Enter duct offset height:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Enter length L for the fitting (minimum {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Enter length L for the fitting (minimum {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu1" xml:space="preserve">
+    <value>Enter width of first duct:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu3" xml:space="preserve">
+    <value>Enter width of first duct:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu2" xml:space="preserve">
+    <value>Enter width of second duct (Enter if same as first):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu4" xml:space="preserve">
+    <value>Enter width of second duct (Enter if same as first):</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay" xml:space="preserve">
+    <value>Shoe heel drawn: height {0}, small side {1}, base side {2}.</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay1" xml:space="preserve">
+    <value>Shoe heel drawn: height {0}, small side {1}, base side {2}.</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay" xml:space="preserve">
+    <value>Select base side position [Left/Right] :</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay1" xml:space="preserve">
+    <value>Select base side position [Left/Right] :</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay" xml:space="preserve">
+    <value>Select shoe heel placement point:</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay1" xml:space="preserve">
+    <value>Select shoe heel placement point:</value>
+  </data>
+  <data name="B3_UI_KeywordPhai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="B3_UI_KeywordPhai1" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="B3_UI_KeywordTrai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="B3_UI_KeywordTrai1" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe" xml:space="preserve">
+    <value>Enter small side:</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe1" xml:space="preserve">
+    <value>Enter small side:</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay" xml:space="preserve">
+    <value>Enter base side (Enter to auto-calculate):</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay1" xml:space="preserve">
+    <value>Enter base side (Enter to auto-calculate):</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao" xml:space="preserve">
+    <value>Enter height:</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao1" xml:space="preserve">
+    <value>Enter height:</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon" xml:space="preserve">
+    <value>Small end must be smaller than large end.</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon1" xml:space="preserve">
+    <value>Small end must be smaller than large end.</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron" xml:space="preserve">
+    <value>Square-to-round fitting drawn: large end {0}, small end {1}, L = {2}.</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron1" xml:space="preserve">
+    <value>Square-to-round fitting drawn: large end {0}, small end {1}, L = {2}.</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>Point 2 coincides with point 1.</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>Point 2 coincides with point 1.</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon" xml:space="preserve">
+    <value>Select point 2 of large end:</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon1" xml:space="preserve">
+    <value>Select point 2 of large end:</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select placement point :</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Select placement point :</value>
+  </data>
+  <data name="B4_UI_KeywordLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="B4_UI_KeywordLength1" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="B4_UI_KeywordPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B4_UI_KeywordPoint1" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Enter length L (Enter to auto-calculate):</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Enter length L (Enter to auto-calculate):</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon" xml:space="preserve">
+    <value>Enter large end size:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon1" xml:space="preserve">
+    <value>Enter large end size:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang" xml:space="preserve">
+    <value>Enter large end size by [Point/Length] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang1" xml:space="preserve">
+    <value>Enter large end size by [Point/Length] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho" xml:space="preserve">
+    <value>Enter small end size:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho1" xml:space="preserve">
+    <value>Enter small end size:</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut" xml:space="preserve">
+    <value>2 elbows</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut1" xml:space="preserve">
+    <value>2 elbows</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang" xml:space="preserve">
+    <value>2 elbows + straight duct {0}</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang1" xml:space="preserve">
+    <value>2 elbows + straight duct {0}</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ" xml:space="preserve">
+    <value>Z-duct drawn ({0}): width {1}, offset {2}, L = {3}, elbow angle {4}°, centerline R {5}.</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ1" xml:space="preserve">
+    <value>Z-duct drawn ({0}): width {1}, offset {2}, L = {3}, elbow angle {4}°, centerline R {5}.</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc" xml:space="preserve">
+    <value>Cannot draw with these parameters.</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc1" xml:space="preserve">
+    <value>Cannot draw with these parameters.</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>L is too short, minimum required is {0}.</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>L is too short, minimum required is {0}.</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon" xml:space="preserve">
+    <value>Select offset side [Left/Right] :</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>Select offset side [Left/Right] :</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat" xml:space="preserve">
+    <value>Select placement point:</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat1" xml:space="preserve">
+    <value>Select placement point:</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai1" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai1" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>Enter duct offset height:</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>Enter duct offset height:</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>Enter length L for the fitting (minimum {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>Enter length L for the fitting (minimum {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>Enter duct width:</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>Enter duct width:</value>
+  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>Dont find text content</value>
   </data>
@@ -147,6 +459,125 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Language changed to {0}.</value>
   </data>
+  <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>Select start point of reducer:</value>
+  </data>
+  <data name="B2_UI_ChonDiemBatDau1" xml:space="preserve">
+    <value>Select start point of reducer:</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth1" xml:space="preserve">
+    <value>Select method to determine Width1</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth2" xml:space="preserve">
+    <value>Select method to determine Width1</value>
+  </data>
+  <data name="B2_UI_KeywordDiem" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B2_UI_KeywordDiem1" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="B2_UI_KeywordNhap" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="B2_UI_KeywordNhap1" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="B2_UI_NhapWidth1" xml:space="preserve">
+    <value>Enter Width1:</value>
+  </data>
+  <data name="B2_UI_NhapWidth2" xml:space="preserve">
+    <value>Enter Width1:</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth1" xml:space="preserve">
+    <value>Select point 2 to get Width1:</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth2" xml:space="preserve">
+    <value>Select point 2 to get Width1:</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL" xml:space="preserve">
+    <value>Enter height L:</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL1" xml:space="preserve">
+    <value>Enter height L:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo2" xml:space="preserve">
+    <value>Enter size of second end:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo3" xml:space="preserve">
+    <value>Enter size of second end:</value>
+  </data>
+  <data name="B2_UI_ChonChieu" xml:space="preserve">
+    <value>Select side</value>
+  </data>
+  <data name="B2_UI_ChonChieu1" xml:space="preserve">
+    <value>Select side</value>
+  </data>
+  <data name="B2_UI_KeywordGiua" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="B2_UI_KeywordGiua1" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="B2_UI_KeywordTrai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="B2_UI_KeywordTrai1" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="B2_UI_KeywordPhai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="B2_UI_KeywordPhai1" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>Value must be greater than 0. Please re-enter or select another point.</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon1" xml:space="preserve">
+    <value>Value must be greater than 0. Please re-enter or select another point.</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau" xml:space="preserve">
+    <value>Point 2 must be different from the start point. Please select again.</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau1" xml:space="preserve">
+    <value>Point 2 must be different from the start point. Please select again.</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam" xml:space="preserve">
+    <value>Reducer drawn: length {0}, size {1} → {2}.</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam1" xml:space="preserve">
+    <value>Reducer drawn: length {0}, size {1} → {2}.</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong" xml:space="preserve">
+    <value>Drag perpendicular and click, or enter width:</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong1" xml:space="preserve">
+    <value>Drag perpendicular and click, or enter width:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong" xml:space="preserve">
+    <value>Select direction:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong1" xml:space="preserve">
+    <value>Select direction:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet" xml:space="preserve">
+    <value>Select direction for the fitting [Flip]:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet1" xml:space="preserve">
+    <value>Select direction for the fitting [Flip]:</value>
+  </data>
+  <data name="B3_UI_KeywordFlip" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="B3_UI_KeywordFlip1" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam" xml:space="preserve">
+    <value>Select direction for the reducer:</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam1" xml:space="preserve">
+    <value>Select direction for the reducer:</value></data>
   <data name="BULON_UI_ChonDiem" xml:space="preserve">
     <value>Select point: </value>
   </data>

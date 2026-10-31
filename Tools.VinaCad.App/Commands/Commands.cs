@@ -140,6 +140,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+       
       
         
 
@@ -159,7 +160,92 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(CreateGridAxisCommand), ex);
             }
         }
+        [CommandMethod("B1")]
+        public void DrawDuctCommand()
+        {
+            try
+            {
+                DrawDuctAction action = new DrawDuctAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawDuctCommand), ex);
+            }
+        }
+        [CommandMethod("B2")]
+        public void ReducerCommand()
+        {
+            try
+            {
+                ReducerAction action = new ReducerAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ReducerCommand), ex);
+            }
+        }
+        [CommandMethod("B3")]
+        public void DrawShoeCommand()
+        {
+            try
+            {
+                DrawShoeAction action = new DrawShoeAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawShoeCommand), ex);
+            }
+        }
+        [CommandMethod("B4")]
+        public void DrawSquareToRoundCommand()
+        {
+            try
+            {
+                DrawSquareToRoundAction action = new DrawSquareToRoundAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawSquareToRoundCommand), ex);
+            }
+        }
 
+        [CommandMethod("BZ")]
+        public void DrawOffsetDuctCommand()
+        {
+            try
+            {
+                DrawOffsetDuctAction action = new DrawOffsetDuctAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawOffsetDuctCommand), ex);
+            }
+        }
+
+        [CommandMethod("BZ2")]
+        public void DrawZElbowDuctCommand()
+        {
+            try
+            {
+                DrawZElbowDuctAction action = new DrawZElbowDuctAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawZElbowDuctCommand), ex);
+            }
+        }
         [CommandMethod("Sample")]
         public void SampleCommand()
         {
