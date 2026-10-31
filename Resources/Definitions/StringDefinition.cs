@@ -53,7 +53,15 @@ namespace Tools.Resources.Definitions
         public static readonly string blockNameTD1 = "BlockTD1";
         public static readonly string blockNameTD2 = "BlockTD2";
         public static readonly string blockNameTD3 = "BlockTD3";
-
+        public static readonly string blockNameBulon = "$mb-bulon";
+        public static readonly string blockNameBulon1 = "$mb-bulon1";
+        public static readonly string blockNameBulon2 = "$mb-bulon2";
+        public static readonly string blockNameDaiOc = "$mb-daioc";
+        public static readonly string blockNameDaiOc1 = "$mb-daioc1";
+        public static readonly string blockNameDaiOc2 = "$mb-daioc2";   
+      
+        public static readonly string linetypeCenter = "CENTER";
+        public static readonly string linetypeFileAcad = "acad.lin";
         public static readonly string dimCongDonName = "1-1-50-CongDon";
 
         public static readonly string SoHieuBanVe = "DRAWINGNO";

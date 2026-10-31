@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Setting Dim Cộng Dồn"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.XLDCD_UI_SettingDimCongDon}"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -21,7 +22,7 @@
         <GroupBox
             Grid.Row="0"
             Margin="0,0,0,10"
-            Header="Sai số cho phép để xem dim là liên tiếp nhau">
+            Header="{x:Static res:Lang.XLDCD_UI_SaiSoChoPhepDeXemDimLaLienTiepNhau}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -38,7 +39,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Khoảng cách lệch phương cho phép:" />
+                    Text="{x:Static res:Lang.XLDCD_UI_KhoangCachLechPhuongChoPhep}" />
                 <TextBox
                     Grid.Row="0"
                     Grid.Column="1"
@@ -53,7 +54,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Khoảng cách lệch giữa 2 chân dim cho phép:" />
+                    Text="{x:Static res:Lang.XLDCD_UI_KhoangCachLechGiua2ChanDimChoPhep}" />
                 <TextBox
                     Grid.Row="2"
                     Grid.Column="1"
@@ -68,7 +69,7 @@
         <GroupBox
             Grid.Row="1"
             Margin="0,0,0,10"
-            Header="Xác lập quy tắc dim cộng dồn">
+            Header="{x:Static res:Lang.XLDCD_UI_XacLapQuyTacDimCongDon}">
             <Grid Margin="12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -85,19 +86,19 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Quy tắc phương ngang:" />
+                    Text="{x:Static res:Lang.XLDCD_UI_QuyTacPhuongNgang}" />
                 <RadioButton
                     Grid.Row="0"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Content="Trái sang phải"
+                    Content="{x:Static res:Lang.Common_UI_TraiSangPhai}"
                     GroupName="HuongBoTriNgang"
                     IsChecked="{Binding IsLeftToRightHorizontal}" />
                 <RadioButton
                     Grid.Row="0"
                     Grid.Column="2"
                     VerticalAlignment="Center"
-                    Content="Phải sang trái"
+                    Content="{x:Static res:Lang.XLDCD_UI_PhaiSangTrai}"
                     GroupName="HuongBoTriNgang"
                     IsChecked="{Binding IsRightToLeftHorizontal}" />
 
@@ -105,19 +106,19 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Quy tắc phương đứng:" />
+                    Text="{x:Static res:Lang.XLDCD_UI_QuyTacPhuongDung}" />
                 <RadioButton
                     Grid.Row="1"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Content="Trên xuống dưới"
+                    Content="{x:Static res:Lang.Common_UI_TrenXuongDuoi}"
                     GroupName="HuongBoTriDung"
                     IsChecked="{Binding IsTopToBottomVertical}" />
                 <RadioButton
                     Grid.Row="1"
                     Grid.Column="2"
                     VerticalAlignment="Center"
-                    Content="Dưới lên trên"
+                    Content="{x:Static res:Lang.XLDCD_UI_DuoiLenTren}"
                     GroupName="HuongBoTriDung"
                     IsChecked="{Binding IsBottomToTopVertical}" />
 
@@ -125,19 +126,19 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Quy tắc phương xiên:" />
+                    Text="{x:Static res:Lang.XLDCD_UI_QuyTacPhuongXien}" />
                 <RadioButton
                     Grid.Row="2"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Content="Dưới lên trên"
+                    Content="{x:Static res:Lang.XLDCD_UI_DuoiLenTren}"
                     GroupName="HuongBoTriXien"
                     IsChecked="{Binding IsBottomToTopAligned}" />
                 <RadioButton
                     Grid.Row="2"
                     Grid.Column="2"
                     VerticalAlignment="Center"
-                    Content="Trên xuống dưới"
+                    Content="{x:Static res:Lang.Common_UI_TrenXuongDuoi}"
                     GroupName="HuongBoTriXien"
                     IsChecked="{Binding IsTopToBottomAligned}" />
             </Grid>
@@ -157,7 +158,7 @@
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>

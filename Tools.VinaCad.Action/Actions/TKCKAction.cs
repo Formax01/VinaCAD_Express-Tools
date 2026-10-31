@@ -13,6 +13,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -68,7 +69,7 @@ namespace Tools.VinaCad.Action.Actions
                         RemoveNearTextResult textIds = RemoveNearTextIds(_db, blockIds, XLTKCKSetting.CheckDistance);
                         if(textIds.DuplicateIds.Count()>0)
                         {
-                            MessageBoxResult result = MessageBox.Show($"Có {textIds.DuplicateIds.Count} Text bị trùng. Bạn có muốn tiếp tục thống kê không?","Cảnh báo trùng text",MessageBoxButton.YesNo,MessageBoxImage.Warning);
+                            MessageBoxResult result = MessageBox.Show(Lang.TKCK_Msg_CoTextBiTrungBanCoMuonTiepTucThongKeKhong.Replace("{textIds.DuplicateIds.Count}",textIds.DuplicateIds.Count.ToString()),Lang.TKCK_Msg_CanhBaoTrungText,MessageBoxButton.YesNo,MessageBoxImage.Warning);
 
                             if (result == MessageBoxResult.No)
                             {
@@ -90,7 +91,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 else
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn chưa xác lập cấu kiện.", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.TKCK_Msg_BanChuaXacLapCauKien, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {
@@ -231,7 +232,7 @@ namespace Tools.VinaCad.Action.Actions
         {
             _TKCKView.Hide();
 
-            PromptPointResult pointResult = ed.GetPoint("\nChọn điểm chèn bảng thống kê: ");
+            PromptPointResult pointResult = ed.GetPoint("\n" + Lang.Common_Prompt_ChonDiemChenBangThongKe);
 
             _TKCKView.Show();
             _TKCKView.Activate();

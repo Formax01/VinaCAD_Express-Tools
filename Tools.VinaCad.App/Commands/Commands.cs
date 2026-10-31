@@ -1,4 +1,4 @@
-using Prima.VinaCAD.ApplicationServices;
+﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System.Globalization;
@@ -17,6 +17,112 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+        [CommandMethod("Bulon")]
+        public void BulonCommand()
+        {
+            try
+            {
+                new BulonAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("Bulon1")]
+        public void Bulon1Command()
+        {
+            try
+            {
+                new Bulon1Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("Bulon2")]
+        public void Bulon2Command()
+        {
+            try
+            {
+                new Bulon2Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC")]
+        public void DaiOcCommand()
+        {
+            try
+            {
+                new DaiOcAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC1")]
+        public void DaiOc1Command()
+        {
+            try
+            {
+                new DaiOc1Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("DAIOC2")]
+        public void DaiOc2Command()
+        {
+            try
+            {
+                new DaiOc2Action().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("OC1")]
+        public void OC1Command()
+        {
+            try
+            {
+                OC1Action action = new OC1Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
+        [CommandMethod("OC2")]
+        public void OC2Command()
+        {
+            try
+            {
+                OC2Action action = new OC2Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
+                Logger.Info(ex.ToString());
+            }
+        }
 
         
         
@@ -35,6 +141,7 @@ namespace Tools.VinaCAD.App.Commands
         }
 
        
+      
         
 
 
@@ -399,7 +506,7 @@ namespace Tools.VinaCAD.App.Commands
             try
             {
                 DanhSoHieuTKTDAction action = new DanhSoHieuTKTDAction();
-                action.Execute(); 
+                action.Execute();
             }
             catch (System.Exception ex)
             {
@@ -690,7 +797,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
-        
+
         [CommandMethod("BBE")]
         public void BlockEraseCommand()
         {
@@ -711,8 +818,8 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                 StuccoAction action = new StuccoAction();
-                 action.Execute();
+                StuccoAction action = new StuccoAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
@@ -720,7 +827,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(StuccoCommand), ex);
             }
         }
-      
+
         [CommandMethod("AD")]
         public void OpenDoorCommand()
         {
@@ -734,34 +841,283 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
-      
-        [CommandMethod("AW")]
-          public void ArrangeWindowCommand()
-          {
-              try
-              {
-                  new ArrangeWindowAction().Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(ArrangeWindowCommand), ex);
-              }
-          }
-        [CommandMethod("LTP")]
-          public void StaircaseSectionCommand()
-          {
-              try
-              {
-                  StaircaseSectionAction action = new StaircaseSectionAction();
-                  action.Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(StaircaseSectionCommand), ex);
-              }
-          }
 
+        [CommandMethod("AW")]
+        public void ArrangeWindowCommand()
+        {
+            try
+            {
+                new ArrangeWindowAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ArrangeWindowCommand), ex);
+            }
+        }
+        [CommandMethod("LTP")]
+        public void StaircaseSectionCommand()
+        {
+            try
+            {
+                StaircaseSectionAction action = new StaircaseSectionAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(StaircaseSectionCommand), ex);
+            }
+        }
+
+        [CommandMethod("S1")]
+        public void FlexDuctTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctTopDownCommand), ex);
+            }
+        }
+        [CommandMethod("S2")]
+        public void FlexDuctHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.Horizontal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("S3")]
+        public void FlexDuctDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R1")]
+        public void FlexDuctBareTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R2")]
+        public void FlexDuctBareHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.HorizontalBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("R3")]
+        public void FlexDuctBareDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
+            }
+        }
+        [CommandMethod("E1")]
+        public void DuctElbowEqualCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
+            }   
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+            }
+        }
+
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+            }
+        }
+
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEX")]
+        public void DuctBranchEEXCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEX);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEXCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEY")]
+        public void DuctBranchEEYCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEY);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEYCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEZ")]
+        public void DuctBranchEEZCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEZ);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctBranchEEZCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE1")]
+        public void DuctElbowEqual3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE2")]
+        public void DuctElbowReducing3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE3")]
+        public void DuctElbowVertical3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+            }
+        }
+
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute3D();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
+            }
+        }
     }
 }

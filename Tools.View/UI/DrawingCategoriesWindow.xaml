@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Thống Kê Danh Mục"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.VBDM_UI_ThongKeDanhMuc}"
     Width="650"
     Height="650"
     Loaded="BangToaDoCocWindow_Loaded"
@@ -34,7 +35,7 @@
                 <DataGridTextColumn
                     Width="80"
                     Binding="{Binding STT, UpdateSourceTrigger=PropertyChanged}"
-                    Header="STT"
+                    Header="{x:Static res:Lang.Common_UI_Stt}"
                     SortMemberPath="STT">
 
                     <DataGridTextColumn.HeaderStyle>
@@ -63,7 +64,7 @@
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding DrawingName, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Tên Bản Vẽ"
+                    Header="{x:Static res:Lang.Common_UI_TenBanVe}"
                     SortMemberPath="DrawingName">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -75,7 +76,7 @@
                 <DataGridTextColumn
                     Width="100"
                     Binding="{Binding DrawingNo, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Số Hiệu"
+                    Header="{x:Static res:Lang.Common_UI_SoHieu}"
                     SortMemberPath="DrawingNo">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -113,13 +114,13 @@
                 Height="25"
                 Margin="0,0,70,0"
                 Command="{Binding DrawTableCmd}"
-                Content="Vẽ bảng" />
+                Content="{x:Static res:Lang.Common_UI_VeBang}" />
 
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>
