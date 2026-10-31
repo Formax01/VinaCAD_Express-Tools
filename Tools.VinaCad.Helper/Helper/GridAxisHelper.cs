@@ -446,7 +446,7 @@ namespace Tools.VinaCad.Helper.Helper
                 Position = Point3d.Origin,
                 AlignmentPoint = Point3d.Origin,
                 Tag = "GRID_LABEL",
-                Prompt = "Nhãn cọc Grid",
+                Prompt = Tools.Resources.Language.Lang.ZXW_Prompt_NhanCocGrid,
                 TextString = label,
                 Height = metrics.TextHeight,
                 Justify = AttachmentPoint.MiddleCenter,

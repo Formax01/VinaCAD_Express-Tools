@@ -254,7 +254,7 @@
     <value>Current version</value>
   </data>
   <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
-    <value>Express_Tools information</value>
+    <value>Express_Tools Information</value>
   </data>
   <data name="AD_Error_AssetCuaKhongCoHinhHocHopLe" xml:space="preserve">
     <value>The door asset does not have valid geometry.</value>
@@ -420,7 +420,7 @@ door</value>
     <value>Unable to get Editor: {ex.Message}</value>
   </data>
   <data name="AW_Output_AwDaTaoCuaSo" xml:space="preserve">
-    <value>AW: created {createdCount} window.</value>
+    <value>AW: Created {createdCount} window.</value>
   </data>
   <data name="AW_Output_AwHayChonLai" xml:space="preserve">
     <value>AW: {exception.Message} Please select again.</value>
@@ -563,7 +563,7 @@ block. block</value>
     <value>or edit the original Dynamic Block definition.</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>Do not fix system block "{owner.Name}"</value>
+    <value>Do not modify system block "{owner.Name}" (Dimension/Hatch/Table).</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>Objects located in Xref/Overlay cannot be edited.</value>
@@ -885,13 +885,10 @@ Automatic</value>
     <value>Numbering rules:</value>
   </data>
   <data name="Common_UI_SHieu" xml:space="preserve">
-    <value>S. Hieu</value>
+    <value>Mark Number</value>
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Mark Number</value>
-  </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>No.</value>
   </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Drawing Name</value>
@@ -971,6 +968,15 @@ Automatic</value>
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>Number the hospital</value>
   </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: No blocks selected.</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: No pile blocks found in selection.</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>Select pile blocks (drag to create window/crossing selection):</value>
+  </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>Reinforcement area table (DTT)</value>
   </data>
@@ -1005,7 +1011,7 @@ Automatic</value>
     <value>Find text (FDT)</value>
   </data>
   <data name="FN_Error_ChieuDayVuaPhaiLonHon0" xml:space="preserve">
-    <value>plaster thickness must be greater than 0.</value>
+    <value>Stucco thickness must be greater than 0.</value>
   </data>
   <data name="FN_Error_KhongCoKetQuaOffset" xml:space="preserve">
     <value>No offset results.</value>
@@ -1026,7 +1032,7 @@ Automatic</value>
     <value>Layer '{targetLayer.Name}' is locked. Please unlock before running FN.</value>
   </data>
   <data name="FN_Error_MauAciPhaiNamTrongKhoang1255" xml:space="preserve">
-    <value>The ACI color must be between 1..255.</value>
+    <value>The ACI color must be between 1 - 255.</value>
   </data>
   <data name="FN_Error_TenLayerFnKhongHopLe" xml:space="preserve">
     <value>Invalid FN layer name.</value>
@@ -1044,10 +1050,10 @@ Automatic</value>
     <value>Select consecutive edges of the outer face, press Enter to confirm:</value>
   </data>
   <data name="FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua" xml:space="preserve">
-    <value>Select an outside point to determine the plaster direction:</value>
+    <value>Select an outside point to determine the Stucco direction:</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - Select point in room or [O Scan select wall | E Exterior | S Settings] :</value>
+    <value>FN - Select a point in the room or [O Scan walls | E Exterior | D Thickness | S Settings]:</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>Outer side</value>
@@ -1062,25 +1068,25 @@ Automatic</value>
     <value>Draw the plaster layer (FN)</value>
   </data>
   <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
-    <value>The selected lines cannot be grouted on the exterior.</value>
+    <value>The selected lines cannot be used to create an exterior stucco.</value>
   </data>
   <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
-    <value>The outer contour has not been selected.</value>
+    <value>The outer boundary not yet selected.</value>
   </data>
   <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
-    <value>There are no border guards.</value>
+    <value>There are no border in the room.</value>
   </data>
   <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
     <value>Haven't scanned open walls yet.</value>
   </data>
   <data name="FN_Text_KhongTheTaoVuaMatTrong" xml:space="preserve">
-    <value>Cannot create plaster on the inside.</value>
+    <value>Cannot create interior Stucco.</value>
   </data>
   <data name="FN_Text_KhongTimThayCapMatTuongHoHopLeTrongVungChon" xml:space="preserve">
     <value>No valid open wall face pairs were found in the selection.</value>
   </data>
   <data name="FN_UI_CaiDatVua" xml:space="preserve">
-    <value>Plaster Settings</value>
+    <value>Stucco Settings</value>
   </data>
   <data name="FN_UI_ChonLayerCoSan" xml:space="preserve">
     <value>Select an existing layer</value>
@@ -1092,10 +1098,10 @@ Automatic</value>
     <value>Reset Default Values</value>
   </data>
   <data name="FN_UI_DoDayVua" xml:space="preserve">
-    <value>plaster Thickness:</value>
+    <value>Stucco Thickness:</value>
   </data>
   <data name="FN_UI_LayerVua" xml:space="preserve">
-    <value>plaster Layer:</value>
+    <value>Stucco Layer:</value>
   </data>
   <data name="FN_UI_MaMauAci1255" xml:space="preserve">
     <value>Color code (ACI): 1–255</value>
@@ -1110,13 +1116,13 @@ Automatic</value>
     <value>Create new layer</value>
   </data>
   <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
-    <value>plaster thickness must be a finite number greater than 0.</value>
+    <value>Stucco thickness must be a finite number greater than 0.</value>
   </data>
   <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
     <value>Select an existing layer.</value>
   </data>
   <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
-    <value>The plaster layer cannot be left blank.</value>
+    <value>The Stucco layer cannot be blank.</value>
   </data>
   <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
     <value>Layer color must be an ACI index from 1 to 255.</value>
@@ -1235,25 +1241,25 @@ Please correct them before creating cumulative dimensions.</value>
     <value>Integrate: combine the railing into 1 object. Uncheck: draw as many separate objects.</value>
   </data>
   <data name="LTP_Drawing_Bac" xml:space="preserve">
-    <value>{preview.StepNumber}/{source.StepNumber} level</value>
+    <value>{preview.StepNumber}/{source.StepNumber} Steps</value>
   </data>
   <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
-    <value>{source.StepNumber} level</value>
+    <value>{source.StepNumber} Steps</value>
   </data>
   <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
-    <value>High-rise: {source.StoreyHeight:0.####}; Step surface: {source.TreadRun:0.####}</value>
+    <value>Storey height: {source.StoreyHeight:0.####}; tread width: {source.TreadRun:0.####}</value>
   </data>
   <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
-    <value>Landing: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+    <value>Landing widths: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
-    <value>Preview image: {GetPreviewSummary(source, preview)}</value>
+    <value>Preview: {GetPreviewSummary(source, preview)}</value>
   </data>
   <data name="LTP_Drawing_Tang" xml:space="preserve">
-    <value>{preview.StoreyNumber}/{source.StoreyNumber} floor</value>
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} Storeys</value>
   </data>
   <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
-    <value>{source.StoreyNumber} floor</value>
+    <value>{source.StoreyNumber} Storeys</value>
   </data>
   <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
     <value>Select the point to insert the stair section:</value>
@@ -1320,7 +1326,7 @@ CT cut</value>
     <value>Floor height:</value>
   </data>
   <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
-    <value>Thickness of ladder:</value>
+    <value>Stair slab thickness:</value>
   </data>
   <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
     <value>Landing 1:</value>
@@ -1332,28 +1338,28 @@ CT cut</value>
     <value>Landing width 1</value>
   </data>
   <data name="LTP_UI_ChieuRongChieuNghi2" xml:space="preserve">
-    <value>Width of landing 2</value>
+    <value>Landing width 2</value>
   </data>
   <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
     <value>Main beam width</value>
   </data>
   <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
-    <value>Secondary beam width</value>
+    <value>Sub beam width</value>
   </data>
   <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
-    <value>Step width:</value>
+    <value>Tread width:</value>
   </data>
   <data name="LTP_UI_DamChinhC" xml:space="preserve">
-    <value>Main beam C:</value>
+    <value>Main beam H: </value>
   </data>
   <data name="LTP_UI_DamChinhR" xml:space="preserve">
-    <value>Main beam R:</value>
+    <value>Main beam W:</value>
   </data>
   <data name="LTP_UI_DamPhuC" xml:space="preserve">
-    <value>Secondary beam C:</value>
+    <value>Sub beam H: </value>
   </data>
   <data name="LTP_UI_DamPhuR" xml:space="preserve">
-    <value>Secondary beam R:</value>
+    <value>Sub beam W:</value>
   </data>
   <data name="LTP_UI_DiemChen" xml:space="preserve">
     <value>● Insertion point</value>
@@ -1362,10 +1368,10 @@ CT cut</value>
     <value>Measure</value>
   </data>
   <data name="LTP_UI_DongY" xml:space="preserve">
-    <value>Agreed</value>
+    <value>OK</value>
   </data>
   <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
-    <value>Group together after drawing</value>
+    <value>Join groups after drawing</value>
   </data>
   <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
     <value>Steps in the first flight:</value>
@@ -1383,13 +1389,13 @@ CT cut</value>
     <value>TWO-FLIGHT STAIRCASE</value>
   </data>
   <data name="LTP_UI_ThangChuX" xml:space="preserve">
-    <value>X-SHAPED LADDER</value>
+    <value>X-SHAPED STAIRCASE</value>
   </data>
   <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
-    <value>Stair specifications:</value>
+    <value>Stair Specifications:</value>
   </data>
   <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
-    <value>Landing specifications:</value>
+    <value>Landing Specifications:</value>
   </data>
   <data name="LTP_UI_TongSoBac" xml:space="preserve">
     <value>Total number of steps:</value>
@@ -1425,7 +1431,7 @@ CT cut</value>
     <value>The first-flight step count must be at least 1 and less than the total step count.</value>
   </data>
   <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
-    <value>The number of floors must be from 1 and the total number of steps per floor must be from 2.</value>
+    <value>The number of storeys must be at least 1, and the number of steps per storey must be at least 2.</value>
   </data>
   <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
     <value>Invalid stair section layer name.</value>
@@ -1452,11 +1458,10 @@ CT cut</value>
     <value>Edit TKTH</value>
   </data>
   <data name="QD_UI_BangThongKeThepHinh" xml:space="preserve">
-    <value>structural steel schedule table</value>
+    <value>Structural Steel Table</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>Afternoon
-Long</value>
+    <value>Length</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>Steel Specification</value>
@@ -1633,7 +1638,7 @@ pile</value>
     <value>Pile coordinates (TDC)</value>
   </data>
   <data name="TDC_UI_BangToaDoCoc" xml:space="preserve">
-    <value>Pile coordinate table</value>
+    <value>Pile Coordinate Table</value>
   </data>
   <data name="TDC_UI_GhiChu" xml:space="preserve">
     <value>Notes</value>
@@ -1671,9 +1676,6 @@ CK</value>
   </data>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>Long</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>Height</value>
   </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>Wide</value>
@@ -1751,16 +1753,16 @@ CK</value>
     <value>Set the drawing scale</value>
   </data>
   <data name="TW_Drawing_KhoangHo" xml:space="preserve">
-    <value>{summary.HealedGapCount} clearance</value>
+    <value>{summary.HealedGapCount} gaps healed.</value>
   </data>
   <data name="TW_Msg_LoiTw" xml:space="preserve">
     <value>Error TW: {ex.Message}</value>
   </data>
   <data name="TW_Output_DaSuaLine" xml:space="preserve">
-    <value>Fixed {summary.ChangedLineCount} line,</value>
+    <value>Repaired {summary.ChangedLineCount} lines,</value>
   </data>
   <data name="TW_Output_GiaoTuong" xml:space="preserve">
-    <value>{summary.JunctionCount} delivered to the wall,</value>
+    <value>{summary.JunctionCount} wall junctions,</value>
   </data>
   <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
     <value>No valid wall stroke pairs were found in the selection.</value>
@@ -1808,7 +1810,7 @@ CK</value>
     <value>Selected: Align Right.</value>
   </data>
   <data name="WW_Output_DaChonCanTam" xml:space="preserve">
-    <value>Selected: Can Tam.</value>
+    <value>Selected: Center alignment.</value>
   </data>
   <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
     <value>Selected: Align Left.</value>
@@ -1817,10 +1819,10 @@ CK</value>
     <value>Created and selected the Wall layer.</value>
   </data>
   <data name="WW_Output_DaVeDoanTuong" xml:space="preserve">
-    <value>Drawn {wallPoints.Count - 1} wall segment.</value>
+    <value>Drawn {wallPoints.Count - 1} wall segments.</value>
   </data>
   <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
-    <value>Wall board error: {ex.Message}</value>
+    <value>Error capping wall end: {ex.Message}</value>
   </data>
   <data name="WW_Output_LoiVeTuong" xml:space="preserve">
     <value>Error drawing wall: {ex.Message}</value>
@@ -1829,7 +1831,7 @@ CK</value>
     <value>Invalid selection, keep the current alignment.</value>
   </data>
   <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
-    <value>WW: D = Wall painting | T = Thickness | A = Alignment | Q = Quit.</value>
+    <value>WW: D = Draw walls | T = Thickness | A = Alignment | Q = Quit.</value>
   </data>
   <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
     <value>Wall alignment [1=Center / 2=Left / 3=Right] &lt;1&gt;:</value>
@@ -1883,7 +1885,7 @@ CK</value>
     <value>Select a wall face &lt;End&gt;:</value>
   </data>
   <data name="WWO_Prompt_Giu" xml:space="preserve">
-    <value>Hold</value>
+    <value>Keep</value>
   </data>
   <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
     <value>Wall offset distance (center-center) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
@@ -1892,7 +1894,7 @@ CK</value>
     <value>WWO only accepts the Line of the wall.</value>
   </data>
   <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
-    <value>Intersection handling [Auto/Hold] &lt;Auto&gt;:</value>
+    <value>Junction handling [Auto/Keep] &lt;Auto&gt;:</value>
   </data>
   <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
     <value>Wall Offset (WWO)</value>
@@ -1901,7 +1903,7 @@ CK</value>
     <value>Connected {connectedBranchCount} to the top of the wall and deleted the inner stroke</value>
   </data>
   <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
-    <value>The wall has been created parallel to the center</value>
+    <value>Created a parallel wall at a centerline distance of</value>
   </data>
   <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
     <value>Created a parallel wall away from the center of {offsetDistance:0.##}.</value>
@@ -1919,7 +1921,7 @@ CK</value>
     <value>Could not find opposite side with SegmentId.</value>
   </data>
   <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
-    <value>{offsetDistance:0.##}; Do not handle intersections.</value>
+    <value>{offsetDistance:0.##}; junctions left unchanged.</value>
   </data>
   <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
     <value>Wall face metadata is incomplete.</value>
@@ -1937,13 +1939,13 @@ CK</value>
     <value>Please enter a valid number greater than 0.</value>
   </data>
   <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
-    <value>keep the face selected.</value>
+    <value>keep the selected face.</value>
   </data>
   <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
     <value>Cannot change wall: {message}</value>
   </data>
   <data name="WWT_Output_ThayDoiDeuQuaTimTuong" xml:space="preserve">
-    <value>change evenly through the heart and wall.</value>
+    <value>changes are measured from the centerlines of the walls.</value>
   </data>
   <data name="WWT_Output_WwtChieuDayMoi" xml:space="preserve">
     <value>WWT: New thickness = {_thickness:0.##};</value>
@@ -2087,6 +2089,9 @@ CK</value>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>The starting number must be greater than 0.</value>
   </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: Cancelled.</value>
+  </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>Font size:</value>
   </data>
@@ -2172,7 +2177,7 @@ CK</value>
     <value>ZXW canceled; The drawing does not change.</value>
   </data>
   <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
-    <value>ZXW created mesh {input.Breadths.Count + 1} x {input.Depths.Count + 1} axes ({entityCount} objects).</value>
+    <value>ZXW created grid {input.Breadths.Count + 1} x {input.Depths.Count + 1} axes ({entityCount} objects).</value>
   </data>
   <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
     <value>ZXW error: {ex.Message}</value>
@@ -2221,7 +2226,7 @@ axis</value>
     <value>Invalid label position.</value>
   </data>
   <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
-    <value>Factory Value Setting</value>
+    <value>Restore default values</value>
   </data>
   <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
     <value>Axis Grid Settings</value>
@@ -2245,18 +2250,341 @@ axis</value>
     <value>The starting number or letter of the vertical axis</value>
   </data>
   <data name="ZXW_UI_TrucHoanh" xml:space="preserve">
-    <value>Horizontal axis:</value>
+    <value>Horizontal axis :</value>
   </data>
   <data name="ZXW_UI_TrucTung" xml:space="preserve">
-    <value>Vertical axis:</value>
+    <value>Vertical axis :</value>
   </data>
   <data name="ZXW_UI_VeKyHieuTrucKichThuoc" xml:space="preserve">
     <value>Draw axis symbol + Dimension</value>
   </data>
   <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
-    <value>Scale: {source.BoardThickness:0.####}; railing: {source.RailingHeight:0.####}</value>
+    <value>Stair slab: {source.BoardThickness:0.####}; railing: {source.RailingHeight:0.####}</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
-    <value>Restore original value</value>
+    <value>Restore default values</value>
   </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>Num of Components</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Configure Rebar Schedule</value>
+  </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve">
+    <value>Error creating wall lines: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve">
+    <value>Error finding intersections: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve">
+    <value>Error cleaning up intersections: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve">
+    <value>Error capping wall end: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve">
+    <value>Error removing old cap: {ex.Message}</value>
+  </data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>The selected object is not a valid wall face.</value>
+  </data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve">
+    <value>No parallel wall face was found.</value>
+  </data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve">
+    <value>The two wall faces overlap.</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve">
+    <value>Junction handling = {mode}.</value>
+  </data>
+  <data name="WWO_Output_TuDong" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve">
+    <value>Keep unchanged</value>
+  </data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve">
+    <value>Select stucco edges to change thickness, then press Enter:</value>
+  </data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve">
+    <value>Enter a new thickness for the selected edges &lt;{settings.Thickness}&gt;:</value>
+  </data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve">
+    <value>Thickness</value>
+  </data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve">
+    <value>FN: {ex.Message} Retrying with BOUNDARY...</value>
+  </data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve">
+    <value>Preview layer color</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve">
+    <value>No wall face was found around the selected point.</value>
+  </data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve">
+    <value>No wall face is available.</value>
+  </data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve">
+    <value>No Stucco edge was selected.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve">
+    <value>No wall line was found in the drawing.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve">
+    <value>The original wall face for the selected plaster edges was not found, or the thickness is already correct.</value>
+  </data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve">
+    <value>The room is not enclosed: {missedRays}/{coarseRays} rays escape (for example at {firstMissDegrees:0}°). Check openings, doors, or wall lines on another layer.</value>
+  </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="FN_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WWT_UI_DongY" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
+    <value>Current riser height: {0:0.####}</value>
+  </data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve">
+    <value>Flexible duct diameter &lt;{diameter}&gt;:</value>
+  </data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve">
+    <value>Choose centerline method [Draw/Select] &lt;Draw&gt;:</value>
+  </data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve">
+    <value>Draw</value>
+  </data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve">
+    <value>Cannot draw the duct from the selected centerline.</value>
+  </data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve">
+    <value>[Warning] {warning}</value>
+  </data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve">
+    <value>{commandName}: drew {count} objects in group {groupName}.</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve">
+    <value>Select the centerline start point:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve">
+    <value>Select the next point &lt;Enter to finish&gt;:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve">
+    <value>Select a centerline Line/Polyline:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve">
+    <value>Only Line or Polyline is accepted.</value>
+  </data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve">
+    <value>Could not erase the original centerline: {ex.Message}</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve">
+    <value>The centerline is too short for both end pieces; end pieces were omitted.</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve">
+    <value>The centerline is too short to draw the duct.</value>
+  </data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve">
+    <value>Corner {i}: short segment; bend radius reduced to {r:0.##}</value>
+  </data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve">
+    <value>Corner {i}: radius {r:0.##} ≤ D/2; the inner edge folds</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve">
+    <value>Enter inlet size</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve">
+    <value>Enter size for both ends</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve">
+    <value>Enter outlet size</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve">
+    <value>Enter duct height</value>
+  </data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve">
+    <value>Enter inner bend radius</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve">
+    <value>Enter vertical segment length</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve">
+    <value>Choose direction</value>
+  </data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>Choose turn direction</value>
+  </data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve">
+    <value>Enter turn angle (degrees)</value>
+  </data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>Invalid duct direction.</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve">
+    <value>Duct height must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve">
+    <value>Inlet size must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve">
+    <value>Outlet size must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve">
+    <value>Inner bend radius must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve">
+    <value>Turn angle must be between {minAngle} and {maxAngle} degrees.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve">
+    <value>Radius is too small: the inner bend radius is less than 0. Increase the radius.</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve">
+    <value>Vertical drop length must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve">
+    <value>Radius must be at least half the inlet diameter.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve">
+    <value>The 3D solid's inner bend radius must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>Value must be greater than 0.</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve">
+    <value>Invalid input value.</value>
+  </data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>Click to confirm duct direction: </value>
+  </data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve">
+    <value>Could not create the 3D duct cross-section.</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonDiemDat" xml:space="preserve">
+    <value>Select insertion point: </value>
+  </data>
+  <data name="DuctBranch_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>Invalid duct direction.</value>
+  </data>
+  <data name="DuctBranch_Output_Loi" xml:space="preserve">
+    <value>Error: {message}</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngChinh" xml:space="preserve">
+    <value>Enter main duct diameter</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngChinh" xml:space="preserve">
+    <value>Enter main duct height (straight section before the branch)</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngDiThang" xml:space="preserve">
+    <value>Enter continuing duct diameter</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>Enter continuing duct height (straight section beyond the branch opening)</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngRe" xml:space="preserve">
+    <value>Enter branch duct diameter {name}</value>
+  </data>
+  <data name="DuctBranch_Prompt_BanKinhOngRe" xml:space="preserve">
+    <value>Enter branch bend radius {name}</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngRe" xml:space="preserve">
+    <value>Enter branch duct height (straight section after the bend)</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>Choose branch direction</value>
+  </data>
+  <data name="DuctBranch_Keyword_Trai" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="DuctBranch_Keyword_Phai" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngChinh" xml:space="preserve">
+    <value>Main duct diameter must be greater than 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngChinh" xml:space="preserve">
+    <value>Main duct height cannot be negative.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngRe" xml:space="preserve">
+    <value>Branch duct height cannot be negative.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThang" xml:space="preserve">
+    <value>Continuing duct diameter must be greater than 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThangQuaLon" xml:space="preserve">
+    <value>Continuing duct diameter cannot exceed the main duct diameter.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>Continuing duct height cannot be negative.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhPhaiDuong" xml:space="preserve">
+    <value>Branch duct diameter {name} must be greater than 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhQuaLon" xml:space="preserve">
+    <value>Branch duct diameter {name} cannot exceed main duct diameter.</value>
+  </data>
+  <data name="DuctBranch_Validation_BanKinhNhanhQuaNho" xml:space="preserve">
+    <value>Radius {name} is too small (negative inner bend radius). Increase Radius {name}.</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriKhongAm" xml:space="preserve">
+    <value>Value must be a nonnegative number.</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriLonHon0" xml:space="preserve">
+    <value>Value must be a number greater than 0.</value>
+  </data>
+  <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>Click to confirm duct direction: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>Enter supply air diffuser width</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>Select supply air diffuser position: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>Enter supply air diffuser block name: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>Block name already exists. Enter a different name.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>Enter height from diffuser to duct riser</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>Enter duct riser height</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>Enter duct riser opening width</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D dimensions exceed the limit.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Select center of 3D supply air diffuser: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be a number greater than 0.</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>Enter inner frame width of return air grille</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>Enter inner frame height of return air grille</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>Enter return air grille block name: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>Block name already exists. Enter a different name.</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>Error: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Value must be a number greater than 0.</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>Select return air grille center point: </value></data>
 </root>

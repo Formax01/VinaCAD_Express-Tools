@@ -5,6 +5,7 @@ using System.Linq;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.VinaCad.Modeling;
+using Tools.Resources.Language;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -403,7 +404,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                     tr.Commit();
                 }
-                catch (Exception ex) { tr.Abort(); throw new Exception($"Error creating wall lines: {ex.Message}", ex); }
+                catch (Exception ex) { tr.Abort(); throw new Exception(Lang.WW_Error_TaoNetTuong.Replace("{ex.Message}", ex.Message), ex); }
             }
             return lineIds;
         }
@@ -533,7 +534,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                     tr.Commit();
                 }
-                catch (Exception ex) { tr.Abort(); throw new Exception($"Error finding intersections: {ex.Message}", ex); }
+                catch (Exception ex) { tr.Abort(); throw new Exception(Lang.WW_Error_TimGiaoDiem.Replace("{ex.Message}", ex.Message), ex); }
             }
 
             return intersections.GroupBy(x => x.ExistingLineId).Select(x => x.First()).ToList();
@@ -661,7 +662,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                     tr.Commit();
                 }
-                catch (Exception ex) { tr.Abort(); throw new Exception($"Error cleaning up intersections: {ex.Message}", ex); }
+                catch (Exception ex) { tr.Abort(); throw new Exception(Lang.WW_Error_XuLyGiaoDiem.Replace("{ex.Message}", ex.Message), ex); }
             }
         }
 
@@ -1206,7 +1207,7 @@ namespace Tools.VinaCad.Helper.Helper
 
                     tr.Commit();
                 }
-                catch (Exception ex) { tr.Abort(); throw new Exception($"Error capping wall end: {ex.Message}", ex); }
+                catch (Exception ex) { tr.Abort(); throw new Exception(Lang.WW_Error_BitDauTuong.Replace("{ex.Message}", ex.Message), ex); }
             }
         }
 
@@ -1258,7 +1259,7 @@ namespace Tools.VinaCad.Helper.Helper
                     EraseEntities(tr, toErase);
                     tr.Commit();
                 }
-                catch (Exception ex) { tr.Abort(); throw new Exception($"Error removing old cap: {ex.Message}", ex); }
+                catch (Exception ex) { tr.Abort(); throw new Exception(Lang.WW_Error_XoaNetBitCu.Replace("{ex.Message}", ex.Message), ex); }
             }
         }
 

@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Bảng tọa độ cọc"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.TDC_UI_BangToaDoCoc}"
     Width="550"
     Height="450"
     Topmost="True"
@@ -33,9 +34,9 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn
-                    Width="0.75*"
+                    Width="*"
                     Binding="{Binding SoHieu, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Số Hiệu">
+                    Header="{x:Static res:Lang.Common_UI_SoHieu}">
 
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -55,7 +56,7 @@
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding KichThuoc, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Kích Thước">
+                    Header="{x:Static res:Lang.TDC_UI_KichThuoc}">
 
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -75,7 +76,7 @@
                 <DataGridTextColumn
                     Width="1.5*"
                     Binding="{Binding ToaDoX, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Tọa Độ X">
+                    Header="{x:Static res:Lang.Common_UI_ToaDoX}">
 
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -95,7 +96,7 @@
                 <DataGridTextColumn
                     Width="1.5*"
                     Binding="{Binding ToaDoY, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Tọa Độ Y">
+                    Header="{x:Static res:Lang.Common_UI_ToaDoY}">
 
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -115,7 +116,7 @@
                 <DataGridTextColumn
                     Width="0.75*"
                     Binding="{Binding GhiChu, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Ghi Chú">
+                    Header="{x:Static res:Lang.TDC_UI_GhiChu}">
 
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -147,13 +148,13 @@
                 Height="25"
                 Margin="0,0,70,0"
                 Command="{Binding DrawTableCmd}"
-                Content="Vẽ bảng" />
+                Content="{x:Static res:Lang.Common_UI_VeBang}" />
 
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>

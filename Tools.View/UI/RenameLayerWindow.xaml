@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Đổi tên Layer"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.Common_Text_DoiTenLayer}"
     Width="460"
     Height="450"
     ResizeMode="CanResize"
@@ -54,12 +55,12 @@
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding NameLayer, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Tên layer cũ" />
+                    Header="{x:Static res:Lang.RenameLayer_UI_TenLayerCu}" />
 
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding RenameLayer, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Tên layer mới" />
+                    Header="{x:Static res:Lang.RenameLayer_UI_TenLayerMoi}" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -88,7 +89,7 @@
                 Height="25"
                 HorizontalAlignment="Center"
                 Command="{Binding CancelCmd}"
-                Content="Thoát"
+                Content="{x:Static res:Lang.Common_UI_Thoat}"
                 FontSize="11" />
 
         </Grid>

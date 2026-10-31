@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Đổi tên Text"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.Common_Text_DoiTenText}"
     Width="460"
     Height="450"
     ResizeMode="CanResize"
@@ -54,12 +55,12 @@
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Text cũ" />
+                    Header="{x:Static res:Lang.RenameText_UI_TextCu}" />
 
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding NewText, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Text mới" />
+                    Header="{x:Static res:Lang.RenameText_UI_TextMoi}" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -71,21 +72,21 @@
             </Grid.RowDefinitions>
 
             <!--  Option group  -->
-            <GroupBox Grid.Row="0" Header="Kiểu thay thế?">
+            <GroupBox Grid.Row="0" Header="{x:Static res:Lang.RenameText_UI_KieuThayThe}">
 
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
 
                     <RadioButton
                         Margin="0,0,35,0"
                         VerticalAlignment="Center"
-                        Content="Ghi đè"
+                        Content="{x:Static res:Lang.RenameText_UI_GhiDe}"
                         FontSize="11"
                         GroupName="RenameType"
                         IsChecked="{Binding IsOverride}" />
 
                     <RadioButton
                         VerticalAlignment="Center"
-                        Content="Cộng dồn"
+                        Content="{x:Static res:Lang.RenameText_UI_CongDon}"
                         FontSize="11"
                         GroupName="RenameType"
                         IsChecked="{Binding IsIncludingOldAndNew}" />
@@ -116,7 +117,7 @@
                     Height="25"
                     HorizontalAlignment="Center"
                     Command="{Binding CancelCmd}"
-                    Content="Thoát"
+                    Content="{x:Static res:Lang.Common_UI_Thoat}"
                     FontSize="11" />
             </Grid>
         </Grid>

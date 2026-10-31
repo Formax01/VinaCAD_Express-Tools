@@ -563,7 +563,7 @@
     <value>または、元のダイナミック ブロック定義を編集します。</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>システムブロック「{owner.Name}」を修正しないでください</value>
+    <value>システムブロック「{owner.Name}」（寸法/ハッチング/表）は修正できません。</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>外部参照/オーバーレイにあるオブジェクトは編集できません。</value>
@@ -885,13 +885,10 @@
     <value>番号付けルール:</value>
   </data>
   <data name="Common_UI_SHieu" xml:space="preserve">
-    <value>S.ヒイウ</value>
+    <value>モデル番号</value>
   </data>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>モデル番号</value>
-  </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>番号</value>
   </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>図面名</value>
@@ -927,7 +924,7 @@
     <value>ボードを描く</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
-    <value>鉄筋集計表を作成</value>
+    <value>鉄筋集計表の作成</value>
   </data>
   <data name="Common_UI_XacLap" xml:space="preserve">
     <value>設立</value>
@@ -970,6 +967,15 @@
   </data>
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>病院に番号を付けます</value>
+  </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: ブロックが選択されていません。</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: 選択範囲に杭ブロックが見つかりません。</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>杭ブロックを選択してください（ドラッグして窓選択/交差選択を作成）:</value>
   </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>鉄筋エリア表（DTT）</value>
@@ -1047,7 +1053,7 @@
     <value>外側の点を選択してモルタルの方向を決定します。</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - 部屋内の点を選択するか、[O 壁を選択してスキャン | E 外観 | S設定]：</value>
+    <value>FN - 部屋内の点を選択するか、[O 壁を選択 | E 外側 | D 厚さ | S 設定]：</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>外側</value>
@@ -1062,13 +1068,13 @@
     <value>モルタル層の作図（FN）</value>
   </data>
   <data name="FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai" xml:space="preserve">
-    <value>選択したラインは外側にグラウトできません。</value>
+    <value>選択した線から外装モルタルを作成することはできません。</value>
   </data>
   <data name="FN_Text_ChuaChonDuongBaoMatNgoai" xml:space="preserve">
-    <value>外側の輪郭が選択されていません。</value>
+    <value>外側の境界線が選択されていません。</value>
   </data>
   <data name="FN_Text_ChuaCoDuongBienPhong" xml:space="preserve">
-    <value>国境警備隊はいない。</value>
+    <value>その部屋に境界線はない。</value>
   </data>
   <data name="FN_Text_ChuaQuetChonTuongHo" xml:space="preserve">
     <value>開いた壁はまだスキャンしていません。</value>
@@ -1092,10 +1098,10 @@
     <value>デフォルト値にリセット</value>
   </data>
   <data name="FN_UI_DoDayVua" xml:space="preserve">
-    <value>モルタルの厚さ:</value>
+    <value>スタッコの厚み：</value>
   </data>
   <data name="FN_UI_LayerVua" xml:space="preserve">
-    <value>モルタル層:</value>
+    <value>スタッコ層：</value>
   </data>
   <data name="FN_UI_MaMauAci1255" xml:space="preserve">
     <value>カラーコード (ACI): 1 ～ 255</value>
@@ -1110,13 +1116,13 @@
     <value>新しいレイヤーを作成する</value>
   </data>
   <data name="FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0" xml:space="preserve">
-    <value>モルタルの厚さは 0 より大きい有限数でなければなりません。</value>
+    <value>スタッコの厚さは、0より大きい有限の数でなければならない。</value>
   </data>
   <data name="FN_Validation_HayChonMotLayerCoSan" xml:space="preserve">
     <value>既存のレイヤーを選択します。</value>
   </data>
   <data name="FN_Validation_LayerVuaKhongDuocDeTrong" xml:space="preserve">
-    <value>モルタル層を空白のままにすることはできません。</value>
+    <value>スタッコ層を空にすることはできません。</value>
   </data>
   <data name="FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255" xml:space="preserve">
     <value>レイヤーの色は 1 ～ 255 の ACI インデックスである必要があります。</value>
@@ -1235,43 +1241,43 @@
     <value>統合: 手すりを 1 つのオブジェクトに結合します。チェックを外すと、別個のオブジェクトをできるだけ多く描画します。</value>
   </data>
   <data name="LTP_Drawing_Bac" xml:space="preserve">
-    <value>{preview.StepNumber}/{source.StepNumber} レベル</value>
+    <value>{preview.StepNumber}/{source.StepNumber} 段</value>
   </data>
   <data name="LTP_Drawing_Bac_92A36506" xml:space="preserve">
-    <value>{source.StepNumber} レベル</value>
+    <value>{source.StepNumber} 段</value>
   </data>
   <data name="LTP_Drawing_CaoTangMatBac" xml:space="preserve">
-    <value>高層ビル: {source.StoreyHeight:0.####};ステップ面: {source.TreadRun:0.####}</value>
+    <value>階高: {source.StoreyHeight:0.####}; 踏面幅: {source.TreadRun:0.####}</value>
   </data>
   <data name="LTP_Drawing_ChieuNghi" xml:space="preserve">
-    <value>着陸: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
+    <value>踊り場幅: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Drawing_HinhXemTruoc" xml:space="preserve">
-    <value>プレビュー画像: {GetPreviewSummary(source, preview)}</value>
+    <value>プレビュー: {GetPreviewSummary(source, preview)}</value>
   </data>
   <data name="LTP_Drawing_Tang" xml:space="preserve">
-    <value>{preview.StoreyNumber}/{source.StoreyNumber} フロア</value>
+    <value>{preview.StoreyNumber}/{source.StoreyNumber} 階</value>
   </data>
   <data name="LTP_Drawing_Tang_0000F949" xml:space="preserve">
-    <value>{source.StoreyNumber} フロア</value>
+    <value>{source.StoreyNumber} 階</value>
   </data>
   <data name="LTP_Prompt_ChonDiemChenMatCatCauThang" xml:space="preserve">
-    <value>階段セクションを挿入する点を選択します。</value>
+    <value>階段断面の挿入点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonDiemDichTrenGroupKhac" xml:space="preserve">
-    <value>別のグループの宛先を選択してください:</value>
+    <value>移動先の点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonDiemGocTrenCauThangMoi" xml:space="preserve">
-    <value>新しい階段の原点を選択します。</value>
+    <value>新しい階段上の基点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuCaoTang" xml:space="preserve">
-    <value>床の高さを測定するには 2 つの点を選択してください:</value>
+    <value>階高を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi1" xml:space="preserve">
-    <value>着陸幅 1 を測定する 2 つの点を選択します。</value>
+    <value>踊り場1の幅を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi2" xml:space="preserve">
-    <value>着陸幅 2 を測定する 2 点を選択します。</value>
+    <value>踊り場2の幅を測る2点を選択してください：</value>
   </data>
   <data name="LTP_Prompt_ChonHaiDiemDoKhoangCach" xml:space="preserve">
     <value>2 つの距離測定点を選択します。</value>
@@ -1287,16 +1293,16 @@
 CTカット</value>
   </data>
   <data name="LTP_Text_ChieuNghi1" xml:space="preserve">
-    <value>着陸 1: {settings.Landing1Width:0.####}</value>
+    <value>踊り場1: {settings.Landing1Width:0.####}</value>
   </data>
   <data name="LTP_Text_ChieuNghi2" xml:space="preserve">
-    <value>着陸 2: {settings.Landing2Width:0.####}</value>
+    <value>踊り場2: {settings.Landing2Width:0.####}</value>
   </data>
   <data name="LTP_Text_Dam1" xml:space="preserve">
-    <value>ビーム1</value>
+    <value>梁1</value>
   </data>
   <data name="LTP_Text_Dam2" xml:space="preserve">
-    <value>ビーム2</value>
+    <value>梁2</value>
   </data>
   <data name="LTP_UI_CauThang1Ve" xml:space="preserve">
     <value>1フライト階段</value>
@@ -1311,22 +1317,22 @@ CTカット</value>
     <value>主梁高さ</value>
   </data>
   <data name="LTP_UI_ChieuCaoDamPhu" xml:space="preserve">
-    <value>二次ビームの高さ</value>
+    <value>補助梁の高さ</value>
   </data>
   <data name="LTP_UI_ChieuCaoLanCan" xml:space="preserve">
     <value>手すりの高さ:</value>
   </data>
   <data name="LTP_UI_ChieuCaoTang" xml:space="preserve">
-    <value>床の高さ:</value>
+    <value>階高:</value>
   </data>
   <data name="LTP_UI_ChieuDayBanThang" xml:space="preserve">
-    <value>はしごの厚さ:</value>
+    <value>階段スラブ厚:</value>
   </data>
   <data name="LTP_UI_ChieuNghi1" xml:space="preserve">
-    <value>着陸 1:</value>
+    <value>踊り場1:</value>
   </data>
   <data name="LTP_UI_ChieuNghi2" xml:space="preserve">
-    <value>着陸 2:</value>
+    <value>踊り場2:</value>
   </data>
   <data name="LTP_UI_ChieuRongChieuNghi1" xml:space="preserve">
     <value>踊り場幅1</value>
@@ -1335,37 +1341,37 @@ CTカット</value>
     <value>踊り場幅2</value>
   </data>
   <data name="LTP_UI_ChieuRongDamChinh" xml:space="preserve">
-    <value>メインビーム幅</value>
+    <value>主梁の幅</value>
   </data>
   <data name="LTP_UI_ChieuRongDamPhu" xml:space="preserve">
-    <value>二次ビーム幅</value>
+    <value>補助梁の幅</value>
   </data>
   <data name="LTP_UI_ChieuRongMatBac" xml:space="preserve">
-    <value>ステップ幅:</value>
+    <value>踏面幅:</value>
   </data>
   <data name="LTP_UI_DamChinhC" xml:space="preserve">
-    <value>メインビームC:</value>
+    <value>主桁の高さ</value>
   </data>
   <data name="LTP_UI_DamChinhR" xml:space="preserve">
-    <value>メインビームR:</value>
+    <value>主桁の幅</value>
   </data>
   <data name="LTP_UI_DamPhuC" xml:space="preserve">
-    <value>二次ビーム C:</value>
+    <value>小梁の高さ</value>
   </data>
   <data name="LTP_UI_DamPhuR" xml:space="preserve">
-    <value>二次ビーム R:</value>
+    <value>小梁の幅</value>
   </data>
   <data name="LTP_UI_DiemChen" xml:space="preserve">
     <value>●挿入ポイント</value>
   </data>
   <data name="LTP_UI_Do" xml:space="preserve">
-    <value>測定する</value>
+    <value>測定</value>
   </data>
   <data name="LTP_UI_DongY" xml:space="preserve">
-    <value>同意しました</value>
+    <value>確定</value>
   </data>
   <data name="LTP_UI_GhepNhomSauKhiVe" xml:space="preserve">
-    <value>絵を描いた後にグループ化する</value>
+    <value>作図後にグループを結合</value>
   </data>
   <data name="LTP_UI_SoBacVeThuNhat" xml:space="preserve">
     <value>第1フライトの段数:</value>
@@ -1383,16 +1389,16 @@ CTカット</value>
     <value>2フライト階段</value>
   </data>
   <data name="LTP_UI_ThangChuX" xml:space="preserve">
-    <value>X型はしご</value>
+    <value>X字型階段</value>
   </data>
   <data name="LTP_UI_ThongSoCauThang" xml:space="preserve">
     <value>階段仕様：</value>
   </data>
   <data name="LTP_UI_ThongSoChieuNghi" xml:space="preserve">
-    <value>着陸仕様:</value>
+    <value>踊り場の設定:</value>
   </data>
   <data name="LTP_UI_TongSoBac" xml:space="preserve">
-    <value>総ステップ数:</value>
+    <value>総段数:</value>
   </data>
   <data name="LTP_UI_VeDauSangPhai" xml:space="preserve">
     <value>第1フライトを右へ</value>
@@ -1401,10 +1407,10 @@ CTカット</value>
     <value>第1フライトを左へ</value>
   </data>
   <data name="LTP_Validation_ChieuCaoTangChieuRongBacPhaiLonHon0ChieuRong" xml:space="preserve">
-    <value>床の高さとステップ幅は 0 より大きくなければなりません。着陸幅を負の値にすることはできません。</value>
+    <value>階高と踏面幅は0より大きく、踊り場幅は0以上である必要があります。</value>
   </data>
   <data name="LTP_Validation_ChieuCaoVaChieuRongDamPhuPhaiLonHon0Khi" xml:space="preserve">
-    <value>ビーム 1 またはビーム 2 が有効な場合、二次ビームの高さと幅は 0 より大きくなければなりません。</value>
+    <value>梁1または梁2を有効にする場合、補助梁の高さと幅は0より大きくしてください。</value>
   </data>
   <data name="LTP_Validation_KichThuocKetCauKhongDuocAmVaChieuDayBanPhai" xml:space="preserve">
     <value>構造寸法は負であってはならず、スラブの厚さは 0 より大きくなければなりません。</value>
@@ -1416,7 +1422,7 @@ CTカット</value>
     <value>LTP エラー: {0}</value>
   </data>
   <data name="LTP_Validation_LtpDaTaoMatCatCauThangGomDuong" xml:space="preserve">
-    <value>LTP: {0} 行で構成される階段セクションを作成しました。</value>
+    <value>LTP: {0} 本の線分からなる階段断面を作成しました。</value>
   </data>
   <data name="LTP_Validation_MatCatCauThangVinacadLtp" xml:space="preserve">
     <value>VinaCAD LTP 階段の断面図</value>
@@ -1425,7 +1431,7 @@ CTカット</value>
     <value>第1フライトの段数は1以上かつ総段数未満である必要があります。</value>
   </data>
   <data name="LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai" xml:space="preserve">
-    <value>階数は1～、各階の総段数は2～となります。</value>
+    <value>階数は1以上、各階の段数は2以上にしてください。</value>
   </data>
   <data name="LTP_Validation_TenLayerMatCatCauThangKhongHopLe" xml:space="preserve">
     <value>階段セクションのレイヤー名が無効です。</value>
@@ -1455,8 +1461,7 @@ CTカット</value>
     <value>形鋼集計表</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>午後
-ロング</value>
+    <value>長さ</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>スチール仕様</value>
@@ -1672,9 +1677,6 @@ CK</value>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>長さ</value>
   </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>身長</value>
-  </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>幅</value>
   </data>
@@ -1751,16 +1753,16 @@ CK</value>
     <value>描画スケールを設定する</value>
   </data>
   <data name="TW_Drawing_KhoangHo" xml:space="preserve">
-    <value>{summary.HealedGapCount} クリアランス</value>
+    <value>隙間 {summary.HealedGapCount} 箇所を修復しました。</value>
   </data>
   <data name="TW_Msg_LoiTw" xml:space="preserve">
     <value>エラー TW: {ex.Message}</value>
   </data>
   <data name="TW_Output_DaSuaLine" xml:space="preserve">
-    <value>{summary.ChangedLineCount} 行を修正しました。</value>
+    <value>線 {summary.ChangedLineCount} 本を修復し、</value>
   </data>
   <data name="TW_Output_GiaoTuong" xml:space="preserve">
-    <value>{summary.JunctionCount} が壁に届けられ、</value>
+    <value>壁の交差部 {summary.JunctionCount} 箇所、</value>
   </data>
   <data name="TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon" xml:space="preserve">
     <value>選択範囲内に有効な壁ストロークのペアが見つかりませんでした。</value>
@@ -1808,7 +1810,7 @@ CK</value>
     <value>選択時: 右揃え。</value>
   </data>
   <data name="WW_Output_DaChonCanTam" xml:space="preserve">
-    <value>選択: カンタム。</value>
+    <value>選択: 中央揃え。</value>
   </data>
   <data name="WW_Output_DaChonCanTrai" xml:space="preserve">
     <value>選択時: 左揃え。</value>
@@ -1820,7 +1822,7 @@ CK</value>
     <value>{wallPoints.Count - 1} の壁セグメントを描画しました。</value>
   </data>
   <data name="WW_Output_LoiBoDauTuong" xml:space="preserve">
-    <value>ウォールボードエラー: {ex.Message}</value>
+    <value>壁端の閉鎖エラー: {ex.Message}</value>
   </data>
   <data name="WW_Output_LoiVeTuong" xml:space="preserve">
     <value>壁の描画エラー: {ex.Message}</value>
@@ -1829,7 +1831,7 @@ CK</value>
     <value>選択が無効です。現在の位置合わせを維持します。</value>
   </data>
   <data name="WW_Output_WwDVeTuongTChieuDayACanLeQThoat" xml:space="preserve">
-    <value>WW: D = 壁画 | T = 厚さ | A = 位置合わせ | Q = やめてください。</value>
+    <value>WW: D = 壁を作図 | T = 厚さ | A = 位置合わせ | Q = 終了。</value>
   </data>
   <data name="WW_Prompt_CanTuong1Tam2Trai3Phai1" xml:space="preserve">
     <value>壁の位置合わせ [1=中央 / 2=左 / 3=右] &lt;1&gt;:</value>
@@ -1883,7 +1885,7 @@ CK</value>
     <value>壁面 &lt;終了&gt; を選択します:</value>
   </data>
   <data name="WWO_Prompt_Giu" xml:space="preserve">
-    <value>ホールド</value>
+    <value>維持</value>
   </data>
   <data name="WWO_Prompt_KhoangCachOffsetTuongTamTam" xml:space="preserve">
     <value>壁オフセット距離 (中心間) &lt;{DefaultOffsetDistance:0.##}&gt;:</value>
@@ -1892,7 +1894,7 @@ CK</value>
     <value>WWO は壁のラインのみを受け入れます。</value>
   </data>
   <data name="WWO_Prompt_XuLyNutGiaoAutoGiuAuto" xml:space="preserve">
-    <value>交差点処理 [自動/ホールド] &lt;自動&gt;:</value>
+    <value>交差部の処理 [自動/維持] &lt;自動&gt;：</value>
   </data>
   <data name="WWO_Ribbon_OffsetTuongWwo" xml:space="preserve">
     <value>壁オフセット (WWO)</value>
@@ -1901,7 +1903,7 @@ CK</value>
     <value>{connectedBranchCount} を壁の上部に接続し、内側のストロークを削除しました</value>
   </data>
   <data name="WWO_Status_DaTaoNguyenTrangTuongSongSongCachTim" xml:space="preserve">
-    <value>壁は中心に平行に作成されました</value>
+    <value>中心線間距離</value>
   </data>
   <data name="WWO_Status_DaTaoTuongSongSongCachTim" xml:space="preserve">
     <value>{offsetDistance:0.##} の中心から離れたところに平行な壁を作成しました。</value>
@@ -1919,7 +1921,7 @@ CK</value>
     <value>SegmentId の反対側が見つかりませんでした。</value>
   </data>
   <data name="WWO_Status_KhongXuLyNutGiao" xml:space="preserve">
-    <value>{offsetDistance:0.##};交差点は扱わないでください。</value>
+    <value>{offsetDistance:0.##} で平行な壁を作成しました。交差部は処理していません。</value>
   </data>
   <data name="WWO_Status_MetadataMatTuongKhongDayDu" xml:space="preserve">
     <value>壁面メタデータが不完全です。</value>
@@ -1937,7 +1939,7 @@ CK</value>
     <value>0 より大きい有効な数値を入力してください。</value>
   </data>
   <data name="WWT_Output_GiuMatDuocChon" xml:space="preserve">
-    <value>面を選択したままにします。</value>
+    <value>選択した面を保持する。</value>
   </data>
   <data name="WWT_Output_KhongTheDoiTuong" xml:space="preserve">
     <value>壁を変更できません: {message}</value>
@@ -2089,6 +2091,9 @@ CK</value>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>開始番号は 0 より大きくなければなりません。</value>
   </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: キャンセルしました。</value>
+  </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>フォントサイズ:</value>
   </data>
@@ -2175,7 +2180,7 @@ CK</value>
     <value>ZXWはキャンセルされました。図面は変わりません。</value>
   </data>
   <data name="ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong" xml:space="preserve">
-    <value>ZXW は、メッシュ {input.Breadths.Count + 1} x {input.Depths.Count + 1} 軸 ({entityCount} オブジェクト) を作成しました。</value>
+    <value>ZXWは {input.Breadths.Count + 1} x {input.Depths.Count + 1} のグリッド軸を作成しました（オブジェクト数: {entityCount}）。</value>
   </data>
   <data name="ZXW_Output_ZxwLoi" xml:space="preserve">
     <value>ZXW エラー: {ex.Message}</value>
@@ -2224,7 +2229,7 @@ CK</value>
     <value>ラベルの位置が無効です。</value>
   </data>
   <data name="ZXW_UI_CaiDatGiaTriGoc" xml:space="preserve">
-    <value>工場出荷時の設定値</value>
+    <value>既定値に戻す</value>
   </data>
   <data name="ZXW_UI_CaiDatLuoiTruc" xml:space="preserve">
     <value>軸グリッドの設定</value>
@@ -2257,9 +2262,332 @@ CK</value>
     <value>軸記号+寸法を描画</value>
   </data>
   <data name="LTP_Text_BanThangLanCan" xml:space="preserve">
-    <value>スケール: {source.BoardThickness:0.####};手すり: {source.RailingHeight:0.####}</value>
+    <value>階段スラブ: {source.BoardThickness:0.####}; 手すり: {source.RailingHeight:0.####}</value>
   </data>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>元の値に戻す</value>
   </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>量</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>部材数</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>身長</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>鉄筋集計を設定</value>
+  </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve">
+    <value>壁線の作成エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve">
+    <value>交点の検索エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve">
+    <value>交点の処理エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve">
+    <value>壁端の閉鎖エラー: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve">
+    <value>古い壁端の閉鎖線の削除エラー: {ex.Message}</value>
+  </data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>選択したオブジェクトは有効な壁面ではありません。</value>
+  </data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve">
+    <value>平行な壁面が見つかりません。</value>
+  </data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve">
+    <value>2つの壁面が重なっています。</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve">
+    <value>交差部の処理 = {mode}。</value>
+  </data>
+  <data name="WWO_Output_TuDong" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve">
+    <value>現状維持</value>
+  </data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve">
+    <value>厚さを変更するモルタルの辺を選択し、Enter キーで確定してください：</value>
+  </data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve">
+    <value>選択した辺の新しい厚さを入力してください &lt;{settings.Thickness}&gt;：</value>
+  </data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve">
+    <value>厚さ</value>
+  </data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve">
+    <value>FN: {ex.Message} BOUNDARY で再試行します...</value>
+  </data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve">
+    <value>レイヤーの色をプレビュー</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve">
+    <value>選択した点の周囲に壁面が見つかりません。</value>
+  </data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve">
+    <value>壁面がありません。</value>
+  </data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve">
+    <value>スタッコの端部は選択されませんでした。</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve">
+    <value>図面に壁の線分が見つかりません。</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve">
+    <value>選択したモルタルの辺の元の壁面が見つからないか、厚さがすでに正しい値です。</value>
+  </data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve">
+    <value>部屋が閉じていません：{missedRays}/{coarseRays} 本の光線が外へ抜けています（例：{firstMissDegrees:0}°方向）。隙間、開口部、または別レイヤーの壁線を確認してください。</value>
+  </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="FN_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="WWT_UI_DongY" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve">
+    <value>奥行き</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
+    <value>現在の蹴上げ高さ: {0:0.####}</value>
+  </data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve">
+    <value>フレキシブルダクトの直径 &lt;{diameter}&gt;：</value>
+  </data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve">
+    <value>中心線の指定方法 [描画/選択] &lt;描画&gt;：</value>
+  </data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve">
+    <value>描画</value>
+  </data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve">
+    <value>選択した中心線からダクトを作図できません。</value>
+  </data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve">
+    <value>[警告] {warning}</value>
+  </data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve">
+    <value>{commandName}: グループ {groupName} に {count} 個のオブジェクトを作図しました。</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve">
+    <value>中心線の始点を選択してください：</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve">
+    <value>次の点を選択してください &lt;Enter で終了&gt;：</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve">
+    <value>中心線の Line/Polyline を選択してください：</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve">
+    <value>Line または Polyline のみ選択できます。</value>
+  </data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve">
+    <value>元の中心線を削除できませんでした：{ex.Message}</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve">
+    <value>中心線が両端部に対して短すぎるため、端部を省略しました。</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve">
+    <value>中心線が短すぎてダクトを作図できません。</value>
+  </data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve">
+    <value>角 {i}: 線分が短いため、曲げ半径を {r:0.##} に縮小しました。</value>
+  </data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve">
+    <value>角 {i}: 半径 {r:0.##} ≤ D/2 のため、内側の縁が折れます。</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve">
+    <value>挿入点を選択: </value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve">
+    <value>入口寸法を入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve">
+    <value>両端の寸法を入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve">
+    <value>出口寸法を入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve">
+    <value>ダクトの高さを入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve">
+    <value>内側の曲げ半径を入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve">
+    <value>垂直部分の長さを入力</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve">
+    <value>方向を選択</value>
+  </data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>曲がる方向を選択</value>
+  </data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve">
+    <value>曲がり角度（度）を入力</value>
+  </data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>ダクトの方向が無効です。</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve">
+    <value>ダクトの高さは0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve">
+    <value>入口寸法は0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve">
+    <value>出口寸法は0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve">
+    <value>内側の曲げ半径は0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve">
+    <value>曲がり角度は{minAngle}～{maxAngle}度の範囲にしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve">
+    <value>半径が小さすぎます。内側の曲げ半径が0未満です。半径を大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve">
+    <value>下がり部分の長さは0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve">
+    <value>半径は入口径の半分以上にしてください。</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve">
+    <value>3Dソリッドの内側の曲げ半径は0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>値は0より大きくしてください。</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve">
+    <value>入力値が無効です。</value>
+  </data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>クリックしてダクトの方向を確定: </value>
+  </data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve">
+    <value>3Dダクトの断面を作成できませんでした。</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonDiemDat" xml:space="preserve">
+    <value>配置点を選択: </value>
+  </data>
+  <data name="DuctBranch_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>ダクトの方向が無効です。</value>
+  </data>
+  <data name="DuctBranch_Output_Loi" xml:space="preserve">
+    <value>エラー: {message}</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngChinh" xml:space="preserve">
+    <value>主ダクトの直径を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngChinh" xml:space="preserve">
+    <value>主ダクトの高さ（分岐前の直線部）を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngDiThang" xml:space="preserve">
+    <value>直進ダクトの直径を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>直進ダクトの高さ（分岐口を越える直線部）を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngRe" xml:space="preserve">
+    <value>分岐ダクトの直径 {name} を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_BanKinhOngRe" xml:space="preserve">
+    <value>分岐の曲げ半径 {name} を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngRe" xml:space="preserve">
+    <value>分岐ダクトの高さ （曲がりの後の直線部）を入力</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>分岐方向を選択</value>
+  </data>
+  <data name="DuctBranch_Keyword_Trai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="DuctBranch_Keyword_Phai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngChinh" xml:space="preserve">
+    <value>主ダクトの直径は0より大きくしてください。</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngChinh" xml:space="preserve">
+    <value>主ダクトの高さは負の値にできません。</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngRe" xml:space="preserve">
+    <value>分岐ダクトの高さは負の値にできません。</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThang" xml:space="preserve">
+    <value>直進ダクトの直径は0より大きくしてください。</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThangQuaLon" xml:space="preserve">
+    <value>直進ダクトの直径は主ダクトの直径を超えないようにしてください。</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>直進ダクトの高さは負の値にできません。</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhPhaiDuong" xml:space="preserve">
+    <value>{name} 分岐管の直径は 0 より大きい必要があります。</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhQuaLon" xml:space="preserve">
+    <value>分岐管{name}の径は、Wを超えてはなりません。</value>
+  </data>
+  <data name="DuctBranch_Validation_BanKinhNhanhQuaNho" xml:space="preserve">
+    <value>半径 {name} が小さすぎます（内側の曲げ半径が負の値になっています）。半径 {name} を大きくしてください。</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriKhongAm" xml:space="preserve">
+    <value>0以上の数値を入力してください。</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriLonHon0" xml:space="preserve">
+    <value>0より大きい数値を入力してください。</value>
+  </data>
+  <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>クリックしてダクトの方向を確定: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>給気口の幅を入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>給気口の配置位置を選択: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>給気口ブロック名を入力: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>給気口からダクト立上り部までの高さを入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>ダクト立上り部の高さを入力</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>ダクト立上り部の開口幅を入力</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D寸法が上限を超えています。</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>3D給気口の中心を選択: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>還気グリルの内枠幅を入力</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>還気グリルの内枠高さを入力</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>還気グリルのブロック名を入力: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>エラー: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>還気グリルの中心点を選択: </value></data>
 </root>

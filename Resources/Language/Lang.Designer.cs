@@ -2199,6 +2199,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string Common_UI_DongY {
+            get {
+                return ResourceManager.GetString("Common_UI_DongY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Độ rộng:.
         /// </summary>
         public static string Common_UI_DoRong {
@@ -2253,11 +2262,29 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SCK.
+        /// </summary>
+        public static string Common_UI_SoCauKien {
+            get {
+                return ResourceManager.GetString("Common_UI_SoCauKien", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số Hiệu.
         /// </summary>
         public static string Common_UI_SoHieu {
             get {
                 return ResourceManager.GetString("Common_UI_SoHieu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SL.
+        /// </summary>
+        public static string Common_UI_SoLuong {
+            get {
+                return ResourceManager.GetString("Common_UI_SoLuong", resourceCulture);
             }
         }
         
@@ -2370,8 +2397,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vẽ Bảng Thống
-        ///Kê Thép.
+        ///   Looks up a localized string similar to Vẽ Bảng Thống Kê Thép.
         /// </summary>
         public static string Common_UI_VeBangThongKeThep {
             get {
@@ -2515,6 +2541,33 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DTC: Không có block nào được chọn..
+        /// </summary>
+        public static string DTC_Output_KhongChonBlockNao {
+            get {
+                return ResourceManager.GetString("DTC_Output_KhongChonBlockNao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DTC: Không tìm thấy block cọc trong vùng chọn..
+        /// </summary>
+        public static string DTC_Output_KhongTimThayBlockCocTrongVungChon {
+            get {
+                return ResourceManager.GetString("DTC_Output_KhongTimThayBlockCocTrongVungChon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quét chọn các block cọc (kéo chuột để tạo vùng chọn cửa sổ/giao cắt):.
+        /// </summary>
+        public static string DTC_Prompt_QuetChonBlockCoc {
+            get {
+                return ResourceManager.GetString("DTC_Prompt_QuetChonBlockCoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bảng diện tích cốt thép (DTT).
         /// </summary>
         public static string DTT_Ribbon_BangDienTichCotThepDtt {
@@ -2529,6 +2582,483 @@ namespace Tools.Resources.Language {
         public static string DTT_UI_BangTraDienTichCotThep {
             get {
                 return ResourceManager.GetString("DTT_UI_BangTraDienTichCotThep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phải.
+        /// </summary>
+        public static string DuctBranch_Keyword_Phai {
+            get {
+                return ResourceManager.GetString("DuctBranch_Keyword_Phai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trái.
+        /// </summary>
+        public static string DuctBranch_Keyword_Trai {
+            get {
+                return ResourceManager.GetString("DuctBranch_Keyword_Trai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị phải là số không âm..
+        /// </summary>
+        public static string DuctBranch_Output_GiaTriKhongAm {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_GiaTriKhongAm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị phải là số lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Output_GiaTriLonHon0 {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_GiaTriLonHon0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hướng ống không hợp lệ..
+        /// </summary>
+        public static string DuctBranch_Output_HuongOngKhongHopLe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_HuongOngKhongHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi: {message}.
+        /// </summary>
+        public static string DuctBranch_Output_Loi {
+            get {
+                return ResourceManager.GetString("DuctBranch_Output_Loi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập bán kính cong nhánh rẽ {name}.
+        /// </summary>
+        public static string DuctBranch_Prompt_BanKinhOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_BanKinhOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống chính (đoạn thẳng trước chỗ rẽ).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống đi tiếp (đoạn thẳng vượt qua miệng nhánh).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống rẽ (đoạn thẳng sau cung rẽ).
+        /// </summary>
+        public static string DuctBranch_Prompt_ChieuCaoOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChieuCaoOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đặt: .
+        /// </summary>
+        public static string DuctBranch_Prompt_ChonDiemDat {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChonDiemDat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn hướng rẽ.
+        /// </summary>
+        public static string DuctBranch_Prompt_ChonHuongRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_ChonHuongRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống chính.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống đi thẳng đi tiếp.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập đường kính ống rẽ {name}.
+        /// </summary>
+        public static string DuctBranch_Prompt_DuongKinhOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_DuongKinhOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click để xác nhận hướng ống: .
+        /// </summary>
+        public static string DuctBranch_Prompt_XacNhanHuongOng {
+            get {
+                return ResourceManager.GetString("DuctBranch_Prompt_XacNhanHuongOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính {name} quá nhỏ (bán kính cong trong âm), hãy tăng bán kính{name}..
+        /// </summary>
+        public static string DuctBranch_Validation_BanKinhNhanhQuaNho {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_BanKinhNhanhQuaNho", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống chính không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống đi thẳng không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống rẽ không được âm..
+        /// </summary>
+        public static string DuctBranch_Validation_ChieuCaoOngRe {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_ChieuCaoOngRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống rẽ {name} phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhNhanhPhaiDuong {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhNhanhPhaiDuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống rẽ {name} không được lớn hơn W..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhNhanhQuaLon {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhNhanhQuaLon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống chính phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngChinh {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngChinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống đi thẳng phải lớn hơn 0..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngDiThang {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngDiThang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống đi thẳng không được lớn hơn đường kính ống chính..
+        /// </summary>
+        public static string DuctBranch_Validation_DuongKinhOngDiThangQuaLon {
+            get {
+                return ResourceManager.GetString("DuctBranch_Validation_DuongKinhOngDiThangQuaLon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không tạo được mặt cắt ống gió 3D..
+        /// </summary>
+        public static string DuctElbow_Error_KhongTaoDuocMatCat3D {
+            get {
+                return ResourceManager.GetString("DuctElbow_Error_KhongTaoDuocMatCat3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lên.
+        /// </summary>
+        public static string DuctElbow_Keyword_Len {
+            get {
+                return ResourceManager.GetString("DuctElbow_Keyword_Len", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phải.
+        /// </summary>
+        public static string DuctElbow_Keyword_Phai {
+            get {
+                return ResourceManager.GetString("DuctElbow_Keyword_Phai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trái.
+        /// </summary>
+        public static string DuctElbow_Keyword_Trai {
+            get {
+                return ResourceManager.GetString("DuctElbow_Keyword_Trai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xuống.
+        /// </summary>
+        public static string DuctElbow_Keyword_Xuong {
+            get {
+                return ResourceManager.GetString("DuctElbow_Keyword_Xuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị nhập vào không hợp lệ..
+        /// </summary>
+        public static string DuctElbow_Output_GiaTriNhapKhongHopLe {
+            get {
+                return ResourceManager.GetString("DuctElbow_Output_GiaTriNhapKhongHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Output_GiaTriPhaiLonHon0 {
+            get {
+                return ResourceManager.GetString("DuctElbow_Output_GiaTriPhaiLonHon0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hướng ống không hợp lệ..
+        /// </summary>
+        public static string DuctElbow_Output_HuongOngKhongHopLe {
+            get {
+                return ResourceManager.GetString("DuctElbow_Output_HuongOngKhongHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập bán kính cong phía trong.
+        /// </summary>
+        public static string DuctElbow_Prompt_BanKinhCongTrong {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_BanKinhCongTrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều cao ống.
+        /// </summary>
+        public static string DuctElbow_Prompt_ChieuCaoOng {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_ChieuCaoOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều dài đoạn đứng.
+        /// </summary>
+        public static string DuctElbow_Prompt_ChieuDaiDoanDung {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_ChieuDaiDoanDung", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm chèn: .
+        /// </summary>
+        public static string DuctElbow_Prompt_ChonDiemChen {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_ChonDiemChen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn hướng.
+        /// </summary>
+        public static string DuctElbow_Prompt_ChonHuong {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_ChonHuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn hướng rẽ.
+        /// </summary>
+        public static string DuctElbow_Prompt_ChonHuongRe {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_ChonHuongRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập góc quay (độ).
+        /// </summary>
+        public static string DuctElbow_Prompt_GocQuay {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_GocQuay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập kích thước đầu ra.
+        /// </summary>
+        public static string DuctElbow_Prompt_KichThuocDauRa {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauRa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập kích thước đầu vào.
+        /// </summary>
+        public static string DuctElbow_Prompt_KichThuocDauVao {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_KichThuocDauVao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập kích thước 2 đầu.
+        /// </summary>
+        public static string DuctElbow_Prompt_KichThuocHaiDau {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_KichThuocHaiDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click chuột để xác nhận hướng ống: .
+        /// </summary>
+        public static string DuctElbow_Prompt_XacNhanHuongOng {
+            get {
+                return ResourceManager.GetString("DuctElbow_Prompt_XacNhanHuongOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính cong phía trong phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_BanKinhCongTrong {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính cong trong của khối 3D phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_BanKinhCongTrong3D {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_BanKinhCongTrong3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính phải lớn hơn hoặc bằng một nửa đường kính đầu vào..
+        /// </summary>
+        public static string DuctElbow_Validation_BanKinhNuaDuongKinh {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_BanKinhNuaDuongKinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kính..
+        /// </summary>
+        public static string DuctElbow_Validation_BanKinhQuaNho {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_BanKinhQuaNho", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều cao ống phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_ChieuCaoOng {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_ChieuCaoOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều dài đoạn hạ phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_ChieuDaiDoanHa {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_ChieuDaiDoanHa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Góc quay phải trong khoảng {minAngle} - {maxAngle} độ..
+        /// </summary>
+        public static string DuctElbow_Validation_GocQuay {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_GocQuay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kích thước đầu ra phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_KichThuocDauRa {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauRa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kích thước đầu vào phải lớn hơn 0..
+        /// </summary>
+        public static string DuctElbow_Validation_KichThuocDauVao {
+            get {
+                return ResourceManager.GetString("DuctElbow_Validation_KichThuocDauVao", resourceCulture);
             }
         }
         
@@ -2695,11 +3225,164 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chọn.
+        /// </summary>
+        public static string FlexDuct_Keyword_Chon {
+            get {
+                return ResourceManager.GetString("FlexDuct_Keyword_Chon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vẽ.
+        /// </summary>
+        public static string FlexDuct_Keyword_Ve {
+            get {
+                return ResourceManager.GetString("FlexDuct_Keyword_Ve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Cảnh báo] {warning}.
+        /// </summary>
+        public static string FlexDuct_Output_CanhBao {
+            get {
+                return ResourceManager.GetString("FlexDuct_Output_CanhBao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {commandName}: đã vẽ {count} đối tượng trong nhóm {groupName}..
+        /// </summary>
+        public static string FlexDuct_Output_DaVe {
+            get {
+                return ResourceManager.GetString("FlexDuct_Output_DaVe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể vẽ ống với đường tâm đã chọn..
+        /// </summary>
+        public static string FlexDuct_Output_KhongTheVeOng {
+            get {
+                return ResourceManager.GetString("FlexDuct_Output_KhongTheVeOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không xóa được đường tâm gốc: {ex.Message}.
+        /// </summary>
+        public static string FlexDuct_Output_KhongXoaDuongTamGoc {
+            get {
+                return ResourceManager.GetString("FlexDuct_Output_KhongXoaDuongTamGoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn cách lấy đường tâm [Vẽ/Chọn] &lt;Vẽ&gt;:.
+        /// </summary>
+        public static string FlexDuct_Prompt_CachLayDuongTam {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_CachLayDuongTam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chỉ nhận Line hoặc Polyline..
+        /// </summary>
+        public static string FlexDuct_Prompt_ChiNhanLinePolyline {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_ChiNhanLinePolyline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm đầu đường tâm:.
+        /// </summary>
+        public static string FlexDuct_Prompt_ChonDiemDauDuongTam {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemDauDuongTam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm tiếp theo &lt;Enter kết thúc&gt;:.
+        /// </summary>
+        public static string FlexDuct_Prompt_ChonDiemTiepTheo {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_ChonDiemTiepTheo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn Line/Polyline đường tâm:.
+        /// </summary>
+        public static string FlexDuct_Prompt_ChonLinePolylineDuongTam {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_ChonLinePolylineDuongTam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường kính ống mềm &lt;{diameter}&gt;:.
+        /// </summary>
+        public static string FlexDuct_Prompt_DuongKinhOngMem {
+            get {
+                return ResourceManager.GetString("FlexDuct_Prompt_DuongKinhOngMem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường tâm quá ngắn so với hai đầu ống, bỏ phần đầu ống..
+        /// </summary>
+        public static string FlexDuct_Warning_DuongTamQuaNganHaiDau {
+            get {
+                return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganHaiDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đường tâm quá ngắn để vẽ ống..
+        /// </summary>
+        public static string FlexDuct_Warning_DuongTamQuaNganVeOng {
+            get {
+                return ResourceManager.GetString("FlexDuct_Warning_DuongTamQuaNganVeOng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Góc {i}: bán kính {r:0.##} ≤ D/2, mép trong bị gấp.
+        /// </summary>
+        public static string FlexDuct_Warning_GocBanKinh {
+            get {
+                return ResourceManager.GetString("FlexDuct_Warning_GocBanKinh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Góc {i}: đoạn ngắn, bán kính bo giảm còn {r:0.##}.
+        /// </summary>
+        public static string FlexDuct_Warning_GocDoanNgan {
+            get {
+                return ResourceManager.GetString("FlexDuct_Warning_GocDoanNgan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chiều dày vữa phải lớn hơn 0..
         /// </summary>
         public static string FN_Error_ChieuDayVuaPhaiLonHon0 {
             get {
                 return ResourceManager.GetString("FN_Error_ChieuDayVuaPhaiLonHon0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chưa chọn cạnh vữa..
+        /// </summary>
+        public static string FN_Error_ChuaChonCanhVua {
+            get {
+                return ResourceManager.GetString("FN_Error_ChuaChonCanhVua", resourceCulture);
             }
         }
         
@@ -2740,6 +3423,33 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy line tường trong bản vẽ..
+        /// </summary>
+        public static string FN_Error_KhongTimThayLineTuongTrongBanVe {
+            get {
+                return ResourceManager.GetString("FN_Error_KhongTimThayLineTuongTrongBanVe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng)..
+        /// </summary>
+        public static string FN_Error_KhongTimThayMatTuongGoc {
+            get {
+                return ResourceManager.GetString("FN_Error_KhongTimThayMatTuongGoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy mặt tường quanh điểm đã chọn..
+        /// </summary>
+        public static string FN_Error_KhongTimThayMatTuongQuanhDiemDaChon {
+            get {
+                return ResourceManager.GetString("FN_Error_KhongTimThayMatTuongQuanhDiemDaChon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không xác định được phía offset từ điểm chỉ dẫn..
         /// </summary>
         public static string FN_Error_KhongXacDinhDuocPhiaOffsetTuDiemChiDan {
@@ -2763,6 +3473,15 @@ namespace Tools.Resources.Language {
         public static string FN_Error_MauAciPhaiNamTrongKhoang1255 {
             get {
                 return ResourceManager.GetString("FN_Error_MauAciPhaiNamTrongKhoang1255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer..
+        /// </summary>
+        public static string FN_Error_PhongKhongKin {
+            get {
+                return ResourceManager.GetString("FN_Error_PhongKhongKin", resourceCulture);
             }
         }
         
@@ -2794,6 +3513,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FN: {ex.Message} Thử lại bằng BOUNDARY....
+        /// </summary>
+        public static string FN_Output_ThuLaiBangBoundary {
+            get {
+                return ResourceManager.GetString("FN_Output_ThuLaiBangBoundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cài đặt.
         /// </summary>
         public static string FN_Prompt_CaiDat {
@@ -2812,6 +3540,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chọn các cạnh vữa cần đổi độ dày, nhấn Enter để xác nhận:.
+        /// </summary>
+        public static string FN_Prompt_ChonCanhVuaCanDoiDoDay {
+            get {
+                return ResourceManager.GetString("FN_Prompt_ChonCanhVuaCanDoiDoDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chọn điểm phía ngoài để xác định hướng vữa:.
         /// </summary>
         public static string FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua {
@@ -2821,7 +3558,16 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] :.
+        ///   Looks up a localized string similar to Độ dày.
+        /// </summary>
+        public static string FN_Prompt_DoDay {
+            get {
+                return ResourceManager.GetString("FN_Prompt_DoDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Độ dày | S Cài đặt] :.
         /// </summary>
         public static string FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat {
             get {
@@ -2835,6 +3581,15 @@ namespace Tools.Resources.Language {
         public static string FN_Prompt_MatNgoai {
             get {
                 return ResourceManager.GetString("FN_Prompt_MatNgoai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập độ dày mới cho các cạnh đã chọn &lt;{settings.Thickness}&gt;:.
+        /// </summary>
+        public static string FN_Prompt_NhapDoDayMoi {
+            get {
+                return ResourceManager.GetString("FN_Prompt_NhapDoDayMoi", resourceCulture);
             }
         }
         
@@ -2889,6 +3644,15 @@ namespace Tools.Resources.Language {
         public static string FN_Text_ChuaCoDuongBienPhong {
             get {
                 return ResourceManager.GetString("FN_Text_ChuaCoDuongBienPhong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chưa có mặt tường..
+        /// </summary>
+        public static string FN_Text_ChuaCoMatTuong {
+            get {
+                return ResourceManager.GetString("FN_Text_ChuaCoMatTuong", resourceCulture);
             }
         }
         
@@ -2965,6 +3729,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string FN_UI_DongY {
+            get {
+                return ResourceManager.GetString("FN_UI_DongY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layer Vữa :.
         /// </summary>
         public static string FN_UI_LayerVua {
@@ -3006,6 +3779,15 @@ namespace Tools.Resources.Language {
         public static string FN_UI_TaoLayerMoi {
             get {
                 return ResourceManager.GetString("FN_UI_TaoLayerMoi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xem trước màu layer.
+        /// </summary>
+        public static string FN_UI_XemTruocMauLayer {
+            get {
+                return ResourceManager.GetString("FN_UI_XemTruocMauLayer", resourceCulture);
             }
         }
         
@@ -3607,6 +4389,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chiều cao cổ bậc hiện tại: {0:0.####}.
+        /// </summary>
+        public static string LTP_UI_ChieuCaoCoBacHienTai {
+            get {
+                return ResourceManager.GetString("LTP_UI_ChieuCaoCoBacHienTai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chiều cao dầm chính.
         /// </summary>
         public static string LTP_UI_ChieuCaoDamChinh {
@@ -4201,8 +4992,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chiều
-        ///Dài.
+        ///   Looks up a localized string similar to Chiều Dài.
         /// </summary>
         public static string QD_UI_ChieuDai {
             get {
@@ -5070,11 +5860,56 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lỗi bịt đầu tường: {ex.Message}.
+        /// </summary>
+        public static string WW_Error_BitDauTuong {
+            get {
+                return ResourceManager.GetString("WW_Error_BitDauTuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không có tài liệu hoạt động.
         /// </summary>
         public static string WW_Error_KhongCoTaiLieuHoatDong {
             get {
                 return ResourceManager.GetString("WW_Error_KhongCoTaiLieuHoatDong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi tạo nét tường: {ex.Message}.
+        /// </summary>
+        public static string WW_Error_TaoNetTuong {
+            get {
+                return ResourceManager.GetString("WW_Error_TaoNetTuong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi tìm giao điểm: {ex.Message}.
+        /// </summary>
+        public static string WW_Error_TimGiaoDiem {
+            get {
+                return ResourceManager.GetString("WW_Error_TimGiaoDiem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi xóa nét bịt đầu tường cũ: {ex.Message}.
+        /// </summary>
+        public static string WW_Error_XoaNetBitCu {
+            get {
+                return ResourceManager.GetString("WW_Error_XoaNetBitCu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi xử lý giao điểm: {ex.Message}.
+        /// </summary>
+        public static string WW_Error_XuLyGiaoDiem {
+            get {
+                return ResourceManager.GetString("WW_Error_XuLyGiaoDiem", resourceCulture);
             }
         }
         
@@ -5268,6 +6103,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Giữ nguyên.
+        /// </summary>
+        public static string WWO_Output_GiuNguyen {
+            get {
+                return ResourceManager.GetString("WWO_Output_GiuNguyen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không thể offset: {resultMessage}.
         /// </summary>
         public static string WWO_Output_KhongTheOffset {
@@ -5282,6 +6126,15 @@ namespace Tools.Resources.Language {
         public static string WWO_Output_KhongTheOffset_8636EE0D {
             get {
                 return ResourceManager.GetString("WWO_Output_KhongTheOffset_8636EE0D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tự động.
+        /// </summary>
+        public static string WWO_Output_TuDong {
+            get {
+                return ResourceManager.GetString("WWO_Output_TuDong", resourceCulture);
             }
         }
         
@@ -5318,6 +6171,15 @@ namespace Tools.Resources.Language {
         public static string WWO_Output_WwoKhoangCachTamTam {
             get {
                 return ResourceManager.GetString("WWO_Output_WwoKhoangCachTamTam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xử lý nút giao = {mode}..
+        /// </summary>
+        public static string WWO_Output_XuLyNutGiao {
+            get {
+                return ResourceManager.GetString("WWO_Output_XuLyNutGiao", resourceCulture);
             }
         }
         
@@ -5619,6 +6481,33 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đối tượng không phải mặt tường hợp lệ..
+        /// </summary>
+        public static string WWT_Status_DoiTuongKhongPhaiMatTuongHopLe {
+            get {
+                return ResourceManager.GetString("WWT_Status_DoiTuongKhongPhaiMatTuongHopLe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hai mặt tường trùng nhau..
+        /// </summary>
+        public static string WWT_Status_HaiMatTuongTrungNhau {
+            get {
+                return ResourceManager.GetString("WWT_Status_HaiMatTuongTrungNhau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không tìm thấy mặt tường song song..
+        /// </summary>
+        public static string WWT_Status_KhongTimThayMatTuongSongSong {
+            get {
+                return ResourceManager.GetString("WWT_Status_KhongTimThayMatTuongSongSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chọn.
         /// </summary>
         public static string WWT_UI_Chon {
@@ -5651,6 +6540,15 @@ namespace Tools.Resources.Language {
         public static string WWT_UI_DoDayTuong_63076923 {
             get {
                 return ResourceManager.GetString("WWT_UI_DoDayTuong_63076923", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string WWT_UI_DongY {
+            get {
+                return ResourceManager.GetString("WWT_UI_DongY", resourceCulture);
             }
         }
         
@@ -5962,6 +6860,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XLDTC: Đã hủy..
+        /// </summary>
+        public static string XLDTC_Output_DaHuy {
+            get {
+                return ResourceManager.GetString("XLDTC_Output_DaHuy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cỡ chữ :.
         /// </summary>
         public static string XLDTC_UI_CoChu {
@@ -6192,6 +7099,33 @@ namespace Tools.Resources.Language {
         public static string XLTKCT_UI_TinhDongDat {
             get {
                 return ResourceManager.GetString("XLTKCT_UI_TinhDongDat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xác Lập Thống Kê Cốt Thép.
+        /// </summary>
+        public static string XLTKCT_UI_XacLapThongKeCotThep {
+            get {
+                return ResourceManager.GetString("XLTKCT_UI_XacLapThongKeCotThep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều rộng.
+        /// </summary>
+        public static string ZXW_Field_ChieuRong {
+            get {
+                return ResourceManager.GetString("ZXW_Field_ChieuRong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiều sâu.
+        /// </summary>
+        public static string ZXW_Field_ChieuSau {
+            get {
+                return ResourceManager.GetString("ZXW_Field_ChieuSau", resourceCulture);
             }
         }
         
@@ -6456,5 +7390,22 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
+        public static string SupplyAirDiffuser_Prompt_DoRongMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoRongMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_TenBlockMiengGioCap { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_TenBlockMiengGioCap", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_TenBlockDaTonTai { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_TenBlockDaTonTai", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChieuCaoCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChieuCaoCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_DoRongMiengCotOng { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_DoRongMiengCotOng", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan", resourceCulture); } }
+        public static string SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D { get { return ResourceManager.GetString("SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D", resourceCulture); } }
+        public static string SupplyAirDiffuser_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("SupplyAirDiffuser_Output_GiaTriPhaiLonHon0", resourceCulture); } }
+        public static string Grille_Prompt_ChieuRongKhungTrong { get { return ResourceManager.GetString("Grille_Prompt_ChieuRongKhungTrong", resourceCulture); } }
+        public static string Grille_Prompt_ChieuCaoKhungTrong { get { return ResourceManager.GetString("Grille_Prompt_ChieuCaoKhungTrong", resourceCulture); } }
+        public static string Grille_Prompt_TenBlock { get { return ResourceManager.GetString("Grille_Prompt_TenBlock", resourceCulture); } }
+        public static string Grille_Output_TenBlockDaTonTai { get { return ResourceManager.GetString("Grille_Output_TenBlockDaTonTai", resourceCulture); } }
+        public static string Grille_Output_Loi { get { return ResourceManager.GetString("Grille_Output_Loi", resourceCulture); } }
+        public static string Grille_Output_GiaTriPhaiLonHon0 { get { return ResourceManager.GetString("Grille_Output_GiaTriPhaiLonHon0", resourceCulture); } }
+        public static string Grille_Prompt_ChonDiemDatTam { get { return ResourceManager.GetString("Grille_Prompt_ChonDiemDatTam", resourceCulture); } }
     }
 }

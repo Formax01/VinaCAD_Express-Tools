@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Teigha.DatabaseServices;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -48,17 +49,18 @@ namespace Tools.VinaCad.Action.Actions
                 editor.Regen();
 
                 if (result.Cancelled)
-                    editor.WriteMessage("\nBBE: Đã hủy, bản vẽ không thay đổi.");
+                    editor.WriteMessage("\n" + Lang.BBE_Output_BbeDaHuyBanVeKhongThayDoi);
                 else if (committed)
-                    editor.WriteMessage($"\nBBE: Đã xóa {result.ErasedCount} đối tượng.");
+                    editor.WriteMessage("\n" + Lang.BBE_Output_BbeDaXoaDoiTuong
+                        .Replace("{result.ErasedCount}", result.ErasedCount.ToString()));
                 else
-                    editor.WriteMessage("\nBBE: Chưa chọn đối tượng nào.");
+                    editor.WriteMessage("\n" + Lang.BBE_Output_BbeChuaChonDoiTuongNao);
             }
             catch (Exception ex)
             {
                 Logger.Info(nameof(BlockEraseAction), ex);
                 editor.Regen();
-                editor.WriteMessage($"\nLỗi BBE: {ex.Message}");
+                editor.WriteMessage("\n" + Lang.BBE_Output_LoiBbe.Replace("{ex.Message}", ex.Message));
             }
         }
 
@@ -73,7 +75,7 @@ namespace Tools.VinaCad.Action.Actions
             int erasedCount = 0;
             Dictionary<string, object> originalSystemVariables = new Dictionary<string, object>();
 
-            editor.WriteMessage("\nBBE: Chọn đối tượng con cần xóa | Enter/Space: Xóa | Esc: Hủy/Hoàn tác");
+            editor.WriteMessage("\n" + Lang.BBE_Output_BbeChonDoiTuongConCanXoaEnterSpaceXoaEscHuy);
 
             TrySetSystemVariable(originalSystemVariables, "CMDECHO", (short)0);
             TrySetSystemVariable(originalSystemVariables, "INPUTHISTORYMODE", (short)0);
@@ -83,7 +85,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 while (true)
                 {
-                    string prompt = $"\nChọn đối tượng";
+                    string prompt = "\n" + Lang.BBE_Prompt_ChonDoiTuong;
 
                     PromptNestedEntityOptions options = new PromptNestedEntityOptions(prompt)
                     {
@@ -124,7 +126,7 @@ namespace Tools.VinaCad.Action.Actions
                             };
                         }
 
-                        editor.WriteMessage("\nBBE: Không có đối tượng. Hãy chọn lại.");
+                        editor.WriteMessage("\n" + Lang.BBE_Output_BbeKhongCoDoiTuongHayChonLai);
                         continue;
                     }
 
@@ -148,15 +150,15 @@ namespace Tools.VinaCad.Action.Actions
                             };
                         }
 
-                        editor.WriteMessage("\nBBE: Không có đối tượng. Hãy chọn lại.");
+                        editor.WriteMessage("\n" + Lang.BBE_Output_BbeKhongCoDoiTuongHayChonLai);
                         continue;
                     }
 
                     BlockEraseHelper.EraseResult eraseResult = BlockEraseHelper.TryEraseSingleEntity(transaction,result.ObjectId,result.GetContainers());
                     if (!eraseResult.Succeeded)
                     {
-                        Logger.Info($"{nameof(BlockEraseAction)}.RejectedSelection",new InvalidOperationException(eraseResult.RejectionReason ?? "Không xác định được lý do từ chối."));
-                        editor.WriteMessage("\nBBE: Đối tượng không nằm trong block có thể sửa. Hãy chọn lại.");
+                        Logger.Info($"{nameof(BlockEraseAction)}.RejectedSelection",new InvalidOperationException(eraseResult.RejectionReason ?? Lang.BBE_Output_KhongXacDinhDuocLyDoTuChoi));
+                        editor.WriteMessage("\n" + Lang.BBE_Output_BbeDoiTuongKhongNamTrongBlockCoTheSuaHayChon);
                         continue;
                     }
 

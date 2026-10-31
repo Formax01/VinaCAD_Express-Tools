@@ -564,7 +564,7 @@ block</value>
     <value>hoặc sửa Dynamic Block definition gốc.</value>
   </data>
   <data name="BBE_Text_KhongSuaBlockHeThong" xml:space="preserve">
-    <value>Không sửa block hệ thống "{owner.Name}"</value>
+    <value>Không sửa block hệ thống "{owner.Name}" (Dimension/Hatch/Table).</value>
   </data>
   <data name="BBE_Text_KhongTheSuaDoiTuongNamTrongXrefOverlay" xml:space="preserve">
     <value>Không thể sửa đối tượng nằm trong Xref/Overlay.</value>
@@ -795,7 +795,7 @@ block</value>
     <value>Xóa tường tự động</value>
   </data>
   <data name="Common_Status_CungSoHieu" xml:space="preserve">
-    <value>Cùng số hiệu </value>
+    <value>Cùng số hiệu {soHieu}</value>
   </data>
   <data name="Common_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
     <value>đối tượng không phải mặt tường hợp lệ.</value>
@@ -891,9 +891,6 @@ Tự Động</value>
   <data name="Common_UI_SoHieu" xml:space="preserve">
     <value>Số Hiệu</value>
   </data>
-  <data name="Common_UI_Stt" xml:space="preserve">
-    <value>STT</value>
-  </data>
   <data name="Common_UI_TenBanVe" xml:space="preserve">
     <value>Tên Bản Vẽ</value>
   </data>
@@ -928,8 +925,7 @@ Tự Động</value>
     <value>Vẽ bảng</value>
   </data>
   <data name="Common_UI_VeBangThongKeThep" xml:space="preserve">
-    <value>Vẽ Bảng Thống
-Kê Thép</value>
+    <value>Vẽ Bảng Thống Kê Thép</value>
   </data>
   <data name="Common_UI_XacLap" xml:space="preserve">
     <value>Xác Lập</value>
@@ -972,6 +968,15 @@ Kê Thép</value>
   </data>
   <data name="DSHBV_Ribbon_DanhSoBv" xml:space="preserve">
     <value>Đánh số BV</value>
+  </data>
+  <data name="DTC_Output_KhongChonBlockNao" xml:space="preserve">
+    <value>DTC: Không có block nào được chọn.</value>
+  </data>
+  <data name="DTC_Output_KhongTimThayBlockCocTrongVungChon" xml:space="preserve">
+    <value>DTC: Không tìm thấy block cọc trong vùng chọn.</value>
+  </data>
+  <data name="DTC_Prompt_QuetChonBlockCoc" xml:space="preserve">
+    <value>Quét chọn các block cọc (kéo chuột để tạo vùng chọn cửa sổ/giao cắt):</value>
   </data>
   <data name="DTT_Ribbon_BangDienTichCotThepDtt" xml:space="preserve">
     <value>Bảng diện tích cốt thép (DTT)</value>
@@ -1049,7 +1054,7 @@ Kê Thép</value>
     <value>Chọn điểm phía ngoài để xác định hướng vữa:</value>
   </data>
   <data name="FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat" xml:space="preserve">
-    <value>FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] :</value>
+    <value>FN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | D Độ dày | S Cài đặt] :</value>
   </data>
   <data name="FN_Prompt_MatNgoai" xml:space="preserve">
     <value>Mặt ngoài</value>
@@ -1457,8 +1462,7 @@ cắt CT</value>
     <value>Bảng Thống Kê Thép Hình</value>
   </data>
   <data name="QD_UI_ChieuDai" xml:space="preserve">
-    <value>Chiều
-Dài</value>
+    <value>Chiều Dài</value>
   </data>
   <data name="QD_UI_QuyCachThep" xml:space="preserve">
     <value>Quy Cách Thép</value>
@@ -1673,9 +1677,6 @@ CK</value>
   </data>
   <data name="TKCK_UI_CDai" xml:space="preserve">
     <value>C.Dài</value>
-  </data>
-  <data name="TKCK_UI_CCao" xml:space="preserve">
-    <value>C.Cao</value>
   </data>
   <data name="TKCK_UI_CRong" xml:space="preserve">
     <value>C.Rộng</value>
@@ -2089,6 +2090,9 @@ CK</value>
   <data name="XLDTC_Msg_SoBatDauPhaiLonHon0" xml:space="preserve">
     <value>Số bắt đầu phải lớn hơn 0.</value>
   </data>
+  <data name="XLDTC_Output_DaHuy" xml:space="preserve">
+    <value>XLDTC: Đã hủy.</value>
+  </data>
   <data name="XLDTC_UI_CoChu" xml:space="preserve">
     <value>Cỡ chữ :</value>
   </data>
@@ -2261,4 +2265,327 @@ trục</value>
   <data name="LTP_UI_KhoiPhucGiaTriBanDau" xml:space="preserve">
     <value>Khôi phục giá trị ban đầu</value>
   </data>
+  <data name="Common_UI_Stt" xml:space="preserve">
+    <value>STT</value>
+  </data>
+  <data name="Common_UI_SoLuong" xml:space="preserve">
+    <value>SL</value>
+  </data>
+  <data name="Common_UI_SoCauKien" xml:space="preserve">
+    <value>SCK</value>
+  </data>
+  <data name="TKCK_UI_CCao" xml:space="preserve">
+    <value>C.Cao</value>
+  </data>
+  <data name="XLTKCT_UI_XacLapThongKeCotThep" xml:space="preserve">
+    <value>Xác Lập Thống Kê Cốt Thép</value>
+  </data>
+  <data name="WW_Error_TaoNetTuong" xml:space="preserve">
+    <value>Lỗi tạo nét tường: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_TimGiaoDiem" xml:space="preserve">
+    <value>Lỗi tìm giao điểm: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XuLyGiaoDiem" xml:space="preserve">
+    <value>Lỗi xử lý giao điểm: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_BitDauTuong" xml:space="preserve">
+    <value>Lỗi bịt đầu tường: {ex.Message}</value>
+  </data>
+  <data name="WW_Error_XoaNetBitCu" xml:space="preserve">
+    <value>Lỗi xóa nét bịt đầu tường cũ: {ex.Message}</value>
+  </data>
+  <data name="WWT_Status_DoiTuongKhongPhaiMatTuongHopLe" xml:space="preserve">
+    <value>Đối tượng không phải mặt tường hợp lệ.</value>
+  </data>
+  <data name="WWT_Status_KhongTimThayMatTuongSongSong" xml:space="preserve">
+    <value>Không tìm thấy mặt tường song song.</value>
+  </data>
+  <data name="WWT_Status_HaiMatTuongTrungNhau" xml:space="preserve">
+    <value>Hai mặt tường trùng nhau.</value>
+  </data>
+  <data name="WWO_Output_XuLyNutGiao" xml:space="preserve">
+    <value>Xử lý nút giao = {mode}.</value>
+  </data>
+  <data name="WWO_Output_TuDong" xml:space="preserve">
+    <value>Tự động</value>
+  </data>
+  <data name="WWO_Output_GiuNguyen" xml:space="preserve">
+    <value>Giữ nguyên</value>
+  </data>
+  <data name="FN_Prompt_ChonCanhVuaCanDoiDoDay" xml:space="preserve">
+    <value>Chọn các cạnh vữa cần đổi độ dày, nhấn Enter để xác nhận:</value>
+  </data>
+  <data name="FN_Prompt_NhapDoDayMoi" xml:space="preserve">
+    <value>Nhập độ dày mới cho các cạnh đã chọn &lt;{settings.Thickness}&gt;:</value>
+  </data>
+  <data name="FN_Prompt_DoDay" xml:space="preserve">
+    <value>Độ dày</value>
+  </data>
+  <data name="FN_Output_ThuLaiBangBoundary" xml:space="preserve">
+    <value>FN: {ex.Message} Thử lại bằng BOUNDARY...</value>
+  </data>
+  <data name="FN_UI_XemTruocMauLayer" xml:space="preserve">
+    <value>Xem trước màu layer</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongQuanhDiemDaChon" xml:space="preserve">
+    <value>Không tìm thấy mặt tường quanh điểm đã chọn.</value>
+  </data>
+  <data name="FN_Text_ChuaCoMatTuong" xml:space="preserve">
+    <value>Chưa có mặt tường.</value>
+  </data>
+  <data name="FN_Error_ChuaChonCanhVua" xml:space="preserve">
+    <value>Chưa chọn cạnh vữa.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayLineTuongTrongBanVe" xml:space="preserve">
+    <value>Không tìm thấy line tường trong bản vẽ.</value>
+  </data>
+  <data name="FN_Error_KhongTimThayMatTuongGoc" xml:space="preserve">
+    <value>Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng).</value>
+  </data>
+  <data name="FN_Error_PhongKhongKin" xml:space="preserve">
+    <value>Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.</value>
+  </data>
+  <data name="Common_UI_DongY" xml:space="preserve">
+    <value>Đồng ý</value>
+  </data>
+  <data name="FN_UI_DongY" xml:space="preserve">
+    <value>Đồng ý</value>
+  </data>
+  <data name="WWT_UI_DongY" xml:space="preserve">
+    <value>Đồng ý</value>
+  </data>
+  <data name="ZXW_Field_ChieuRong" xml:space="preserve">
+    <value>Chiều rộng</value>
+  </data>
+  <data name="ZXW_Field_ChieuSau" xml:space="preserve">
+    <value>Chiều sâu</value>
+  </data>
+  <data name="LTP_UI_ChieuCaoCoBacHienTai" xml:space="preserve">
+    <value>Chiều cao cổ bậc hiện tại: {0:0.####}</value>
+  </data>
+  <data name="FlexDuct_Prompt_DuongKinhOngMem" xml:space="preserve">
+    <value>Đường kính ống mềm &lt;{diameter}&gt;:</value>
+  </data>
+  <data name="FlexDuct_Prompt_CachLayDuongTam" xml:space="preserve">
+    <value>Chọn cách lấy đường tâm [Vẽ/Chọn] &lt;Vẽ&gt;:</value>
+  </data>
+  <data name="FlexDuct_Keyword_Ve" xml:space="preserve">
+    <value>Vẽ</value>
+  </data>
+  <data name="FlexDuct_Keyword_Chon" xml:space="preserve">
+    <value>Chọn</value>
+  </data>
+  <data name="FlexDuct_Output_KhongTheVeOng" xml:space="preserve">
+    <value>Không thể vẽ ống với đường tâm đã chọn.</value>
+  </data>
+  <data name="FlexDuct_Output_CanhBao" xml:space="preserve">
+    <value>[Cảnh báo] {warning}</value>
+  </data>
+  <data name="FlexDuct_Output_DaVe" xml:space="preserve">
+    <value>{commandName}: đã vẽ {count} đối tượng trong nhóm {groupName}.</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemDauDuongTam" xml:space="preserve">
+    <value>Chọn điểm đầu đường tâm:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonDiemTiepTheo" xml:space="preserve">
+    <value>Chọn điểm tiếp theo &lt;Enter kết thúc&gt;:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChonLinePolylineDuongTam" xml:space="preserve">
+    <value>Chọn Line/Polyline đường tâm:</value>
+  </data>
+  <data name="FlexDuct_Prompt_ChiNhanLinePolyline" xml:space="preserve">
+    <value>Chỉ nhận Line hoặc Polyline.</value>
+  </data>
+  <data name="FlexDuct_Output_KhongXoaDuongTamGoc" xml:space="preserve">
+    <value>Không xóa được đường tâm gốc: {ex.Message}</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganHaiDau" xml:space="preserve">
+    <value>Đường tâm quá ngắn so với hai đầu ống, bỏ phần đầu ống.</value>
+  </data>
+  <data name="FlexDuct_Warning_DuongTamQuaNganVeOng" xml:space="preserve">
+    <value>Đường tâm quá ngắn để vẽ ống.</value>
+  </data>
+  <data name="FlexDuct_Warning_GocDoanNgan" xml:space="preserve">
+    <value>Góc {i}: đoạn ngắn, bán kính bo giảm còn {r:0.##}</value>
+  </data>
+  <data name="FlexDuct_Warning_GocBanKinh" xml:space="preserve">
+    <value>Góc {i}: bán kính {r:0.##} ≤ D/2, mép trong bị gấp</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonDiemChen" xml:space="preserve">
+    <value>Chọn điểm chèn: </value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauVao" xml:space="preserve">
+    <value>Nhập kích thước đầu vào</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocHaiDau" xml:space="preserve">
+    <value>Nhập kích thước 2 đầu</value>
+  </data>
+  <data name="DuctElbow_Prompt_KichThuocDauRa" xml:space="preserve">
+    <value>Nhập kích thước đầu ra</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuCaoOng" xml:space="preserve">
+    <value>Nhập chiều cao ống</value>
+  </data>
+  <data name="DuctElbow_Prompt_BanKinhCongTrong" xml:space="preserve">
+    <value>Nhập bán kính cong phía trong</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChieuDaiDoanDung" xml:space="preserve">
+    <value>Nhập chiều dài đoạn đứng</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuong" xml:space="preserve">
+    <value>Chọn hướng</value>
+  </data>
+  <data name="DuctElbow_Keyword_Xuong" xml:space="preserve">
+    <value>Xuống</value>
+  </data>
+  <data name="DuctElbow_Keyword_Len" xml:space="preserve">
+    <value>Lên</value>
+  </data>
+  <data name="DuctElbow_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>Chọn hướng rẽ</value>
+  </data>
+  <data name="DuctElbow_Keyword_Trai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="DuctElbow_Keyword_Phai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="DuctElbow_Prompt_GocQuay" xml:space="preserve">
+    <value>Nhập góc quay (độ)</value>
+  </data>
+  <data name="DuctElbow_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>Hướng ống không hợp lệ.</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuCaoOng" xml:space="preserve">
+    <value>Chiều cao ống phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauVao" xml:space="preserve">
+    <value>Kích thước đầu vào phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_KichThuocDauRa" xml:space="preserve">
+    <value>Kích thước đầu ra phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong" xml:space="preserve">
+    <value>Bán kính cong phía trong phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_GocQuay" xml:space="preserve">
+    <value>Góc quay phải trong khoảng {minAngle} - {maxAngle} độ.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhQuaNho" xml:space="preserve">
+    <value>Bán kính quá nhỏ: bán kính cong trong nhỏ hơn 0. Hãy tăng bán kính.</value>
+  </data>
+  <data name="DuctElbow_Validation_ChieuDaiDoanHa" xml:space="preserve">
+    <value>Chiều dài đoạn hạ phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhNuaDuongKinh" xml:space="preserve">
+    <value>Bán kính phải lớn hơn hoặc bằng một nửa đường kính đầu vào.</value>
+  </data>
+  <data name="DuctElbow_Validation_BanKinhCongTrong3D" xml:space="preserve">
+    <value>Bán kính cong trong của khối 3D phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>Giá trị phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctElbow_Output_GiaTriNhapKhongHopLe" xml:space="preserve">
+    <value>Giá trị nhập vào không hợp lệ.</value>
+  </data>
+  <data name="DuctElbow_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>Click chuột để xác nhận hướng ống: </value>
+  </data>
+  <data name="DuctElbow_Error_KhongTaoDuocMatCat3D" xml:space="preserve">
+    <value>Không tạo được mặt cắt ống gió 3D.</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonDiemDat" xml:space="preserve">
+    <value>Chọn điểm đặt: </value>
+  </data>
+  <data name="DuctBranch_Output_HuongOngKhongHopLe" xml:space="preserve">
+    <value>Hướng ống không hợp lệ.</value>
+  </data>
+  <data name="DuctBranch_Output_Loi" xml:space="preserve">
+    <value>Lỗi: {message}</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngChinh" xml:space="preserve">
+    <value>Nhập đường kính ống chính</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngChinh" xml:space="preserve">
+    <value>Nhập chiều cao ống chính (đoạn thẳng trước chỗ rẽ)</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngDiThang" xml:space="preserve">
+    <value>Nhập đường kính ống đi thẳng đi tiếp</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>Nhập chiều cao ống đi tiếp (đoạn thẳng vượt qua miệng nhánh)</value>
+  </data>
+  <data name="DuctBranch_Prompt_DuongKinhOngRe" xml:space="preserve">
+    <value>Nhập đường kính ống rẽ {name}</value>
+  </data>
+  <data name="DuctBranch_Prompt_BanKinhOngRe" xml:space="preserve">
+    <value>Nhập bán kính cong nhánh rẽ {name}</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChieuCaoOngRe" xml:space="preserve">
+    <value>Nhập chiều cao ống rẽ (đoạn thẳng sau cung rẽ)</value>
+  </data>
+  <data name="DuctBranch_Prompt_ChonHuongRe" xml:space="preserve">
+    <value>Chọn hướng rẽ</value>
+  </data>
+  <data name="DuctBranch_Keyword_Trai" xml:space="preserve">
+    <value>Trái</value>
+  </data>
+  <data name="DuctBranch_Keyword_Phai" xml:space="preserve">
+    <value>Phải</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngChinh" xml:space="preserve">
+    <value>Đường kính ống chính phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngChinh" xml:space="preserve">
+    <value>Chiều cao ống chính không được âm.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngRe" xml:space="preserve">
+    <value>Chiều cao ống rẽ không được âm.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThang" xml:space="preserve">
+    <value>Đường kính ống đi thẳng phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhOngDiThangQuaLon" xml:space="preserve">
+    <value>Đường kính ống đi thẳng không được lớn hơn đường kính ống chính.</value>
+  </data>
+  <data name="DuctBranch_Validation_ChieuCaoOngDiThang" xml:space="preserve">
+    <value>Chiều cao ống đi thẳng không được âm.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhPhaiDuong" xml:space="preserve">
+    <value>Đường kính ống rẽ {name} phải lớn hơn 0.</value>
+  </data>
+  <data name="DuctBranch_Validation_DuongKinhNhanhQuaLon" xml:space="preserve">
+    <value>Đường kính ống rẽ {name} không được lớn hơn W.</value>
+  </data>
+  <data name="DuctBranch_Validation_BanKinhNhanhQuaNho" xml:space="preserve">
+    <value>Bán kính {name} quá nhỏ (bán kính cong trong âm), hãy tăng bán kính{name}.</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriKhongAm" xml:space="preserve">
+    <value>Giá trị phải là số không âm.</value>
+  </data>
+  <data name="DuctBranch_Output_GiaTriLonHon0" xml:space="preserve">
+    <value>Giá trị phải là số lớn hơn 0.</value>
+  </data>
+  <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
+    <value>Click để xác nhận hướng ống: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>Nhập độ rộng miệng gió cấp</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>Chọn vị trí đặt miệng gió cấp: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>Nhập tên block miệng gió cấp: </value></data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>Tên block đã tồn tại. Hãy nhập tên khác.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>Nhập độ cao từ miệng gió đến cột ống</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>Nhập chiều cao cột ống</value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>Nhập độ rộng miệng cột ống</value></data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>Kích thước 3D vượt giới hạn.</value></data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>Chọn tâm miệng gió cấp 3D: </value></data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải là số lớn hơn 0.</value></data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>Nhập chiều rộng khung trong miệng gió</value></data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>Nhập chiều cao khung trong miệng gió</value></data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>Nhập tên block miệng gió: </value></data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>Tên block đã tồn tại. Hãy nhập tên khác.</value></data>
+  <data name="Grille_Output_Loi" xml:space="preserve"><value>Lỗi: {message}</value></data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>Giá trị phải là số lớn hơn 0.</value></data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>Chọn điểm đặt tâm miệng gió: </value></data>
 </root>
