@@ -17,64 +17,64 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
-      [CommandMethod("CLG")]
-public void TurningVaneCommand()
-{
-    try
-    {
-        TurningVaneAction action = new TurningVaneAction();
-        action.Execute();
-    }
-    catch (System.Exception ex)
-    {
-        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        Logger.Info(nameof(TurningVaneCommand), ex);
-    }
-}
+        [CommandMethod("CLG")]
+        public void TurningVaneCommand()
+        {
+            try
+            {
+                TurningVaneAction action = new TurningVaneAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(TurningVaneCommand), ex);
+            }
+        }
 
-[CommandMethod("VCD")]
-public void VCDCommand()
-{
-    try
-    {
-        VCDAction action = new VCDAction();
-        action.Execute();
-    }
-    catch (System.Exception ex)
-    {
-        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        Logger.Info(nameof(VCDCommand), ex);
-    }
-}
+        [CommandMethod("VCD")]
+        public void VCDCommand()
+        {
+            try
+            {
+                VCDAction action = new VCDAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(VCDCommand), ex);
+            }
+        }
 
-[CommandMethod("LiL")]
-public void LiLCommand()
-{
-    try
-    {
-        LiLAction action = new LiLAction();
-        action.Execute();
-    }
-    catch (System.Exception ex)
-    {
-        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        Logger.Info(nameof(LiLCommand), ex);
-    }
-}
-[CommandMethod("HG")]
-public void HGCommand()
-{
-    try
-    {
-        HGAction action = new HGAction();
-        action.Execute();
-    }
-    catch (System.Exception ex)
-    {
-        MessageBox.Show(ex.Message);
-        Logger.Info(ex.ToString());
-    }
-}
+        [CommandMethod("LiL")]
+        public void LiLCommand()
+        {
+            try
+            {
+                LiLAction action = new LiLAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(LiLCommand), ex);
+            }
+        }
+        [CommandMethod("HG")]
+        public void HGCommand()
+        {
+            try
+            {
+                HGAction action = new HGAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.Info(ex.ToString());
+            }
+        }
         [CommandMethod("Bulon")]
         public void BulonCommand()
         {
@@ -359,7 +359,7 @@ public void HGCommand()
                 Logger.Info(nameof(BbzCommand), ex);
             }
         }
-        
+
 
         [CommandMethod("Sample")]
         public void SampleCommand()

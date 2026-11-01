@@ -566,7 +566,7 @@
     <value>長さLと半径rは0より大きくする必要があります。</value>
   </data>
   <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
-    <value>半径 r ({0:0.##}) は L ({1:0.##}) より小さくする必要があります。</value>
+    <value>半径 r ({0:0.##}) は L ({1:0.##}) より小さくする必要があります。</value></data>
   <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
     <value>開始点を選択: </value>
   </data>

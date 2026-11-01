@@ -562,7 +562,7 @@
     <value>Length L and radius r must be greater than 0.</value>
   </data>
   <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
-    <value>Radius r ({0:0.##}) must be smaller than L ({1:0.##}).</value>
+    <value>Radius r ({0:0.##}) must be smaller than L ({1:0.##}).</value></data>
   <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
     <value>Select start point: </value>
   </data>

@@ -564,7 +564,6 @@
   <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
     <value>Bán kính r ({0:0.##}) phải nhỏ hơn L ({1:0.##}).</value>
   </data>
-</root>
   <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
     <value>Chọn điểm bắt đầu: </value>
   </data>
