@@ -7761,5 +7761,77 @@ namespace Tools.Resources.Language
                 return ResourceManager.GetString("ZXW_UI_VeKyHieuTrucKichThuoc", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã vẽ 1 hình chữ nhật và {0} block..
+        /// </summary>
+        public static string VCD_MessDialog_DaVeHinhChuNhatVaBlock {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_DaVeHinhChuNhatVaBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không thể tạo entity VCD trong database..
+        /// </summary>
+        public static string VCD_MessDialog_KhongTheTaoEntity {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_KhongTheTaoEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length phải lớn hơn hoặc bằng Width..
+        /// </summary>
+        public static string VCD_MessDialog_LengthPhaiLonHonHoacBangWidth {
+            get {
+                return ResourceManager.GetString("VCD_MessDialog_LengthPhaiLonHonHoacBangWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VCD.
+        /// </summary>
+        public static string VCD_Title {
+            get {
+                return ResourceManager.GetString("VCD_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm bắt đầu:.
+        /// </summary>
+        public static string VCD_UI_ChonDiemBatDau {
+            get {
+                return ResourceManager.GetString("VCD_UI_ChonDiemBatDau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập góc quay (0-360).
+        /// </summary>
+        public static string VCD_UI_CHONHUONGXOAY {
+            get {
+                return ResourceManager.GetString("VCD_UI_CHONHUONGXOAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập Length:.
+        /// </summary>
+        public static string VCD_UI_NhapLength {
+            get {
+                return ResourceManager.GetString("VCD_UI_NhapLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập Width:.
+        /// </summary>
+        public static string VCD_UI_NhapWidth {
+            get {
+                return ResourceManager.GetString("VCD_UI_NhapWidth", resourceCulture);
+            }
+        }
     }
 }
