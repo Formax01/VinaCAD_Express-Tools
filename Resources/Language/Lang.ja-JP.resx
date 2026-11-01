@@ -578,7 +578,7 @@
     <value>ダクトの配置方向を指定してください：</value>
   </data>
   <data name="BBZ_UI_XOAYCHONVITRI" xml:space="preserve">
-    <value>始点を中心に図形を回転し、クリックして配置位置を指定してください：</value>
+    <value>始点を中心に図形を回転し、クリックして配置位置を指定してください：</value></data>
   <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
     <value>レデューサーの開始点を選択:</value>
   </data>

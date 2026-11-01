@@ -22,12 +22,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new BulonAction().Execute();
+                BulonAction action = new BulonAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BulonCommand), ex);
             }
         }
 
@@ -36,12 +37,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new Bulon1Action().Execute();
+                Bulon1Action action = new Bulon1Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon1Command), ex);
             }
         }
 
@@ -50,12 +52,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new Bulon2Action().Execute();
+                Bulon2Action action = new Bulon2Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon2Command), ex);
             }
         }
 
@@ -64,12 +67,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new DaiOcAction().Execute();
+                DaiOcAction action = new DaiOcAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOcCommand), ex);
             }
         }
 
@@ -78,12 +82,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new DaiOc1Action().Execute();
+                DaiOc1Action action = new DaiOc1Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc1Command), ex);
             }
         }
 
@@ -92,12 +97,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new DaiOc2Action().Execute();
+                DaiOc2Action action = new DaiOc2Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc2Command), ex);
             }
         }
 
@@ -111,8 +117,8 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC1Command), ex);
             }
         }
 
@@ -126,8 +132,8 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC2Command), ex);
             }
         }
 
@@ -136,12 +142,13 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new BanisterAction().Execute();
+                BanisterAction action = new BanisterAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
             }
         }
 

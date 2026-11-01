@@ -574,7 +574,7 @@
     <value>Specify duct placement direction:</value>
   </data>
   <data name="BBZ_UI_XOAYCHONVITRI" xml:space="preserve">
-    <value>Rotate the shape around the start point, click to specify the position:</value>
+    <value>Rotate the shape around the start point, click to specify the position:</value></data>
   <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
     <value>Select start point of reducer:</value>
   </data>
