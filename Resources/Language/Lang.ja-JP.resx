@@ -117,6 +117,322 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe" xml:space="preserve">
+    <value>長さが無効です。正の数を入力してください。</value>
+  </data>
+  <data name="B1_MessDialog_ChieuDaiKhongHopLe1" xml:space="preserve">
+    <value>長さが無効です。正の数を入力してください。</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio" xml:space="preserve">
+    <value>ダクトを描画しました {0} x {1}。</value>
+  </data>
+  <data name="B1_MessDialog_DaVeOngGio1" xml:space="preserve">
+    <value>ダクトを描画しました {0} x {1}。</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>点2が点1と一致しています。</value>
+  </data>
+  <data name="B1_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>点2が点1と一致しています。</value>
+  </data>
+  <data name="B1_UI_ChonCachVe" xml:space="preserve">
+    <value>描画方法を選択 [入力/点]:</value>
+  </data>
+  <data name="B1_UI_ChonCachVe1" xml:space="preserve">
+    <value>描画方法を選択 [入力/点]:</value>
+  </data>
+  <data name="B1_UI_ChonDiem2" xml:space="preserve">
+    <value>長さと辺の方向を決定する点2を選択:</value>
+  </data>
+  <data name="B1_UI_ChonDiem3" xml:space="preserve">
+    <value>長さと辺の方向を決定する点2を選択:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio" xml:space="preserve">
+    <value>ダクトの開始点を選択:</value>
+  </data>
+  <data name="B1_UI_ChonDiemBatDauOngGio1" xml:space="preserve">
+    <value>ダクトの開始点を選択:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio" xml:space="preserve">
+    <value>ダクトの配置方向を選択:</value>
+  </data>
+  <data name="B1_UI_ChonHuongDatOngGio1" xml:space="preserve">
+    <value>ダクトの配置方向を選択:</value>
+  </data>
+  <data name="B1_UI_KeywordDiem" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B1_UI_KeywordDiem1" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B1_UI_KeywordNhap" xml:space="preserve">
+    <value>入力</value>
+  </data>
+  <data name="B1_UI_KeywordNhap1" xml:space="preserve">
+    <value>入力</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio" xml:space="preserve">
+    <value>ダクトの長さを入力:</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiOngGio1" xml:space="preserve">
+    <value>ダクトの長さを入力:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>ダクトの幅を入力:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>ダクトの幅を入力:</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon" xml:space="preserve">
+    <value>オフセットダクトを描画しました: 幅 {0} / {1}, オフセット {2}, L = {3}</value>
+  </data>
+  <data name="BZ2_MessDialog_DaVeOngLuon1" xml:space="preserve">
+    <value>オフセットダクトを描画しました: 幅 {0} / {1}, オフセット {2}, L = {3}</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>Lが短すぎます。最小値は {0} です。</value>
+  </data>
+  <data name="BZ2_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>Lが短すぎます。最小値は {0} です。</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon" xml:space="preserve">
+    <value>オフセット方向を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="BZ2_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>オフセット方向を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat" xml:space="preserve">
+    <value>配置点を選択:</value>
+  </data>
+  <data name="BZ2_UI_ChonDiemDat1" xml:space="preserve">
+    <value>配置点を選択:</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="BZ2_UI_KeywordPhai1" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="BZ2_UI_KeywordTrai1" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>ダクトのオフセット高さを入力:</value>
+  </data>
+  <data name="BZ2_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>ダクトのオフセット高さを入力:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>継手の長さLを入力 (最小 {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>継手の長さLを入力 (最小 {0}):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu1" xml:space="preserve">
+    <value>1つ目のダクトの幅を入力:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu3" xml:space="preserve">
+    <value>1つ目のダクトの幅を入力:</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu2" xml:space="preserve">
+    <value>2つ目のダクトの幅を入力 (Enterで1つ目と同じ):</value>
+  </data>
+  <data name="BZ2_UI_NhapChieuRongOngGioThu4" xml:space="preserve">
+    <value>2つ目のダクトの幅を入力 (Enterで1つ目と同じ):</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay" xml:space="preserve">
+    <value>靴のかかとを描画しました: 高さ {0}, 小さい辺 {1}, 底辺 {2}</value>
+  </data>
+  <data name="B3_MessDialog_DaVeGotGiay1" xml:space="preserve">
+    <value>靴のかかとを描画しました: 高さ {0}, 小さい辺 {1}, 底辺 {2}</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay" xml:space="preserve">
+    <value>底辺の配置側を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="B3_UI_ChonBenDatCanhDay1" xml:space="preserve">
+    <value>底辺の配置側を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay" xml:space="preserve">
+    <value>靴のかかとの配置点を選択:</value>
+  </data>
+  <data name="B3_UI_ChonDiemDatGotGiay1" xml:space="preserve">
+    <value>靴のかかとの配置点を選択:</value>
+  </data>
+  <data name="B3_UI_KeywordPhai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="B3_UI_KeywordPhai1" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="B3_UI_KeywordTrai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="B3_UI_KeywordTrai1" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe" xml:space="preserve">
+    <value>小さい辺を入力:</value>
+  </data>
+  <data name="B3_UI_NhapCanhBe1" xml:space="preserve">
+    <value>小さい辺を入力:</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay" xml:space="preserve">
+    <value>底辺を入力 (Enterで自動計算):</value>
+  </data>
+  <data name="B3_UI_NhapCanhDay1" xml:space="preserve">
+    <value>底辺を入力 (Enterで自動計算):</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao" xml:space="preserve">
+    <value>高さを入力:</value>
+  </data>
+  <data name="B3_UI_NhapChieuCao1" xml:space="preserve">
+    <value>高さを入力:</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon" xml:space="preserve">
+    <value>小端は大端より小さくしてください。</value>
+  </data>
+  <data name="B4_MessDialog_DauNhoPhaiNhoHon1" xml:space="preserve">
+    <value>小端は大端より小さくしてください。</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron" xml:space="preserve">
+    <value>角丸継手を描画しました: 大端 {0}, 小端 {1}, L = {2}。</value>
+  </data>
+  <data name="B4_MessDialog_DaVeChiTietVuongRaTron1" xml:space="preserve">
+    <value>角丸継手を描画しました: 大端 {0}, 小端 {1}, L = {2}。</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem1" xml:space="preserve">
+    <value>点2が点1と一致しています</value>
+  </data>
+  <data name="B4_MessDialog_Diem2TrungDiem2" xml:space="preserve">
+    <value>点2が点1と一致しています</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon" xml:space="preserve">
+    <value>大端の点2を選択:</value>
+  </data>
+  <data name="B4_UI_ChonDiem2DauLon1" xml:space="preserve">
+    <value>大端の点2を選択:</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat" xml:space="preserve">
+    <value>配置点を選択 :</value>
+  </data>
+  <data name="B4_UI_ChonDiemDat1" xml:space="preserve">
+    <value>配置点を選択 :</value>
+  </data>
+  <data name="B4_UI_KeywordLength" xml:space="preserve">
+    <value>長さ</value>
+  </data>
+  <data name="B4_UI_KeywordLength1" xml:space="preserve">
+    <value>長さ</value>
+  </data>
+  <data name="B4_UI_KeywordPoint" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B4_UI_KeywordPoint1" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>長さLを入力 (Enterで自動計算):</value>
+  </data>
+  <data name="B4_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>長さLを入力 (Enterで自動計算):</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon" xml:space="preserve">
+    <value>大端のサイズを入力:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLon1" xml:space="preserve">
+    <value>大端のサイズを入力:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang" xml:space="preserve">
+    <value>大端のサイズを入力 [点/入力] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauLonBang1" xml:space="preserve">
+    <value>大端のサイズを入力 [点/入力] :</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho" xml:space="preserve">
+    <value>小端のサイズを入力:</value>
+  </data>
+  <data name="B4_UI_NhapKichThuocDauNho1" xml:space="preserve">
+    <value>小端のサイズを入力:</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut" xml:space="preserve">
+    <value>2エルボ</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2Cut1" xml:space="preserve">
+    <value>2エルボ</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang" xml:space="preserve">
+    <value>2エルボ + 直線ダクト {0}</value>
+  </data>
+  <data name="BZ_MessDialog_ChiTiet2CutOngThang1" xml:space="preserve">
+    <value>2エルボ + 直線ダクト {0}</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ" xml:space="preserve">
+    <value>Zダクトを描画しました ({0}): 幅 {1}, オフセット {2}, L = {3}, エルボ角度 {4}°, 中心線R {5}。</value>
+  </data>
+  <data name="BZ_MessDialog_DaVeOngChuZ1" xml:space="preserve">
+    <value>Zダクトを描画しました ({0}): 幅 {1}, オフセット {2}, L = {3}, エルボ角度 {4}°, 中心線R {5}。</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc" xml:space="preserve">
+    <value>これらのパラメータでは描画できません。</value>
+  </data>
+  <data name="BZ_MessDialog_KhongVeDuoc1" xml:space="preserve">
+    <value>これらのパラメータでは描画できません。</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan" xml:space="preserve">
+    <value>Lが短すぎます。最小値は {0} です。</value>
+  </data>
+  <data name="BZ_MessDialog_LQuaNgan1" xml:space="preserve">
+    <value>Lが短すぎます。最小値は {0} です。</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon" xml:space="preserve">
+    <value>オフセット方向を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="BZ_UI_ChonChieuLuon1" xml:space="preserve">
+    <value>オフセット方向を選択 [左/右] &lt;左&gt;:</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat" xml:space="preserve">
+    <value>配置点を選択:</value>
+  </data>
+  <data name="BZ_UI_ChonDiemDat1" xml:space="preserve">
+    <value>配置点を選択:</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="BZ_UI_KeywordPhai1" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="BZ_UI_KeywordTrai1" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio" xml:space="preserve">
+    <value>ダクトのオフセット高さを入力:</value>
+  </data>
+  <data name="BZ_UI_NhapCaoDoLuonOngGio1" xml:space="preserve">
+    <value>ダクトのオフセット高さを入力:</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL" xml:space="preserve">
+    <value>継手の長さLを入力 (最小 {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuDaiL1" xml:space="preserve">
+    <value>継手の長さLを入力 (最小 {0}):</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio" xml:space="preserve">
+    <value>ダクトの幅を入力</value>
+  </data>
+  <data name="BZ_UI_NhapChieuRongOngGio1" xml:space="preserve">
+    <value>ダクトの幅を入力</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FDT_MessDialog" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>含まれているテキストが見つかりませんでした</value>
   </data>
@@ -147,6 +463,125 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
   </data>
+  <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
+    <value>レデューサーの開始点を選択:</value>
+  </data>
+  <data name="B2_UI_ChonDiemBatDau1" xml:space="preserve">
+    <value>レデューサーの開始点を選択:</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth1" xml:space="preserve">
+    <value>Width1の決定方法を選択</value>
+  </data>
+  <data name="B2_UI_ChonCachXacDinhWidth2" xml:space="preserve">
+    <value>Width1の決定方法を選択</value>
+  </data>
+  <data name="B2_UI_KeywordDiem" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B2_UI_KeywordDiem1" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="B2_UI_KeywordNhap" xml:space="preserve">
+    <value>入力</value>
+  </data>
+  <data name="B2_UI_KeywordNhap1" xml:space="preserve">
+    <value>入力</value>
+  </data>
+  <data name="B2_UI_NhapWidth1" xml:space="preserve">
+    <value>Width1を入力:</value>
+  </data>
+  <data name="B2_UI_NhapWidth2" xml:space="preserve">
+    <value>Width1を入力:</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth1" xml:space="preserve">
+    <value>Width1を取得する点2を選択</value>
+  </data>
+  <data name="B2_UI_ChonDiem2LayWidth2" xml:space="preserve">
+    <value>Width1を取得する点2を選択</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL" xml:space="preserve">
+    <value>高さLを入力:</value>
+  </data>
+  <data name="B2_UI_NhapChieuCaoL1" xml:space="preserve">
+    <value>高さLを入力:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo2" xml:space="preserve">
+    <value>2つ目の端部サイズを入力:</value>
+  </data>
+  <data name="B2_UI_NhapGiaTriDauSo3" xml:space="preserve">
+    <value>2つ目の端部サイズを入力:</value>
+  </data>
+  <data name="B2_UI_ChonChieu" xml:space="preserve">
+    <value>方向を選択</value>
+  </data>
+  <data name="B2_UI_ChonChieu1" xml:space="preserve">
+    <value>方向を選択</value>
+  </data>
+  <data name="B2_UI_KeywordGiua" xml:space="preserve">
+    <value>中央</value>
+  </data>
+  <data name="B2_UI_KeywordGiua1" xml:space="preserve">
+    <value>中央</value>
+  </data>
+  <data name="B2_UI_KeywordTrai" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="B2_UI_KeywordTrai1" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="B2_UI_KeywordPhai" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="B2_UI_KeywordPhai1" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>値は0より大きくしてください。再入力するか別の点を選択してください。</value>
+  </data>
+  <data name="B2_MessDialog_GiaTriPhaiLonHon1" xml:space="preserve">
+    <value>値は0より大きくしてください。再入力するか別の点を選択してください。</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau" xml:space="preserve">
+    <value>点2は開始点と異なる必要があります。再選択してください</value>
+  </data>
+  <data name="B2_MessDialog_Diem2PhaiKhacDiemBatDau1" xml:space="preserve">
+    <value>点2は開始点と異なる必要があります。再選択してください</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam" xml:space="preserve">
+    <value>レデューサーを描画しました: 長さ {0}, サイズ {1} → {2}。</value>
+  </data>
+  <data name="B2_MessDialog_DaVeChiTietGiam1" xml:space="preserve">
+    <value>レデューサーを描画しました: 長さ {0}, サイズ {1} → {2}。</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong" xml:space="preserve">
+    <value>直角にドラッグしてクリック、または幅を入力:</value>
+  </data>
+  <data name="B1_UI_KeoVuongGocVaClickHoacNhapChieuRong1" xml:space="preserve">
+    <value>直角にドラッグしてクリック、または幅を入力:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong" xml:space="preserve">
+    <value>方向を選択:</value>
+  </data>
+  <data name="BZ_UI_ChonHuong1" xml:space="preserve">
+    <value>方向を選択:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet" xml:space="preserve">
+    <value>継手の方向を選択 [反転]:</value>
+  </data>
+  <data name="B3_UI_ChonHuongChoChiTiet1" xml:space="preserve">
+    <value>継手の方向を選択 [反転]:</value>
+  </data>
+  <data name="B3_UI_KeywordFlip" xml:space="preserve">
+    <value>反転</value>
+  </data>
+  <data name="B3_UI_KeywordFlip1" xml:space="preserve">
+    <value>反転</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam" xml:space="preserve">
+    <value>レデューサーの方向を選択:</value>
+  </data>
+  <data name="B4_UI_ChonHuongChoChiTietGiam1" xml:space="preserve">
+    <value>レデューサーの方向を選択:</value></data>
   <data name="BULON_UI_ChonDiem" xml:space="preserve">
     <value>点を選択: </value>
   </data>
