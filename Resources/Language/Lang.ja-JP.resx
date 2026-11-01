@@ -121,7 +121,7 @@
     <value>一致するテキストが見つかりません</value>
   </data>
   <data name="FDT_Title" xml:space="preserve">
-    <value>杭を描画</value>
+    <value>杭を描画</value></data>
   <data name="B1_MessDialog_ChieuDaiKhongHopLe" xml:space="preserve">
     <value>長さが無効です。正の数を入力してください。</value>
   </data>
@@ -619,7 +619,7 @@
     <value>オブジェクトはxrefに属しているため、このレイヤーは使用できません。</value>
   </data>
   <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
-    <value>未設定（mmとして扱う）</value>
+    <value>未設定（mmとして扱う）</value></data>
   <data name="CLG_Title" xml:space="preserve">
     <value>CLG</value>
   </data>

@@ -17,7 +17,7 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
-        
+
         [CommandMethod("CPD")]
         public void CopyElevation()
         {
@@ -25,6 +25,13 @@ namespace Tools.VinaCAD.App.Commands
             {
                 CopyElevationAction action = new CopyElevationAction();
                 action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CopyElevation), ex);
+            }
+        }
 
         [CommandMethod("CLG")]
         public void TurningVaneCommand()
@@ -40,19 +47,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(CreateGridAxisCommand), ex);
             }
         }
-
-
-
-        [CommandMethod("LG")]
-        public void BanisterCommand()
-        {
-            try
-            {
-                BanisterAction action = new BanisterAction();
-                Logger.Info(nameof(TurningVaneCommand), ex);
-            }
-        }
-
+        
         [CommandMethod("VCD")]
         public void VCDCommand()
         {

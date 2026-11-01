@@ -610,7 +610,7 @@
     <value>Object belongs to an xref, this layer cannot be used.</value>
   </data>
   <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
-    <value>not set (treated as mm)</value>
+    <value>not set (treated as mm)</value></data>
   <data name="CLG_Title" xml:space="preserve">
     <value>CLG</value>
   </data>
