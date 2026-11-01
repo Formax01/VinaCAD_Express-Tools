@@ -29,4 +29,10 @@
     <ProjectReference Include="..\Tools.VinaCad.Modeling\Tools.VinaCad.Modeling.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+  <Reference Include="TD_Mgd_Net8_26.12_17">
+    <HintPath>..\Lib\VinaCad\2026\TD_Mgd_Net8_26.12_17.dll</HintPath>
+  </Reference>
+</ItemGroup>
+
 </Project>
