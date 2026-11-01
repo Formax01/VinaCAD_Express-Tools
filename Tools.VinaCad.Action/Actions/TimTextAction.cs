@@ -21,6 +21,7 @@ using Teigha.Geometry;
 using System.Globalization;
 using Tools.VinaCad.Modeling;
 using Tools.VinaCad.Helper.Helper;
+using Tools.Resources.Language;
 using MessageBox = System.Windows.MessageBox;
 
 namespace Tools.VinaCad.Action.Actions
@@ -127,7 +128,7 @@ namespace Tools.VinaCad.Action.Actions
                 if (textIds == null || textIds.Count == 0)
                 {
                     _findtextView.Show();
-                    MessageBox.Show($"Không tìm thấy text chứa '{findText}'.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.FDT_Msg_KhongTimThayTextChua.Replace("{findText}", findText),Lang.Common_Text_ThongBao);
                     return;
                 }
 
@@ -159,7 +160,7 @@ namespace Tools.VinaCad.Action.Actions
             if (!string.IsNullOrWhiteSpace(findText))
                 return true;
 
-            MessageBox.Show("Vui lòng nhập Text cần tìm.", StringDefinition.TITLE_MESSAGE);
+            MessageBox.Show(Lang.FDT_Msg_VuiLongNhapTextCanTim, Lang.Common_Text_ThongBao);
             return false;
         }
 
@@ -168,7 +169,9 @@ namespace Tools.VinaCad.Action.Actions
             if (textIds != null && textIds.Count > 0)
                 return true;
 
-            MessageBox.Show($"Không tìm thấy text chứa '{findText}'.", StringDefinition.TITLE_MESSAGE);
+            MessageBox.Show(
+                Lang.FDT_Msg_KhongTimThayTextChua.Replace("{findText}", findText),
+                Lang.Common_Text_ThongBao);
             return false;
         }
 
@@ -197,7 +200,7 @@ namespace Tools.VinaCad.Action.Actions
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa text: ";
+            opt.MessageForAdding = "\n" + Lang.FDT_RenameText_Prompt_QuetChonText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);

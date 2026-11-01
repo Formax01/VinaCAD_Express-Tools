@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using Teigha.DatabaseServices;
 using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -115,7 +116,7 @@ namespace Tools.VinaCad.Action.Actions
                
                 else
                 {
-                    MessageBox.Show("Vui lòng chọn block khung tên.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.Common_Msg_VuiLongChonBlockKhungTen, Lang.Common_Text_ThongBao);
                 }    
 
             }

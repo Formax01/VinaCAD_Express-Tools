@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -27,7 +27,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (dir == null)
-                throw new DirectoryNotFoundException("Không tìm thấy thư mục Resources.");
+                throw new DirectoryNotFoundException(Lang.Common_Error_KhongTimThayThuMucResources);
 
             return Path.Combine(dir.FullName, "Resources", "Templates", templateFileName);
         }
@@ -176,10 +176,10 @@ namespace Tools.VinaCad.Helper.Helper
                 throw new ArgumentNullException(nameof(currentDb));
 
             if (string.IsNullOrWhiteSpace(templatePath))
-                throw new ArgumentException("Đường dẫn file template không hợp lệ.", nameof(templatePath));
+                throw new ArgumentException(Lang.IPT_Error_DuongDanFileTemplateKhongHopLe, nameof(templatePath));
 
             if (!File.Exists(templatePath))
-                throw new FileNotFoundException("Không tìm thấy file template block.", templatePath);
+                throw new FileNotFoundException(Lang.IPT_Error_KhongTimThayFileTemplateBlock, templatePath);
 
             using (Database sourceDb = new Database(false, true))
             {
@@ -318,8 +318,8 @@ namespace Tools.VinaCad.Helper.Helper
                 if (!bt.Has(blockName))
                 {
                     MessageBox.Show(
-                        $"Không tìm thấy block '{blockName}' trong bản vẽ.",
-                        StringDefinition.TITLE_MESSAGE);
+                        Lang.IPT_Msg_KhongTimThayBlockTrongBanVe.Replace("{blockName}", blockName),
+                        Lang.Common_Text_ThongBao);
 
                     return false;
                 }

@@ -10,6 +10,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -36,7 +37,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa Dim: ";
+            opt.MessageForAdding = "\n" + Lang.KTD_DCD_Prompt_QuetChonVungChuaDim;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
@@ -92,14 +93,14 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 ed.SetImpliedSelection(ids.ToArray());
                 ed.UpdateScreen();
-                ed.WriteMessage("\nCó dim bị trùng!");
+                ed.WriteMessage("\n" + Lang.KTD_DCD_Output_CoDimBiTrung);
                 ZoomToObjects(db, ed, ids.ToArray());
             }
             else
             {
                 ed.SetImpliedSelection(Array.Empty<ObjectId>());
                 ed.UpdateScreen();
-                ed.WriteMessage("\nKhông tìm thấy dim nào bị trùng!");
+                ed.WriteMessage("\n" + Lang.KTD_DCD_Output_KhongTimThayDimNaoBiTrung);
             }
         }
 
@@ -305,7 +306,7 @@ namespace Tools.VinaCad.Helper.Helper
                         };
             SelectionFilter filter = new SelectionFilter(filterValues);
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn dim cộng dồn: ";
+            opt.MessageForAdding = "\n" + Lang.KTD_DCD_Prompt_QuetChonDimCongDon;
             opt.RejectObjectsOnLockedLayers = true;
             PromptSelectionResult result = ed.GetSelection(opt, filter);
 
@@ -333,14 +334,14 @@ namespace Tools.VinaCad.Helper.Helper
                 ed.SetImpliedSelection(ids.ToArray());
                 ZoomToObjects(db, ed, ids.ToArray());
                 ed.UpdateScreen();
-                ed.WriteMessage("\nCó chuỗi dim cộng dồn bị sai!");
-                MessageBox.Show("Có các dim bị chồng lấn, hở, sai giá trị thực! \nBạn vui lòng điều chỉnh trước khi dim cộng dồn.", StringDefinition.TITLE_MESSAGE);
+                ed.WriteMessage("\n" + Lang.KTD_DCD_Msg_CoChuoiDimCongDonBiSai);
+                MessageBox.Show(Lang.KTD_DCD_Msg_CoCacDimBiChongLanHoSaiGiaTriThucBan, Lang.Common_Text_ThongBao);
             }
             else
             {
                 ed.SetImpliedSelection(Array.Empty<ObjectId>());
                 ed.UpdateScreen();
-                ed.WriteMessage("\nKhông tìm thấy dim cộng dồn sai!");
+                ed.WriteMessage("\n" + Lang.KTD_DCD_Output_KhongTimThayDimCongDonSai);
             }
 
             return ids;

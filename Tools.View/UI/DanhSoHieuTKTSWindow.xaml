@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Đánh Số Hiệu Và Thống Kê Thép Sàn Tự Động"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.TS_UI_DanhSoHieuVaThongKeThepSanTuDong}"
     Loaded="BangToaDoCocWindow_Loaded"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
@@ -24,7 +25,7 @@
         <GroupBox
             Grid.Row="0"
             Margin="0,0,0,10"
-            Header="Xác lập chiều dài bẻ móc thép và chiều dày lớp bê tông bảo vệ">
+            Header="{x:Static res:Lang.TS_UI_XacLapChieuDaiBeMocThepVaChieuDayLopBe}">
             <Grid Margin="12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -42,7 +43,7 @@
                     Grid.Column="0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Content="Cố định cho tất cả thanh thép"
+                    Content="{x:Static res:Lang.TS_UI_CoDinhChoTatCaThanhThep}"
                     GroupName="DaiMocThep"
                     IsChecked="{Binding IsCoDinh}" />
                 <TextBox
@@ -64,14 +65,14 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Content="Chiều dài thực trong bản vẽ"
+                    Content="{x:Static res:Lang.TS_UI_ChieuDaiThucTrongBanVe}"
                     GroupName="DaiMocThep"
                     IsChecked="{Binding IsThucTe}" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Chiều dày lớp bê tông bảo vệ:" />
+                    Text="{x:Static res:Lang.TS_UI_ChieuDayLopBeTongBaoVe}" />
                 <TextBox
                     Grid.Row="2"
                     Grid.Column="1"
@@ -92,7 +93,7 @@
         <GroupBox
             Grid.Row="1"
             Margin="0,0,0,10"
-            Header="Xác lập đánh số hiệu thép sàn tự động">
+            Header="{x:Static res:Lang.TS_UI_XacLapDanhSoHieuThepSanTuDong}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -109,19 +110,19 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Quy tắc đánh số hiệu:" />
+                    Text="{x:Static res:Lang.Common_UI_QuyTacDanhSoHieu}" />
                 <RadioButton
                     Grid.Row="0"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Content="Trái sang phải"
+                    Content="{x:Static res:Lang.Common_UI_TraiSangPhai}"
                     GroupName="HuongBoTri"
                     IsChecked="{Binding IsLeftToRight}" />
                 <RadioButton
                     Grid.Row="0"
                     Grid.Column="2"
                     VerticalAlignment="Center"
-                    Content="Trên xuống dưới"
+                    Content="{x:Static res:Lang.Common_UI_TrenXuongDuoi}"
                     GroupName="HuongBoTri"
                     IsChecked="{Binding IsTopToBottom}" />
 
@@ -129,7 +130,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Số hiệu bắt đầu (cố định):" />
+                    Text="{x:Static res:Lang.TS_UI_SoHieuBatDauCoDinh}" />
                 <TextBox
                     Grid.Row="2"
                     Grid.Column="1"
@@ -145,7 +146,7 @@
         <GroupBox
             Grid.Row="2"
             Margin="0,0,0,10"
-            Header="Xác lập tỷ lệ bản vẽ">
+            Header="{x:Static res:Lang.TS_UI_XacLapTyLeBanVe}">
             <Grid Height="30" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
@@ -156,7 +157,7 @@
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    Text="Tỷ lệ bản vẽ:" />
+                    Text="{x:Static res:Lang.Common_UI_TyLeBanVe}" />
                 <TextBox
                     Grid.Column="1"
                     HorizontalContentAlignment="Left"
@@ -185,7 +186,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="Đánh Số Hiệu&#x0a;Tự Động"
+                    Text="{x:Static res:Lang.Common_UI_DanhSoHieuTuDong}"
                     TextAlignment="Center" />
             </Button>
 
@@ -200,7 +201,7 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="Vẽ Bảng Thống&#x0a;Kê Thép"
+                    Text="{x:Static res:Lang.Common_UI_VeBangThongKeThep}"
                     TextAlignment="Center" />
             </Button>
 
@@ -210,7 +211,7 @@
                 Height="40"
                 HorizontalContentAlignment="Center"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </Grid>
     </Grid>
 </Window>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teigha.DatabaseServices;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 
@@ -53,7 +54,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 else
                 {
-                    MessageBox.Show("Bạn chưa xác lập cài đặt dim cộng dồn!", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.DCD_Msg_BanChuaXacLapCaiDatDimCongDon, Lang.Common_Text_ThongBao);
                 }
                 
             }
