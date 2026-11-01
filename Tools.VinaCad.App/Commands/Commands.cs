@@ -44,7 +44,7 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(TurningVaneAction), ex);
+                Logger.Info(nameof(TurningVaneCommand), ex);
             }
         }
 
