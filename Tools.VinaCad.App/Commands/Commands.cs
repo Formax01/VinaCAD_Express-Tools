@@ -44,10 +44,10 @@ namespace Tools.VinaCAD.App.Commands
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(CreateGridAxisCommand), ex);
+                Logger.Info(nameof(TurningVaneAction), ex);
             }
         }
-        
+
         [CommandMethod("VCD")]
         public void VCDCommand()
         {
