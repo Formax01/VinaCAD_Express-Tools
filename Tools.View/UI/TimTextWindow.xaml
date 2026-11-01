@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
-    Title="{x:Static res:Lang.FDT_Title}"
+    Title="{x:Static res:Lang.FDT_UI_Title}"
     Width="300"
     ResizeMode="NoResize"
     SizeToContent="Height"

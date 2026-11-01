@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -22,7 +23,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (dir == null)
-                throw new DirectoryNotFoundException("Không tìm thấy thư mục Resources.");
+                throw new DirectoryNotFoundException(Lang.Common_Error_KhongTimThayThuMucResources);
 
             return Path.Combine(dir.FullName, "Resources", "Images", imageFileName);
         }
