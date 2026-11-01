@@ -1,4 +1,4 @@
-﻿using Prima.VinaCAD.ApplicationServices;
+using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System.Globalization;
@@ -10,9 +10,9 @@ using Teigha.Runtime;
 using Tools.Resources.Definitions;
 using Tools.VinaCad.Action.Actions;
 using Tools.VinaCAD.Action.Actions;
-
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using AcadApp = Prima.VinaCAD.ApplicationServices.Application;
+
 namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
@@ -22,79 +22,91 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                new BulonAction().Execute();
+                BulonAction action = new BulonAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BulonCommand), ex);
             }
         }
+
         [CommandMethod("Bulon1")]
         public void Bulon1Command()
         {
             try
             {
-                new Bulon1Action().Execute();
+                Bulon1Action action = new Bulon1Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon1Command), ex);
             }
         }
+
         [CommandMethod("Bulon2")]
         public void Bulon2Command()
         {
             try
             {
-                new Bulon2Action().Execute();
+                Bulon2Action action = new Bulon2Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon2Command), ex);
             }
         }
+
         [CommandMethod("DAIOC")]
         public void DaiOcCommand()
         {
             try
             {
-                new DaiOcAction().Execute();
+                DaiOcAction action = new DaiOcAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOcCommand), ex);
             }
         }
+
         [CommandMethod("DAIOC1")]
         public void DaiOc1Command()
         {
             try
             {
-                new DaiOc1Action().Execute();
+                DaiOc1Action action = new DaiOc1Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc1Command), ex);
             }
         }
+
         [CommandMethod("DAIOC2")]
         public void DaiOc2Command()
         {
             try
             {
-                new DaiOc2Action().Execute();
+                DaiOc2Action action = new DaiOc2Action();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc2Command), ex);
             }
         }
+
         [CommandMethod("OC1")]
         public void OC1Command()
         {
@@ -105,10 +117,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC1Command), ex);
             }
         }
+
         [CommandMethod("OC2")]
         public void OC2Command()
         {
@@ -119,32 +132,25 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_MESSAGE);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC2Command), ex);
             }
         }
 
-        
-        
         [CommandMethod("LG")]
         public void BanisterCommand()
         {
             try
             {
-                new BanisterAction().Execute();
+                BanisterAction action = new BanisterAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
             }
         }
-
-       
-      
-        
-
-
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
@@ -160,6 +166,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(CreateGridAxisCommand), ex);
             }
         }
+
         [CommandMethod("B1")]
         public void DrawDuctCommand()
         {
@@ -174,6 +181,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawDuctCommand), ex);
             }
         }
+
         [CommandMethod("B2")]
         public void ReducerCommand()
         {
@@ -188,6 +196,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(ReducerCommand), ex);
             }
         }
+
         [CommandMethod("B3")]
         public void DrawShoeCommand()
         {
@@ -202,6 +211,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawShoeCommand), ex);
             }
         }
+
         [CommandMethod("B4")]
         public void DrawSquareToRoundCommand()
         {
@@ -246,6 +256,53 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawZElbowDuctCommand), ex);
             }
         }
+
+        [CommandMethod("BB1")]
+        public void DrawBoxCommand()
+        {
+            try
+            {
+                DrawBoxAction action = new DrawBoxAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawBoxCommand), ex);
+            }
+        }
+
+        [CommandMethod("BB2")]
+        public void DrawReducerDuct3DCommand()
+        {
+            try
+            {
+                DrawReducerDuct3DAction action = new DrawReducerDuct3DAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawReducerDuct3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("Bbz")]
+        public void BbzCommand()
+        {
+            try
+            {
+                BbzAction action = new BbzAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BbzCommand), ex);
+            }
+        }
+        
+
         [CommandMethod("Sample")]
         public void SampleCommand()
         {
@@ -260,6 +317,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(SampleCommand), ex);
             }
         }
+
         [CommandMethod("FDT")]
         public void FindTextCommand()
         {
@@ -559,6 +617,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
+
         [CommandMethod("NEO")]
         public void BangTraNeoCTCommand()
         {
@@ -588,6 +647,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
+
         [CommandMethod("KTD")]
         public void KiemTraTrungDimCommand()
         {
@@ -617,7 +677,6 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(XLKiemTraCongDonDimCommand), ex);
             }
         }
-
 
         [CommandMethod("DCD")]
         public void KiemTraCongDonDimCommand()
@@ -753,6 +812,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
         [CommandMethod("WWT")]
         public void ChangeWallThicknessCommand()
         {
@@ -855,6 +915,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(ArrangeWindowCommand), ex);
             }
         }
+
         [CommandMethod("LTP")]
         public void StaircaseSectionCommand()
         {
@@ -883,6 +944,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(FlexDuctTopDownCommand), ex);
             }
         }
+
         [CommandMethod("S2")]
         public void FlexDuctHorizontalCommand()
         {
@@ -952,13 +1014,14 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
+
         [CommandMethod("E1")]
         public void DuctElbowEqualCommand()
         {
             try
             {
                 new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
-            }   
+            }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);

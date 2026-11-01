@@ -8,10 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Tools.Resources.Language {
+namespace Tools.Resources.Language
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,44 +23,52 @@ namespace Tools.Resources.Language {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Lang {
-        
+    public class Lang
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Lang() {
+        internal Lang()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Tools.Resources.Language.Lang", typeof(Lang).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Không thể mở file hướng dẫn.
         ///{ex.Message}.
@@ -7337,7 +7346,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLDTC_UI_TraiPhaiDuoiTren", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Trái → Phải, Trên → Dưới.
         /// </summary>
@@ -7346,7 +7355,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLDTC_UI_TraiPhaiTrenDuoi", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Xác Lập Đặt Tên Cọc.
         /// </summary>
@@ -7355,7 +7364,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLDTC_UI_XacLapDatTenCoc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Xác lập sửa danh mục (XLSDM).
         /// </summary>
@@ -7364,7 +7373,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_Ribbon_XacLapSuaDanhMucXlsdm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Xác lập sửa DM.
         /// </summary>
@@ -7373,7 +7382,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_Ribbon_XacLapSuaDm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chọn block danh mục.
         /// </summary>
@@ -7382,7 +7391,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_UI_ChonBlockDanhMuc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to K/c sai số cho phép (mm)..
         /// </summary>
@@ -7391,7 +7400,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_UI_KCSaiSoChoPhepMm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Thuộc tính 1:.
         /// </summary>
@@ -7400,7 +7409,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_UI_ThuocTinh1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Thuộc tính 2:.
         /// </summary>
@@ -7409,7 +7418,7 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("XLSDM_UI_ThuocTinh2", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Thuộc tính 3:.
         /// </summary>
