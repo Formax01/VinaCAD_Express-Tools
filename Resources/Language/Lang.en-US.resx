@@ -459,6 +459,12 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Language changed to {0}.</value>
   </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Express Tools Language</value>
+  </data>
+  <data name="Language_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>Select a new insertion point, press Enter to finish.</value>
   </data>

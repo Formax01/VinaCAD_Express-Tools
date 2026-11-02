@@ -41,28 +41,32 @@ namespace Tools.Resources.Language
         public event EventHandler? LanguageChanged;
 
         // Gọi 1 lần lúc plugin khởi động (trong AppStartup.Initialize)
-        public void Initialize()
+        public void Initialize(string vinaCadCode)
         {
-            SetLanguage(LoadSavedCode(), save: false);
+            string? savedCode = LoadSavedCode();
+            string fallbackCode = Supported.Any(l => l.Code == vinaCadCode) ? vinaCadCode : "";
+            string code = savedCode != null && Supported.Any(l => l.Code == savedCode)
+                ? savedCode : fallbackCode;
+            SetLanguage(code, save: false);
         }
 
         public void SetLanguage(string? code, bool save = true)
         {
             code = code ?? "";
-            if (!Supported.Any(l => l.Code == code)) code = "";
+            if (!Supported.Any(l => l.Code == code)) throw new ArgumentException("Unsupported language code.", nameof(code));
+
+            if (save) SaveCode(code);
 
             CurrentCode = code;
             Lang.Culture = code == ""
                 ? CultureInfo.InvariantCulture   // dùng Lang.resx
                 : new CultureInfo(code);
 
-            if (save) SaveCode(code);
-
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
             LanguageChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private static string LoadSavedCode()
+        private static string? LoadSavedCode()
         {
             try
             {
@@ -70,17 +74,13 @@ namespace Tools.Resources.Language
                     return File.ReadAllText(SettingFile).Trim();
             }
             catch { }
-            return "";
+            return null;
         }
 
         private static void SaveCode(string code)
         {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(SettingFile)!);
-                File.WriteAllText(SettingFile, code);
-            }
-            catch { }
+            Directory.CreateDirectory(Path.GetDirectoryName(SettingFile)!);
+            File.WriteAllText(SettingFile, code);
         }
     }
 

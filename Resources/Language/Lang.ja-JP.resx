@@ -468,6 +468,12 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
   </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Express Tools の言語</value>
+  </data>
+  <data name="Language_Apply" xml:space="preserve">
+    <value>適用</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>新しい配置ポイントを選択し、Enterキーで終了します。</value>
   </data>
