@@ -807,6 +807,20 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+        [CommandMethod("EXPRESSLANGUAGE")]
+        public void ExpressLanguageCommand()
+        {
+            try
+            {
+                new LanguageSettingsAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(ExpressLanguageCommand), ex);
+            }
+        }
+
         [CommandMethod("ABOUTEXPRESS")]
         public void AboutToolsCommand()
         {

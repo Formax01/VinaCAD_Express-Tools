@@ -22,7 +22,7 @@ namespace Tools.VinaCad.App.ApplicationLoader
                     LANGUAGE_ENG => "en-US",
                     _ => ""   // tiếng Việt hoặc không xác định -> dùng Lang.resx
                 };
-                Translator.Instance.SetLanguage(code, save: false);
+                Translator.Instance.Initialize(code);
             }
             catch (System.Exception ex)
             {
