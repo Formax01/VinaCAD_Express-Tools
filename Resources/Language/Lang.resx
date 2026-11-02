@@ -459,6 +459,12 @@
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>Đã chuyển ngôn ngữ sang {0}.</value>
   </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Ngôn ngữ Express Tools</value>
+  </data>
+  <data name="Language_Apply" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>Chọn điểm đặt mới, Enter để kết thúc.</value>
   </data>
