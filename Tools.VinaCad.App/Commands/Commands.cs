@@ -636,7 +636,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("TD")]
+        [CommandMethod("TDD")]
         public void TKTDCommand()
         {
             try
@@ -651,11 +651,11 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("TDD")]
-        public void TDDCommand()
-        {
-            TKTDCommand();
-        }
+        //[CommandMethod("TDD")]
+        //public void TDDCommand()
+        //{
+        //    TKTDCommand();
+        //}
 
         [CommandMethod("DTT")]
         public void BangTraDTCTCommand()
