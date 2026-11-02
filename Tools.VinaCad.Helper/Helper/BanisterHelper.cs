@@ -10,6 +10,7 @@ using Teigha.Geometry;
 using Tools.Model;
 using Tools.VinaCad.Helper.Helper;
 using Prima.VinaCAD.EditorInput;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper
 {
@@ -95,7 +96,7 @@ namespace Tools.VinaCad.Helper
             var rects = BanisterGeometry.Build(input, L, m);
             if (rects.Count > 3000)
                 throw new InvalidOperationException(
-                    $"Lan can có quá nhiều chi tiết ({rects.Count}). Hãy kiểm tra đơn vị bản vẽ và khoảng cách hai điểm đã chọn.");
+    string.Format(Lang.LG_MessDialog_QuaNhieuChiTiet, rects.Count));
 
             using (var tr = db.TransactionManager.StartTransaction())
             {
@@ -192,7 +193,7 @@ namespace Tools.VinaCad.Helper
             layerName = null;
             aci = 7;
 
-            var res = ed.GetEntity(new PromptEntityOptions("\nChọn đối tượng để lấy layer: "));
+            var res = ed.GetEntity(new PromptEntityOptions(Lang.LG_UI_ChonDoiTuongLayLayer));
             if (res.Status != PromptStatus.OK) return false;
 
             using (var tr = db.TransactionManager.StartTransaction())
@@ -202,7 +203,7 @@ namespace Tools.VinaCad.Helper
 
                 if (layerName.Contains('|'))
                 {
-                    ed.WriteMessage("\nĐối tượng thuộc xref, không dùng được layer này.");
+                    ed.WriteMessage($"\n{Lang.LG_MessDialog_DoiTuongThuocXref}");
                     layerName = null;
                     return false;
                 }
@@ -268,7 +269,7 @@ namespace Tools.VinaCad.Helper
                 case UnitsValue.Kilometers: return "km";
                 case UnitsValue.Inches: return "inch";
                 case UnitsValue.Feet: return "feet";
-                default: return "chưa đặt (coi là mm)";
+                default: return Lang.LG_UI_ChuaDatCoiLaMm;
             }
         }
 
