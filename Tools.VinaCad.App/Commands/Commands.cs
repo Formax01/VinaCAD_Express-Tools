@@ -836,6 +836,20 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+        [CommandMethod("EXPRESSFEEDBACK")]
+        public void FeedbackCommand()
+        {
+            try
+            {
+                new FeedbackAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FeedbackCommand), ex);
+            }
+        }
+
         [CommandMethod("IPT")]
         public void ImportallCommand()
         {
