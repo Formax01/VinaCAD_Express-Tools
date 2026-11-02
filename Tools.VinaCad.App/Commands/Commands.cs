@@ -17,6 +17,22 @@ namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
+
+        [CommandMethod("CPD")]
+        public void CopyElevation()
+        {
+            try
+            {
+                CopyElevationAction action = new CopyElevationAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CopyElevation), ex);
+            }
+        }
+
         [CommandMethod("CLG")]
         public void TurningVaneCommand()
         {
@@ -71,8 +87,8 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
             }
         }
         [CommandMethod("Bulon")]
@@ -89,6 +105,8 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(BulonCommand), ex);
             }
         }
+
+
 
         [CommandMethod("Bulon1")]
         public void Bulon1Command()
@@ -217,6 +235,7 @@ namespace Tools.VinaCAD.App.Commands
             {
                 CreateGridAxisAction action = new CreateGridAxisAction();
                 action.Execute();
+               
             }
             catch (System.Exception ex)
             {
@@ -855,6 +874,7 @@ namespace Tools.VinaCAD.App.Commands
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
+        
 
         [CommandMethod("EW")]
         public void EraseAutoHealWallCommand()

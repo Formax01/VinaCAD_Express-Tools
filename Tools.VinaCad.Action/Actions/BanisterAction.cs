@@ -1,5 +1,6 @@
 ﻿using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
+using PrLogTrackingSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,21 +18,60 @@ using Application = Prima.VinaCAD.ApplicationServices.Application;
 using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxImage = System.Windows.MessageBoxImage;
-
+using Tools.Resources.Language;
 namespace Tools.VinaCad.Action.Actions
 {
     public class BanisterAction : IAciColorPickerService
     {
+        private Document _doc;
+        private Editor _ed;
+        private Database _db;
+
         public void Execute()
         {
-            var doc = Application.DocumentManager.MdiActiveDocument;
-            var ed = doc.Editor;
-            var db = doc.Database;
+            try
+            {
+                UpdateCurrentDocument();
+                if (_doc == null)
+                    return;
 
-            // 1. Form (lặp lại nếu người dùng bấm Pick)
-            var vm = CreateViewModel(db);
+                // 1. Form nhập thông số (mở lại nếu người dùng bấm Pick)
+                if (!TryShowDialog(out BanisterInput input))
+                    return;
 
-            BanisterInput input = null;
+                BanisterSettingsStore.Save(input);
+
+                // 2. Vẽ liên tiếp nhiều đoạn
+                int segments = DrawSegments(input);
+
+                Finish(segments);
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(nameof(BanisterAction), ex);
+                throw;
+            }
+        }
+
+        private void UpdateCurrentDocument()
+        {
+            _doc = Application.DocumentManager.MdiActiveDocument;
+            if (_doc == null)
+                return;
+
+            _ed = _doc.Editor;
+            _db = _doc.Database;
+        }
+
+        // ---------- Form nhập thông số ----------
+
+        // Hiện form; lặp lại khi bấm Pick hoặc khi dữ liệu không hợp lệ.
+        // Trả về false nếu người dùng hủy hoặc đóng cửa sổ.
+        private bool TryShowDialog(out BanisterInput input)
+        {
+            input = null;
+            var vm = CreateViewModel();
+
             while (true)
             {
                 vm.ResetDialogRequest();
@@ -41,79 +81,26 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (vm.PickRequested)
                 {
-                    if (BanisterHelper.TryPickLayer(ed, db, out string layer, out short aci))
+                    if (BanisterHelper.TryPickLayer(_ed, _db, out string layer, out short aci))
                         vm.ApplyPickedLayer(layer, aci);
                     continue;                       // mở lại form với giá trị đã nhập
                 }
 
-                if (!vm.AcceptRequested) break;     // Cancel/đóng cửa sổ
+                if (!vm.AcceptRequested)
+                    return false;                   // Cancel / đóng cửa sổ
 
-                if (!BanisterInputFactory.TryCreate(vm, out input, out string error))
-                {
-                    MessageBox.Show(window, error, "Lan can", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    continue;
-                }
-                break;
+                if (BanisterInputFactory.TryCreate(vm, out input, out string error))
+                    return true;
+
+                MessageBox.Show(window, error, Lang.LG_Title_LanCan, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            if (input == null) return;
-
-            BanisterSettingsStore.Save(input);
-
-            // 2. Vẽ liên tiếp nhiều đoạn
-            int segments = 0;
-            bool hasLast = false;
-            Point3d lastEnd = Point3d.Origin;
-
-            while (true)
-            {
-                var startOpt = new PromptPointOptions(hasLast
-                    ? "\nChọn điểm đầu lan can [Nối tiếp từ điểm cuối trước (T)] <Enter để kết thúc>: "
-                    : "\nChọn điểm đầu lan can: ")
-                {
-                    AllowNone = hasLast
-                };
-                if (hasLast)
-                {
-                    startOpt.Keywords.Add("T");
-                    startOpt.AppendKeywordsToMessage = false;
-                }
-
-                var r1 = ed.GetPoint(startOpt);
-                if (r1.Status == PromptStatus.None) break;
-                if (r1.Status != PromptStatus.OK && r1.Status != PromptStatus.Keyword) break;
-
-                Point3d start = r1.Status == PromptStatus.Keyword ? lastEnd : r1.Value;
-
-                var r2 = ed.GetPoint(new PromptPointOptions("\nChọn điểm cuối lan can: ")
-                {
-                    UseBasePoint = true,
-                    BasePoint = start
-                });
-                if (r2.Status != PromptStatus.OK) break;
-
-                Point3d end = BanisterHelper.NormalizeEnd(start, r2.Value);
-                var ids = BanisterHelper.CreateBanister(db, input, start, end);
-                if (ids.Count == 0)
-                {
-                    ed.WriteMessage("\nHai điểm quá gần nhau theo phương ngang hoặc quá dốc (> 70 độ), bỏ qua đoạn này.");
-                    continue;
-                }
-
-                segments++;
-                lastEnd = end;
-                hasLast = true;
-                ed.WriteMessage($"\nĐã vẽ đoạn {segments} .");
-            }
-
-            if (segments > 0) ed.Regen();
-            ed.WriteMessage($"\nKết thúc LG: {segments} đoạn lan can.");
         }
 
         // Dựng VM và nối logic đồng bộ layer → màu → brush (VM chỉ giữ state)
-        private BanisterVM CreateViewModel(Database db)
+        private BanisterVM CreateViewModel()
         {
             var vm = new BanisterVM(this);
-            var layerColors = BanisterHelper.GetLayerColors(db);
+            var layerColors = BanisterHelper.GetLayerColors(_db);
 
             void SyncColorFromLayer()
             {
@@ -156,124 +143,213 @@ namespace Tools.VinaCad.Action.Actions
                 .FirstOrDefault(window => window.IsActive);
             return AciPickerAction.Pick(currentIndex, owner);
         }
-    }
 
-    /// <summary>
-    /// Toàn bộ logic của picker ACI: dựng palette, parse, chọn ô, tính preview.
-    /// AciPickerVM chỉ giữ state và command.
-    /// </summary>
-    internal static class AciPickerAction
-    {
-        public static short? Pick(short current, System.Windows.Window owner)
+        // ---------- Vẽ các đoạn lan can ----------
+
+        // Vẽ liên tiếp cho đến khi người dùng Enter hoặc Esc; trả về số đoạn đã vẽ
+        private int DrawSegments(BanisterInput input)
         {
-            var vm = new AciPickerVM();
-            var items = new Dictionary<short, AciColorItem>();
-            Fill(vm.DarkColors, AciColorHelper.GetDarkPalette(), items);
-            Fill(vm.LightColors, AciColorHelper.GetLightPalette(), items);
-            Fill(vm.StandardColors, AciColorHelper.GetStandardPalette(), items);
+            int segments = 0;
+            bool hasLast = false;
+            Point3d lastEnd = Point3d.Origin;
 
-            AciColorItem selected = null;
-            vm.PropertyChanged += (_, e) =>
+            while (true)
             {
-                if (e.PropertyName != nameof(AciPickerVM.ColorText)) return;
+                if (!TryGetStartPoint(hasLast, lastEnd, out Point3d start))
+                    break;
 
-                bool valid = AciColorHelper.TryParseIndex(vm.ColorText, out short aci);
-                vm.CanAccept = valid;
-                if (!valid) return;
+                PromptPointResult endRes = _ed.GetPoint(
+                    new PromptPointOptions(Lang.LG_UI_ChonDiemCuoiLanCan)
+                    {
+                        UseBasePoint = true,
+                        BasePoint = start
+                    });
+                if (endRes.Status != PromptStatus.OK)
+                    break;
 
-                if (selected != null) selected.IsSelected = false;
-                selected = items[aci];
-                selected.IsSelected = true;
-                vm.PreviewBrush = selected.ColorBrush;
-                vm.Description = selected.Description;
-            };
+                Point3d end = BanisterHelper.NormalizeEnd(start, endRes.Value);
+                var ids = BanisterHelper.CreateBanister(_db, input, start, end);
+                if (ids.Count == 0)
+                {
+                    _ed.WriteMessage(Lang.LG_MessDialog_HaiDiemQuaGanHoacDoc);
+                    continue;
+                }
 
-            // Gán sau khi đã gắn handler để lần đầu cũng chọn đúng ô.
-            short start = AciColorHelper.IsValidIndex(current) ? current : AciColorHelper.DefaultAci;
-            vm.ColorText = start.ToString(CultureInfo.InvariantCulture);
+                segments++;
+                lastEnd = end;
+                hasLast = true;
+                _ed.WriteMessage(string.Format(Lang.LG_MessDialog_DaVeDoan, segments)   );
+            }
 
-            var dialog = new AciPickerWindow(vm) { Owner = owner };
-            if (dialog.ShowDialog() != true) return null;
-
-            return AciColorHelper.TryParseIndex(vm.ColorText, out short result) ? result : (short?)null;
+            return segments;
         }
 
-        private static void Fill(ObservableCollection<AciColorItem> target,
-            IEnumerable<short> indices, Dictionary<short, AciColorItem> lookup)
+        
+        private bool TryGetStartPoint(bool hasLast, Point3d lastEnd, out Point3d start)
         {
-            foreach (short aci in indices)
-            {
-                var (r, g, b) = AciColorHelper.ToRgb(aci);
-                var brush = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromRgb(r, g, b));
-                brush.Freeze();
+            start = default(Point3d);
 
-                var item = new AciColorItem(aci, brush, AciColorHelper.Describe(aci));
-                target.Add(item);
-                lookup[aci] = item;
+            var options = new PromptPointOptions(hasLast
+                ? Lang.LG_UI_ChonDiemDauLanCanNoiTiep
+                : Lang.LG_UI_ChonDiemDauLanCan)
+            {
+                AllowNone = hasLast
+            };
+            if (hasLast)
+            {
+                options.Keywords.Add("T");
+                options.AppendKeywordsToMessage = false;
+            }
+
+            PromptPointResult result = _ed.GetPoint(options);
+
+            if (result.Status == PromptStatus.Keyword)
+            {
+                start = lastEnd;
+                return true;
+            }
+
+            if (result.Status != PromptStatus.OK)
+                return false;                       // Enter (None), Esc hoặc trạng thái khác
+
+            start = result.Value;
+            return true;
+        }
+
+       
+
+        private void Finish(int segments)
+        {
+            if (segments > 0)
+                _ed.Regen();
+
+            _ed.WriteMessage(string.Format(Lang.LG_MessDialog_KetThucLG, segments));
+        }
+        
+        internal static class AciPickerAction
+        {
+            public static short? Pick(short current, System.Windows.Window owner)
+            {
+                var vm = new AciPickerVM();
+                var items = new Dictionary<short, AciColorItem>();
+                Fill(vm.DarkColors, AciColorHelper.GetDarkPalette(), items);
+                Fill(vm.LightColors, AciColorHelper.GetLightPalette(), items);
+                Fill(vm.StandardColors, AciColorHelper.GetStandardPalette(), items);
+
+                AciColorItem selected = null;
+                vm.PropertyChanged += (_, e) =>
+                {
+                    if (e.PropertyName != nameof(AciPickerVM.ColorText)) return;
+
+                    bool valid = AciColorHelper.TryParseIndex(vm.ColorText, out short aci);
+                    vm.CanAccept = valid;
+                    if (!valid) return;
+
+                    if (selected != null) selected.IsSelected = false;
+                    selected = items[aci];
+                    selected.IsSelected = true;
+                    vm.PreviewBrush = selected.ColorBrush;
+                    vm.Description = selected.Description;
+                };
+
+                // Gán sau khi đã gắn handler để lần đầu cũng chọn đúng ô.
+                short start = AciColorHelper.IsValidIndex(current) ? current : AciColorHelper.DefaultAci;
+                vm.ColorText = start.ToString(CultureInfo.InvariantCulture);
+
+                var dialog = new AciPickerWindow(vm) { Owner = owner };
+                if (dialog.ShowDialog() != true) return null;
+
+                return AciColorHelper.TryParseIndex(vm.ColorText, out short result) ? result : (short?)null;
+            }
+
+            private static void Fill(ObservableCollection<AciColorItem> target,
+                IEnumerable<short> indices, Dictionary<short, AciColorItem> lookup)
+            {
+                foreach (short aci in indices)
+                {
+                    var (r, g, b) = AciColorHelper.ToRgb(aci);
+                    var brush = new System.Windows.Media.SolidColorBrush(
+                        System.Windows.Media.Color.FromRgb(r, g, b));
+                    brush.Freeze();
+
+                    var item = new AciColorItem(aci, brush, AciColorHelper.Describe(aci));
+                    target.Add(item);
+                    lookup[aci] = item;
+                }
             }
         }
-    }
 
-    internal static class BanisterInputFactory
-    {
-        public static bool TryCreate(BanisterVM vm, out BanisterInput input, out string error)
+        internal static class BanisterInputFactory
         {
-            input = null;
-            error = null;
-
-            string layer = (vm.LayerName ?? string.Empty).Trim();
-            if (layer.Length == 0 || layer.IndexOfAny("<>/\\\":;?*|=`".ToCharArray()) >= 0)
-            { error = "Tên layer không hợp lệ."; return false; }
-
-            if (!AciColorHelper.TryParseIndex(vm.ColorIndex, out short aci))
-            { error = "Màu layer (ACI) phải từ 1 đến 255."; return false; }
-
-            if (!Parse(vm.TotalHeight, "Total Height", true, out double h, ref error) ||
-                !Parse(vm.HandrailDia, "Handrail Dia", true, out double hd, ref error) ||
-                !Parse(vm.HandrailExtend, "Handrail Extend", false, out double he, ref error) ||
-                !Parse(vm.RailDia, "Rail Dia", true, out double rd, ref error) ||
-                !Parse(vm.TopGap, "Top Gap", false, out double tg, ref error) ||
-                !Parse(vm.BottomGap, "Bottom Gap", false, out double bg, ref error) ||
-                !Parse(vm.ColumnDia, "Column Dia", true, out double cd, ref error) ||
-                !Parse(vm.ColumnGap, "Column Gap", true, out double cg, ref error) ||
-                !Parse(vm.PoleDia, "Pole Dia", true, out double pd, ref error) ||
-                !Parse(vm.PoleGap, "Pole Gap", true, out double pg, ref error))
-                return false;
-
-            if (hd + tg + rd + bg >= h)
-            { error = "Total Height quá nhỏ so với Handrail Dia + Top Gap + Rail Dia + Bottom Gap."; return false; }
-            if (cd >= cg)
-            { error = "Column Gap phải lớn hơn Column Dia."; return false; }
-
-            input = new BanisterInput
+            public static bool TryCreate(BanisterVM vm, out BanisterInput input, out string error)
             {
-                LayerName = layer,
-                ColorIndex = aci,
-                TotalHeight = h,
-                HandrailDia = hd,
-                HandrailExtend = he,
-                RailDia = rd,
-                TopGap = tg,
-                BottomGap = bg,
-                ColumnDia = cd,
-                ColumnGap = cg,
-                HasSideColumns = vm.HasSideColumns,
-                PoleDia = pd,
-                PoleGap = pg,
-                ToGroup = vm.ToGroup
-            };
-            return true;
-        }
+                input = null;
+                error = null;
 
-        private static bool Parse(string text, string label, bool positive, out double value, ref string error)
-        {
-            string normalized = (text ?? string.Empty).Trim().Replace(',', '.');
-            if (!double.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            { error = $"{label}: giá trị không phải là số."; return false; }
-            if (positive ? value <= 0 : value < 0)
-            { error = positive ? $"{label} phải lớn hơn 0." : $"{label} không được âm."; return false; }
-            return true;
+                string layer = (vm.LayerName ?? string.Empty).Trim();
+                if (layer.Length == 0 || layer.IndexOfAny("<>/\\\":;?*|=`".ToCharArray()) >= 0)
+                { error = Lang.LG_MessDialog_TenLayerKhongHopLe; return false; }
+
+                if (!AciColorHelper.TryParseIndex(vm.ColorIndex, out short aci))
+                { error = Lang.LG_MessDialog_MauLayerKhongHopLe; return false; }
+
+                if (!Parse(vm.TotalHeight, Lang.LG_UI_TotalHeight, true, out double h, ref error) ||
+                    !Parse(vm.HandrailDia, Lang.LG_UI_HandrailDia, true, out double hd, ref error) ||
+                    !Parse(vm.HandrailExtend, Lang.LG_UI_HandrailExtend, false, out double he, ref error) ||
+                    !Parse(vm.RailDia, Lang.LG_UI_RailDia, true, out double rd, ref error) ||
+                    !Parse(vm.TopGap, Lang.LG_UI_TopGap, false, out double tg, ref error) ||
+                    !Parse(vm.BottomGap, Lang.LG_UI_BottomGap, false, out double bg, ref error) ||
+                    !Parse(vm.ColumnDia, Lang.LG_UI_ColumnDia, true, out double cd, ref error) ||
+                    !Parse(vm.ColumnGap, Lang.LG_UI_ColumnGap, true, out double cg, ref error) ||
+                    !Parse(vm.PoleDia, Lang.LG_UI_PoleDia, true, out double pd, ref error) ||
+                    !Parse(vm.PoleGap, Lang.LG_UI_PoleGap, true, out double pg, ref error))
+                    return false;
+
+                if (hd + tg + rd + bg >= h)
+                { error = Lang.LG_MessDialog_TotalHeightQuaNho; return false; }
+                if (cd >= cg)
+                { error = Lang.LG_MessDialog_ColumnGapPhaiLonHon; return false; }
+
+                input = new BanisterInput
+                {
+                    LayerName = layer,
+                    ColorIndex = aci,
+                    TotalHeight = h,
+                    HandrailDia = hd,
+                    HandrailExtend = he,
+                    RailDia = rd,
+                    TopGap = tg,
+                    BottomGap = bg,
+                    ColumnDia = cd,
+                    ColumnGap = cg,
+                    HasSideColumns = vm.HasSideColumns,
+                    PoleDia = pd,
+                    PoleGap = pg,
+                    ToGroup = vm.ToGroup
+                };
+                return true;
+            }
+
+            private static bool Parse(string text, string label, bool positive, out double value, ref string error)
+            {
+                string normalized = (text ?? string.Empty).Trim().Replace(',', '.');
+
+                if (!double.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                {
+                    error = string.Format(Lang.LG_MessDialog_GiaTriKhongPhaiSo, label);
+                    return false;
+                }
+
+                if (positive ? value <= 0 : value < 0)
+                {
+                    error = positive
+                        ? string.Format(Lang.LG_MessDialog_PhaiLonHon0, label)
+                        : string.Format(Lang.LG_MessDialog_KhongDuocAm, label);
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }
