@@ -5,6 +5,7 @@ using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -193,9 +194,9 @@ namespace Tools.VinaCad.Helper.Helper
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
             if (string.IsNullOrWhiteSpace(requestedLayerName))
-                throw new ArgumentException("Tên layer FN không hợp lệ.", nameof(requestedLayerName));
+                throw new ArgumentException(Lang.FN_Error_TenLayerFnKhongHopLe, nameof(requestedLayerName));
             if (colorIndex < 1 || colorIndex > 255)
-                throw new ArgumentOutOfRangeException(nameof(colorIndex), "Màu ACI phải nằm trong khoảng 1..255.");
+                throw new ArgumentOutOfRangeException(nameof(colorIndex), Lang.FN_Error_MauAciPhaiNamTrongKhoang1255);
 
             string layerName = requestedLayerName.Trim();
             using Transaction transaction = database.TransactionManager.StartTransaction();
@@ -232,12 +233,12 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (spans.Count == 0)
-                throw new InvalidOperationException("Không tìm thấy mặt tường quanh điểm đã chọn.");
+                throw new InvalidOperationException(Lang.FN_Error_KhongTimThayMatTuongQuanhDiemDaChon);
 
             ObjectId[] sourceIds = spans.SelectMany(span => span.Ids).Distinct().ToArray();
             return RunStucco(database, sourceIds, thickness, targetLayerName,
-                "Chưa có mặt tường.",
-                "Không thể tạo vữa mặt trong.",
+                Lang.FN_Text_ChuaCoMatTuong,
+                Lang.FN_Text_KhongTheTaoVuaMatTrong,
                 context =>
                 {
                     int created = 0;
@@ -258,8 +259,8 @@ namespace Tools.VinaCad.Helper.Helper
         public static int CreateStuccoForExteriorFaces(Database database, ObjectId[] sourceIds, Point3d sidePoint, double thickness, string targetLayerName)
         {
             return RunStucco(database, sourceIds, thickness, targetLayerName,
-                "Chưa chọn mặt tường ngoài.",
-                "Các đường đã chọn không thể tạo vữa mặt ngoài.",
+                Lang.FN_Text_ChuaChonDuongBaoMatNgoai,
+                Lang.FN_Text_CacDuongDaChonKhongTheTaoVuaMatNgoai,
                 context =>
                 {
                     List<Line> allFaces = new List<Line>();
@@ -354,7 +355,7 @@ namespace Tools.VinaCad.Helper.Helper
         {
             ValidateArguments(database, newThickness, targetLayerName);
             if (stuccoIds == null || stuccoIds.Length == 0)
-                throw new ArgumentException("Chưa chọn cạnh vữa.", nameof(stuccoIds));
+                throw new ArgumentException(Lang.FN_Error_ChuaChonCanhVua, nameof(stuccoIds));
 
             using Transaction transaction = database.TransactionManager.StartTransaction();
             ObjectId layerId = GetTargetLayerId(transaction, database, targetLayerName);
@@ -362,7 +363,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             List<WallFaceRef> walls = FilterWallLayerFaces(CollectWallFaceRefs(transaction, database, layerId));
             if (walls.Count == 0)
-                throw new InvalidOperationException("Không tìm thấy line tường trong bản vẽ.");
+                throw new InvalidOperationException(Lang.FN_Error_KhongTimThayLineTuongTrongBanVe);
 
             // 1) Gom toàn bộ line vữa trên layer FN (đánh dấu các line được chọn)
             HashSet<ObjectId> selectedIds = new HashSet<ObjectId>(stuccoIds);
@@ -401,7 +402,7 @@ namespace Tools.VinaCad.Helper.Helper
             }
 
             if (movedCount == 0)
-                throw new InvalidOperationException("Không tìm thấy mặt tường gốc của các cạnh vữa đã chọn (hoặc độ dày đã đúng).");
+                throw new InvalidOperationException(Lang.FN_Error_KhongTimThayMatTuongGoc);
 
             // 3) Nối lại hai đầu của từng cạnh đã dịch chuyển
             double connectionTolerance = FineTolerance(largest, 0.05);
@@ -597,8 +598,8 @@ namespace Tools.VinaCad.Helper.Helper
         public static int CreateStuccoForBoundary(Database database, ObjectId[] boundaryIds, Point3d interiorPoint, double thickness, string targetLayerName)
         {
             return RunStucco(database, boundaryIds, thickness, targetLayerName,
-                "Chưa có đường biên phòng.",
-                "Không thể tạo vữa mặt trong.",
+                Lang.FN_Text_ChuaCoDuongBienPhong,
+                Lang.FN_Text_KhongTheTaoVuaMatTrong,
                 context =>
                 {
                     int created = 0;
@@ -620,8 +621,8 @@ namespace Tools.VinaCad.Helper.Helper
         public static int CreateStuccoForOpenWalls(Database database, ObjectId[] sourceIds, double thickness, string targetLayerName)
         {
             return RunStucco(database, sourceIds, thickness, targetLayerName,
-                "Chưa quét chọn tường hở.",
-                "Không tìm thấy cặp mặt tường hở hợp lệ trong vùng chọn.",
+                Lang.FN_Text_ChuaQuetChonTuongHo,
+                Lang.FN_Text_KhongTimThayCapMatTuongHoHopLeTrongVungChon,
                 context =>
                 {
                     List<Line> wallFaces = new List<Line>();
@@ -840,7 +841,7 @@ namespace Tools.VinaCad.Helper.Helper
                     return null;
 
                 throw new InvalidOperationException(
-                    $"Phòng không kín: {missedRays}/{coarseRays} tia lọt ra ngoài (ví dụ hướng {firstMissDegrees:0}°). Kiểm tra khe hở/cửa hoặc line tường khác layer.");
+                    Lang.FN_Error_PhongKhongKin.Replace("{missedRays}", missedRays.ToString()).Replace("{coarseRays}", coarseRays.ToString()).Replace("{firstMissDegrees:0}", firstMissDegrees.ToString("0")));
             }
 
             const double margin = 1.0;
@@ -2159,8 +2160,8 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (positiveOffsets.Count == 0 && negativeOffsets.Count == 0)
             {
-                string detail = positiveError?.Message ?? negativeError?.Message ?? "Không có kết quả offset.";
-                throw new InvalidOperationException($"Không thể offset biên tường: {detail}");
+                string detail = positiveError?.Message ?? negativeError?.Message ?? Lang.FN_Error_KhongCoKetQuaOffset;
+                throw new InvalidOperationException(Lang.FN_Error_KhongTheOffsetBienTuong.Replace("{detail}", detail));
             }
 
             double positiveScore = GetDistanceScore(positiveOffsets, sidePoint);
@@ -2172,7 +2173,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (chosenOffsets.Count == 0 || double.IsPositiveInfinity(Math.Min(positiveScore, negativeScore)))
             {
                 DisposeTransientEntities(chosenOffsets);
-                throw new InvalidOperationException("Không xác định được phía offset từ điểm chỉ dẫn.");
+                throw new InvalidOperationException(Lang.FN_Error_KhongXacDinhDuocPhiaOffsetTuDiemChiDan);
             }
 
             int createdCount = 0;
@@ -2337,12 +2338,12 @@ namespace Tools.VinaCad.Helper.Helper
         {
             LayerTable layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
             if (!layerTable.Has(targetLayerName))
-                throw new InvalidOperationException($"Không tìm thấy layer '{targetLayerName}'.");
+                throw new InvalidOperationException(Lang.FN_Error_KhongTimThayLayer.Replace("{targetLayerName}", targetLayerName));
 
             ObjectId targetLayerId = layerTable[targetLayerName];
             LayerTableRecord targetLayer = (LayerTableRecord)transaction.GetObject(targetLayerId, OpenMode.ForRead);
             if (targetLayer.IsLocked)
-                throw new InvalidOperationException($"Layer '{targetLayer.Name}' đang khóa. Hãy mở khóa trước khi chạy FN.");
+                throw new InvalidOperationException(Lang.FN_Error_LayerDangKhoaHayMoKhoaTruocKhiChayFn.Replace("{targetLayer.Name}", targetLayer.Name));
 
             return targetLayerId;
         }
@@ -2352,9 +2353,9 @@ namespace Tools.VinaCad.Helper.Helper
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
             if (thickness <= 0.0 || double.IsNaN(thickness) || double.IsInfinity(thickness))
-                throw new ArgumentOutOfRangeException(nameof(thickness), "Chiều dày vữa phải lớn hơn 0.");
+                throw new ArgumentOutOfRangeException(nameof(thickness), Lang.FN_Error_ChieuDayVuaPhaiLonHon0);
             if (string.IsNullOrWhiteSpace(targetLayerName))
-                throw new ArgumentException("Tên layer FN không hợp lệ.", nameof(targetLayerName));
+                throw new ArgumentException(Lang.FN_Error_TenLayerFnKhongHopLe, nameof(targetLayerName));
         }
     }
 }

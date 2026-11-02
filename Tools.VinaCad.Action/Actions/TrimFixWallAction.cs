@@ -8,6 +8,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -44,7 +45,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             try
             {
-                editor.WriteMessage("\nTW: Kéo chọn các tường cần sửa, nhấn Enter để thực hiện.");
+                editor.WriteMessage("\n" + Lang.TW_Output_TwKeoChonCacTuongCanSuaNhanEnterDeThucHien);
 
                 TypedValue[] filterValues =
                 {
@@ -52,7 +53,7 @@ namespace Tools.VinaCAD.Action.Actions
                 };
                 PromptSelectionOptions selectionOptions = new PromptSelectionOptions
                 {
-                    MessageForAdding = "\nQuét chọn các tường cần sửa : "
+                    MessageForAdding = "\n" + Lang.TW_Prompt_QuetChonCacTuongCanSua
                 };
                 PromptSelectionResult selection = editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
 
@@ -88,21 +89,21 @@ namespace Tools.VinaCAD.Action.Actions
 
                 if (summary.WallLineCount == 0)
                 {
-                    editor.WriteMessage("\nKhông tìm thấy cặp nét tường hợp lệ trong vùng chọn.");
+                    editor.WriteMessage("\n" + Lang.TW_Output_KhongTimThayCapNetTuongHopLeTrongVungChon);
                     return true;
                 }
 
                 editor.WriteMessage(
-                    $"\nĐã sửa {summary.ChangedLineCount} line, " +
-                    $"{summary.JunctionCount} giao tường, " +
-                    $"{summary.HealedGapCount} khoảng hở ");
+                    "\n" + Lang.TW_Output_DaSuaLine.Replace("{summary.ChangedLineCount}", summary.ChangedLineCount.ToString()) + " " +
+                    Lang.TW_Output_GiaoTuong.Replace("{summary.JunctionCount}", summary.JunctionCount.ToString()) + " " +
+                    Lang.TW_Drawing_KhoangHo.Replace("{summary.HealedGapCount}", summary.HealedGapCount.ToString()));
                 editor.UpdateScreen();
                 return true;
             }
             catch (Exception ex)
             {
                 Logger.Info(nameof(TrimFixWallAction), ex);
-                MessageBox.Show($"Lỗi TW: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.TW_Msg_LoiTw.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
                 return false;
             }
         }

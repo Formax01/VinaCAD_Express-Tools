@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -72,7 +73,7 @@ namespace Tools.VinaCad.Action.Actions
             catch (Exception ex)
             {
                 Logger.Info(nameof(AboutExpressToolAction), ex);
-                MessageBox.Show($"Không thể mở file hướng dẫn.\n{ex.Message}", "Lỗi",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show(Lang.ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
        
@@ -84,7 +85,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (!File.Exists(pdfPath))
                 {
-                    MessageBox.Show($"Không tìm thấy file hướng dẫn:\n{pdfPath}","Thông báo",MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(Lang.ABOUTEXPRESS_Msg_KhongTimThayFileHuongDan.Replace("{pdfPath}", pdfPath), Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 Process.Start(new ProcessStartInfo
@@ -111,7 +112,7 @@ namespace Tools.VinaCad.Action.Actions
             }
 
             if (dir == null)
-                throw new DirectoryNotFoundException("Không tìm thấy thư mục Resources.");
+                throw new DirectoryNotFoundException(Lang.Common_Error_KhongTimThayThuMucResources);
 
             return Path.Combine(dir.FullName, "Resources", "Templates", pdfFileName);
         }

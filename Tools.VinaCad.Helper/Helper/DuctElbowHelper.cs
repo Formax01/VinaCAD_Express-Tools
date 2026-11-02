@@ -4,6 +4,7 @@ using Teigha.Colors;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.VinaCad.Modeling;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -77,7 +78,7 @@ namespace Tools.VinaCad.Helper.Helper
             {
                 regions = Region.CreateFromCurves(curves);
                 if (regions.Count != 1 || regions[0] is not Region region)
-                    throw new InvalidOperationException("Không tạo được mặt cắt ống gió 3D.");
+                    throw new InvalidOperationException(Lang.DuctElbow_Error_KhongTaoDuocMatCat3D);
 
                 solid = new Solid3d();
                 double extrusion = model.Type == DuctElbowType.Vertical ? model.Width1 : model.Height;

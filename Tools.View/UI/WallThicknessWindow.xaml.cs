@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Tools.ViewModel;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCAD.UI
 {
@@ -34,7 +35,7 @@ namespace Tools.VinaCAD.UI
                 return;
             }
 
-            MessageBox.Show("Vui lòng nhập một số hợp lệ lớn hơn 0.", "Lỗi nhập liệu",
+            MessageBox.Show(Lang.WWT_Msg_VuiLongNhapMotSoHopLeLonHon0, Lang.WWT_Msg_LoiNhapLieu,
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             TxtThickness.Focus();
         }

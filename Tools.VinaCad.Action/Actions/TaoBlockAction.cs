@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -79,19 +79,21 @@ namespace Tools.VinaCad.Action.Actions
                     List<ObjectId> blockIds = BlockHelper.PickBlocksByBlockName(_db,_ed,_TaoBlockVM.SelectedBlockName);
                     if (blockIds == null || blockIds.Count == 0)
                     {
-                        MessageBox.Show("Không tìm thấy block cần copy.", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.BB_Msg_KhongTimThayBlockCanCopy, Lang.Common_Text_ThongBao);
                         return;
                     }
                     var count =  BlockHelper.CloneBlocksWithNewName(_db, blockIds,_TaoBlockVM.NewBlockName); 
                     if(count>0)
                     {
-                        _ed.WriteMessage($"\nĐã tạo {count} block mới với tên \"{_TaoBlockVM.NewBlockName}\".");
+                        _ed.WriteMessage("\n" + Lang.BB_Output_DaTaoBlockMoiVoiTen
+                            .Replace("{count}", count.ToString())
+                            .Replace("{_TaoBlockVM.NewBlockName}", _TaoBlockVM.NewBlockName));
                     }    
                     _TaoBlockView.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Bạn cần nhập tên block mới.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.BB_Msg_BanCanNhapTenBlockMoi, Lang.Common_Text_ThongBao);
                 }
 
             }

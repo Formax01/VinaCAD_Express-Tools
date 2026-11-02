@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Teigha.DatabaseServices;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -50,7 +51,7 @@ namespace Tools.VinaCAD.Action.Actions
                     }
                     catch (Exception exception)
                     {
-                        editor.WriteMessage($"\nAW: {exception.Message} Hãy chọn lại.");
+                        editor.WriteMessage("\n" + Lang.AW_Output_AwHayChonLai.Replace("{exception.Message}", exception.Message));
                         continue;
                     }
 
@@ -75,15 +76,15 @@ namespace Tools.VinaCAD.Action.Actions
                     catch (Exception exception)
                     {
                         WindowOpeningHelper.CancelOpening(document.Database, windowId);
-                        editor.WriteMessage($"\nAW: Không thể đổi hướng cửa sổ: {exception.Message}");
+                        editor.WriteMessage("\n" + Lang.AW_Output_AwKhongTheDoiHuongCuaSo.Replace("{exception.Message}", exception.Message));
                     }
                 }
 
-                editor.WriteMessage($"\nAW: đã tạo {createdCount} cửa sổ.");
+                editor.WriteMessage("\n" + Lang.AW_Output_AwDaTaoCuaSo.Replace("{createdCount}", createdCount.ToString()));
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Không thể lấy Editor: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show(Lang.AW_Msg_KhongTheLayEditor.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
@@ -163,13 +164,13 @@ namespace Tools.VinaCAD.Action.Actions
             {
                 if (!TryParse(window.HoleWidthText.Text, out double parsedWidth) || parsedWidth <= 0)
                 {
-                    System.Windows.MessageBox.Show(window, "Chiều rộng lỗ cửa sổ phải là số lớn hơn 0.", "Thông số chưa hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    System.Windows.MessageBox.Show(window, Lang.AW_Msg_ChieuRongLoCuaSoPhaiLaSoLonHon0, Lang.Common_Text_ThongSoChuaHopLe, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 if (window.PocketWidthCheck.IsChecked == true && window.MiddleWallCheck.IsChecked != true &&
                     (!TryParse(window.PierWidthText.Text, out double parsedEdge) || parsedEdge < 0))
                 {
-                    System.Windows.MessageBox.Show(window, "Khoảng cách trụ phải là số không âm.", "Thông số chưa hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    System.Windows.MessageBox.Show(window, Lang.Common_Msg_KhoangCachTruPhaiLaSoKhongAm, Lang.Common_Text_ThongSoChuaHopLe, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 width = parsedWidth;
@@ -220,11 +221,11 @@ namespace Tools.VinaCAD.Action.Actions
 
         private static PromptEntityOptions CreateWallPrompt()
         {
-            PromptEntityOptions options = new PromptEntityOptions("Chọn tường hoặc [S-Chọn cửa sổ/W-Cài đặt thông số/C-Center] <Enter: Kết thúc>: ")
+            PromptEntityOptions options = new PromptEntityOptions(Lang.AW_Prompt_ChonTuongHoacSChonCuaSoWCaiDatThongSo)
             {
                 AllowNone = true
             };
-            options.SetRejectMessage("\nChỉ chấp nhận Line, Polyline thẳng hoặc block tường.");
+            options.SetRejectMessage("\n" + Lang.Common_Prompt_ChiChapNhanLinePolylineThangHoacBlockTuong);
             options.AddAllowedClass(typeof(Line), true);
             options.AddAllowedClass(typeof(Polyline), true);
             options.AddAllowedClass(typeof(BlockReference), true);
@@ -256,7 +257,7 @@ namespace Tools.VinaCAD.Action.Actions
                 case "C":
                     selection.PlaceAtWallCenter = true;
                     selection.UseEdgeDistance = false;
-                    editor.WriteMessage("\n Đã chuyển vị trí cửa sổ về giữa tường.");
+                    editor.WriteMessage("\n" + Lang.AW_Output_DaChuyenViTriCuaSoVeGiuaTuong);
                     return true;
             }
 

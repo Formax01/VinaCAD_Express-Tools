@@ -17,7 +17,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Tools.View.UI;
@@ -62,7 +62,7 @@ namespace Tools.VinaCad.Action.Actions
                     && createdEntityIds.Count > 0)
                 {
                     PromptPointResult baseResult = document.Editor.GetPoint(
-                        new PromptPointOptions("\nChọn điểm gốc trên cầu thang mới: "));
+                        new PromptPointOptions("\n" + Lang.LTP_Prompt_ChonDiemGocTrenCauThangMoi));
                     if (baseResult.Status == PromptStatus.OK)
                     {
                         StaircaseGroupMoveAction.MoveEntitiesWithJig(
@@ -75,14 +75,14 @@ namespace Tools.VinaCad.Action.Actions
 
                 // B3: Cập nhật màn hình và trả kết quả cho người dùng.
                 document.Editor.UpdateScreen();
-                document.Editor.WriteMessage(string.Format(CompletionMessageFormat, lineCount));
+                document.Editor.WriteMessage("\n" + string.Format(Lang.LTP_Validation_LtpDaTaoMatCatCauThangGomDuong, lineCount));
             }
             catch (Exception exception)
             {
                 Logger.Info(nameof(StaircaseSectionAction), exception);
                 MessageBox.Show(
-                    string.Format(ErrorMessageFormat, exception.Message),
-                    StringDefinition.TITLE_ERROR);
+                    string.Format(Lang.LTP_Validation_LoiLtp, exception.Message),
+                    Lang.Common_Text_Loi);
             }
         }
 
@@ -137,7 +137,7 @@ namespace Tools.VinaCad.Action.Actions
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             var options = new JigPromptPointOptions(
-                "\nChọn điểm đích trên group khác: ")
+                "\n" + Lang.LTP_Prompt_ChonDiemDichTrenGroupKhac)
             {
                 BasePoint = _basePoint,
                 UseBasePoint = true,
@@ -204,7 +204,7 @@ namespace Tools.VinaCad.Action.Actions
 
         protected override SamplerStatus Sampler(JigPrompts prompts)
         {
-            var options = new JigPromptPointOptions(InsertionPointPrompt)
+            var options = new JigPromptPointOptions("\n" + Lang.LTP_Prompt_ChonDiemChenMatCatCauThang)
             {
                 UserInputControls = UserInputControls.Accept3dCoordinates
             };
@@ -303,14 +303,14 @@ namespace Tools.VinaCad.Action.Actions
         {
             if (StaircaseSectionPreviewController.HasValidationErrors(view))
             {
-                MessageBox.Show(NumberFormatMessage, StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.LTP_Prompt_VuiLongNhapDungDinhDangSoChoTatCaThongSo, Lang.Common_Text_ThongBao);
                 return;
             }
 
             if (!StaircaseSectionValidator.TryValidate(
                 viewModel.Settings, out string message))
             {
-                MessageBox.Show(message, StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(message, Lang.Common_Text_ThongBao);
                 return;
             }
 
@@ -348,10 +348,10 @@ namespace Tools.VinaCad.Action.Actions
         {
             return measurement switch
             {
-                StaircaseMeasurement.StoreyHeight => StoreyHeightPrompt,
-                StaircaseMeasurement.Landing1Width => Landing1Prompt,
-                StaircaseMeasurement.Landing2Width => Landing2Prompt,
-                _ => DefaultMeasurementPrompt
+                StaircaseMeasurement.StoreyHeight => "\n" + Lang.LTP_Prompt_ChonHaiDiemDoChieuCaoTang,
+                StaircaseMeasurement.Landing1Width => "\n" + Lang.LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi1,
+                StaircaseMeasurement.Landing2Width => "\n" + Lang.LTP_Prompt_ChonHaiDiemDoChieuRongChieuNghi2,
+                _ => "\n" + Lang.LTP_Prompt_ChonHaiDiemDoKhoangCach
             };
         }
     }
@@ -364,7 +364,7 @@ namespace Tools.VinaCad.Action.Actions
         private const double PreviewMargin = 7.0;
         private const double DimensionOffset = 34.0;
         private const double DimensionTextGap = 8.0;
-        private const string InvalidPreviewMessage = "Thông số chưa hợp lệ";
+        private static string InvalidPreviewMessage => Lang.Common_Text_ThongSoChuaHopLe;
         private static readonly WpfBrush DimensionBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(51, 165, 28));
 
         private readonly StaircaseSectionWindow _view;
@@ -477,13 +477,13 @@ namespace Tools.VinaCad.Action.Actions
             {
                 Point outer = ProjectWorld(-direction * settings.Landing1Width, 0, insertion, scale);
                 DrawHorizontalDimension(layer, outer, insertion, DimensionOffset,
-                    $"Chiếu nghỉ 1: {settings.Landing1Width:0.####}");
+                    Lang.LTP_Text_ChieuNghi1.Replace("{settings.Landing1Width:0.####}", settings.Landing1Width.ToString("0.####")));
             }
             if (settings.Landing2Width > 0)
             {
                 Point outer = new Point(landing2.X + direction * settings.Landing2Width * scale, landing2.Y);
                 DrawHorizontalDimension(layer, landing2, outer, -DimensionOffset,
-                    $"Chiếu nghỉ 2: {settings.Landing2Width:0.####}");
+                    Lang.LTP_Text_ChieuNghi2.Replace("{settings.Landing2Width:0.####}", settings.Landing2Width.ToString("0.####")));
             }
             DrawBeamNotes(layer, settings, insertion, landing2, scale);
         }
@@ -526,13 +526,13 @@ namespace Tools.VinaCad.Action.Actions
             if (settings.HasBeam1)
             {
                 var anchor = new Point(insertion.X, insertion.Y + settings.BeamHeight * scale / 2);
-                DrawBeamLeader(layer, anchor, "Dầm 1", Math.Clamp(insertion.X + 18, 100, layer.Width - 55), Math.Clamp(insertion.Y + 15, 170, 184));
+                DrawBeamLeader(layer, anchor, Lang.LTP_Text_Dam1, Math.Clamp(insertion.X + 18, 100, layer.Width - 55), Math.Clamp(insertion.Y + 15, 170, 184));
             }
             if (settings.HasBeam2)
             {
                 int direction = settings.FirstRunRightward ? 1 : -1;
                 var anchor = new Point(landing2.X + direction * settings.BeamWidth * scale / 2, landing2.Y + settings.BeamHeight * scale / 2);
-                DrawBeamLeader(layer, anchor, "Dầm 2", Math.Clamp(landing2.X + 14, 120, layer.Width - 55), Math.Clamp(landing2.Y + 20, 32, 160));
+                DrawBeamLeader(layer, anchor, Lang.LTP_Text_Dam2, Math.Clamp(landing2.X + 14, 120, layer.Width - 55), Math.Clamp(landing2.Y + 20, 32, 160));
             }
         }
 
@@ -633,17 +633,21 @@ namespace Tools.VinaCad.Action.Actions
 
         private static string GetPreviewSummary(StaircaseSectionModel source, StaircaseSectionModel preview)
         {
-            string storeys = preview.StoreyNumber < source.StoreyNumber ? $"{preview.StoreyNumber}/{source.StoreyNumber} tầng" : $"{source.StoreyNumber} tầng";
-            string steps = preview.StepNumber < source.StepNumber ? $"{preview.StepNumber}/{source.StepNumber} bậc" : $"{source.StepNumber} bậc";
+            string storeys = preview.StoreyNumber < source.StoreyNumber
+                ? Lang.LTP_Drawing_Tang.Replace("{preview.StoreyNumber}", preview.StoreyNumber.ToString()).Replace("{source.StoreyNumber}", source.StoreyNumber.ToString())
+                : Lang.LTP_Drawing_Tang_0000F949.Replace("{source.StoreyNumber}", source.StoreyNumber.ToString());
+            string steps = preview.StepNumber < source.StepNumber
+                ? Lang.LTP_Drawing_Bac.Replace("{preview.StepNumber}", preview.StepNumber.ToString()).Replace("{source.StepNumber}", source.StepNumber.ToString())
+                : Lang.LTP_Drawing_Bac_92A36506.Replace("{source.StepNumber}", source.StepNumber.ToString());
             return $"{storeys} · {steps}";
         }
 
         private static string GetPreviewToolTip(StaircaseSectionModel source, StaircaseSectionModel preview)
         {
-            return $"Hình xem trước: {GetPreviewSummary(source, preview)}\n" +
-                $"Cao tầng: {source.StoreyHeight:0.####}; mặt bậc: {source.TreadRun:0.####}\n" +
-                $"Chiếu nghỉ: {source.Landing1Width:0.####} / {source.Landing2Width:0.####}\n" +
-                $"Bản thang: {source.BoardThickness:0.####}; lan can: {source.RailingHeight:0.####}";
+            return Lang.LTP_Drawing_HinhXemTruoc.Replace("{GetPreviewSummary(source, preview)}", GetPreviewSummary(source, preview)) + "\n" +
+                Lang.LTP_Drawing_CaoTangMatBac.Replace("{source.StoreyHeight:0.####}", source.StoreyHeight.ToString("0.####")).Replace("{source.TreadRun:0.####}", source.TreadRun.ToString("0.####")) + "\n" +
+                Lang.LTP_Drawing_ChieuNghi.Replace("{source.Landing1Width:0.####}", source.Landing1Width.ToString("0.####")).Replace("{source.Landing2Width:0.####}", source.Landing2Width.ToString("0.####")) + "\n" +
+                Lang.LTP_Text_BanThangLanCan.Replace("{source.BoardThickness:0.####}", source.BoardThickness.ToString("0.####")).Replace("{source.RailingHeight:0.####}", source.RailingHeight.ToString("0.####"));
         }
 
         private static void ShowPreviewError(Canvas canvas, WpfPath path, TextBlock summary, string message)
@@ -663,8 +667,8 @@ namespace Tools.VinaCad.Action.Actions
         private const short ByLayerColorIndex = 256;
         private const string LtpXDataAppName = "VINACAD_LTP_STAIR";
         private const string GroupKeyPrefix = "LTP_STAIR_";
-        private const string GroupDescription = "Mặt cắt cầu thang VinaCAD LTP";
-        private const string InvalidLayerNameMessage = "Tên layer mặt cắt cầu thang không hợp lệ.";
+        private static string GroupDescription => Lang.LTP_Validation_MatCatCauThangVinacadLtp;
+        private static string InvalidLayerNameMessage => Lang.LTP_Validation_TenLayerMatCatCauThangKhongHopLe;
 
         public int Draw( Database database, Point3d insertionPoint, StaircaseSectionModel settings, out ObjectIdCollection createdEntityIds)
         {

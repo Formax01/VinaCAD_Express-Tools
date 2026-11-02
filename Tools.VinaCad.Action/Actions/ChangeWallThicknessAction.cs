@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -33,15 +33,15 @@ namespace Tools.VinaCAD.Action.Actions
                 bool keepClickedSide = PromptAlignment(editor);
 
                 editor.WriteMessage(
-                    $"\nWWT: Chiều dày mới = {_thickness:0.##}; " +
-                    (keepClickedSide ? "giữ mặt được chọn." : "thay đổi đều qua tim tường."));
+                    "\n" + Lang.WWT_Output_WwtChieuDayMoi.Replace("{_thickness:0.##}", _thickness.ToString("0.##")) + " " +
+                    (keepClickedSide ? Lang.WWT_Output_GiuMatDuocChon : Lang.WWT_Output_ThayDoiDeuQuaTimTuong));
 
                 int changedCount = 0;
                 while (true)
                 {
                     PromptEntityOptions options = new PromptEntityOptions(
-                        "\nChọn một mặt tường cần đổi chiều dày <Kết thúc>: ");
-                    options.SetRejectMessage("\nWWT chỉ nhận đường thẳng Line của tường.");
+                        "\n" + Lang.WWT_Prompt_ChonMotMatTuongCanDoiChieuDayKetThuc);
+                    options.SetRejectMessage("\n" + Lang.WWT_Prompt_WwtChiNhanDuongThangLineCuaTuong);
                     options.AddAllowedClass(typeof(Line), true);
 
                     PromptEntityResult result = editor.GetEntity(options);
@@ -55,16 +55,16 @@ namespace Tools.VinaCAD.Action.Actions
                     }
                     else
                     {
-                        editor.WriteMessage($"\nKhông thể đổi tường: {message}");
+                        editor.WriteMessage("\n" + Lang.WWT_Output_KhongTheDoiTuong.Replace("{message}", message));
                     }
                 }
 
-                editor.WriteMessage($"\nWWT: Đã thay đổi {changedCount} đoạn tường.");
+                editor.WriteMessage("\n" + Lang.WWT_Output_WwtDaThayDoiDoanTuong.Replace("{changedCount}", changedCount.ToString()));
             }
             catch (Exception ex)
             {
                 Logger.Info(nameof(ChangeWallThicknessAction), ex);
-                MessageBox.Show($"Lỗi WWT: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.WWT_Msg_LoiWwt.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Tools.VinaCAD.Action.Actions
                 if (window.IsPickUpRequested)
                 {
                     PromptDistanceOptions options = new PromptDistanceOptions(
-                        "\nChọn hai điểm xác định chiều dày mới: ");
+                        "\n" + Lang.WWT_Prompt_ChonHaiDiemXacDinhChieuDayMoi);
                     PromptDoubleResult result = editor.GetDistance(options);
                     if (result.Status == PromptStatus.OK && result.Value > Tolerance)
                         _thickness = Math.Round(result.Value, 2);
@@ -99,7 +99,7 @@ namespace Tools.VinaCAD.Action.Actions
         private static bool PromptAlignment(Editor editor)
         {
             PromptStringOptions options = new PromptStringOptions(
-                "\nChế độ căn [C=Tâm/S=Giữ mặt được chọn] <C>: ")
+                "\n" + Lang.WWT_Prompt_CheDoCanCTamSGiuMatDuocChonC)
             {
                 AllowSpaces = false,
                 DefaultValue = "C"
@@ -120,7 +120,7 @@ namespace Tools.VinaCAD.Action.Actions
                     Line clicked = transaction.GetObject(clickedId, OpenMode.ForRead) as Line;
                     if (clicked == null || clicked.IsErased || DrawWallHelper.IsWallCap(clicked))
                     {
-                        message = "đối tượng không phải mặt tường hợp lệ.";
+                        message = Lang.WWT_Status_DoiTuongKhongPhaiMatTuongHopLe;
                         return false;
                     }
 
@@ -129,7 +129,7 @@ namespace Tools.VinaCAD.Action.Actions
                     List<Line> otherSide;
                     if (!TryFindWallFaces(clicked, allLines, out clickedSide, out otherSide))
                     {
-                        message = "không tìm thấy mặt tường song song tương ứng.";
+                        message = Lang.WWT_Status_KhongTimThayMatTuongSongSong;
                         return false;
                     }
 
@@ -138,7 +138,7 @@ namespace Tools.VinaCAD.Action.Actions
                     double signedDistance = SignedDistance(otherSide[0].StartPoint, clicked.StartPoint, normal);
                     if (Math.Abs(signedDistance) <= Tolerance)
                     {
-                        message = "hai mặt tường đang trùng nhau.";
+                        message = Lang.WWT_Status_HaiMatTuongTrungNhau;
                         return false;
                     }
 
@@ -167,7 +167,7 @@ namespace Tools.VinaCAD.Action.Actions
                     RepairConnections(allLines, movedIds, endpointMoves);
 
                     transaction.Commit();
-                    message = $"Đã đổi từ {oldThickness:0.##} thành {_thickness:0.##}.";
+                    message = Lang.WWT_Status_DaDoiTuThanh.Replace("{oldThickness:0.##}", oldThickness.ToString("0.##")).Replace("{_thickness:0.##}", _thickness.ToString("0.##"));
                     return true;
                 }
                 catch (Exception ex)

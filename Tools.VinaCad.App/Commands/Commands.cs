@@ -8,6 +8,7 @@ using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Teigha.Runtime;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Action.Actions;
 using Tools.VinaCAD.Action.Actions;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -239,7 +240,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(CreateGridAxisCommand), ex);
             }
         }
@@ -390,7 +391,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SampleCommand), ex);
             }
         }
@@ -405,7 +406,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FindTextCommand), ex);
             }
         }
@@ -420,7 +421,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(ConfigureDrawingListActionCommand), ex);
             }
         }
@@ -435,7 +436,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLSDMCommand), ex);
             }
         }
@@ -450,7 +451,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(NumberingDrawingsCommand), ex);
             }
         }
@@ -465,7 +466,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DrawingCategoriesCommand), ex);
             }
         }
@@ -480,7 +481,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SDMCommand), ex);
             }
         }
@@ -495,7 +496,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLCKCommand), ex);
             }
         }
@@ -510,7 +511,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKCKCommand), ex);
             }
         }
@@ -525,7 +526,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TaoBlockCommand), ex);
             }
         }
@@ -540,7 +541,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TaoDoCocCommand), ex);
             }
         }
@@ -555,7 +556,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(VeCocCommand), ex);
             }
         }
@@ -570,7 +571,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(QXLTKCTCommand), ex);
             }
         }
@@ -585,7 +586,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(EDITTKCTCommand), ex);
             }
         }
@@ -600,7 +601,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKLTKCTHCommand), ex);
             }
         }
@@ -615,7 +616,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKLTKCTCommand), ex);
             }
         }
@@ -630,7 +631,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKTSCommand), ex);
             }
         }
@@ -645,9 +646,15 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKTDCommand), ex);
             }
+        }
+
+        [CommandMethod("TDD")]
+        public void TDDCommand()
+        {
+            TKTDCommand();
         }
 
         [CommandMethod("DTT")]
@@ -660,7 +667,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraDTCTCommand), ex);
             }
         }
@@ -675,7 +682,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTieuChuanNeoNoiCTCommand), ex);
             }
         }
@@ -690,7 +697,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
@@ -705,7 +712,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
@@ -720,7 +727,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
@@ -735,7 +742,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(KiemTraTrungDimCommand), ex);
             }
         }
@@ -750,7 +757,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLKiemTraCongDonDimCommand), ex);
             }
         }
@@ -765,7 +772,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(KiemTraCongDonDimCommand), ex);
             }
         }
@@ -780,7 +787,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(RenameTextCommand), ex);
             }
         }
@@ -795,7 +802,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(RenameLayerCommand), ex);
             }
         }
@@ -810,7 +817,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(AboutToolsCommand), ex);
             }
         }
@@ -825,7 +832,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(AboutToolsCommand), ex);
             }
         }
@@ -840,7 +847,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLDatTenCocCommand), ex);
             }
         }
@@ -855,7 +862,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DTCCommand), ex);
             }
         }
@@ -870,7 +877,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
@@ -886,7 +893,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
@@ -901,7 +908,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(ChangeWallThicknessCommand), ex);
             }
         }
@@ -916,7 +923,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(OffsetWallCommand), ex);
             }
         }
@@ -931,7 +938,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
@@ -946,7 +953,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BlockEraseCommand), ex);
             }
         }
@@ -961,7 +968,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(StuccoCommand), ex);
             }
         }
@@ -975,7 +982,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
@@ -989,7 +996,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(ArrangeWindowCommand), ex);
             }
         }
@@ -1004,7 +1011,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(StaircaseSectionCommand), ex);
             }
         }
@@ -1018,7 +1025,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctTopDownCommand), ex);
             }
         }
@@ -1032,7 +1039,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctHorizontalCommand), ex);
             }
         }
@@ -1046,7 +1053,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
             }
         }
@@ -1060,7 +1067,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctBareTopDownCommand), ex);
             }
         }
@@ -1074,7 +1081,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctBareHorizontalCommand), ex);
             }
         }
@@ -1088,7 +1095,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
             }
         }
@@ -1102,7 +1109,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowEqualCommand), ex);
             }
         }
@@ -1116,7 +1123,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowReducingCommand), ex);
             }
         }
@@ -1130,7 +1137,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowVerticalCommand), ex);
             }
         }
@@ -1144,7 +1151,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctBranchEEXCommand), ex);
             }
         }
@@ -1158,7 +1165,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctBranchEEYCommand), ex);
             }
         }
@@ -1172,7 +1179,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctBranchEEZCommand), ex);
             }
         }
@@ -1186,7 +1193,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
             }
         }
@@ -1200,7 +1207,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
             }
         }
@@ -1214,7 +1221,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
             }
         }
@@ -1228,7 +1235,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
             }
         }
@@ -1242,7 +1249,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
             }
         }
@@ -1256,9 +1263,21 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
             }
+        }
+
+        [CommandMethod("Grill")]
+        public void ReturnAirGrilleCommand()
+        {
+            new ReturnAirGrilleAction().Execute(false);
+        }
+
+        [CommandMethod("GrillV")]
+        public void ReturnAirGrilleEggCrateCommand()
+        {
+            new ReturnAirGrilleAction().Execute(true);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using Tools.ViewModel;
 using Tools.VinaCad.Modeling;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCAD.UI
 {
@@ -39,7 +40,7 @@ namespace Tools.VinaCAD.UI
                 return;
             }
 
-            MessageBox.Show(validationMessage, "FN - Dữ liệu không hợp lệ",
+            MessageBox.Show(validationMessage, Lang.FN_Msg_FnDuLieuKhongHopLe,
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 

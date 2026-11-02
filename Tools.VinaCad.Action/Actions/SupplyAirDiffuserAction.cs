@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
+using Tools.Resources.Language;
 using WorldDraw = Teigha.GraphicsInterface.WorldDraw;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
@@ -22,11 +23,11 @@ namespace Tools.VinaCAD.Action.Actions
                 if (document == null) return;
                 Editor editor = document.Editor;
 
-                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp",SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_DoRongMiengGioCap, SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
 
                 while (true)
                 {
-                    PromptPointResult result = editor.GetPoint("\nChọn vị trí đặt miệng gió cấp : ");
+                    PromptPointResult result = editor.GetPoint("\n" + Lang.SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap);
                     if (result.Status != PromptStatus.OK) break;
 
                     Point3d center = result.Value;
@@ -74,7 +75,7 @@ namespace Tools.VinaCAD.Action.Actions
                 Document document = Application.DocumentManager.MdiActiveDocument;
                 if (document == null) return;
                 Editor editor = document.Editor;
-                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_DoRongMiengGioCap, SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double width)) return;
 
                 Database database = document.Database;
                 string baseName = "SupAirDiff_" + width.ToString("0.##", CultureInfo.InvariantCulture);
@@ -87,7 +88,7 @@ namespace Tools.VinaCAD.Action.Actions
                     System.Diagnostics.Debug.Assert(!blocks.Has(defaultName));
                 }
 
-                PromptResult nameResult = editor.GetString(new PromptStringOptions($"\nNhập tên block miệng gió cấp : ")
+                PromptResult nameResult = editor.GetString(new PromptStringOptions("\n" + Lang.SupplyAirDiffuser_Prompt_TenBlockMiengGioCap)
                 {
                     AllowSpaces = false,
                     DefaultValue = defaultName,
@@ -103,7 +104,7 @@ namespace Tools.VinaCAD.Action.Actions
                     BlockTable blocks = (BlockTable)tr.GetObject(database.BlockTableId, OpenMode.ForRead);
                     if (blocks.Has(name))
                     {
-                        editor.WriteMessage("\nTên block đã tồn tại. Hãy nhập tên khác.");
+                        editor.WriteMessage("\n" + Lang.SupplyAirDiffuser_Output_TenBlockDaTonTai);
                         return;
                     }
                 }
@@ -171,7 +172,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                var options = new JigPromptPointOptions("\nChọn vị trí đặt miệng gió cấp : ")
+                var options = new JigPromptPointOptions("\n" + Lang.SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap)
                 {
                     UserInputControls = UserInputControls.Accept3dCoordinates
                 };
@@ -219,21 +220,21 @@ namespace Tools.VinaCAD.Action.Actions
                 if (document == null) return;
                 Editor editor = document.Editor;
 
-                if (!AskPositive(editor, "Nhập độ rộng miệng gió cấp", SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double mouthWidth)) return;
-                if (!AskPositive(editor, "Nhập độ cao từ miệng gió đến cột ống", SupplyAirDiffuserSetting.DefaultTransitionHeight, out double transitionHeight)) return;
-                if (!AskPositive(editor, "Nhập chiều cao cột ống", SupplyAirDiffuserSetting.DefaultColumnHeight, out double columnHeight)) return;
-                if (!AskPositive(editor, "Nhập độ rộng miệng cột ống", SupplyAirDiffuserSetting.DefaultColumnWidth, out double columnWidth)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_DoRongMiengGioCap, SupplyAirDiffuserSetting.DefaultSupplyAirWidth, out double mouthWidth)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng, SupplyAirDiffuserSetting.DefaultTransitionHeight, out double transitionHeight)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_ChieuCaoCotOng, SupplyAirDiffuserSetting.DefaultColumnHeight, out double columnHeight)) return;
+                if (!AskPositive(editor, Lang.SupplyAirDiffuser_Prompt_DoRongMiengCotOng, SupplyAirDiffuserSetting.DefaultColumnWidth, out double columnWidth)) return;
 
                 if (!double.IsFinite(transitionHeight + columnHeight) ||
                     !double.IsFinite(mouthWidth * 1.5) || !double.IsFinite(columnWidth * 1.5))
                 {
-                    editor.WriteMessage("\nKích thước 3D vượt giới hạn.");
+                    editor.WriteMessage("\n" + Lang.SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan);
                     return;
                 }
 
                 while (true)
                 {
-                    PromptPointResult result = editor.GetPoint("\nChọn tâm miệng gió cấp 3D : ");
+                    PromptPointResult result = editor.GetPoint("\n" + Lang.SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D);
                     if (result.Status != PromptStatus.OK) break;
 
                     Point3d c = result.Value;
@@ -404,12 +405,12 @@ namespace Tools.VinaCAD.Action.Actions
                 !double.TryParse(result.StringResult, NumberStyles.Float, CultureInfo.CurrentCulture, out value) &&
                 !double.TryParse(result.StringResult, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             {
-                editor.WriteMessage($"\n{label} phải là số lớn hơn 0.");
+                editor.WriteMessage("\n" + Lang.SupplyAirDiffuser_Output_GiaTriPhaiLonHon0);
                 return false;
             }
             if (!double.IsFinite(value) || value <= 0)
             {
-                editor.WriteMessage($"\n{label} phải là số lớn hơn 0.");
+                editor.WriteMessage("\n" + Lang.SupplyAirDiffuser_Output_GiaTriPhaiLonHon0);
                 return false;
             }
             return true;

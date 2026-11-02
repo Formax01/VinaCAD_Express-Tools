@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Modeling;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using CadColor = Teigha.Colors.Color;
@@ -25,14 +25,14 @@ namespace Tools.VinaCAD.Action.Actions
                 if (document == null) return;
 
                 Editor editor = document.Editor;
-                if (!AskPositive(editor, "Nhập chiều rộng khung trong miệng gió", ReturnAirGrilleSetting.DefaultWidth, out double width)) return;
-                if (!AskPositive(editor, "Nhập chiều cao khung trong miệng gió", ReturnAirGrilleSetting.DefaultHeight, out double height)) return;
+                if (!AskPositive(editor, Lang.Grille_Prompt_ChieuRongKhungTrong, ReturnAirGrilleSetting.DefaultWidth, out double width)) return;
+                if (!AskPositive(editor, Lang.Grille_Prompt_ChieuCaoKhungTrong, ReturnAirGrilleSetting.DefaultHeight, out double height)) return;
                 Debug.Assert(IsValidSize(width, height));
 
                 Database database = document.Database;
                 string baseName = (eggCrate ? "GrillV" : "Grill") + '_' + FormatSize(width) + "x" + FormatSize(height);
                 string defaultName = GetAvailableName(database, baseName);
-                PromptResult nameResult = editor.GetString(new PromptStringOptions("\nNhập tên block miệng gió : ")
+                PromptResult nameResult = editor.GetString(new PromptStringOptions("\n" + Lang.Grille_Prompt_TenBlock)
                 {
                     AllowSpaces = false,
                     DefaultValue = defaultName,
@@ -45,7 +45,7 @@ namespace Tools.VinaCAD.Action.Actions
                     : defaultName;
                 if (BlockExists(database, name))
                 {
-                    editor.WriteMessage("\nTên block đã tồn tại. Hãy nhập tên khác.");
+                    editor.WriteMessage("\n" + Lang.Grille_Output_TenBlockDaTonTai);
                     return;
                 }
 
@@ -79,7 +79,7 @@ namespace Tools.VinaCAD.Action.Actions
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.Grille_Output_Loi.Replace("{message}", ex.Message), Lang.Common_Text_Loi);
                 Logger.Info(nameof(ReturnAirGrilleAction), ex);
             }
         }
@@ -112,12 +112,12 @@ namespace Tools.VinaCAD.Action.Actions
                 !double.TryParse(result.StringResult, NumberStyles.Float, CultureInfo.CurrentCulture, out value) &&
                 !double.TryParse(result.StringResult, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             {
-                editor.WriteMessage($"\n{label} phải là số lớn hơn 0.");
+                editor.WriteMessage("\n" + Lang.Grille_Output_GiaTriPhaiLonHon0);
                 return false;
             }
             if (!double.IsFinite(value) || value <= 0)
             {
-                editor.WriteMessage($"\n{label} phải là số lớn hơn 0.");
+                editor.WriteMessage("\n" + Lang.Grille_Output_GiaTriPhaiLonHon0);
                 return false;
             }
             return true;
@@ -250,7 +250,7 @@ namespace Tools.VinaCAD.Action.Actions
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                var options = new JigPromptPointOptions("\nChọn điểm đặt tâm miệng gió : ")
+                var options = new JigPromptPointOptions("\n" + Lang.Grille_Prompt_ChonDiemDatTam)
                 {
                     UserInputControls = UserInputControls.Accept3dCoordinates
                 };

@@ -246,8 +246,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             try
             {
-                PromptPointResult ppr = ed.GetPoint(
-                    "\nChọn điểm đặt đối tượng từ template: ");
+                PromptPointResult ppr = ed.GetPoint("\n" + Lang.IPT_Prompt_ChonDiemDatDoiTuongTuTemplate);
 
                 if (ppr.Status != PromptStatus.OK)
                     return false;

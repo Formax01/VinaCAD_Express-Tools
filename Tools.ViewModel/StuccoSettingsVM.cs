@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
 using Tools.VinaCad.Modeling;
+using Tools.Resources.Language;
 
 namespace Tools.ViewModel
 {
@@ -130,31 +131,31 @@ namespace Tools.ViewModel
             string normalizedLayerName = (CreateNewLayer ? NewLayerName : LayerName)?.Trim() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(normalizedLayerName))
             {
-                validationMessage = "Layer vữa không được để trống.";
+                validationMessage = Lang.FN_Validation_LayerVuaKhongDuocDeTrong;
                 return false;
             }
 
             if (ContainsInvalidLayerNameCharacter(normalizedLayerName))
             {
-                validationMessage = "Tên layer chứa ký tự không hợp lệ: < > / \\ \" : ; ? * | , =";
+                validationMessage = Lang.FN_Validation_TenLayerChuaKyTuKhongHopLe;
                 return false;
             }
 
             if (!CreateNewLayer && !_availableLayers.ContainsKey(normalizedLayerName))
             {
-                validationMessage = "Hãy chọn một layer có sẵn.";
+                validationMessage = Lang.FN_Validation_HayChonMotLayerCoSan;
                 return false;
             }
 
             if (!TryParseColorIndex(LayerColorIndexText, out short colorIndex))
             {
-                validationMessage = "Màu Layer phải là chỉ số ACI từ 1 đến 255.";
+                validationMessage = Lang.FN_Validation_MauLayerPhaiLaChiSoAciTu1Den255;
                 return false;
             }
 
             if (!TryParsePositiveDouble(ThicknessText, out double thickness))
             {
-                validationMessage = "Độ dày vữa phải là số hữu hạn lớn hơn 0.";
+                validationMessage = Lang.FN_Validation_DoDayVuaPhaiLaSoHuuHanLonHon0;
                 return false;
             }
 

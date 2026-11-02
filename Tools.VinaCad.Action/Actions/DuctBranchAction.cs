@@ -6,6 +6,7 @@ using Teigha.DatabaseServices;
 using Teigha.GraphicsInterface;
 using Teigha.Geometry;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
@@ -24,7 +25,7 @@ namespace Tools.VinaCad.Action.Actions
                 Editor editor = doc.Editor;
 
                 // 1) Điểm đặt
-                PromptPointResult point = editor.GetPoint(new PromptPointOptions("\nChọn điểm đặt: "));
+                PromptPointResult point = editor.GetPoint(new PromptPointOptions("\n" + Lang.DuctBranch_Prompt_ChonDiemDat));
                 if (point.Status != PromptStatus.OK) return;
 
                 // 2) Nhập số. Sau khi có W, mọi giá trị khác được đặt sẵn theo dáng mặc định rồi mới hỏi.
@@ -45,7 +46,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (jig.Direction.Length < Eps)
                 {
-                    editor.WriteMessage("\nHướng ống không hợp lệ.");
+                    editor.WriteMessage("\n" + Lang.DuctBranch_Output_HuongOngKhongHopLe);
                     return;
                 }
 
@@ -59,7 +60,7 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch (System.Exception ex)
             {
-                Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nLỗi: " + ex.Message);
+                Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\n" + Lang.DuctBranch_Output_Loi.Replace("{message}", ex.Message));
             }
         }
 
@@ -67,44 +68,44 @@ namespace Tools.VinaCad.Action.Actions
 
         private static bool AskInputs(Editor editor, DuctBranchVM vm)
         {
-            if (!AskNumber(editor, "Nhập đường kính ống chính ", ref vm.MainWidth)) return false;
+            if (!AskNumber(editor, Lang.DuctBranch_Prompt_DuongKinhOngChinh, ref vm.MainWidth)) return false;
 
-            if (!AskNumber(editor, "Nhập chiều cao ống chính (đoạn thẳng trước chỗ rẽ)", ref vm.MainHeight, true)) return false;
+            if (!AskNumber(editor, Lang.DuctBranch_Prompt_ChieuCaoOngChinh, ref vm.MainHeight, true)) return false;
 
             if (vm.HasThrough)
             {
-                if (!AskNumber(editor, "Nhập đường kính ống đi thẳng đi tiếp ", ref vm.ThroughWidth)) return false;
-                if (!AskNumber(editor, "Nhập chiều cao ống đi tiếp (đoạn thẳng vượt qua miệng nhánh)", ref vm.ThroughHeight, true)) return false;
+                if (!AskNumber(editor, Lang.DuctBranch_Prompt_DuongKinhOngDiThang, ref vm.ThroughWidth)) return false;
+                if (!AskNumber(editor, Lang.DuctBranch_Prompt_ChieuCaoOngDiThang, ref vm.ThroughHeight, true)) return false;
             }
 
             // Nhánh 1 (eez: nhánh trái; eex, eey: nhánh duy nhất / cả hai nhánh)
             string n1 = vm.HasBranch2 ? "1" : "";
-            if (!AskNumber(editor, "Nhập đường kính ống rẽ Wb" + n1, ref vm.BranchWidth)) return false;
-            if (!AskNumber(editor, "Nhập bán kính cong nhánh rẽ R" + n1, ref vm.Radius)) return false;
+            if (!AskNumber(editor, Lang.DuctBranch_Prompt_DuongKinhOngRe.Replace("{name}", n1), ref vm.BranchWidth)) return false;
+            if (!AskNumber(editor, Lang.DuctBranch_Prompt_BanKinhOngRe.Replace("{name}", n1), ref vm.Radius)) return false;
 
             // Nhánh 2 (chỉ eez)
             if (vm.HasBranch2)
             {
-                if (!AskNumber(editor, "Nhập đường kính ống rẽ Wb2", ref vm.Branch2Width)) return false;
-                if (!AskNumber(editor, "Nhập bán kính cong nhánh rẽ R2", ref vm.Radius2)) return false;
+                if (!AskNumber(editor, Lang.DuctBranch_Prompt_DuongKinhOngRe.Replace("{name}", "2"), ref vm.Branch2Width)) return false;
+                if (!AskNumber(editor, Lang.DuctBranch_Prompt_BanKinhOngRe.Replace("{name}", "2"), ref vm.Radius2)) return false;
             }
-            if (!AskNumber(editor, "Nhập chiều cao ống rẽ Hb (đoạn thẳng sau cung rẽ)", ref vm.BranchHeight, true)) return false;
+            if (!AskNumber(editor, Lang.DuctBranch_Prompt_ChieuCaoOngRe, ref vm.BranchHeight, true)) return false;
 
             // Hướng rẽ (chỉ eex)
             if (vm.HasSide)
             {
                 string side = vm.Side == ElbowSide.Left ? "Left" : "Right";
                 if (!AskSide(editor, ref side)) return false;
-                vm.Side = side == "Right" ? ElbowSide.Right : ElbowSide.Left;
+                vm.Side = side == "Right" || side == Lang.DuctBranch_Keyword_Phai ? ElbowSide.Right : ElbowSide.Left;
             }
             return true;
         }
 
         public string Validate(DuctBranchVM vm)
         {
-            if (vm.MainWidth <= 0) return "Đường kính ống chính phải lớn hơn 0.";
-            if (vm.MainHeight < 0) return "Chiều cao ống chính không được âm.";
-            if (vm.BranchHeight < 0) return "Chiều cao ống rẽ không được âm.";
+            if (vm.MainWidth <= 0) return Lang.DuctBranch_Validation_DuongKinhOngChinh;
+            if (vm.MainHeight < 0) return Lang.DuctBranch_Validation_ChieuCaoOngChinh;
+            if (vm.BranchHeight < 0) return Lang.DuctBranch_Validation_ChieuCaoOngRe;
             string error = CheckBranch(vm, "", vm.BranchWidth, vm.Radius);
             if (error != null) return error;
 
@@ -116,18 +117,18 @@ namespace Tools.VinaCad.Action.Actions
 
             if (vm.HasThrough)
             {
-                if (vm.ThroughWidth <= 0) return "Đường kính ống đi thẳng phải lớn hơn 0.";
-                if (vm.ThroughWidth > vm.MainWidth) return "Đường kính ống đi thẳng không được lớn hơn đường kính ống chính.";
-                if (vm.ThroughHeight < 0) return "Chiều cao ống đi thẳng không được âm.";
+                if (vm.ThroughWidth <= 0) return Lang.DuctBranch_Validation_DuongKinhOngDiThang;
+                if (vm.ThroughWidth > vm.MainWidth) return Lang.DuctBranch_Validation_DuongKinhOngDiThangQuaLon;
+                if (vm.ThroughHeight < 0) return Lang.DuctBranch_Validation_ChieuCaoOngDiThang;
             }
             return null;
         }
 
         private static string CheckBranch(DuctBranchVM vm, string name, double width, double radius)
         {
-            if (width <= 0) return "Wb" + name + " phải lớn hơn 0.";
-            if (width > vm.MainWidth) return "Wb" + name + " không được lớn hơn W.";
-            if (radius - width / 2 < 0) return "R" + name + " quá nhỏ (bán kính cong trong âm), hãy tăng R" + name + ".";
+            if (width <= 0) return Lang.DuctBranch_Validation_DuongKinhNhanhPhaiDuong.Replace("{name}", name);
+            if (width > vm.MainWidth) return Lang.DuctBranch_Validation_DuongKinhNhanhQuaLon.Replace("{name}", name);
+            if (radius - width / 2 < 0) return Lang.DuctBranch_Validation_BanKinhNhanhQuaNho.Replace("{name}", name);
             return null;
         }
 
@@ -148,7 +149,7 @@ namespace Tools.VinaCad.Action.Actions
                  !double.TryParse(result.StringResult, NumberStyles.Float, CultureInfo.InvariantCulture, out input)) ||
                 double.IsNaN(input) || double.IsInfinity(input) || input < 0 || (!allowZero && input == 0))
             {
-                editor.WriteMessage("\nGiá trị phải là số " + (allowZero ? "không âm." : "lớn hơn 0."));
+                editor.WriteMessage("\n" + (allowZero ? Lang.DuctBranch_Output_GiaTriKhongAm : Lang.DuctBranch_Output_GiaTriLonHon0));
                 return false;
             }
 
@@ -158,13 +159,15 @@ namespace Tools.VinaCad.Action.Actions
 
         private static bool AskSide(Editor editor, ref string side)
         {
-            var options = new PromptKeywordOptions("\nChọn hướng rẽ [Trái/Phải] <" + (side == "Left" ? "Trái" : "Phải") + ">: ")
+            string left = Lang.DuctBranch_Keyword_Trai;
+            string right = Lang.DuctBranch_Keyword_Phai;
+            var options = new PromptKeywordOptions("\n" + Lang.DuctBranch_Prompt_ChonHuongRe + " [" + left + "/" + right + "] <" + (side == "Left" ? left : right) + ">: ")
             {
                 AllowNone = true,
                 AppendKeywordsToMessage = false
             };
-            options.Keywords.Add("Left", "Trái", "Trái");
-            options.Keywords.Add("Right", "Phải", "Phải");
+            options.Keywords.Add("Left", left, left);
+            options.Keywords.Add("Right", right, right);
             options.Keywords.Default = side;
 
             PromptResult result = editor.GetKeywords(options);
@@ -192,7 +195,7 @@ namespace Tools.VinaCad.Action.Actions
 
             protected override SamplerStatus Sampler(JigPrompts prompts)
             {
-                var options = new JigPromptPointOptions("\n Click để xác nhận hướng ống: ");
+                var options = new JigPromptPointOptions("\n" + Lang.DuctBranch_Prompt_XacNhanHuongOng);
                 options.BasePoint = _insertPoint;
                 options.UseBasePoint = true;
                 options.UserInputControls = UserInputControls.Accept3dCoordinates;
