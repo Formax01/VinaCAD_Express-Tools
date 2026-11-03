@@ -15,7 +15,13 @@ namespace Tools.VinaCad.Action.Actions
 {
     public class DrawDuctAction
     {
-        private enum DrawMode { Length, TwoPoints }
+        private enum DrawMode
+        {
+            Length,
+            TwoPoints
+        }
+
+        private const double Tolerance = 1e-9;
 
         private Document _doc;
         private Editor _ed;
@@ -26,27 +32,32 @@ namespace Tools.VinaCad.Action.Actions
         {
             try
             {
-                UpdateCurrentDocument();
-                if (_doc == null)
+                if (!UpdateCurrentDocument())
                     return;
 
-                DuctModel model = new DuctModel();
+                var model = new DuctModel();
 
-                // Bước 1: Chọn điểm bắt đầu
-                PromptPointResult startResult = _ed.GetPoint(Lang.B1_UI_ChonDiemBatDauOngGio);
+                // 1. Start point
+                var startResult = _ed.GetPoint(Lang.B1_UI_ChonDiemBatDauOngGio);
                 if (startResult.Status != PromptStatus.OK)
                     return;
+
                 model.StartPoint = startResult.Value;
 
-                // Bước 2: Chọn phương thức vẽ
-                if (!TryAskDrawMode(out DrawMode mode))
+                // 2. Length or "P" for two-point mode
+                if (!TryAskDrawMode(out DrawMode mode, out double length))
                     return;
 
-                // Bước 3: Điều phối đến phương thức vẽ tương ứng
+                // 3. Dispatch
                 if (mode == DrawMode.TwoPoints)
+                {
                     DrawByTwoPoints(model);
+                }
                 else
+                {
+                    model.Length = length;
                     DrawByLength(model);
+                }
             }
             catch (Exception ex)
             {
@@ -55,134 +66,146 @@ namespace Tools.VinaCad.Action.Actions
             }
         }
 
-        private void UpdateCurrentDocument()
+        private bool UpdateCurrentDocument()
         {
             _doc = Application.DocumentManager.MdiActiveDocument;
             if (_doc == null)
-                return;
+                return false;
 
             _ed = _doc.Editor;
             _db = _doc.Database;
             _ucsToWcs = _ed.CurrentUserCoordinateSystem;
+            return true;
         }
 
-        // Nhánh 1: Vẽ bằng hai điểm (P1-P2 là một cạnh, kéo vuông góc để lấy chiều rộng)
+        /// <summary>
+        /// Draw by two points (P1-P2 defines one side).
+        /// User then drags perpendicular to set the width/offset.
+        /// </summary>
         private void DrawByTwoPoints(DuctModel model)
         {
             Point3d p1 = model.StartPoint;
 
-            // Chọn điểm 2 để xác định chiều dài và hướng cạnh
-            PromptPointOptions pointOptions = new PromptPointOptions(Lang.B1_UI_ChonDiem2)
+            var pointOptions = new PromptPointOptions(Lang.B1_UI_ChonDiem2)
             {
                 BasePoint = p1,
                 UseBasePoint = true
             };
-            PromptPointResult pointResult = _ed.GetPoint(pointOptions);
+
+            var pointResult = _ed.GetPoint(pointOptions);
             if (pointResult.Status != PromptStatus.OK)
                 return;
 
+            // Keep same Z as start point
             Point3d p2 = new Point3d(pointResult.Value.X, pointResult.Value.Y, p1.Z);
 
-            // Kiểm tra hai điểm có trùng nhau không
-            if (p1.DistanceTo(p2) < 1e-9)
+            if (p1.DistanceTo(p2) < Tolerance)
             {
                 _ed.WriteMessage(Lang.B1_MessDialog_Diem2TrungDiem1);
                 return;
             }
 
-            // Kéo chuột để xác định phía và chiều rộng
-            DuctSideJig sideJig = new DuctSideJig(p1, p2, _ucsToWcs);
+            var sideJig = new DuctSideJig(p1, p2, _ucsToWcs);
             if (_ed.Drag(sideJig).Status != PromptStatus.OK)
                 return;
 
-            // Tính bốn góc rồi tạo Polyline
             Point3d[] corners = DuctHelper.GetCornersFromSide(p1, p2, sideJig.Offset);
             DuctHelper.CreateClosedPolyline(_db, corners, model.Layer, _ucsToWcs);
 
             Finish(p1.DistanceTo(p2), Math.Abs(sideJig.Offset));
         }
 
-        // Nhánh 2: Vẽ bằng chiều dài và chiều rộng
+        /// <summary>
+        /// Draw by explicit length + width, then place with a jig.
+        /// </summary>
         private void DrawByLength(DuctModel model)
         {
-            // Bước 1: Nhập chiều dài
-            if (!TryGetLength(out double length))
-                return;
-            model.Length = length;
-
-            // Bước 2: Nhập chiều rộng
-            PromptDistanceOptions widthOptions = new PromptDistanceOptions(Lang.B1_UI_NhapChieuRongOngGio)
+            var widthOptions = new PromptDistanceOptions(Lang.B1_UI_NhapChieuRongOngGio)
             {
                 AllowNegative = false,
                 AllowZero = false
             };
-            PromptDoubleResult widthResult = _ed.GetDistance(widthOptions);
+
+            var widthResult = _ed.GetDistance(widthOptions);
             if (widthResult.Status != PromptStatus.OK)
                 return;
+
             model.Width = widthResult.Value;
 
-            // Bước 3: Kéo chuột để xác định hướng đặt ống gió
-            DuctPlacementJig jig = new DuctPlacementJig(model, _ucsToWcs);
+            var jig = new DuctPlacementJig(model, _ucsToWcs);
             if (_ed.Drag(jig).Status != PromptStatus.OK)
                 return;
-            model.Direction = jig.Direction;
 
-            // Bước 4: Tạo ống gió
+            model.Direction = jig.Direction;
             DuctHelper.CreateDuct(_db, model, _ucsToWcs);
 
             Finish(model.Length, model.Width);
         }
 
-        
-
-        private bool TryAskDrawMode(out DrawMode mode)
+        private bool TryAskDrawMode(out DrawMode mode, out double length)
         {
             mode = DrawMode.Length;
-
-            PromptKeywordOptions options = new PromptKeywordOptions(Lang.B1_UI_ChonCachVe)
-            {
-                AllowNone = false
-            };
-            options.Keywords.Add(Lang.B1_UI_KeywordNhap);
-            options.Keywords.Add(Lang.B1_UI_KeywordDiem);
-
-            PromptResult result = _ed.GetKeywords(options);
-            if (result.Status != PromptStatus.OK)
-                return false;
-
-            bool isTwoPoints = string.Equals(
-                result.StringResult,
-                Lang.B1_UI_KeywordDiem,
-                StringComparison.OrdinalIgnoreCase);
-
-            mode = isTwoPoints ? DrawMode.TwoPoints : DrawMode.Length;
-            return true;
-        }
-
-        // GetString giữ nguyên số gõ vào và cho phép dấu phẩy thập phân
-        private bool TryGetLength(out double length)
-        {
             length = 0;
 
             while (true)
             {
-                PromptStringOptions options = new PromptStringOptions(Lang.B1_UI_NhapChieuDaiOngGio)
+                var options = new PromptDoubleOptions(Lang.B1_UI_NhapChieuDaiHoacP)
                 {
-                    AllowSpaces = false
+                    AllowNegative = false,
+                    AllowZero = false,
+                    AllowArbitraryInput = true,       // "1,5" không phải số chuẩn: CAD trả về chuỗi để mình đổi dấu phẩy
+                    AppendKeywordsToMessage = true    // hiện [P] trên dòng nhắc
                 };
+                options.Keywords.Add(
+                    Lang.B1_UI_KeywordP, Lang.B1_UI_KeywordP, Lang.B1_UI_KeywordP);
 
-                PromptResult result = _ed.GetString(options);
-                if (result.Status != PromptStatus.OK)
-                    return false;
+                PromptDoubleResult result = _ed.GetDouble(options);
 
-                string input = (result.StringResult ?? "").Trim().Replace(',', '.');
+                switch (result.Status)
+                {
+                    case PromptStatus.Keyword:          // gõ P hoặc chọn P từ menu mũi tên xuống
+                        mode = DrawMode.TwoPoints;
+                        return true;
 
-                if (double.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out length)
-                    && length > 1e-9)
-                    return true;
+                    case PromptStatus.OK:               // gõ số chuẩn: 500, 1.5
+                        if (result.Value > Tolerance)
+                        {
+                            mode = DrawMode.Length;
+                            length = result.Value;
+                            return true;
+                        }
+                        break;
+
+                    case PromptStatus.Other:            // chuỗi khác, ví dụ "1,5"
+                        if (TryParseLength(result.StringResult, out length))
+                        {
+                            mode = DrawMode.Length;
+                            return true;
+                        }
+                        break;
+
+                    default:                            // Esc
+                        return false;
+                }
 
                 _ed.WriteMessage(Lang.B1_MessDialog_ChieuDaiKhongHopLe);
             }
+        }
+
+        private static bool TryParseLength(string text, out double length)
+        {
+            length = 0;
+
+            string input = (text ?? string.Empty)
+                .Trim()
+                .Replace(',', '.');
+
+            return double.TryParse(
+                       input,
+                       NumberStyles.Float,
+                       CultureInfo.InvariantCulture,
+                       out length)
+                   && length > Tolerance;
         }
 
         private void Finish(double length, double width)

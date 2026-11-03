@@ -1,4 +1,5 @@
-﻿using Prima.VinaCAD.ApplicationServices;
+﻿
+using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
@@ -24,22 +25,26 @@ namespace Tools.VinaCad.Action.Actions
             try
             {
                 UpdateCurrentDocument();
+
                 if (_doc == null)
                     return;
 
                 SquareToRoundModel model = new SquareToRoundModel();
 
-                // Bước 1: điểm đầu (góc phải dưới của đầu lớn)
-                PromptPointResult startResult = _ed.GetPoint(Lang.B4_UI_ChonDiemDat);
+                // Bước 1: Chọn điểm đặt
+                PromptPointResult startResult =
+                    _ed.GetPoint(Lang.B4_UI_ChonDiemDat);
+
                 if (startResult.Status != PromptStatus.OK)
                     return;
+
                 model.StartPoint = startResult.Value;
 
-                // Bước 2: chọn cách nhập kích thước đầu lớn (Enter = Length)
-                if (!TryAskUsePoint(out bool usePoint))
+                // Bước 2: Nhập kích thước đầu lớn hoặc nhấn P
+                if (!TryGetBigSizeOrPoint(model, out bool usePoint))
                     return;
 
-                // Bước 3: vẽ theo nhánh đã chọn
+                // Bước 3: Chọn phương pháp vẽ
                 if (usePoint)
                     DrawByPoint(model);
                 else
@@ -55,6 +60,7 @@ namespace Tools.VinaCad.Action.Actions
         private void UpdateCurrentDocument()
         {
             _doc = Application.DocumentManager.MdiActiveDocument;
+
             if (_doc == null)
                 return;
 
@@ -65,7 +71,7 @@ namespace Tools.VinaCad.Action.Actions
 
         // ---------- Hai nhánh vẽ ----------
 
-        // Nhánh Point: P1-P2 là cạnh đầu lớn, hình mở về bên phải chiều P1 -> P2
+        // Nhánh Point: chọn P2 để xác định BigSize và Direction
         private void DrawByPoint(SquareToRoundModel model)
         {
             Point3d p1 = model.StartPoint;
@@ -75,10 +81,11 @@ namespace Tools.VinaCad.Action.Actions
 
             model.BigSize = p1.DistanceTo(p2);
 
-            // n = chiều P1 -> P2; hướng đặt = n xoay -90° (để GetCorners xoay lại +90°
-            // ra đúng n, khi đó a1 = P2)
             Vector3d n = (p2 - p1).GetNormal();
-            model.Direction = n.RotateBy(-System.Math.PI / 2, Vector3d.ZAxis);
+
+            model.Direction = n.RotateBy(
+                -Math.PI / 2,
+                Vector3d.ZAxis);
 
             if (!TryGetSmallAndLength(model))
                 return;
@@ -86,162 +93,232 @@ namespace Tools.VinaCad.Action.Actions
             CreateShape(model);
         }
 
-        // Nhánh Length: nhập đầu lớn, đầu nhỏ, L rồi ướm hướng bằng Jig
+        // Nhánh Length: BigSize đã được nhập ở bước lựa chọn
         private void DrawByLength(SquareToRoundModel model)
         {
-            if (!TryGetDistance(model.StartPoint, Lang.B4_UI_NhapKichThuocDauLon, out double big))
-                return;
-            model.BigSize = big;
+            // Không hỏi lại BigSize
 
             if (!TryGetSmallAndLength(model))
                 return;
 
-            SquareToRoundJig jig = new SquareToRoundJig(model, _ucsToWcs);
+            SquareToRoundJig jig =
+                new SquareToRoundJig(model, _ucsToWcs);
+
             if (_ed.Drag(jig).Status != PromptStatus.OK)
                 return;
+
             model.Direction = jig.Direction;
 
             CreateShape(model);
         }
 
-        // ---------- Các bước nhập ----------
+        // ---------- Lựa chọn phương pháp vẽ ----------
 
-        // Chọn Point hoặc Length: true nếu chọn Point (Enter = Length)
-        private bool TryAskUsePoint(out bool usePoint)
+        // Nhập kích thước đầu lớn hoặc nhấn P để chọn điểm
+        // true  = chọn Point
+        // false = nhập Length
+        private bool TryGetBigSizeOrPoint(
+            SquareToRoundModel model,
+            out bool usePoint)
         {
             usePoint = false;
 
-            PromptKeywordOptions options = new PromptKeywordOptions("")
+            PromptDistanceOptions options =
+                new PromptDistanceOptions(
+                    $"{Lang.B4_UI_NhapKichThuocDauLon} " +
+                    $"[{Lang.B4_UI_KeywordPoint}]: ",
+                    Lang.B4_UI_KeywordPoint)
+                {
+                    AllowNegative = false,
+                    AllowZero = false,
+                    BasePoint = model.StartPoint,
+                    UseBasePoint = true
+                };
+
+            PromptDoubleResult result = _ed.GetDistance(options);
+
+            // Người dùng nhấn P
+            if (result.Status == PromptStatus.Keyword)
             {
-                AllowNone = true
-            };
-            options.SetMessageAndKeywords(
-                Lang.B4_UI_NhapKichThuocDauLonBang,
-                $"{Lang.B4_UI_KeywordPoint} {Lang.B4_UI_KeywordLength}");
+                if (result.StringResult == Lang.B4_UI_KeywordPoint)
+                {
+                    usePoint = true;
+                    return true;
+                }
 
-            PromptResult result = _ed.GetKeywords(options);
+                return false;
+            }
 
-            if (result.Status == PromptStatus.None)
-                return true;                          // Enter: mặc định Length
+            // Người dùng nhập kích thước
+            if (result.Status == PromptStatus.OK)
+            {
+                model.BigSize = result.Value;
+                usePoint = false;
+                return true;
+            }
 
-            if (result.Status != PromptStatus.OK)
-                return false;                         // Esc / hủy
-
-            usePoint = result.StringResult == Lang.B4_UI_KeywordPoint;
-            return true;
+            // ESC hoặc hủy thao tác
+            return false;
         }
 
-        // Chọn điểm 2 của đầu lớn (hỏi lại nếu trùng điểm 1)
+        // ---------- Các bước nhập ----------
+
+        // Chọn điểm 2 của đầu lớn
+        // Hỏi lại nếu P1 và P2 trùng nhau
         private bool TryGetSecondPoint(Point3d p1, out Point3d p2)
         {
             p2 = p1;
 
             while (true)
             {
-                PromptPointOptions options = new PromptPointOptions(Lang.B4_UI_ChonDiem2DauLon)
-                {
-                    BasePoint = p1,
-                    UseBasePoint = true,
-                    UseDashedLine = true
-                };
+                PromptPointOptions options =
+                    new PromptPointOptions(
+                        Lang.B4_UI_ChonDiem2DauLon)
+                    {
+                        BasePoint = p1,
+                        UseBasePoint = true,
+                        UseDashedLine = true
+                    };
 
                 PromptPointResult result = _ed.GetPoint(options);
+
                 if (result.Status != PromptStatus.OK)
                     return false;
 
-                p2 = new Point3d(result.Value.X, result.Value.Y, p1.Z);
+                p2 = new Point3d(
+                    result.Value.X,
+                    result.Value.Y,
+                    p1.Z);
+
                 if (p1.DistanceTo(p2) > 1e-9)
                     return true;
 
-                _ed.WriteMessage(Lang.B4_MessDialog_Diem2TrungDiem1);
+                _ed.WriteMessage(
+                    Lang.B4_MessDialog_Diem2TrungDiem1);
             }
         }
 
-        // Nhập đầu nhỏ (phải nhỏ hơn đầu lớn) rồi L (Enter để tự tính)
+        // Nhập đầu nhỏ rồi nhập chiều dài L
         private bool TryGetSmallAndLength(SquareToRoundModel model)
         {
             if (!TryGetSmallSize(model, out double small))
                 return false;
+
             model.SmallSize = small;
 
             if (!TryGetLength(model, out double length))
                 return false;
+
             model.Length = length;
 
             return true;
         }
 
-        private bool TryGetSmallSize(SquareToRoundModel model, out double small)
+        // Đầu nhỏ phải nhỏ hơn đầu lớn
+        private bool TryGetSmallSize(
+            SquareToRoundModel model,
+            out double small)
         {
             while (true)
             {
-                if (!TryGetDistance(model.StartPoint, Lang.B4_UI_NhapKichThuocDauNho, out small))
+                if (!TryGetDistance(
+                    model.StartPoint,
+                    Lang.B4_UI_NhapKichThuocDauNho,
+                    out small))
+                {
                     return false;
+                }
 
                 if (small < model.BigSize)
                     return true;
 
-                _ed.WriteMessage(Lang.B4_MessDialog_DauNhoPhaiNhoHon);
+                _ed.WriteMessage(
+                    Lang.B4_MessDialog_DauNhoPhaiNhoHon);
             }
         }
 
-        // Chiều dài L: Enter = tự tính, gõ số = dùng số đó
-        private bool TryGetLength(SquareToRoundModel model, out double length)
+        // Chiều dài L:
+        // Enter = tự tính
+        // Nhập số = sử dụng giá trị nhập
+        private bool TryGetLength(
+            SquareToRoundModel model,
+            out double length)
         {
-            double autoL = SquareToRoundHelper.GetAutoLength(model.BigSize, model.SmallSize);
+            double autoL = SquareToRoundHelper.GetAutoLength(
+                model.BigSize,
+                model.SmallSize);
+
             length = autoL;
 
-            PromptDistanceOptions options = new PromptDistanceOptions(Lang.B4_UI_NhapChieuDaiL)
-            {
-                BasePoint = model.StartPoint,
-                UseBasePoint = true,
-                AllowNegative = false,
-                AllowZero = false,
-                AllowNone = true,
-                DefaultValue = autoL,
-                UseDefaultValue = true
-            };
+            PromptDistanceOptions options =
+                new PromptDistanceOptions(
+                    Lang.B4_UI_NhapChieuDaiL)
+                {
+                    BasePoint = model.StartPoint,
+                    UseBasePoint = true,
+                    AllowNegative = false,
+                    AllowZero = false,
+                    AllowNone = true,
+                    DefaultValue = autoL,
+                    UseDefaultValue = true
+                };
 
             PromptDoubleResult result = _ed.GetDistance(options);
 
             if (result.Status == PromptStatus.None)
-                return true;                          // Enter: dùng giá trị tự tính
+                return true;
 
             if (result.Status != PromptStatus.OK)
-                return false;                         // Esc / hủy
+                return false;
 
             length = result.Value;
             return true;
         }
 
-        // Nhập một khoảng cách dương, có đường rubber band từ điểm đặt
-        private bool TryGetDistance(Point3d basePoint, string message, out double value)
+        // Nhập một khoảng cách dương
+        private bool TryGetDistance(
+            Point3d basePoint,
+            string message,
+            out double value)
         {
-            PromptDistanceOptions options = new PromptDistanceOptions(message)
-            {
-                BasePoint = basePoint,
-                UseBasePoint = true,
-                AllowNegative = false,
-                AllowZero = false
-            };
+            PromptDistanceOptions options =
+                new PromptDistanceOptions(message)
+                {
+                    BasePoint = basePoint,
+                    UseBasePoint = true,
+                    AllowNegative = false,
+                    AllowZero = false
+                };
 
             PromptDoubleResult result = _ed.GetDistance(options);
-            value = result.Status == PromptStatus.OK ? result.Value : 0;
+
+            value = result.Status == PromptStatus.OK
+                ? result.Value
+                : 0;
+
             return result.Status == PromptStatus.OK;
         }
 
         // ---------- Ghi hình ----------
 
-        // Ghi hình thật vào bản vẽ (dùng chung cho cả hai nhánh)
+        // Dùng chung cho cả hai nhánh
         private void CreateShape(SquareToRoundModel model)
         {
             Point3d[] corners = SquareToRoundHelper.GetCorners(
-                model.StartPoint, model.Direction,
-                model.BigSize, model.SmallSize, model.Length);
+                model.StartPoint,
+                model.Direction,
+                model.BigSize,
+                model.SmallSize,
+                model.Length);
 
-            SquareToRoundHelper.Create(_db, corners, model.Layer, _ucsToWcs);
+            SquareToRoundHelper.Create(
+                _db,
+                corners,
+                model.Layer,
+                _ucsToWcs);
 
             _ed.Regen();
+
             _ed.WriteMessage(string.Format(
                 Lang.B4_MessDialog_DaVeChiTietVuongRaTron,
                 model.BigSize.ToString("0.##"),
