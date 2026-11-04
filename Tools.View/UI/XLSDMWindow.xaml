@@ -9,13 +9,12 @@
     xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
     Title="{x:Static res:Lang.XLSDM_UI_XacLapDeSuaBangDanhMuc}"
     Width="550"
-    Background="#9DB9D3"
     ResizeMode="NoResize"
     SizeToContent="Height"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid Background="#9DB9D3">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="10" />
@@ -171,9 +170,7 @@
                 HorizontalAlignment="Center"
                 Background="White"
                 Command="{Binding OkCmd}"
-                Content="OK"
-                FontWeight="Bold"
-                Foreground="Blue" />
+                Content="OK" />
 
             <Button
                 Grid.Column="2"
@@ -182,9 +179,7 @@
                 HorizontalAlignment="Center"
                 Background="White"
                 Command="{Binding CancelCmd}"
-                Content="{x:Static res:Lang.Common_UI_Thoat}"
-                FontWeight="Bold"
-                Foreground="Blue" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </Grid>
     </Grid>
 </Window>

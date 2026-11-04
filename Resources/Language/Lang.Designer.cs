@@ -97,6 +97,15 @@ namespace Tools.Resources.Language {
                 return ResourceManager.GetString("ABOUTEXPRESS_UI_PhienBanHienTai", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Góp ý.
+        /// </summary>
+        public static string ABOUTEXPRESS_UI_Feedback {
+            get {
+                return ResourceManager.GetString("ABOUTEXPRESS_UI_Feedback", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Thông tin Express_Tools.

@@ -22,6 +22,8 @@ namespace Tools.ViewModel
         }
         public RelayCommand HyperlinkCmd { get; set; }
 
+        public RelayCommand FeedbackCmd { get; set; }
+
         public RelayCommand CloseCmd { get; set; }
 
     }

@@ -1067,6 +1067,9 @@
   <data name="ABOUTEXPRESS_UI_PhienBanHienTai" xml:space="preserve">
     <value>Current version</value>
   </data>
+  <data name="ABOUTEXPRESS_UI_Feedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
   <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
     <value>Express_Tools Information</value>
   </data>
