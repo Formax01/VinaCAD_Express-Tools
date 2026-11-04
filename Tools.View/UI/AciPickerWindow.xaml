@@ -77,7 +77,9 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
             <TextBlock Text="{x:Static res:Lang.LG_AciPicker_UI_IndexColor}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-            <TextBox Width="50" Padding="3,2" Text="{Binding ColorText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Width="50" Padding="3,2"
+                     Text="{Binding ColorText, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
             <Border Width="44" Height="26" BorderBrush="Gray" BorderThickness="1" Margin="8,0,0,0"
                     Background="{Binding PreviewBrush}"/>
             <TextBlock Text="{Binding Description}" Margin="12,0,0,0" VerticalAlignment="Center"/>
@@ -87,6 +89,7 @@
             <Button Content="{x:Static res:Lang.LG_UI_OK}" Width="80" Padding="0,3" IsDefault="True"
                     IsEnabled="{Binding CanAccept}" Command="{Binding AcceptCommand}"/>
             <Button Content="{x:Static res:Lang.LG_UI_Cancel}" Width="80" Padding="0,3" Margin="8,0,0,0"
+                    IsCancel="True"
                     Command="{Binding CancelCommand}"/>
         </StackPanel>
     </StackPanel>

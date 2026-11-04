@@ -84,9 +84,10 @@
                 <Run Text="{x:Static res:Lang.LG_UI_BanisterLayer}"/><Run Text=":"/>
             </TextBlock>
 
-            <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,3" IsEditable="True"
-                      ItemsSource="{Binding LayerNames}"
-                      Text="{Binding LayerName, UpdateSourceTrigger=PropertyChanged}"/>
+            <behavior:FilterableComboBox Grid.Row="0" Grid.Column="1" Margin="0,3"
+                                         OnlyValuesInList="False"
+                                         ItemsSource="{Binding LayerNames}"
+                                         Text="{Binding LayerName, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Grid.Row="1">
                 <Run Text="{x:Static res:Lang.LG_UI_LayerColor}"/><Run Text=":"/>
