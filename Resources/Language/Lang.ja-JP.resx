@@ -3453,4 +3453,10 @@ CK</value>
   <data name="B1_UI_NhapChieuRongOngGioHoacAnP" xml:space="preserve">
     <value>ダクト幅を入力するか、Pを押して点を選択:</value>
   </data>
+  <data name="ZXW_UI_Number" xml:space="preserve">
+    <value>数字</value>
+  </data>
+  <data name="ZXW_UI_Letter" xml:space="preserve">
+    <value>文字</value>
+  </data>
 </root>

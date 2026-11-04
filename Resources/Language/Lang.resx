@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -3448,5 +3448,11 @@ trục</value>
   </data>
   <data name="B1_UI_NhapChieuRongOngGioHoacAnP" xml:space="preserve">
     <value>Nhập chiều rộng ống gió hoặc ấn P để chọn điểm:</value>
+  </data>
+  <data name="ZXW_UI_Number" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="ZXW_UI_Letter" xml:space="preserve">
+    <value>Chữ</value>
   </data>
 </root>
