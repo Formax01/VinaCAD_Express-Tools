@@ -8,16 +8,19 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize" ShowInTaskbar="False"
         behavior:WindowDialogBehavior.DialogResult="{Binding DialogResult, Mode=OneWay}">
+
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
+
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="0,3"/>
             <Setter Property="Padding" Value="3,2"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
         </Style>
+
         <!-- Style riêng cho nút OK để làm nổi bật Primary Action -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#0078D4"/>
@@ -37,6 +40,7 @@
             <ColumnDefinition Width="190"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -46,6 +50,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,0">
             <Canvas x:Name="SlopedCanvas" Width="175" Height="165"/>
             <Canvas x:Name="FlatCanvas" Width="175" Height="85" Margin="0,16,0,0"/>
+
             <CheckBox Margin="0,12,0,0"
                       Content="{x:Static res:Lang.LG_UI_ToGroup}"
                       IsChecked="{Binding ToGroup}"
@@ -58,6 +63,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -77,6 +83,7 @@
             <TextBlock Grid.Row="0">
                 <Run Text="{x:Static res:Lang.LG_UI_BanisterLayer}"/><Run Text=":"/>
             </TextBlock>
+
             <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,3" IsEditable="True"
                       ItemsSource="{Binding LayerNames}"
                       Text="{Binding LayerName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -84,12 +91,17 @@
             <TextBlock Grid.Row="1">
                 <Run Text="{x:Static res:Lang.LG_UI_LayerColor}"/><Run Text=":"/>
             </TextBlock>
+
             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                <TextBox Width="36" Text="{Binding ColorIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="36"
+                         Text="{Binding ColorIndex, UpdateSourceTrigger=PropertyChanged}"
+                         behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+
                 <Button Width="28" Height="22" Margin="4,0,4,0"
                         Background="{Binding ColorBrush}"
                         Command="{Binding ChooseColorCmd}"
                         ToolTip="{x:Static res:Lang.LG_TT_ChooseColor}"/>
+
                 <Button Width="40" Margin="0,3"
                         Content="{x:Static res:Lang.LG_UI_Pick}"
                         Command="{Binding PickCmd}"
@@ -99,42 +111,66 @@
             <TextBlock Grid.Row="2">
                 <Run Text="{x:Static res:Lang.LG_UI_TotalHeight}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TotalHeight, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Text="{Binding TotalHeight, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="3">
                 <Run Text="{x:Static res:Lang.LG_UI_HandrailDia}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HandrailDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding HandrailDia, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="4">
                 <Run Text="{x:Static res:Lang.LG_UI_HandrailExtend}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding HandrailExtend, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Text="{Binding HandrailExtend, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="5">
                 <Run Text="{x:Static res:Lang.LG_UI_RailDia}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding RailDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     Text="{Binding RailDia, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="6">
                 <Run Text="{x:Static res:Lang.LG_UI_TopGap}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding TopGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="6" Grid.Column="1"
+                     Text="{Binding TopGap, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="7">
                 <Run Text="{x:Static res:Lang.LG_UI_BottomGap}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding BottomGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="7" Grid.Column="1"
+                     Text="{Binding BottomGap, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="8">
                 <Run Text="{x:Static res:Lang.LG_UI_ColumnDia}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding ColumnDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="8" Grid.Column="1"
+                     Text="{Binding ColumnDia, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="9">
                 <Run Text="{x:Static res:Lang.LG_UI_ColumnGap}"/><Run Text=": &lt;="/>
             </TextBlock>
-            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding ColumnGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="9" Grid.Column="1"
+                     Text="{Binding ColumnGap, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <CheckBox Grid.Row="10" Grid.ColumnSpan="2" Margin="0,4"
                       Content="{x:Static res:Lang.LG_UI_HasSideColumns}"
@@ -143,12 +179,18 @@
             <TextBlock Grid.Row="11">
                 <Run Text="{x:Static res:Lang.LG_UI_PoleDia}"/><Run Text=":"/>
             </TextBlock>
-            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding PoleDia, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="11" Grid.Column="1"
+                     Text="{Binding PoleDia, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
             <TextBlock Grid.Row="12">
                 <Run Text="{x:Static res:Lang.LG_UI_PoleGap}"/><Run Text=": &lt;="/>
             </TextBlock>
-            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding PoleGap, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBox Grid.Row="12" Grid.Column="1"
+                     Text="{Binding PoleGap, UpdateSourceTrigger=PropertyChanged}"
+                     behavior:TextBoxBehavior.SelectAllTextOnFocus="True"/>
         </Grid>
 
         <!-- ===== Hàng nút dưới cùng ===== -->
@@ -164,6 +206,7 @@
                         IsDefault="True"
                         Content="{x:Static res:Lang.LG_UI_OK}"
                         Command="{Binding AcceptCmd}"/>
+
                 <Button Width="80" Height="26"
                         IsCancel="True"
                         Content="{x:Static res:Lang.LG_UI_Cancel}"
