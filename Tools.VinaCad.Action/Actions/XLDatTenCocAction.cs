@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Documents;
 using Teigha.DatabaseServices;
 using Tools.VinaCAD.Action.Actions;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -103,7 +103,7 @@ namespace Tools.VinaCad.Action.Actions
             catch (Exception ex)
             {
                 Logger.Info(nameof(XLDatTenCocAction), ex);
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
             }
         }
 
@@ -186,12 +186,12 @@ namespace Tools.VinaCad.Action.Actions
                 // basic validation
                 if (_vm.StartNumber <= 0)
                 {
-                    MessageBox.Show("Số bắt đầu phải lớn hơn 0.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.XLDTC_Msg_SoBatDauPhaiLonHon0, Lang.Common_Text_ThongBao);
                     return;
                 }
                 if (_vm.TextHeight <= 0)
                 {
-                    MessageBox.Show("Cỡ chữ phải lớn hơn 0.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.XLDTC_Msg_CoChuPhaiLonHon0, Lang.Common_Text_ThongBao);
                     return;
                 }
 
@@ -207,7 +207,7 @@ namespace Tools.VinaCad.Action.Actions
             catch (Exception ex)
             {
                 Logger.Info(nameof(SaveInvoke), ex);
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
             }
         }
 
@@ -216,7 +216,7 @@ namespace Tools.VinaCad.Action.Actions
             try
             {
                 _view?.Close();
-                _ed?.WriteMessage("\nXLDTC: Cancelled.\n");
+                _ed?.WriteMessage("\n" + Lang.XLDTC_Output_DaHuy + "\n");
             }
             catch (Exception ex)
             {

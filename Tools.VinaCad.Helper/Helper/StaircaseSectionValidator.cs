@@ -1,27 +1,17 @@
 using System;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
     public static class StaircaseSectionValidator
     {
-        private const string InvalidPlanDimensionsMessage =
-            "Chiều cao tầng, chiều rộng bậc phải lớn hơn 0; chiều rộng chiếu nghỉ không được âm.";
-
-        private const string InvalidCountsMessage =
-            "Số tầng phải từ 1 và tổng số bậc mỗi tầng phải từ 2.";
-
-        private const string InvalidFirstFlightMessage =
-            "Số bậc vế đầu phải nằm trong khoảng từ 1 đến nhỏ hơn tổng số bậc.";
-
-        private const string InvalidStructureDimensionsMessage =
-            "Kích thước kết cấu không được âm và chiều dày bản phải lớn hơn 0.";
-
-        private const string InvalidBeamDimensionsMessage =
-            "Chiều cao và chiều rộng dầm phụ phải lớn hơn 0 khi bật Dầm 1 hoặc Dầm 2.";
-
-        private const string InvalidStaircaseTypeMessage =
-            "Kiểu cầu thang không hợp lệ.";
+        private static string InvalidPlanDimensionsMessage => Lang.LTP_Validation_ChieuCaoTangChieuRongBacPhaiLonHon0ChieuRong;
+        private static string InvalidCountsMessage => Lang.LTP_Validation_SoTangPhaiTu1VaTongSoBacMoiTangPhai;
+        private static string InvalidFirstFlightMessage => Lang.LTP_Validation_SoBacVeDauPhaiNamTrongKhoangTu1DenNho;
+        private static string InvalidStructureDimensionsMessage => Lang.LTP_Validation_KichThuocKetCauKhongDuocAmVaChieuDayBanPhai;
+        private static string InvalidBeamDimensionsMessage => Lang.LTP_Validation_ChieuCaoVaChieuRongDamPhuPhaiLonHon0Khi;
+        private static string InvalidStaircaseTypeMessage => Lang.LTP_Validation_KieuCauThangKhongHopLe;
 
         public static bool TryValidate( StaircaseSectionModel settings, out string message)
         {

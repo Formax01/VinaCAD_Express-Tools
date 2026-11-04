@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 using Tools.VinaCAD.UI;
@@ -27,7 +27,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 Document document = Application.DocumentManager.MdiActiveDocument;
                 if (document == null)
-                    throw new InvalidOperationException("Không có bản vẽ đang hoạt động.");
+                    throw new InvalidOperationException(Lang.Common_Error_KhongCoBanVeDangHoatDong);
 
                 _editor = document.Editor;
                 _database = document.Database;
@@ -39,7 +39,7 @@ namespace Tools.VinaCad.Action.Actions
             catch (Exception ex)
             {
                 Logger.Info(nameof(StuccoAction), ex);
-                MessageBox.Show($"Lỗi FN: {ex.Message}", StringDefinition.TITLE_ERROR);
+                MessageBox.Show(Lang.FN_Msg_LoiFn.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi);
             }
         }
 
@@ -47,16 +47,16 @@ namespace Tools.VinaCad.Action.Actions
         {
             while (true)
             {
-                PromptPointOptions pointOptions = new PromptPointOptions(
-                    "\nFN - Chọn điểm trong phòng hoặc [O Quét chọn tường | E Mặt ngoài | S Cài đặt] : ")
+                PromptPointOptions pointOptions = new PromptPointOptions("\n" + Lang.FN_Prompt_FnChonDiemTrongPhongHoacOQuetChonTuongEMat)
                 {
                     AllowNone = true,
                     AllowArbitraryInput = false,
                     AppendKeywordsToMessage = false
                 };
-                pointOptions.Keywords.Add("Open", "O", "Quét chọn tường");
-                pointOptions.Keywords.Add("Exterior", "E", "Mặt ngoài");
-                pointOptions.Keywords.Add("Settings", "S", "Cài đặt");
+                pointOptions.Keywords.Add("Open", "O", Lang.FN_Prompt_QuetChonTuong);
+                pointOptions.Keywords.Add("Exterior", "E", Lang.FN_Prompt_MatNgoai);
+                pointOptions.Keywords.Add("Thick", "D", Lang.FN_Prompt_DoDay);
+                pointOptions.Keywords.Add("Settings", "S", Lang.FN_Prompt_CaiDat);
 
                 PromptPointResult pointResult = _editor.GetPoint(pointOptions);
                 if (pointResult.Status == PromptStatus.Cancel || pointResult.Status == PromptStatus.None)
@@ -69,11 +69,12 @@ namespace Tools.VinaCad.Action.Actions
                         if (operationCount <= 0)
                             continue;
 
-                        _editor.UpdateScreen();
+                            _editor.UpdateScreen();
                     }
                     catch (Exception ex)
                     {
                         Logger.Info(nameof(DrawStucco), ex);
+                        _editor.WriteMessage("\nFN: " + ex.Message);
                     }
 
                     continue;
@@ -93,6 +94,22 @@ namespace Tools.VinaCad.Action.Actions
                     continue;
                 }
 
+                if (IsMode(selectedMode, "Thick", "D"))
+                {
+                    try
+                    {
+                        if (ChangeStuccoThicknessBySelection(settings) > 0)
+                            _editor.UpdateScreen();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Info(nameof(DrawStucco), ex);
+                        _editor.WriteMessage("\nFN: " + ex.Message);
+                    }
+
+                    continue;
+                }
+
                 try
                 {
                     int operationCount = IsMode(selectedMode, "Open", "O")
@@ -106,6 +123,7 @@ namespace Tools.VinaCad.Action.Actions
                 catch (Exception ex)
                 {
                     Logger.Info(nameof(DrawStucco), ex);
+                    _editor.WriteMessage("\nFN: " + ex.Message);
                 }
 
                 break;
@@ -127,22 +145,68 @@ namespace Tools.VinaCad.Action.Actions
             };
             PromptSelectionOptions selectionOptions = new PromptSelectionOptions
             {
-                MessageForAdding = "\nChọn các cạnh liên tiếp của mặt ngoài, nhấn Enter để xác nhận: "
+                MessageForAdding = "\n" + Lang.FN_Prompt_ChonCacCanhLienTiepCuaMatNgoaiNhanEnterDeXac
             };
             PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
             if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
                 return 0;
 
-            PromptPointOptions sideOptions = new PromptPointOptions("\nChọn điểm phía ngoài để xác định hướng vữa: ");
+            PromptPointOptions sideOptions = new PromptPointOptions("\n" + Lang.FN_Prompt_ChonDiemPhiaNgoaiDeXacDinhHuongVua);
             PromptPointResult sideResult = _editor.GetPoint(sideOptions);
             if (sideResult.Status != PromptStatus.OK)
                 return 0;
 
-            return StuccoHelper.CreateStuccoForSelection(
+            return StuccoHelper.CreateStuccoForExteriorFaces(
                 _database,
                 selectionResult.Value.GetObjectIds(),
                 ToWorldPoint(sideResult.Value),
                 settings.Thickness,
+                settings.LayerName);
+        }
+
+        private int ChangeStuccoThicknessBySelection(StuccoSetting settings)
+        {
+            TypedValue[] filterValues =
+            {
+                new TypedValue((int)DxfCode.Start, "LINE"),
+                new TypedValue((int)DxfCode.LayerName, settings.LayerName)
+            };
+            PromptSelectionOptions selectionOptions = new PromptSelectionOptions
+            {
+                MessageForAdding = "\n" + Lang.FN_Prompt_ChonCanhVuaCanDoiDoDay
+            };
+            PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
+            if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
+                return 0;
+
+            PromptDoubleOptions thicknessOptions = new PromptDoubleOptions("\n" + Lang.FN_Prompt_NhapDoDayMoi.Replace("{settings.Thickness}", settings.Thickness.ToString()))
+            {
+                AllowNegative = false,
+                AllowZero = false,
+                AllowNone = true,
+                UseDefaultValue = false
+            };
+            PromptDoubleResult thicknessResult = _editor.GetDouble(thicknessOptions);
+
+            double newThickness;
+            if (thicknessResult.Status == PromptStatus.None)
+            {
+                newThickness = settings.Thickness;
+            }
+            else if (thicknessResult.Status == PromptStatus.OK)
+            {
+                newThickness = thicknessResult.Value;
+            }
+            else
+            {
+                return 0;
+            }
+
+            return StuccoHelper.ChangeStuccoThickness(
+                _database,
+                selectionResult.Value.GetObjectIds(),
+                settings.Thickness,
+                newThickness,
                 settings.LayerName);
         }
 
@@ -154,7 +218,7 @@ namespace Tools.VinaCad.Action.Actions
             };
             PromptSelectionOptions selectionOptions = new PromptSelectionOptions
             {
-                MessageForAdding = "\nQuét chọn toàn bộ hai mặt của các tường hở, nhấn Enter để xác nhận: "
+                MessageForAdding = "\n" + Lang.FN_Prompt_QuetChonToanBoHaiMatCuaCacTuongHoNhanEnter
             };
             PromptSelectionResult selectionResult = _editor.GetSelection(selectionOptions, new SelectionFilter(filterValues));
             if (selectionResult.Status != PromptStatus.OK || selectionResult.Value == null || selectionResult.Value.Count == 0)
@@ -169,13 +233,32 @@ namespace Tools.VinaCad.Action.Actions
 
         private int DrawInteriorBoundary(Point3d interiorPoint, StuccoSetting settings)
         {
+            try
+            {
+                return StuccoHelper.CreateStuccoForRoomFaces(
+                    _database,
+                    ToWorldPoint(interiorPoint),
+                    settings.Thickness,
+                    settings.LayerName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.Info(nameof(DrawInteriorBoundary), ex);
+                _editor.WriteMessage("\n" + Lang.FN_Output_ThuLaiBangBoundary.Replace("{ex.Message}", ex.Message));
+            }
+
+            return DrawInteriorBoundaryByBoundaryCommand(interiorPoint, settings);
+        }
+
+        private int DrawInteriorBoundaryByBoundaryCommand(Point3d interiorPoint, StuccoSetting settings)
+        {
             ObjectId[] temporaryBoundaryIds = Array.Empty<ObjectId>();
             try
             {
                 _editor.Regen();
                 temporaryBoundaryIds = CreateBoundaryWithCoreCommand(interiorPoint, settings.Thickness);
                 if (temporaryBoundaryIds.Length == 0)
-                    throw new InvalidOperationException("Không tìm thấy biên kín quanh điểm đã chọn. Hãy kiểm tra khe hở và bảo đảm toàn bộ biên phòng đang hiển thị trên màn hình.");
+                    throw new InvalidOperationException(Lang.FN_Error_KhongTimThayBienKinQuanhDiemDaChonHayKiemTra);
 
                 return StuccoHelper.CreateStuccoForBoundary(
                     _database,
@@ -360,6 +443,5 @@ namespace Tools.VinaCad.Action.Actions
             }
             catch { }
         }
-
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCad.Modeling;
 
@@ -151,8 +152,8 @@ namespace Tools.ViewModel
 
         public bool TryGetPreview(out IReadOnlyList<double> breadths, out IReadOnlyList<double> depths)
         {
-            bool breadthsOk = GridAxisDataHelper.TryParseSpacings(BreadthsText, "Breadths", out breadths, out _);
-            bool depthsOk = GridAxisDataHelper.TryParseSpacings(DepthsText, "Depths", out depths, out _);
+            bool breadthsOk = GridAxisDataHelper.TryParseSpacings(BreadthsText, Lang.ZXW_Field_ChieuRong, out breadths, out _);
+            bool depthsOk = GridAxisDataHelper.TryParseSpacings(DepthsText, Lang.ZXW_Field_ChieuSau, out depths, out _);
             if (depthsOk)
                 depths = depths.Reverse().ToArray();
             return breadthsOk && depthsOk;
@@ -162,10 +163,10 @@ namespace Tools.ViewModel
         {
             input = null;
 
-            if (!GridAxisDataHelper.TryParseSpacings(BreadthsText, "Breadths", out IReadOnlyList<double> breadths, out error))
+            if (!GridAxisDataHelper.TryParseSpacings(BreadthsText, Lang.ZXW_Field_ChieuRong, out IReadOnlyList<double> breadths, out error))
                 return false;
 
-            if (!GridAxisDataHelper.TryParseSpacings(DepthsText, "Depths", out IReadOnlyList<double> depths, out error))
+            if (!GridAxisDataHelper.TryParseSpacings(DepthsText, Lang.ZXW_Field_ChieuSau, out IReadOnlyList<double> depths, out error))
                 return false;
 
             if (!GridAxisDataHelper.TryBuildLabel(

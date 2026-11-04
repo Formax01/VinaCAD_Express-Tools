@@ -14,6 +14,7 @@ using Teigha.Geometry;
 using Tools.VinaCAD.Action.Actions;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -98,7 +99,7 @@ namespace Tools.VinaCad.Action.Actions
                 }
                 else
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn chưa xác lập danh mục.", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.Common_Msg_BanChuaXacLapDanhMuc, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {
@@ -131,7 +132,7 @@ namespace Tools.VinaCad.Action.Actions
 
                     if (!bt.Has(StringDefinition.blockNameTKDM_TD) || !bt.Has(StringDefinition.blockNameTKDM))
                     {
-                        MessageBox.Show("Bạn cần chèn block thống kê mẫu vào bản vẽ.",StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.Common_Msg_BanCanChenBlockThongKeMauVaoBanVe, Lang.Common_Text_ThongBao);
                         return;
                     }
 
@@ -158,7 +159,7 @@ namespace Tools.VinaCad.Action.Actions
         {
             
             _drawingCategoriesView.Hide();
-            PromptPointResult pointResult = _ed.GetPoint("\nChọn điểm chèn bảng thống kê: ");
+            PromptPointResult pointResult = _ed.GetPoint("\n" + Lang.Common_Prompt_ChonDiemChenBangThongKe);
             _drawingCategoriesView.Show();
             _drawingCategoriesView.Activate();
 

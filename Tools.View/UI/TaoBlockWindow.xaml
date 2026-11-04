@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Tạo block mới từ block được chọn"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.BB_UI_TaoBlockMoiTuBlockDuocChon}"
     Width="380"
     ResizeMode="NoResize"
     SizeToContent="Height"
@@ -33,7 +34,7 @@
             Grid.Column="0"
             VerticalAlignment="Center"
             Foreground="#222222"
-            Text="Tên block được chọn:" />
+            Text="{x:Static res:Lang.BB_UI_TenBlockDuocChon}" />
 
         <TextBox
             Grid.Row="0"
@@ -49,7 +50,7 @@
             Grid.Column="0"
             VerticalAlignment="Center"
             Foreground="#222222"
-            Text="Tên block mới:" />
+            Text="{x:Static res:Lang.BB_UI_TenBlockMoi}" />
 
         <TextBox
             Grid.Row="2"
@@ -72,13 +73,13 @@
                 Height="25"
                 Margin="0,0,90,0"
                 Command="{Binding TaoBlockCmd}"
-                Content="Chọn block" />
+                Content="{x:Static res:Lang.BB_UI_ChonBlock}" />
 
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>

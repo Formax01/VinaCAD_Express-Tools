@@ -8,50 +8,226 @@ using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Teigha.Runtime;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Action.Actions;
 using Tools.VinaCAD.Action.Actions;
-
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 using AcadApp = Prima.VinaCAD.ApplicationServices.Application;
+
 namespace Tools.VinaCAD.App.Commands
 {
     public class Commands
     {
 
-        
-        
+        [CommandMethod("CPD")]
+        public void CopyElevation()
+        {
+            try
+            {
+                CopyElevationAction action = new CopyElevationAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(CopyElevation), ex);
+            }
+        }
+
+        [CommandMethod("CLG")]
+        public void TurningVaneCommand()
+        {
+            try
+            {
+                TurningVaneAction action = new TurningVaneAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(TurningVaneCommand), ex);
+            }
+        }
+
+        [CommandMethod("VCD")]
+        public void VCDCommand()
+        {
+            try
+            {
+                VCDAction action = new VCDAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(VCDCommand), ex);
+            }
+        }
+
+        [CommandMethod("LiL")]
+        public void LiLCommand()
+        {
+            try
+            {
+                LiLAction action = new LiLAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(LiLCommand), ex);
+            }
+        }
+        [CommandMethod("HG")]
+        public void HGCommand()
+        {
+            try
+            {
+                HGAction action = new HGAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
+            }
+        }
+        [CommandMethod("Bulon")]
+        public void BulonCommand()
+        {
+            try
+            {
+                BulonAction action = new BulonAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BulonCommand), ex);
+            }
+        }
+
+
+
+        [CommandMethod("Bulon1")]
+        public void Bulon1Command()
+        {
+            try
+            {
+                Bulon1Action action = new Bulon1Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon1Command), ex);
+            }
+        }
+
+        [CommandMethod("Bulon2")]
+        public void Bulon2Command()
+        {
+            try
+            {
+                Bulon2Action action = new Bulon2Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(Bulon2Command), ex);
+            }
+        }
+
+        [CommandMethod("DAIOC")]
+        public void DaiOcCommand()
+        {
+            try
+            {
+                DaiOcAction action = new DaiOcAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOcCommand), ex);
+            }
+        }
+
+        [CommandMethod("DAIOC1")]
+        public void DaiOc1Command()
+        {
+            try
+            {
+                DaiOc1Action action = new DaiOc1Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc1Command), ex);
+            }
+        }
+
+        [CommandMethod("DAIOC2")]
+        public void DaiOc2Command()
+        {
+            try
+            {
+                DaiOc2Action action = new DaiOc2Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DaiOc2Command), ex);
+            }
+        }
+
+        [CommandMethod("OC1")]
+        public void OC1Command()
+        {
+            try
+            {
+                OC1Action action = new OC1Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC1Command), ex);
+            }
+        }
+
+        [CommandMethod("OC2")]
+        public void OC2Command()
+        {
+            try
+            {
+                OC2Action action = new OC2Action();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(OC2Command), ex);
+            }
+        }
+
         [CommandMethod("LG")]
         public void BanisterCommand()
         {
             try
             {
-                new BanisterAction().Execute();
+                BanisterAction action = new BanisterAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Logger.Info(ex.ToString());
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BanisterCommand), ex);
             }
         }
-
-        //[CommandMethod("CPD")]
-        //public void CopyElevation()
-        //{
-        //    try
-        //    {
-        //        CopyElevationAction action = new CopyElevationAction();
-        //        action.Execute();
-
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-        //        Logger.Info(nameof(CreateGridAxisCommand), ex);
-        //    }
-        //}
-        
-
-
 
         [CommandMethod("ZXW")]
         public void CreateGridAxisCommand()
@@ -60,13 +236,150 @@ namespace Tools.VinaCAD.App.Commands
             {
                 CreateGridAxisAction action = new CreateGridAxisAction();
                 action.Execute();
+               
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(CreateGridAxisCommand), ex);
+            }
+        }
+
+        [CommandMethod("B1")]
+        public void DrawDuctCommand()
+        {
+            try
+            {
+                DrawDuctAction action = new DrawDuctAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                Logger.Info(nameof(CreateGridAxisCommand), ex);
+                Logger.Info(nameof(DrawDuctCommand), ex);
             }
         }
+
+        [CommandMethod("B2")]
+        public void ReducerCommand()
+        {
+            try
+            {
+                ReducerAction action = new ReducerAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(ReducerCommand), ex);
+            }
+        }
+
+        [CommandMethod("B3")]
+        public void DrawShoeCommand()
+        {
+            try
+            {
+                DrawShoeAction action = new DrawShoeAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawShoeCommand), ex);
+            }
+        }
+
+        [CommandMethod("B4")]
+        public void DrawSquareToRoundCommand()
+        {
+            try
+            {
+                DrawSquareToRoundAction action = new DrawSquareToRoundAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawSquareToRoundCommand), ex);
+            }
+        }
+
+        [CommandMethod("BZ")]
+        public void DrawOffsetDuctCommand()
+        {
+            try
+            {
+                DrawOffsetDuctAction action = new DrawOffsetDuctAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawOffsetDuctCommand), ex);
+            }
+        }
+
+        [CommandMethod("BZ2")]
+        public void DrawZElbowDuctCommand()
+        {
+            try
+            {
+                DrawZElbowDuctAction action = new DrawZElbowDuctAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawZElbowDuctCommand), ex);
+            }
+        }
+
+        [CommandMethod("BB1")]
+        public void DrawBoxCommand()
+        {
+            try
+            {
+                DrawBoxAction action = new DrawBoxAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawBoxCommand), ex);
+            }
+        }
+
+        [CommandMethod("BB2")]
+        public void DrawReducerDuct3DCommand()
+        {
+            try
+            {
+                DrawReducerDuct3DAction action = new DrawReducerDuct3DAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(DrawReducerDuct3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("Bbz")]
+        public void BbzCommand()
+        {
+            try
+            {
+                BbzAction action = new BbzAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                Logger.Info(nameof(BbzCommand), ex);
+            }
+        }
+
 
         [CommandMethod("Sample")]
         public void SampleCommand()
@@ -78,10 +391,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SampleCommand), ex);
             }
         }
+
         [CommandMethod("FDT")]
         public void FindTextCommand()
         {
@@ -92,7 +406,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(FindTextCommand), ex);
             }
         }
@@ -107,7 +421,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(ConfigureDrawingListActionCommand), ex);
             }
         }
@@ -122,7 +436,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLSDMCommand), ex);
             }
         }
@@ -137,7 +451,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(NumberingDrawingsCommand), ex);
             }
         }
@@ -152,7 +466,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DrawingCategoriesCommand), ex);
             }
         }
@@ -167,7 +481,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(SDMCommand), ex);
             }
         }
@@ -182,7 +496,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLCKCommand), ex);
             }
         }
@@ -197,7 +511,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKCKCommand), ex);
             }
         }
@@ -212,7 +526,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TaoBlockCommand), ex);
             }
         }
@@ -227,7 +541,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TaoDoCocCommand), ex);
             }
         }
@@ -242,7 +556,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(VeCocCommand), ex);
             }
         }
@@ -257,7 +571,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(QXLTKCTCommand), ex);
             }
         }
@@ -272,7 +586,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(EDITTKCTCommand), ex);
             }
         }
@@ -287,7 +601,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKLTKCTHCommand), ex);
             }
         }
@@ -302,7 +616,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKLTKCTCommand), ex);
             }
         }
@@ -317,25 +631,31 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKTSCommand), ex);
             }
         }
 
-        [CommandMethod("TD")]
+        [CommandMethod("TDD")]
         public void TKTDCommand()
         {
             try
             {
                 DanhSoHieuTKTDAction action = new DanhSoHieuTKTDAction();
-                action.Execute(); 
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TKTDCommand), ex);
             }
         }
+
+        //[CommandMethod("TDD")]
+        //public void TDDCommand()
+        //{
+        //    TKTDCommand();
+        //}
 
         [CommandMethod("DTT")]
         public void BangTraDTCTCommand()
@@ -347,7 +667,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraDTCTCommand), ex);
             }
         }
@@ -362,7 +682,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTieuChuanNeoNoiCTCommand), ex);
             }
         }
@@ -377,10 +697,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
+
         [CommandMethod("NEO")]
         public void BangTraNeoCTCommand()
         {
@@ -391,7 +712,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
@@ -406,10 +727,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BangTraCuongDoBTCommand), ex);
             }
         }
+
         [CommandMethod("KTD")]
         public void KiemTraTrungDimCommand()
         {
@@ -420,7 +742,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(KiemTraTrungDimCommand), ex);
             }
         }
@@ -435,11 +757,10 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLKiemTraCongDonDimCommand), ex);
             }
         }
-
 
         [CommandMethod("DCD")]
         public void KiemTraCongDonDimCommand()
@@ -451,7 +772,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(KiemTraCongDonDimCommand), ex);
             }
         }
@@ -466,7 +787,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(RenameTextCommand), ex);
             }
         }
@@ -481,8 +802,22 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(RenameLayerCommand), ex);
+            }
+        }
+
+        [CommandMethod("EXPRESSLANGUAGE")]
+        public void ExpressLanguageCommand()
+        {
+            try
+            {
+                new LanguageSettingsAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(ExpressLanguageCommand), ex);
             }
         }
 
@@ -496,8 +831,22 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(AboutToolsCommand), ex);
+            }
+        }
+
+        [CommandMethod("EXPRESSFEEDBACK")]
+        public void FeedbackCommand()
+        {
+            try
+            {
+                new FeedbackAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FeedbackCommand), ex);
             }
         }
 
@@ -511,7 +860,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(AboutToolsCommand), ex);
             }
         }
@@ -526,7 +875,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(XLDatTenCocCommand), ex);
             }
         }
@@ -541,7 +890,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DTCCommand), ex);
             }
         }
@@ -556,10 +905,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(DrawWallCommand), ex);
             }
         }
+        
 
         [CommandMethod("EW")]
         public void EraseAutoHealWallCommand()
@@ -571,10 +921,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(EraseAutoHealWallCommand), ex);
             }
         }
+
         [CommandMethod("WWT")]
         public void ChangeWallThicknessCommand()
         {
@@ -585,7 +936,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(ChangeWallThicknessCommand), ex);
             }
         }
@@ -600,7 +951,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(OffsetWallCommand), ex);
             }
         }
@@ -615,11 +966,11 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(TrimFixWallCommand), ex);
             }
         }
-        
+
         [CommandMethod("BBE")]
         public void BlockEraseCommand()
         {
@@ -630,7 +981,7 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(BlockEraseCommand), ex);
             }
         }
@@ -640,16 +991,16 @@ namespace Tools.VinaCAD.App.Commands
         {
             try
             {
-                 StuccoAction action = new StuccoAction();
-                 action.Execute();
+                StuccoAction action = new StuccoAction();
+                action.Execute();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(StuccoCommand), ex);
             }
         }
-      
+
         [CommandMethod("AD")]
         public void OpenDoorCommand()
         {
@@ -659,38 +1010,302 @@ namespace Tools.VinaCAD.App.Commands
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(OpenDoorCommand), ex);
             }
         }
-      
-        [CommandMethod("AW")]
-          public void ArrangeWindowCommand()
-          {
-              try
-              {
-                  new ArrangeWindowAction().Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(ArrangeWindowCommand), ex);
-              }
-          }
-        [CommandMethod("LTP")]
-          public void StaircaseSectionCommand()
-          {
-              try
-              {
-                  StaircaseSectionAction action = new StaircaseSectionAction();
-                  action.Execute();
-              }
-              catch (System.Exception ex)
-              {
-                  MessageBox.Show(ex.Message, StringDefinition.TITLE_ERROR);
-                  Logger.Info(nameof(StaircaseSectionCommand), ex);
-              }
-          }
 
+        [CommandMethod("AW")]
+        public void ArrangeWindowCommand()
+        {
+            try
+            {
+                new ArrangeWindowAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(ArrangeWindowCommand), ex);
+            }
+        }
+
+        [CommandMethod("LTP")]
+        public void StaircaseSectionCommand()
+        {
+            try
+            {
+                StaircaseSectionAction action = new StaircaseSectionAction();
+                action.Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(StaircaseSectionCommand), ex);
+            }
+        }
+
+        [CommandMethod("S1")]
+        public void FlexDuctTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("S2")]
+        public void FlexDuctHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.Horizontal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("S3")]
+        public void FlexDuctDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDown);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctDoubleTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R1")]
+        public void FlexDuctBareTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.TopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctBareTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("R2")]
+        public void FlexDuctBareHorizontalCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.HorizontalBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctBareHorizontalCommand), ex);
+            }
+        }
+
+        [CommandMethod("R3")]
+        public void FlexDuctBareDoubleTopDownCommand()
+        {
+            try
+            {
+                new FlexDuctAction().Execute(Tools.Model.FlexDuctType.DoubleTopDownBare);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FlexDuctBareDoubleTopDownCommand), ex);
+            }
+        }
+
+        [CommandMethod("E1")]
+        public void DuctElbowEqualCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowEqualCommand), ex);
+            }
+        }
+
+        [CommandMethod("E2")]
+        public void DuctElbowReducingCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowReducingCommand), ex);
+            }
+        }
+
+        [CommandMethod("E3")]
+        public void DuctElbowVerticalCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowVerticalCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEX")]
+        public void DuctBranchEEXCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEX);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctBranchEEXCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEY")]
+        public void DuctBranchEEYCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEY);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctBranchEEYCommand), ex);
+            }
+        }
+
+        [CommandMethod("EEZ")]
+        public void DuctBranchEEZCommand()
+        {
+            try
+            {
+                new DuctBranchAction().Execute(Tools.Model.DuctBranchType.EEZ);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctBranchEEZCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE1")]
+        public void DuctElbowEqual3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Equal, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowEqual3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE2")]
+        public void DuctElbowReducing3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Reducing, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowReducing3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("EE3")]
+        public void DuctElbowVertical3DCommand()
+        {
+            try
+            {
+                new DuctElbowAction().Execute(Tools.Model.DuctElbowType.Vertical, true);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(DuctElbowVertical3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DD")]
+        public void SupplyAirDiffuserCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(SupplyAirDiffuserCommand), ex);
+            }
+        }
+
+        [CommandMethod("DDI")]
+        public void SupplyAirDiffuser3DCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().Execute3D();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(SupplyAirDiffuser3DCommand), ex);
+            }
+        }
+
+        [CommandMethod("DIFF")]
+        public void SupplyAirDiffuserBlockCommand()
+        {
+            try
+            {
+                new SupplyAirDiffuserAction().ExecuteBlock();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(SupplyAirDiffuserBlockCommand), ex);
+            }
+        }
+
+        [CommandMethod("Grill")]
+        public void ReturnAirGrilleCommand()
+        {
+            new ReturnAirGrilleAction().Execute(false);
+        }
+
+        [CommandMethod("GrillV")]
+        public void ReturnAirGrilleEggCrateCommand()
+        {
+            new ReturnAirGrilleAction().Execute(true);
+        }
     }
 }

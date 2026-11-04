@@ -10,6 +10,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Teigha.GraphicsInterface;
 using Tools.Model;
+using Tools.Resources.Language;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
 using Tools.VinaCAD.UI;
@@ -30,7 +31,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 Document? document = Application.DocumentManager.MdiActiveDocument;
                 if (document == null)
-                    throw new InvalidOperationException("Không có bản vẽ đang hoạt động.");
+                    throw new InvalidOperationException(Lang.Common_Error_KhongCoBanVeDangHoatDong);
 
                 editor = document.Editor;
                 Database database = document.Database;
@@ -48,18 +49,21 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (placementResult.Status != PromptStatus.OK)
                 {
-                    editor.WriteMessage("\nZXW đã hủy; bản vẽ không thay đổi.");
+                    editor.WriteMessage("\n" + Lang.ZXW_Output_ZxwDaHuyBanVeKhongThayDoi);
                     return;
                 }
 
                 int entityCount = GridAxisHelper.CreateGrid(database, input, jig.Origin);
                 editor.Regen();
                 editor.WriteMessage(
-                    $"\nZXW đã tạo lưới {input.Breadths.Count + 1} x {input.Depths.Count + 1} trục ({entityCount} đối tượng).");
+                    "\n" + Lang.ZXW_Output_ZxwDaTaoLuoiXTrucDoiTuong
+                        .Replace("{input.Breadths.Count + 1}", (input.Breadths.Count + 1).ToString())
+                        .Replace("{input.Depths.Count + 1}", (input.Depths.Count + 1).ToString())
+                        .Replace("{entityCount}", entityCount.ToString()));
             }
             catch (Exception ex)
             {
-                editor?.WriteMessage($"\nZXW lỗi: {ex.Message}");
+                editor?.WriteMessage("\n" + Lang.ZXW_Output_ZxwLoi.Replace("{ex.Message}", ex.Message));
             }
         }
 
@@ -89,7 +93,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 var options = new JigPromptPointOptions
                 {
-                    Message = "\nChọn điểm góc trái-dưới để đặt lưới trục: ",
+                    Message = "\n" + Lang.ZXW_Prompt_ChonDiemGocTraiDuoiDeDatLuoiTruc,
                     UserInputControls = UserInputControls.Accept3dCoordinates
                 };
 
@@ -248,7 +252,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 if (!viewModel.TryBuildInput(out GridAxisInput? input, out string error) || input == null)
                 {
-                    System.Windows.MessageBox.Show(error, "Dữ liệu lưới trục không hợp lệ",
+                    System.Windows.MessageBox.Show(error, Lang.ZXW_Msg_DuLieuLuoiTrucKhongHopLe,
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }

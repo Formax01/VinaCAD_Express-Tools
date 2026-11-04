@@ -12,6 +12,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -60,7 +61,7 @@ namespace Tools.VinaCad.Action.Actions
                 UpdateCurrentDocument();
                 if (XLTKCTSetting.LapD10 == 0 || XLTKCTSetting.LapD10D16 == 0 || XLTKCTSetting.LapD16 == 0)
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn cần xác lập đầy đủ trước khi thống kê thép!", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {
@@ -104,7 +105,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 if (string.IsNullOrEmpty(_danhSoHieuTKTDVM.SoHieuThepRenStart) || string.IsNullOrEmpty(_danhSoHieuTKTDVM.SoHieuThepKhacStart))
                 {
-                    MessageBox.Show("Bạn cần nhập số hiệu bắt đầu để đánh số!", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.Common_Msg_BanCanNhapSoHieuBatDauDeDanhSo, Lang.Common_Text_ThongBao);
                     return;
                 }
                 else
@@ -117,7 +118,7 @@ namespace Tools.VinaCad.Action.Actions
                         NumberBlocks(blockIdRenSeleted, _danhSoHieuTKTDVM.SoHieuThepRenStart);
                         NumberBlocks(blockIdDamSeleted, _danhSoHieuTKTDVM.SoHieuThepKhacStart);
                         _danhSoHieuTuDong = true;
-                        MessageBox.Show("Bạn đã đánh số hiệu tự động thép dầm thành công!", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.TD_Msg_BanDaDanhSoHieuTuDongThepDamThanhCong, Lang.Common_Text_ThongBao);
                     }
                     else
                     {
@@ -126,7 +127,7 @@ namespace Tools.VinaCad.Action.Actions
                         NumberBlocks(blockIdRenSeleted, _danhSoHieuTKTDVM.SoHieuThepRenStart);
                         NumberBlocks(blockIdDamSeleted, _danhSoHieuTKTDVM.SoHieuThepKhacStart);
                         _danhSoHieuTuDong = true;
-                        MessageBox.Show("Bạn đã đánh số hiệu tự động thép dầm thành công!", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.TD_Msg_BanDaDanhSoHieuTuDongThepDamThanhCong, Lang.Common_Text_ThongBao);
                     }
                 }
 
@@ -174,13 +175,13 @@ namespace Tools.VinaCad.Action.Actions
         {
             if ((blockIdRenSeleted == null || blockIdRenSeleted.Count == 0) && (blockIdDamSeleted == null || blockIdDamSeleted.Count == 0))
             {
-                MessageBox.Show("Vui lòng quét chọn block thép đầu dầm.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.TD_Msg_VuiLongQuetChonBlockThepDauDam, Lang.Common_Text_ThongBao);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(_danhSoHieuTKTDVM.Scale))
             {
-                MessageBox.Show("Vui lòng nhập tỷ lệ bản vẽ.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.Common_Msg_VuiLongNhapTyLeBanVe, Lang.Common_Text_ThongBao);
                 return false;
             }
 
@@ -201,7 +202,7 @@ namespace Tools.VinaCad.Action.Actions
                         first.chieuDaiThanhThep != item.chieuDaiThanhThep ||
                         first.chieuDaiBeMoc != item.chieuDaiBeMoc)
                     {
-                        MessageBox.Show("Cùng số hiệu " + first.soHieu.ToUpper() + " nhưng lại khác thông số. Bạn cần dừng lại để kiểm tra!", "Phát Hiện Trùng Số Hiệu!!!");
+                        MessageBox.Show(Lang.Common_Status_CungSoHieu.Replace("{soHieu}", first.soHieu.ToUpper()) + " " +Lang.TD_Msg_NhungLaiKhacThongSoBanCanDungLaiDeKiemTra,Lang.Common_Msg_PhatHienTrungSoHieu);
 
                         if (first.blockThep != null && !first.blockThep.ObjectId.IsNull)
                             duplicateIds.Add(first.blockThep.ObjectId);
@@ -323,7 +324,7 @@ namespace Tools.VinaCad.Action.Actions
             _ed.SetImpliedSelection(Array.Empty<ObjectId>());
             _ed.SetImpliedSelection(objectIds);
 
-            _ed.WriteMessage($"\nĐã chọn {objectIds.Length} đối tượng.");
+            _ed.WriteMessage("\n" + Lang.Common_Output_DaChonDoiTuong.Replace("{objectIds.Length}",objectIds.Length.ToString()));
 
             _ed.UpdateScreen();
         }
@@ -426,7 +427,7 @@ namespace Tools.VinaCad.Action.Actions
         }
         private Point3d? PickInsertPoint()
         {
-            PromptPointResult result = _ed.GetPoint("\nChọn điểm chèn bảng thống kê thép: ");
+            PromptPointResult result = _ed.GetPoint("\n" + Lang.Common_Prompt_ChonDiemChenBangThongKeThep);
 
             if (result.Status != PromptStatus.OK)
                 return null;

@@ -12,6 +12,7 @@ using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.VinaCAD.Action.Actions;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -70,25 +71,25 @@ namespace Tools.VinaCad.Action.Actions
                             }
                             else
                             {
-                                MessageBox.Show("Hậu tố phải là số nguyên.",StringDefinition.TITLE_MESSAGE);
+                                MessageBox.Show(Lang.DSHBV_Msg_HauToPhaiLaSoNguyen, Lang.Common_Text_ThongBao);
                                 return;
                             }   
                         }
                         else
                         {
-                            MessageBox.Show("Bạn vui lòng nhập đầy đủ tiền tố và hậu tố.", StringDefinition.TITLE_MESSAGE);
+                            MessageBox.Show(Lang.DSHBV_Msg_BanVuiLongNhapDayDuTienToVaHauTo, Lang.Common_Text_ThongBao);
                             return;
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Bạn chưa chọn kiểu đánh tên.", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.DSHBV_Msg_BanChuaChonKieuDanhTen, Lang.Common_Text_ThongBao);
                         return;
                     } 
                 }
                 else
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn chưa xác lập danh mục.", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.Common_Msg_BanChuaXacLapDanhMuc, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {

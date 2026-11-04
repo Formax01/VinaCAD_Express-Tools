@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.VinaCad.Helper.Helper
 {
@@ -24,7 +25,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (string.IsNullOrWhiteSpace(text))
             {
-                error = $"{fieldName} không được để trống.";
+                error = Lang.ZXW_Text_KhongDuocDeTrong.Replace("{fieldName}", fieldName);
                 return false;
             }
 
@@ -46,7 +47,7 @@ namespace Tools.VinaCad.Helper.Helper
                 {
                     if (!int.TryParse(repeated.Groups[1].Value, out repeatCount) || repeatCount <= 0)
                     {
-                        error = $"{fieldName}: hệ số lặp tại mục {tokenIndex + 1} không hợp lệ.";
+                        error = Lang.ZXW_Text_HeSoLapTaiMucKhongHopLe.Replace("{fieldName}", fieldName).Replace("{tokenIndex + 1}", (tokenIndex + 1).ToString());
                         return false;
                     }
 
@@ -55,13 +56,13 @@ namespace Tools.VinaCad.Helper.Helper
 
                 if (!TryParsePositiveNumber(valueToken, out double value))
                 {
-                    error = $"{fieldName}: '{token}' không phải khoảng cách dương hợp lệ.";
+                    error = Lang.ZXW_Text_KhongPhaiKhoangCachDuongHopLe.Replace("{fieldName}", fieldName).Replace("{token}", token);
                     return false;
                 }
 
                 if (values.Count + repeatCount > MaximumBayCount)
                 {
-                    error = $"{fieldName} chỉ hỗ trợ tối đa {MaximumBayCount} nhịp.";
+                    error = Lang.ZXW_Text_ChiHoTroToiDaNhip.Replace("{fieldName}", fieldName).Replace("{MaximumBayCount}", MaximumBayCount.ToString());
                     return false;
                 }
 
@@ -71,7 +72,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (values.Count == 0)
             {
-                error = $"{fieldName} phải có ít nhất một nhịp.";
+                error = Lang.ZXW_Text_PhaiCoItNhatMotNhip.Replace("{fieldName}", fieldName);
                 return false;
             }
 
@@ -123,7 +124,7 @@ namespace Tools.VinaCad.Helper.Helper
 
             if (offset < 0)
             {
-                error = "Vị trí nhãn không hợp lệ.";
+                error = Lang.ZXW_Text_ViTriNhanKhongHopLe;
                 return false;
             }
 
@@ -133,7 +134,7 @@ namespace Tools.VinaCad.Helper.Helper
                     || number < 0
                     || number > int.MaxValue - offset)
                 {
-                    error = "Ký tự bắt đầu của trục số phải là số nguyên không âm.";
+                    error = Lang.ZXW_Text_KyTuBatDauCuaTrucSoPhaiLaSoNguyenKhong;
                     return false;
                 }
 
@@ -144,7 +145,7 @@ namespace Tools.VinaCad.Helper.Helper
             string letters = (start ?? string.Empty).Trim().ToUpperInvariant();
             if (letters.Length == 0 || letters.Any(c => c < 'A' || c > 'Z'))
             {
-                error = "Ký tự bắt đầu của trục chữ phải gồm A-Z.";
+                error = Lang.ZXW_Text_KyTuBatDauCuaTrucChuPhaiGomAZ;
                 return false;
             }
 
@@ -154,7 +155,7 @@ namespace Tools.VinaCad.Helper.Helper
                 value = value * 26 + (letter - 'A' + 1);
                 if (value > int.MaxValue)
                 {
-                    error = "Ký tự bắt đầu của trục chữ quá lớn.";
+                    error = Lang.ZXW_Text_KyTuBatDauCuaTrucChuQuaLon;
                     return false;
                 }
             }
@@ -162,7 +163,7 @@ namespace Tools.VinaCad.Helper.Helper
             value += offset;
             if (value > int.MaxValue)
             {
-                error = "Số lượng trục vượt quá giới hạn nhãn chữ.";
+                error = Lang.ZXW_Text_SoLuongTrucVuotQuaGioiHanNhanChu;
                 return false;
             }
 

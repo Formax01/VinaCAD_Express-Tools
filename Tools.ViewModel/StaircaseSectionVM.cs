@@ -1,5 +1,6 @@
 using PrMVVMCore;
 using Tools.Model;
+using Tools.Resources.Language;
 
 namespace Tools.ViewModel
 {
@@ -82,6 +83,7 @@ namespace Tools.ViewModel
                 _settings.StoreyHeight = value;
                 OnPropertyChanged(nameof(StoreyHeight));
                 OnPropertyChanged(nameof(CurrentStepHeight));
+                OnPropertyChanged(nameof(CurrentStepHeightText));
             }
         }
 
@@ -99,6 +101,7 @@ namespace Tools.ViewModel
                 _settings.StepNumber = value;
                 OnPropertyChanged(nameof(StepNumber));
                 OnPropertyChanged(nameof(CurrentStepHeight));
+                OnPropertyChanged(nameof(CurrentStepHeightText));
             }
         }
 
@@ -181,6 +184,7 @@ namespace Tools.ViewModel
         }
 
         public double CurrentStepHeight => _settings.CurrentStepHeight;
+        public string CurrentStepHeightText => Lang.LTP_UI_ChieuCaoCoBacHienTai.Replace("{0:0.####}", CurrentStepHeight.ToString("0.####"));
 
         public void Reset(StaircaseSectionModel defaults)
         {

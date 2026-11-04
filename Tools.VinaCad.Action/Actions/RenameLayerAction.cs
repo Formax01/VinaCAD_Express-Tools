@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teigha.DatabaseServices;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -71,14 +71,14 @@ namespace Tools.VinaCad.Action.Actions
                 List<RenameLayerModel> renameLayerModels = _renameLayerVM.CauKienItems?.ToList();
                 if (renameLayerModels.Count == 0)
                 {
-                    MessageBox.Show("Chưa có layer nào để đổi.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.RenameLayer_Msg_ChuaCoLayerNaoDeDoi, Lang.Common_Text_ThongBao);
                     return;
                 }
                 bool allRenameLayerEmpty = renameLayerModels.All(x => x == null || string.IsNullOrWhiteSpace(x.RenameLayer));
 
                 if (allRenameLayerEmpty)
                 {
-                    MessageBox.Show("Vui lòng copy giá trị vào cột Rename Layer.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.RenameLayer_Msg_VuiLongCopyGiaTriVaoCotRenameLayer, Lang.Common_Text_ThongBao);
                     return;
                 }
 
@@ -143,7 +143,7 @@ namespace Tools.VinaCad.Action.Actions
 
                     if (layerTable.Has(newLayerName))
                     {
-                        MessageBox.Show($"Layer \"{newLayerName}\" đã tồn tại.", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.RenameLayer_Msg_LayerDaTonTai.Replace("{newLayerName}", newLayerName), Lang.Common_Text_ThongBao);
                         continue;
                     }
 

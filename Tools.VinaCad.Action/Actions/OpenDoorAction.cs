@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using Teigha.DatabaseServices;
 using Tools.Model;
-using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.VinaCad.Helper.Helper;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
@@ -50,7 +50,7 @@ namespace Tools.VinaCAD.Action.Actions
                     }
                     catch (Exception exception)
                     {
-                        editor.WriteMessage($"\nAD: {exception.Message} Hãy chọn lại.");
+                        editor.WriteMessage("\n" + Lang.AD_Output_AdHayChonLai.Replace("{exception.Message}", exception.Message));
                         continue;
                     }
 
@@ -75,31 +75,31 @@ namespace Tools.VinaCAD.Action.Actions
                     catch (Exception exception)
                     {
                         OpenDoorHelper.CancelOpening(document.Database, doorId);
-                        editor.WriteMessage($"\nAD: Không thể đổi hướng cửa: {exception.Message}");
+                        editor.WriteMessage("\n" + Lang.AD_Output_AdKhongTheDoiHuongCua.Replace("{exception.Message}", exception.Message));
                     }
                 }
 
-                editor.WriteMessage($"\nAD: đã tạo {createdCount} cửa đi.");
+                editor.WriteMessage("\n" + Lang.AD_Output_AdDaTaoCuaDi.Replace("{createdCount}", createdCount.ToString()));
             }
             catch (Exception exception)
             {
                 Logger.Info("CreateDoorCommand", exception);
 
-                System.Windows.MessageBox.Show($"Lỗi AD: {exception.Message}",StringDefinition.TITLE_ERROR,MessageBoxButton.OK,MessageBoxImage.Error);
+                System.Windows.MessageBox.Show(
+                    Lang.AD_Msg_LoiAd.Replace("{exception.Message}", exception.Message),
+                    Lang.Common_Text_Loi,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
         private static PromptEntityOptions CreateWallPrompt(DoorStyleSelection selection)
         {
-            string placement = selection.PlaceAtWallCenter ? "Giữa" : $"Pier={selection.EdgeDistance:0.##}";
-
-            string orientation = (selection.ReverseAlongWall ? ", Đảo" : string.Empty) +
-                                 (selection.MirrorAcrossWall ? ", Lật" : string.Empty);
-            PromptEntityOptions options = new PromptEntityOptions("Chọn tường hoặc [S-Chọn cửa/W-Cài đặt thông số/C-Center] <Enter: Kết thúc>: ")
+            PromptEntityOptions options = new PromptEntityOptions(Lang.AD_Prompt_ChonTuongHoacSChonCuaWCaiDatThongSoC)
             {
                 AllowNone = true
             };
-            options.SetRejectMessage("\nChỉ chấp nhận Line, Polyline thẳng hoặc block tường.");
+            options.SetRejectMessage("\n" + Lang.Common_Prompt_ChiChapNhanLinePolylineThangHoacBlockTuong);
             options.AddAllowedClass(typeof(Line), true);
             options.AddAllowedClass(typeof(Polyline), true);
             options.AddAllowedClass(typeof(BlockReference), true);
@@ -131,7 +131,7 @@ namespace Tools.VinaCAD.Action.Actions
                 case "C":
                     selection.PlaceAtWallCenter = true;
                     selection.UseEdgeDistance = false;
-                    editor.WriteMessage("\n Đã chuyển vị trí cửa về giữa tường.");
+                    editor.WriteMessage("\n " + Lang.AD_Output_DaChuyenViTriCuaVeGiuaTuong);
                     return true;
             }
 

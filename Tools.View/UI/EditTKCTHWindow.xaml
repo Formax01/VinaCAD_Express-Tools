@@ -5,8 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Tools.View.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Bảng Thống Kê Thép Hình"
-    Width="580"
+    xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
+    Title="{x:Static res:Lang.QD_UI_BangThongKeThepHinh}"
+    Width="600"
     Height="500"
     Loaded="BangToaDoCocWindow_Loaded"
     Topmost="True"
@@ -37,7 +38,7 @@
                 <DataGridTextColumn
                     Width="90"
                     Binding="{Binding SoHieu, UpdateSourceTrigger=PropertyChanged}"
-                    Header="S.Hiệu"
+                    Header="{x:Static res:Lang.Common_UI_SoHieu}"
                     SortMemberPath="SoHieu">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -55,7 +56,7 @@
                 <DataGridTextColumn
                     Width="200"
                     Binding="{Binding QCT, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Quy Cách Thép"
+                    Header="{x:Static res:Lang.QD_UI_QuyCachThep}"
                     SortMemberPath="QuyCachThep">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -73,7 +74,7 @@
                 <DataGridTextColumn
                     Width="90"
                     Binding="{Binding CD, UpdateSourceTrigger=PropertyChanged}"
-                    Header="Chiều&#x0a;Dài"
+                    Header="{x:Static res:Lang.QD_UI_ChieuDai}"
                     SortMemberPath="ChieuDai">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -91,7 +92,7 @@
                 <DataGridTextColumn
                     Width="80"
                     Binding="{Binding SL, UpdateSourceTrigger=PropertyChanged}"
-                    Header="SL"
+                    Header="{x:Static res:Lang.Common_UI_SoLuong}"
                     SortMemberPath="SL">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -109,7 +110,7 @@
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding SCK, UpdateSourceTrigger=PropertyChanged}"
-                    Header="SCK"
+                    Header="{x:Static res:Lang.Common_UI_SoCauKien}"
                     SortMemberPath="SCK">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -138,12 +139,12 @@
                 Height="25"
                 Margin="0,0,110,0"
                 Command="{Binding UpdateCmd}"
-                Content="Cập Nhật" />
+                Content="{x:Static res:Lang.Common_UI_CapNhat}" />
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="Thoát" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>

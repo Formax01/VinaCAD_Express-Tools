@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Teigha.DatabaseServices;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Application = Prima.VinaCAD.ApplicationServices.Application;
 
 namespace Tools.VinaCad.Helper.Helper
@@ -88,7 +89,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nChọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_ChonBlock;
             opt.SingleOnly = true;
             opt.RejectObjectsOnLockedLayers = true;
 
@@ -115,7 +116,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return resultIds;
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
             opt.RejectObjectsOnLockedLayers = true;
 
             TypedValue[] filterValues =
@@ -171,7 +172,7 @@ namespace Tools.VinaCad.Helper.Helper
             ed.UpdateScreen();
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
 
             TypedValue[] filterValues =
             {
@@ -234,7 +235,7 @@ namespace Tools.VinaCad.Helper.Helper
             ed.UpdateScreen();
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlock;
 
             TypedValue[] filterValues =
             {
@@ -303,7 +304,7 @@ namespace Tools.VinaCad.Helper.Helper
                 return;
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn block và text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonBlockVaText;
 
             PromptSelectionResult result = ed.GetSelection(opt);
 
@@ -374,7 +375,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonVungChuaText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
@@ -434,7 +435,7 @@ namespace Tools.VinaCad.Helper.Helper
             SelectionFilter filter = new SelectionFilter(filterValues);
 
             PromptSelectionOptions opt = new PromptSelectionOptions();
-            opt.MessageForAdding = "\nQuét chọn vùng chứa text: ";
+            opt.MessageForAdding = "\n" + Lang.Common_Prompt_QuetChonVungChuaText;
             opt.RejectObjectsOnLockedLayers = true;
 
             PromptSelectionResult result = ed.GetSelection(opt, filter);
@@ -869,8 +870,8 @@ namespace Tools.VinaCad.Helper.Helper
                 if (blockTable.Has(newBlockName))
                 {
                     MessageBox.Show(
-                        $"Block \"{newBlockName}\" đã tồn tại trong bản vẽ.",
-                        StringDefinition.TITLE_MESSAGE);
+                        Lang.Common_Msg_BlockDaTonTaiTrongBanVe.Replace("{newBlockName}", newBlockName),
+                        Lang.Common_Text_ThongBao);
 
                     return createdCount;
                 }
@@ -1028,9 +1029,7 @@ namespace Tools.VinaCad.Helper.Helper
             if (isValid)
                 return true;
 
-            MessageBox.Show(
-                "Bạn cần chèn block thống kê mẫu vào bản vẽ.",
-                StringDefinition.TITLE_MESSAGE);
+            MessageBox.Show(Lang.Common_Msg_BanCanChenBlockThongKeMauVaoBanVe,Lang.Common_Text_ThongBao);
 
             return false;
         }

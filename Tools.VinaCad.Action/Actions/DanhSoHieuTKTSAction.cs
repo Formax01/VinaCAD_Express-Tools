@@ -14,6 +14,7 @@ using Teigha.Geometry;
 using Teigha.Runtime;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -63,7 +64,7 @@ namespace Tools.VinaCad.Action.Actions
                 TextHelper.ClearSelection(_ed);
                 if (XLTKCTSetting.LapD10 == 0 || XLTKCTSetting.LapD10D16 == 0 || XLTKCTSetting.LapD16 == 0)
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn cần xác lập đầy đủ trước khi thống kê thép!", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {
@@ -100,7 +101,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 if (string.IsNullOrEmpty(_danhSoHieuTKTSVM.SoHieuStart))
                 {
-                    MessageBox.Show("Bạn cần nhập số hiệu bắt đầu để đánh số!", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.Common_Msg_BanCanNhapSoHieuBatDauDeDanhSo, Lang.Common_Text_ThongBao);
                     return;
                 }
                 else
@@ -111,14 +112,14 @@ namespace Tools.VinaCad.Action.Actions
                         blockIdSeleted = BlockHelper.SortBlocksTopToBottomLeftToRight(_db, blockIdSeleted, 0);
                         NumberBlocks(blockIdSeleted);
                         _danhSoHieuTuDong = true;
-                        MessageBox.Show("Bạn đã đánh số hiệu tự động thép sàn thành công!", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.TS_Msg_BanDaDanhSoHieuTuDongThepSanThanhCong, Lang.Common_Text_ThongBao);
                     }
                     else
                     {
                         blockIdSeleted = BlockHelper.SortBlocksLeftToRightTopToBottom(_db, blockIdSeleted, 0);
                         NumberBlocks(blockIdSeleted);
                         _danhSoHieuTuDong = true;
-                        MessageBox.Show("Bạn đã đánh số hiệu tự động thép sàn thành công!", StringDefinition.TITLE_MESSAGE);
+                        MessageBox.Show(Lang.TS_Msg_BanDaDanhSoHieuTuDongThepSanThanhCong, Lang.Common_Text_ThongBao);
                     }
                 }
 
@@ -166,19 +167,19 @@ namespace Tools.VinaCad.Action.Actions
         {
             if (blockIdsThepSan == null || blockIdsThepSan.Count == 0)
             {
-                MessageBox.Show("Vui lòng quét chọn thép sàn.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.TS_Msg_VuiLongQuetChonThepSan, Lang.Common_Text_ThongBao);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(_danhSoHieuTKTSVM.Scale))
             {
-                MessageBox.Show("Vui lòng nhập tỷ lệ bản vẽ.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.Common_Msg_VuiLongNhapTyLeBanVe, Lang.Common_Text_ThongBao);
                 return false;
             }
 
             if (_danhSoHieuTKTSVM.IsCoDinh && string.IsNullOrWhiteSpace(_danhSoHieuTKTSVM.HookLength))
             {
-                MessageBox.Show("Vui lòng nhập chiều dài bẻ móc cố định.", StringDefinition.TITLE_MESSAGE);
+                MessageBox.Show(Lang.TS_Msg_VuiLongNhapChieuDaiBeMocCoDinh, Lang.Common_Text_ThongBao);
                 return false;
             }
 
@@ -360,19 +361,19 @@ namespace Tools.VinaCad.Action.Actions
         {
             if (a.duongKinh != b.duongKinh)
             {
-                MessageBox.Show($"Cùng số hiệu {a.soHieu} nhưng khác đường kính.", "Phát hiện trùng số hiệu");
+                MessageBox.Show(Lang.TS_Msg_CungSoHieuNhungKhacDuongKinh.Replace("{a.soHieu}", a.soHieu),Lang.TS_Msg_PhatHienTrungSoHieu);
                 return false;
             }
 
             if (a.dangThep != b.dangThep)
             {
-                MessageBox.Show($"Cùng số hiệu {a.soHieu} nhưng khác hình dạng thanh thép.", "Phát hiện trùng số hiệu");
+                MessageBox.Show(Lang.TS_Msg_CungSoHieuNhungKhacHinhDangThanhThep.Replace("{a.soHieu}", a.soHieu),Lang.TS_Msg_PhatHienTrungSoHieu);
                 return false;
             }
 
             if (a.chieuDaiThanhThep != b.chieuDaiThanhThep || a.L2 != b.L2 || a.L3 != b.L3)
             {
-                MessageBox.Show($"Cùng số hiệu {a.soHieu} nhưng khác chiều dài thép hoặc chiều dài bẻ móc.", "Phát hiện trùng số hiệu");
+                MessageBox.Show(Lang.TS_Msg_CungSoHieuNhungKhacChieuDaiThepHoacChieuDaiBe.Replace("{a.soHieu}", a.soHieu),Lang.TS_Msg_PhatHienTrungSoHieu);
                 return false;
             }
 
@@ -428,7 +429,7 @@ namespace Tools.VinaCad.Action.Actions
         }
         private Point3d? PickInsertPoint()
         {
-            PromptPointResult result = _ed.GetPoint("\nChọn điểm chèn bảng thống kê thép: ");
+            PromptPointResult result = _ed.GetPoint("\n" + Lang.Common_Prompt_ChonDiemChenBangThongKeThep);
 
             if (result.Status != PromptStatus.OK)
                 return null;
@@ -451,7 +452,7 @@ namespace Tools.VinaCad.Action.Actions
             _ed.SetImpliedSelection(Array.Empty<ObjectId>());
             _ed.SetImpliedSelection(objectIds);
 
-            _ed.WriteMessage($"\nĐã chọn {objectIds.Length} đối tượng.");
+            _ed.WriteMessage("\n" + Lang.Common_Output_DaChonDoiTuong.Replace("{objectIds.Length}",objectIds.Length.ToString()));
 
             _ed.UpdateScreen();
         }
@@ -929,7 +930,7 @@ namespace Tools.VinaCad.Action.Actions
 
             foreach (string message in messages)
             {
-                MessageBox.Show(message, "Phát Hiện Trùng Số Hiệu!!!");
+                MessageBox.Show(message, Lang.Common_Msg_PhatHienTrungSoHieu);
             }
 
             if (duplicateIds.Count > 0)
@@ -973,31 +974,31 @@ namespace Tools.VinaCad.Action.Actions
         {
             if (first.duongKinh != second.duongKinh)
             {
-                AddDuplicateError(first, second, duplicateIds, messages, "khác đường kính");
+                AddDuplicateError(first, second, duplicateIds, messages, Lang.TS_Status_KhacDuongKinh);
                 return false;
             }
 
             if (first.dangThep != second.dangThep)
             {
-                AddDuplicateError(first, second, duplicateIds, messages, "khác hình dạng thanh thép");
+                AddDuplicateError(first, second, duplicateIds, messages, Lang.TS_Status_KhacHinhDangThanhThep);
                 return false;
             }
 
             if (first.chieuDaiThanhThep != second.chieuDaiThanhThep)
             {
-                AddDuplicateError(first, second, duplicateIds, messages, "khác chiều dài thép");
+                AddDuplicateError(first, second, duplicateIds, messages, Lang.TS_Status_KhacChieuDaiThep);
                 return false;
             }
 
             if (first.L2 != second.L2)
             {
-                AddDuplicateError(first, second, duplicateIds, messages, "khác chiều dài bẻ móc");
+                AddDuplicateError(first, second, duplicateIds, messages, Lang.TS_Status_KhacChieuDaiBeMoc);
                 return false;
             }
 
             if (first.L3 != second.L3)
             {
-                AddDuplicateError(first, second, duplicateIds, messages, "khác chiều dài bẻ móc");
+                AddDuplicateError(first, second, duplicateIds, messages, Lang.TS_Status_KhacChieuDaiBeMoc);
                 return false;
             }
 
@@ -1005,7 +1006,7 @@ namespace Tools.VinaCad.Action.Actions
         }
         private void AddDuplicateError(ThepSan first, ThepSan second, ObjectIdCollection duplicateIds, List<string> messages, string reason)
         {
-            messages.Add("Cùng số hiệu " + first.soHieu.ToUpper() + " nhưng lại " + reason + ". Bạn cần dừng lại để kiểm tra!");
+            messages.Add(Lang.Common_Status_CungSoHieu.Replace("{soHieu}", first.soHieu.ToUpper()) + " " +Lang.TS_Status_NhungLai + " " + reason +Lang.TS_Status_BanCanDungLaiDeKiemTra);
 
             if (first.blockThep != null)
                 duplicateIds.Add(first.blockThep.ObjectId);

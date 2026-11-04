@@ -13,6 +13,7 @@ using Teigha.DatabaseServices;
 using Teigha.Runtime;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -61,7 +62,7 @@ namespace Tools.VinaCad.Action.Actions
                 TextHelper.ClearSelection(_ed);
                 if (XLTKCTSetting.LapD10 == 0 || XLTKCTSetting.LapD10D16 == 0 || XLTKCTSetting.LapD16 == 0)
                 {
-                    MessageBoxResult result = MessageBox.Show("Bạn cần xác lập đầy đủ trước khi thống kê thép!", StringDefinition.TITLE_MESSAGE, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show(Lang.Common_Msg_BanCanXacLapDayDuTruocKhiThongKeThep, Lang.Common_Text_ThongBao, MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.OK)
                     {

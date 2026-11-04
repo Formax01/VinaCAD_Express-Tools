@@ -13,6 +13,7 @@ using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Model;
 using Tools.Resources.Definitions;
+using Tools.Resources.Language;
 using Tools.View.UI;
 using Tools.ViewModel;
 using Tools.VinaCad.Helper.Helper;
@@ -73,7 +74,7 @@ namespace Tools.VinaCad.Action.Actions
                 List<VeCocModel> veCocs = _VeCocVM.CauKienItems.ToList();
                 if (!HasValidData(veCocs))
                 {
-                    MessageBox.Show("Vui lòng copy dữ liệu vào bảng.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.Common_Msg_VuiLongCopyDuLieuVaoBang, Lang.Common_Text_ThongBao);
                 }
                 else
                 {
@@ -147,7 +148,7 @@ namespace Tools.VinaCad.Action.Actions
 
                 if (!bt.Has(blockName))
                 {
-                    MessageBox.Show($"Không tìm thấy block {blockName}.", StringDefinition.TITLE_MESSAGE);
+                    MessageBox.Show(Lang.VC_Msg_KhongTimThayBlock.Replace("{blockName}", blockName), Lang.Common_Text_ThongBao);
                     return createdIds;
                 }
 
