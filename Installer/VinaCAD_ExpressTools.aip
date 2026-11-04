@@ -203,6 +203,8 @@
     <ROW File="WA_B7.dwg" Component_="WA_B1.dwg" FileName="WA_B7.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B7.dwg" SelfReg="false"/>
     <ROW File="WA_B8.dwg" Component_="WA_B1.dwg" FileName="WA_B8.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B8.dwg" SelfReg="false"/>
     <ROW File="WA_B9.dwg" Component_="WA_B1.dwg" FileName="WA_B9.dwg" Attributes="0" SourcePath="..\Resources\Templates\Window Assets\WA_B9.dwg" SelfReg="false"/>
+    <ROW File="VinaCAD_ExpressTools.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~1.MNR|VinaCAD_ExpressTools.mnr" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools.mnr" SelfReg="false"/>
+    <ROW File="VinaCAD_ExpressTools_light.mnr" Component_="ACCAMERA_26.12_17.tx" FileName="VINACA~2.MNR|VinaCAD_ExpressTools_light.mnr" Attributes="0" SourcePath="..\Outcome_V2026\VinaCAD_ExpressTools_light.mnr" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>

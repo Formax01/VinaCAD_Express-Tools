@@ -117,11 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FDT_MessDialog" xml:space="preserve">
-    <value>一致するテキストが見つかりません</value>
-  </data>
-  <data name="FDT_Title" xml:space="preserve">
-    <value>杭を描画</value></data>
   <data name="B1_MessDialog_ChieuDaiKhongHopLe" xml:space="preserve">
     <value>長さが無効です。正の数を入力してください。</value>
   </data>
@@ -237,7 +232,7 @@
     <value>継手の長さLを入力 (最小 {0}):</value>
   </data>
   <data name="BZ2_UI_NhapChieuRongOngGioThu1" xml:space="preserve">
-    <value>1つ目のダクトの幅を入力:</value>
+    <value>ダクト1の幅を入力するか、Pを押して点を選択:</value>
   </data>
   <data name="BZ2_UI_NhapChieuRongOngGioThu3" xml:space="preserve">
     <value>1つ目のダクトの幅を入力:</value>
@@ -345,10 +340,10 @@
     <value>長さLを入力 (Enterで自動計算):</value>
   </data>
   <data name="B4_UI_NhapKichThuocDauLon" xml:space="preserve">
-    <value>大端のサイズを入力:</value>
+    <value>大きい端部サイズを入力するか、Pを押して点を選択:</value>
   </data>
   <data name="B4_UI_NhapKichThuocDauLon1" xml:space="preserve">
-    <value>大端のサイズを入力:</value>
+    <value>大きい端部サイズを入力するか、Pを押して点を選択:</value>
   </data>
   <data name="B4_UI_NhapKichThuocDauLonBang" xml:space="preserve">
     <value>大端のサイズを入力 [点/入力] :</value>
@@ -434,10 +429,6 @@
   <data name="BZ_UI_NhapChieuRongOngGio1" xml:space="preserve">
     <value>ダクトの幅を入力</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="FDT_MessDialog" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="FDT_MessDialog" xml:space="preserve">
     <value>含まれているテキストが見つかりませんでした</value>
   </data>
@@ -467,6 +458,12 @@
   </data>
   <data name="Msg_LanguageChanged" xml:space="preserve">
     <value>言語を{0}に変更しました。</value>
+  </data>
+  <data name="Language_Label" xml:space="preserve">
+    <value>Express Tools の言語</value>
+  </data>
+  <data name="Language_Apply" xml:space="preserve">
+    <value>適用</value>
   </data>
   <data name="CPD_MessDialog_ChonDiemDatMoiEnterDeKetThuc" xml:space="preserve">
     <value>新しい配置ポイントを選択し、Enterキーで終了します。</value>
@@ -619,7 +616,8 @@
     <value>オブジェクトはxrefに属しているため、このレイヤーは使用できません。</value>
   </data>
   <data name="LG_UI_ChuaDatCoiLaMm" xml:space="preserve">
-    <value>未設定（mmとして扱う）</value></data>
+    <value>未設定（mmとして扱う）</value>
+  </data>
   <data name="CLG_Title" xml:space="preserve">
     <value>CLG</value>
   </data>
@@ -723,7 +721,8 @@
     <value>長さLと半径rは0より大きくする必要があります。</value>
   </data>
   <data name="CLG_MessDialog_BanKinhNhoHonChieuDai" xml:space="preserve">
-    <value>半径 r ({0:0.##}) は L ({1:0.##}) より小さくする必要があります。</value></data>
+    <value>半径 r ({0:0.##}) は L ({1:0.##}) より小さくする必要があります。</value>
+  </data>
   <data name="BB1_UI_ChonDiemBatDau" xml:space="preserve">
     <value>開始点を選択: </value>
   </data>
@@ -839,7 +838,8 @@
     <value>ダクトの配置方向を指定してください：</value>
   </data>
   <data name="BBZ_UI_XOAYCHONVITRI" xml:space="preserve">
-    <value>始点を中心に図形を回転し、クリックして配置位置を指定してください：</value></data>
+    <value>始点を中心に図形を回転し、クリックして配置位置を指定してください：</value>
+  </data>
   <data name="B2_UI_ChonDiemBatDau" xml:space="preserve">
     <value>レデューサーの開始点を選択:</value>
   </data>
@@ -847,10 +847,10 @@
     <value>レデューサーの開始点を選択:</value>
   </data>
   <data name="B2_UI_ChonCachXacDinhWidth1" xml:space="preserve">
-    <value>Width1の決定方法を選択</value>
+    <value>幅の決定方法を選択:</value>
   </data>
   <data name="B2_UI_ChonCachXacDinhWidth2" xml:space="preserve">
-    <value>Width1の決定方法を選択</value>
+    <value>幅の決定方法を選択:</value>
   </data>
   <data name="B2_UI_KeywordDiem" xml:space="preserve">
     <value>点</value>
@@ -871,10 +871,10 @@
     <value>Width1を入力:</value>
   </data>
   <data name="B2_UI_ChonDiem2LayWidth1" xml:space="preserve">
-    <value>Width1を取得する点2を選択</value>
+    <value>ダクト幅を取得する点2を選択:</value>
   </data>
   <data name="B2_UI_ChonDiem2LayWidth2" xml:space="preserve">
-    <value>Width1を取得する点2を選択</value>
+    <value>ダクト幅を取得する点2を選択:</value>
   </data>
   <data name="B2_UI_NhapChieuCaoL" xml:space="preserve">
     <value>高さLを入力:</value>
@@ -958,7 +958,8 @@
     <value>レデューサーの方向を選択:</value>
   </data>
   <data name="B4_UI_ChonHuongChoChiTietGiam1" xml:space="preserve">
-    <value>レデューサーの方向を選択:</value></data>
+    <value>レデューサーの方向を選択:</value>
+  </data>
   <data name="BULON_UI_ChonDiem" xml:space="preserve">
     <value>点を選択: </value>
   </data>
@@ -1050,7 +1051,8 @@
     <value>値を入力 :</value>
   </data>
   <data name="OC1_UI_NhapLength" xml:space="preserve">
-    <value>長さを入力:</value> </data>
+    <value>長さを入力:</value>
+  </data>
   <data name="ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan" xml:space="preserve">
     <value>指示ファイルを開けません。
 {ex.Message}</value>
@@ -1064,6 +1066,9 @@
   </data>
   <data name="ABOUTEXPRESS_UI_PhienBanHienTai" xml:space="preserve">
     <value>現在のバージョン</value>
+  </data>
+  <data name="ABOUTEXPRESS_UI_Feedback" xml:space="preserve">
+    <value>フィードバック</value>
   </data>
   <data name="ABOUTEXPRESS_UI_ThongTinExpressTools" xml:space="preserve">
     <value>Express_Tools 情報</value>
@@ -3385,21 +3390,73 @@ CK</value>
   <data name="DuctBranch_Prompt_XacNhanHuongOng" xml:space="preserve">
     <value>クリックしてダクトの方向を確定: </value>
   </data>
-  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve"><value>給気口の幅を入力</value></data>
-  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve"><value>給気口の配置位置を選択: </value></data>
-  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve"><value>給気口ブロック名を入力: </value></data>
-  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
-  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve"><value>給気口からダクト立上り部までの高さを入力</value></data>
-  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve"><value>ダクト立上り部の高さを入力</value></data>
-  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve"><value>ダクト立上り部の開口幅を入力</value></data>
-  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve"><value>3D寸法が上限を超えています。</value></data>
-  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve"><value>3D給気口の中心を選択: </value></data>
-  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
-  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve"><value>還気グリルの内枠幅を入力</value></data>
-  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve"><value>還気グリルの内枠高さを入力</value></data>
-  <data name="Grille_Prompt_TenBlock" xml:space="preserve"><value>還気グリルのブロック名を入力: </value></data>
-  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve"><value>ブロック名は既に存在します。別の名前を入力してください。</value></data>
-  <data name="Grille_Output_Loi" xml:space="preserve"><value>エラー: {message}</value></data>
-  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve"><value>0より大きい数値を入力してください。</value></data>
-  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve"><value>還気グリルの中心点を選択: </value></data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengGioCap" xml:space="preserve">
+    <value>給気口の幅を入力</value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_ChonViTriDatMiengGioCap" xml:space="preserve">
+    <value>給気口の配置位置を選択: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_TenBlockMiengGioCap" xml:space="preserve">
+    <value>給気口ブロック名を入力: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Output_TenBlockDaTonTai" xml:space="preserve">
+    <value>ブロック名は既に存在します。別の名前を入力してください。</value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_DoCaoMiengGioDenCotOng" xml:space="preserve">
+    <value>給気口からダクト立上り部までの高さを入力</value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_ChieuCaoCotOng" xml:space="preserve">
+    <value>ダクト立上り部の高さを入力</value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_DoRongMiengCotOng" xml:space="preserve">
+    <value>ダクト立上り部の開口幅を入力</value>
+  </data>
+  <data name="SupplyAirDiffuser_Output_KichThuoc3DQuaGioiHan" xml:space="preserve">
+    <value>3D寸法が上限を超えています。</value>
+  </data>
+  <data name="SupplyAirDiffuser_Prompt_ChonTamMiengGioCap3D" xml:space="preserve">
+    <value>3D給気口の中心を選択: </value>
+  </data>
+  <data name="SupplyAirDiffuser_Output_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>0より大きい数値を入力してください。</value>
+  </data>
+  <data name="Grille_Prompt_ChieuRongKhungTrong" xml:space="preserve">
+    <value>還気グリルの内枠幅を入力</value>
+  </data>
+  <data name="Grille_Prompt_ChieuCaoKhungTrong" xml:space="preserve">
+    <value>還気グリルの内枠高さを入力</value>
+  </data>
+  <data name="Grille_Prompt_TenBlock" xml:space="preserve">
+    <value>還気グリルのブロック名を入力: </value>
+  </data>
+  <data name="Grille_Output_TenBlockDaTonTai" xml:space="preserve">
+    <value>ブロック名は既に存在します。別の名前を入力してください。</value>
+  </data>
+  <data name="Grille_Output_Loi" xml:space="preserve">
+    <value>エラー: {message}</value>
+  </data>
+  <data name="Grille_Output_GiaTriPhaiLonHon0" xml:space="preserve">
+    <value>0より大きい数値を入力してください。</value>
+  </data>
+  <data name="Grille_Prompt_ChonDiemDatTam" xml:space="preserve">
+    <value>還気グリルの中心点を選択: </value>
+  </data>
+  <data name="B1_UI_KeywordP" xml:space="preserve">
+    <value>P</value>
+  </data>
+  <data name="B1_UI_NhapChieuDaiHoacP" xml:space="preserve">
+    <value>長さを入力するか、Pを押して点を選択:</value>
+  </data>
+  <data name="BZ_UI_ChonDiem2DauLon" xml:space="preserve">
+    <value>ダクトの点2を選択:</value>
+  </data>
+  <data name="B1_UI_NhapChieuRongOngGioHoacAnP" xml:space="preserve">
+    <value>ダクト幅を入力するか、Pを押して点を選択:</value>
+  </data>
+  <data name="ZXW_UI_Number" xml:space="preserve">
+    <value>数字</value>
+  </data>
+  <data name="ZXW_UI_Letter" xml:space="preserve">
+    <value>文字</value>
+  </data>
 </root>

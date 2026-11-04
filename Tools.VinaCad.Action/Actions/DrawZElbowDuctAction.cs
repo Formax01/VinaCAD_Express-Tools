@@ -1,4 +1,5 @@
-﻿using Prima.VinaCAD.ApplicationServices;
+﻿
+using Prima.VinaCAD.ApplicationServices;
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
@@ -24,43 +25,60 @@ namespace Tools.VinaCad.Action.Actions
             try
             {
                 UpdateCurrentDocument();
+
                 if (_doc == null)
                     return;
 
                 ZElbowDuctModel model = new ZElbowDuctModel();
 
-                // Bước 1: bắt điểm
-                PromptPointResult startResult = _ed.GetPoint(Lang.BZ_UI_ChonDiemDat);
+                // Bước 1: Chọn điểm đặt
+                PromptPointResult startResult =
+                    _ed.GetPoint(Lang.BZ_UI_ChonDiemDat);
+
                 if (startResult.Status != PromptStatus.OK)
                     return;
+
                 model.StartPoint = startResult.Value;
 
-                // Bước 2: chiều rộng ống gió
-                if (!TryGetDistance(model.StartPoint, Lang.BZ_UI_NhapChieuRongOngGio, out double width))
+                // Bước 2: Nhập chiều rộng ống hoặc nhấn P để chọn điểm
+                if (!TryGetWidthOrPoint(model, out bool usePoint))
                     return;
-                model.Width = width;
 
-                // Bước 3: chọn bên lệch (Enter = Trái)
+                // Bước 3: Nếu chọn P thì lấy Width bằng hai điểm
+                if (usePoint)
+                {
+                    if (!TryGetWidthByPoint(model))
+                        return;
+                }
+
+                // Bước 4: Chọn bên lệch (Enter = Trái)
                 if (!TryGetIsLeft(out bool isLeft))
                     return;
 
-                // Bước 4: cao độ lượn (độ lệch giữa hai tim ống)
-                if (!TryGetDistance(model.StartPoint, Lang.BZ_UI_NhapCaoDoLuonOngGio, out double offset))
+                // Bước 5: Cao độ lượn
+                if (!TryGetDistance(
+                    model.StartPoint,
+                    Lang.BZ_UI_NhapCaoDoLuonOngGio,
+                    out double offset))
                     return;
+
                 model.Offset = isLeft ? offset : -offset;
 
-                // Bước 5: chiều dài L (không ngắn hơn mức tối thiểu)
+                // Bước 6: Chiều dài L (không ngắn hơn mức tối thiểu)
                 if (!TryGetLength(model, out double length))
                     return;
+
                 model.Length = length;
 
-                // Bước 6: chọn hướng bằng Jig
+                // Bước 7: Chọn hướng bằng JIG
                 ZElbowJig jig = new ZElbowJig(model, _ucsToWcs);
+
                 if (_ed.Drag(jig).Status != PromptStatus.OK)
                     return;
+
                 model.Direction = jig.Direction;
 
-                // Bước 7: vẽ hình thật
+                // Bước 8: Tạo hình thật
                 CreateShape(model);
             }
             catch (Exception ex)
@@ -73,6 +91,7 @@ namespace Tools.VinaCad.Action.Actions
         private void UpdateCurrentDocument()
         {
             _doc = Application.DocumentManager.MdiActiveDocument;
+
             if (_doc == null)
                 return;
 
@@ -81,64 +100,181 @@ namespace Tools.VinaCad.Action.Actions
             _ucsToWcs = _ed.CurrentUserCoordinateSystem;
         }
 
-        // ---------- Các bước nhập ----------
+        // ---------- Xác định chiều rộng ống ----------
 
-        // Nhập một khoảng cách dương, có đường rubber band từ điểm đặt
-        private bool TryGetDistance(Point3d basePoint, string message, out double value)
+        // Nhập Width hoặc nhấn P để chọn điểm
+        // true  = chọn Point
+        // false = nhập kích thước
+        private bool TryGetWidthOrPoint(
+            ZElbowDuctModel model,
+            out bool usePoint)
         {
-            PromptDistanceOptions options = new PromptDistanceOptions(message)
-            {
-                BasePoint = basePoint,
-                UseBasePoint = true,
-                AllowNegative = false,
-                AllowZero = false
-            };
+            usePoint = false;
+
+            PromptDistanceOptions options =
+                new PromptDistanceOptions(
+                    $"{Lang.BZ2_UI_NhapChieuRongOngGioThu1} [P]: ",
+                    "P")
+                {
+                    BasePoint = model.StartPoint,
+                    UseBasePoint = true,
+                    AllowNegative = false,
+                    AllowZero = false
+                };
 
             PromptDoubleResult result = _ed.GetDistance(options);
-            value = result.Status == PromptStatus.OK ? result.Value : 0;
+
+            // Người dùng nhấn P
+            if (result.Status == PromptStatus.Keyword)
+            {
+                if (string.Equals(
+                    result.StringResult,
+                    "P",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    usePoint = true;
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Người dùng nhập kích thước
+            if (result.Status == PromptStatus.OK)
+            {
+                model.Width = result.Value;
+                usePoint = false;
+                return true;
+            }
+
+            // ESC / hủy
+            return false;
+        }
+
+        // Chọn hai điểm để xác định Width
+        private bool TryGetWidthByPoint(ZElbowDuctModel model)
+        {
+            Point3d p1 = model.StartPoint;
+
+            while (true)
+            {
+                PromptPointOptions options =
+                    new PromptPointOptions(
+                        Lang.BZ_UI_ChonDiem2DauLon)
+                    {
+                        BasePoint = p1,
+                        UseBasePoint = true,
+                        UseDashedLine = true
+                    };
+
+                PromptPointResult result = _ed.GetPoint(options);
+
+                if (result.Status != PromptStatus.OK)
+                    return false;
+
+                // Giữ cùng cao độ Z với điểm đặt
+                Point3d p2 = new Point3d(
+                    result.Value.X,
+                    result.Value.Y,
+                    p1.Z);
+
+                double width = p1.DistanceTo(p2);
+
+                // Không cho phép hai điểm trùng nhau
+                if (width > 1e-9)
+                {
+                    model.Width = width;
+                    return true;
+                }
+
+                _ed.WriteMessage(
+                    Lang.B4_MessDialog_Diem2TrungDiem1);
+            }
+        }
+
+        // ---------- Các bước nhập còn lại ----------
+
+        // Nhập một khoảng cách dương
+        private bool TryGetDistance(
+            Point3d basePoint,
+            string message,
+            out double value)
+        {
+            PromptDistanceOptions options =
+                new PromptDistanceOptions(message)
+                {
+                    BasePoint = basePoint,
+                    UseBasePoint = true,
+                    AllowNegative = false,
+                    AllowZero = false
+                };
+
+            PromptDoubleResult result = _ed.GetDistance(options);
+
+            value = result.Status == PromptStatus.OK
+                ? result.Value
+                : 0;
+
             return result.Status == PromptStatus.OK;
         }
 
-        // Chọn bên lệch: true nếu Trái (Enter = Trái)
+        // Chọn bên lệch: true = Trái (Enter = Trái)
         private bool TryGetIsLeft(out bool isLeft)
         {
             isLeft = true;
 
-            PromptKeywordOptions options = new PromptKeywordOptions("")
-            {
-                AllowNone = true
-            };
+            PromptKeywordOptions options =
+                new PromptKeywordOptions("")
+                {
+                    AllowNone = true
+                };
+
             options.SetMessageAndKeywords(
                 Lang.BZ_UI_ChonChieuLuon,
-                $"{Lang.BZ_UI_KeywordTrai} {Lang.BZ_UI_KeywordPhai}");
+                $"{Lang.BZ_UI_KeywordTrai} " +
+                $"{Lang.BZ_UI_KeywordPhai}");
 
             PromptResult result = _ed.GetKeywords(options);
 
             if (result.Status == PromptStatus.None)
-                return true;                          // Enter: mặc định Trái
+                return true;
 
             if (result.Status != PromptStatus.OK)
-                return false;                         // Esc / hủy
+                return false;
 
-            isLeft = result.StringResult != Lang.BZ_UI_KeywordPhai;
+            isLeft =
+                result.StringResult != Lang.BZ_UI_KeywordPhai;
+
             return true;
         }
 
         // Chiều dài L: hỏi lại nếu ngắn hơn mức tối thiểu
-        private bool TryGetLength(ZElbowDuctModel model, out double length)
+        private bool TryGetLength(
+            ZElbowDuctModel model,
+            out double length)
         {
-            double minL = ZElbowHelper.GetMinimumLength(model.Width, model.Offset);
+            double minL = ZElbowHelper.GetMinimumLength(
+                model.Width,
+                model.Offset);
 
             while (true)
             {
-                string prompt = string.Format(Lang.BZ_UI_NhapChieuDaiL, minL.ToString("0.##"));
-                if (!TryGetDistance(model.StartPoint, prompt, out length))
+                string prompt = string.Format(
+                    Lang.BZ_UI_NhapChieuDaiL,
+                    minL.ToString("0.##"));
+
+                if (!TryGetDistance(
+                    model.StartPoint,
+                    prompt,
+                    out length))
                     return false;
 
                 if (length + 1e-9 >= minL)
                     return true;
 
-                _ed.WriteMessage(string.Format(Lang.BZ_MessDialog_LQuaNgan, minL.ToString("0.##")));
+                _ed.WriteMessage(string.Format(
+                    Lang.BZ_MessDialog_LQuaNgan,
+                    minL.ToString("0.##")));
             }
         }
 
@@ -147,36 +283,49 @@ namespace Tools.VinaCad.Action.Actions
         private void CreateShape(ZElbowDuctModel model)
         {
             ZElbowShape? shape = ZElbowHelper.Build(
-                model.StartPoint, model.Direction,
-                model.Width, model.Offset, model.Length);
+                model.StartPoint,
+                model.Direction,
+                model.Width,
+                model.Offset,
+                model.Length);
 
             if (shape == null)
             {
-                _ed.WriteMessage(Lang.BZ_MessDialog_KhongVeDuoc);
+                _ed.WriteMessage(
+                    Lang.BZ_MessDialog_KhongVeDuoc);
                 return;
             }
 
-            ZElbowHelper.Create(_db, shape, model.Layer, _ucsToWcs);
+            ZElbowHelper.Create(
+                _db,
+                shape,
+                model.Layer,
+                _ucsToWcs);
 
             Finish(model, shape);
         }
 
-        private void Finish(ZElbowDuctModel model, ZElbowShape shape)
+        private void Finish(
+            ZElbowDuctModel model,
+            ZElbowShape shape)
         {
             _ed.Regen();
 
             string detail = shape.Straight > 1e-6
-                ? string.Format(Lang.BZ_MessDialog_ChiTiet2CutOngThang, shape.Straight.ToString("0.##"))
+                ? string.Format(
+                    Lang.BZ_MessDialog_ChiTiet2CutOngThang,
+                    shape.Straight.ToString("0.##"))
                 : Lang.BZ_MessDialog_ChiTiet2Cut;
 
             _ed.WriteMessage(string.Format(
                 Lang.BZ_MessDialog_DaVeOngChuZ,
                 detail,
                 model.Width.ToString("0.##"),
-                System.Math.Abs(model.Offset).ToString("0.##"),
+                Math.Abs(model.Offset).ToString("0.##"),
                 model.Length.ToString("0.##"),
-                (shape.Theta * 180.0 / System.Math.PI).ToString("0.#"),
+                (shape.Theta * 180.0 / Math.PI).ToString("0.#"),
                 shape.Radius.ToString("0.##")));
         }
     }
 }
+    

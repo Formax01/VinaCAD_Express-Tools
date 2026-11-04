@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <Reference Include="VinaCADCoreMgd_Net8">
-      <HintPath>C:\Program Files\VinaCAD\VinaCAD 2026\VinaCADCoreMgd_Net8.dll</HintPath>
+      <HintPath>..\Lib\VinaCad\2026\VinaCADCoreMgd_Net8.dll</HintPath>
     </Reference>
   </ItemGroup>
 

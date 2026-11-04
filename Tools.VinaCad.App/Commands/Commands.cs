@@ -636,7 +636,7 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("TD")]
+        [CommandMethod("TDD")]
         public void TKTDCommand()
         {
             try
@@ -651,11 +651,11 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
-        [CommandMethod("TDD")]
-        public void TDDCommand()
-        {
-            TKTDCommand();
-        }
+        //[CommandMethod("TDD")]
+        //public void TDDCommand()
+        //{
+        //    TKTDCommand();
+        //}
 
         [CommandMethod("DTT")]
         public void BangTraDTCTCommand()
@@ -807,6 +807,20 @@ namespace Tools.VinaCAD.App.Commands
             }
         }
 
+        [CommandMethod("EXPRESSLANGUAGE")]
+        public void ExpressLanguageCommand()
+        {
+            try
+            {
+                new LanguageSettingsAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(ExpressLanguageCommand), ex);
+            }
+        }
+
         [CommandMethod("ABOUTEXPRESS")]
         public void AboutToolsCommand()
         {
@@ -819,6 +833,20 @@ namespace Tools.VinaCAD.App.Commands
             {
                 MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
                 Logger.Info(nameof(AboutToolsCommand), ex);
+            }
+        }
+
+        [CommandMethod("EXPRESSFEEDBACK")]
+        public void FeedbackCommand()
+        {
+            try
+            {
+                new FeedbackAction().Execute();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi);
+                Logger.Info(nameof(FeedbackCommand), ex);
             }
         }
 

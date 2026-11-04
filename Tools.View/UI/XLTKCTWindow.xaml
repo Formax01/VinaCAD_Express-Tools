@@ -13,7 +13,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid Background="#9DB9D3">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -217,16 +217,14 @@
                 Height="25"
                 Click="Button_Click"
                 Command="{Binding XacLapCmd}"
-                Content="{x:Static res:Lang.Common_UI_XacLap}"
-                Foreground="Blue" />
+                Content="{x:Static res:Lang.Common_UI_XacLap}" />
 
             <Button
                 Grid.Column="2"
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="{x:Static res:Lang.Common_UI_Thoat}"
-                Foreground="Blue" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </Grid>
 
     </Grid>

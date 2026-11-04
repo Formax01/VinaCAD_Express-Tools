@@ -33,6 +33,7 @@ namespace Tools.VinaCad.Action.Actions
             _aboutExpressToolVM = new AboutExpressToolVM()
             {
                 HyperlinkCmd = new RelayCommand(HyperlinkInvoke),
+                FeedbackCmd = new RelayCommand(FeedbackInvoke),
                 CloseCmd = new RelayCommand(CancelInvoke)
             };
             _aboutExpressToolView = new AboutExpressToolWindow() { DataContext = _aboutExpressToolVM };
@@ -74,6 +75,19 @@ namespace Tools.VinaCad.Action.Actions
             {
                 Logger.Info(nameof(AboutExpressToolAction), ex);
                 MessageBox.Show(Lang.ABOUTEXPRESS_Msg_KhongTheMoFileHuongDan.Replace("{ex.Message}", ex.Message), Lang.Common_Text_Loi, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void FeedbackInvoke()
+        {
+            try
+            {
+                new FeedbackAction().Execute();
+            }
+            catch (Exception ex)
+            {
+                Logger.Info(nameof(AboutExpressToolAction), ex);
+                MessageBox.Show(ex.Message, Lang.Common_Text_Loi, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
        

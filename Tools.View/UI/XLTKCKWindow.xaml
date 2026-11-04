@@ -117,15 +117,13 @@
                 Height="25"
                 Margin="0,0,70,0"
                 Command="{Binding OkCmd}"
-                Content="{x:Static res:Lang.Common_UI_XacLap}"
-                Foreground="Blue" />
+                Content="{x:Static res:Lang.Common_UI_XacLap}" />
 
             <Button
                 Width="70"
                 Height="25"
                 Command="{Binding CancelCmd}"
-                Content="{x:Static res:Lang.Common_UI_Thoat}"
-                Foreground="Blue" />
+                Content="{x:Static res:Lang.Common_UI_Thoat}" />
         </StackPanel>
     </Grid>
 </Window>
