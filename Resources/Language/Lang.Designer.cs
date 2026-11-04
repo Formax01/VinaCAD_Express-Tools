@@ -90,20 +90,20 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phiên bản hiện tại.
-        /// </summary>
-        public static string ABOUTEXPRESS_UI_PhienBanHienTai {
-            get {
-                return ResourceManager.GetString("ABOUTEXPRESS_UI_PhienBanHienTai", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Góp ý.
         /// </summary>
         public static string ABOUTEXPRESS_UI_Feedback {
             get {
                 return ResourceManager.GetString("ABOUTEXPRESS_UI_Feedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phiên bản hiện tại.
+        /// </summary>
+        public static string ABOUTEXPRESS_UI_PhienBanHienTai {
+            get {
+                return ResourceManager.GetString("ABOUTEXPRESS_UI_PhienBanHienTai", resourceCulture);
             }
         }
         
@@ -955,6 +955,24 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to P.
+        /// </summary>
+        public static string B1_UI_KeywordP {
+            get {
+                return ResourceManager.GetString("B1_UI_KeywordP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều dài hoặc ấn P để chọn điểm: .
+        /// </summary>
+        public static string B1_UI_NhapChieuDaiHoacP {
+            get {
+                return ResourceManager.GetString("B1_UI_NhapChieuDaiHoacP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nhập chiều dài ống gió:.
         /// </summary>
         public static string B1_UI_NhapChieuDaiOngGio {
@@ -987,6 +1005,15 @@ namespace Tools.Resources.Language {
         public static string B1_UI_NhapChieuRongOngGio1 {
             get {
                 return ResourceManager.GetString("B1_UI_NhapChieuRongOngGio1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập chiều rộng ống gió hoặc ấn P để chọn điểm:.
+        /// </summary>
+        public static string B1_UI_NhapChieuRongOngGioHoacAnP {
+            get {
+                return ResourceManager.GetString("B1_UI_NhapChieuRongOngGioHoacAnP", resourceCulture);
             }
         }
         
@@ -1045,7 +1072,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chọn cách xác định Width1.
+        ///   Looks up a localized string similar to Chọn cách xác định chiều rộng:.
         /// </summary>
         public static string B2_UI_ChonCachXacDinhWidth1 {
             get {
@@ -1054,7 +1081,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chọn cách xác định Width1.
+        ///   Looks up a localized string similar to Chọn cách xác định chiều rộng:.
         /// </summary>
         public static string B2_UI_ChonCachXacDinhWidth2 {
             get {
@@ -1081,7 +1108,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chọn điểm 2 để lấy Width1:.
+        ///   Looks up a localized string similar to Chọn điểm 2 để lấy độ rộng ống gió :.
         /// </summary>
         public static string B2_UI_ChonDiem2LayWidth1 {
             get {
@@ -1090,7 +1117,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chọn điểm 2 để lấy Width1:.
+        ///   Looks up a localized string similar to Chọn điểm 2 để lấy độ rộng ống gió :.
         /// </summary>
         public static string B2_UI_ChonDiem2LayWidth2 {
             get {
@@ -1603,7 +1630,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nhập kích thước đầu lớn:.
+        ///   Looks up a localized string similar to Nhập kích thước đầu lớn hoặc ấn P để chọn điểm :.
         /// </summary>
         public static string B4_UI_NhapKichThuocDauLon {
             get {
@@ -1612,7 +1639,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nhập kích thước đầu lớn:.
+        ///   Looks up a localized string similar to Nhập kích thước đầu lớn hoặc ấn P để chọn điểm:.
         /// </summary>
         public static string B4_UI_NhapKichThuocDauLon1 {
             get {
@@ -2549,6 +2576,15 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chọn điểm 2 ống gió :.
+        /// </summary>
+        public static string BZ_UI_ChonDiem2DauLon {
+            get {
+                return ResourceManager.GetString("BZ_UI_ChonDiem2DauLon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chọn điểm đặt :.
         /// </summary>
         public static string BZ_UI_ChonDiemDat {
@@ -2819,7 +2855,7 @@ namespace Tools.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nhập chiều rộng ống gió thứ 1:.
+        ///   Looks up a localized string similar to Nhập chiều rộng ống gió thứ 1 ấn P để chọn điểm :.
         /// </summary>
         public static string BZ2_UI_NhapChieuRongOngGioThu1 {
             get {
@@ -5959,6 +5995,24 @@ namespace Tools.Resources.Language {
         public static string KTD_Ribbon_KiemTraTrungDimKtd {
             get {
                 return ResourceManager.GetString("KTD_Ribbon_KiemTraTrungDimKtd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Áp dụng.
+        /// </summary>
+        public static string Language_Apply {
+            get {
+                return ResourceManager.GetString("Language_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngôn ngữ Express Tools.
+        /// </summary>
+        public static string Language_Label {
+            get {
+                return ResourceManager.GetString("Language_Label", resourceCulture);
             }
         }
         
