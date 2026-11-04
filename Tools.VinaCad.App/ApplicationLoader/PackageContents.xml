@@ -9,8 +9,7 @@
   <Components Description="2026">
     <RuntimeRequirements OS="Win32|Win64"
 							           Platform="VinaCAD"
-							           SeriesMin="R26.7"
-							           SeriesMax="R26.12" />
+							           SeriesMin="R26.7" />
 
     <ComponentEntry AppName="VinaCAD_ExpressTools" Version="2026.0"
 						        ModuleName="./Contents/Outcome_V2026/Tools.VinaCad.App.dll"
@@ -20,4 +19,4 @@
   <Components Description="CUI">
     <ComponentEntry AppName="VinaCAD_ExpressTools cui" ModuleName="./Contents/Outcome_V2026/VinaCAD_ExpressTools.cuix"  AppDescription="VinaCAD_ExpressTools cui" />
   </Components>
-</ApplicationPackage>
+</ApplicationPackage> 
