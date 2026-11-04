@@ -95,7 +95,13 @@ namespace Tools.VinaCad.Action.Actions
         {
             try
             {
-                string pdfPath = GetManualPdfPath(StringDefinition.PDFAboutTools);
+                string pdfFileName = Translator.Instance.CurrentCode switch
+                {
+                    "en-US" => "Express Tools - EngVersion.pdf",
+                    "ja-JP" => "Express Tools - JapVersion.pdf",
+                    _ => StringDefinition.PDFAboutTools
+                };
+                string pdfPath = GetManualPdfPath(pdfFileName);
 
                 if (!File.Exists(pdfPath))
                 {
