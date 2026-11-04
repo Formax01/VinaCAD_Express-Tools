@@ -53,12 +53,6 @@ public sealed class FlexDuctAction
                  string.Equals(mode.StringResult, Lang.FlexDuct_Keyword_Chon, StringComparison.OrdinalIgnoreCase))
                 ? FlexDuctPathMode.Select : FlexDuctPathMode.Draw;
 
-            ObjectId sourceId = ObjectId.Null;          // line/polyline gốc (chỉ có khi chọn có sẵn)
-            List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select
-                ? SelectPath(editor, document.Database, out sourceId)
-                : DrawPath(editor, document.Database);
-            if (path == null) return;
-
             string name = type switch
             {
                 FlexDuctType.TopDown => "S1",
@@ -71,13 +65,27 @@ public sealed class FlexDuctAction
             };
             FlexDuctStyle style = ResolveStyle(type);
 
-            (int count, string groupName, string? warning) =
-                FlexDuctHelper.Draw(document.Database, path, vm.Model, style);
-            editor.UpdateScreen();
-            if (count == 0) { editor.WriteMessage("\n" + (warning ?? Lang.FlexDuct_Output_KhongTheVeOng)); return; }
-            if (!sourceId.IsNull) EraseSource(editor, document.Database, sourceId);
-            if (warning != null) editor.WriteMessage("\n" + Lang.FlexDuct_Output_CanhBao.Replace("{warning}", warning));
-            editor.WriteMessage("\n" + Lang.FlexDuct_Output_DaVe.Replace("{commandName}", name).Replace("{count}", count.ToString()).Replace("{groupName}", groupName));
+            // Giữ thông số trong phiên lệnh; lần gọi Execute tiếp theo sẽ dùng mặc định.
+            while (true)
+            {
+                ObjectId sourceId = ObjectId.Null;
+                List<Point3d>? path = vm.PathMode == FlexDuctPathMode.Select
+                    ? SelectPath(editor, document.Database, out sourceId)
+                    : DrawPath(editor, document.Database);
+                if (path == null) return;
+
+                (int count, string groupName, string? warning) =
+                    FlexDuctHelper.Draw(document.Database, path, vm.Model, style);
+                editor.UpdateScreen();
+                if (count == 0)
+                {
+                    editor.WriteMessage("\n" + (warning ?? Lang.FlexDuct_Output_KhongTheVeOng));
+                    continue;
+                }
+                if (!sourceId.IsNull) EraseSource(editor, document.Database, sourceId);
+                if (warning != null) editor.WriteMessage("\n" + Lang.FlexDuct_Output_CanhBao.Replace("{warning}", warning));
+                editor.WriteMessage("\n" + Lang.FlexDuct_Output_DaVe.Replace("{commandName}", name).Replace("{count}", count.ToString()).Replace("{groupName}", groupName));
+            }
         }
         catch (System.Exception ex)
         {
