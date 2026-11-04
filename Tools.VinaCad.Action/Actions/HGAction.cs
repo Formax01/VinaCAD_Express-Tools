@@ -39,12 +39,8 @@ namespace Tools.VinaCad.Action.Actions
                 if (!TryGetEndPoint(startUcs, startWcs, out double length, out double axisAngle))
                     return;
 
-                // B4: góc quay (jig ướm hình xoay quanh điểm đầu)
-                if (!TryGetAngle(startUcs, length, axisAngle, out double angle))
-                    return;
-
                 // Tạo block một lần duy nhất, chèn tại điểm đầu
-                ObjectId brId = HGHelper.CreateBlockReference(_db, startWcs, length, angle);
+                ObjectId brId = HGHelper.CreateBlockReference(_db, startWcs, length, axisAngle);
                 if (brId.IsNull)
                     return;
 
@@ -93,24 +89,6 @@ namespace Tools.VinaCad.Action.Actions
 
             axisAngle = Math.Atan2(dir.Y, dir.X);
             return true;
-        }
-
-        // Chọn góc quay bằng Jig: Enter = theo hướng đường nối, Esc = hủy
-        private bool TryGetAngle(
-            Point3d startUcs, double length, double axisAngle, out double angle)
-        {
-            angle = axisAngle;
-
-            HGJig angleJig = HGJig.ForAngle(startUcs, _ucs, length, axisAngle);
-            PromptResult res = _ed.Drag(angleJig);
-
-            if (res.Status == PromptStatus.OK)
-            {
-                angle = angleJig.AngleWcs;
-                return true;
-            }
-
-            return angleJig.NullResponse;   // Enter: dùng axisAngle; Esc: hủy
         }
 
         // ---------- Kết thúc ----------
