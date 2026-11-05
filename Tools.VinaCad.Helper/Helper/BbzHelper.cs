@@ -94,8 +94,11 @@ namespace Tools.VinaCad.Helper.Helper
 
                     Region region = (Region)regions[0];
 
+                    // Extrude đùn theo pháp tuyến của Region, nên đổi dấu để luôn đùn về +Z.
+                    double height = region.Normal.Z < 0 ? -m.Height : m.Height;
+
                     Solid3d solid = new Solid3d();
-                    solid.Extrude(region, m.Height, 0.0);
+                    solid.Extrude(region, height, 0.0);
                     solid.TransformBy(localToWcs);
 
                     return solid;
