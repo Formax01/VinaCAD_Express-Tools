@@ -35,6 +35,8 @@
     <ROW Directory="Templates_Dir" Directory_Parent="Resources_Dir" DefaultDir="TEMPLA~1|Templates"/>
     <ROW Directory="WindowAssets_Dir" Directory_Parent="Templates_Dir" DefaultDir="WINDOW~1|Window Assets"/>
     <ROW Directory="__1_Dir" Directory_Parent="Contents_Dir" DefaultDir="OUTCOM~1|Outcome_V2026"/>
+    <ROW Directory="en-US_Dir" Directory_Parent="__1_Dir" DefaultDir="en-US"/>
+    <ROW Directory="ja-JP_Dir" Directory_Parent="__1_Dir" DefaultDir="ja-JP"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="ACCAMERA_26.12_17.tx" ComponentId="{C88B47E4-8ADF-4A73-A81B-D59EF3ADA18C}" Directory_="__1_Dir" Attributes="256" KeyPath="ACCAMERA_26.12_17.tx" Type="0"/>
@@ -59,6 +61,8 @@
     <ROW Component="TD_SpatialIndex_26.12_17.dll" ComponentId="{2859154F-F312-4637-BB18-C32C482AE593}" Directory_="__1_Dir" Attributes="256" KeyPath="TD_SpatialIndex_26.12_17.dll"/>
     <ROW Component="Tools.Model.dll" ComponentId="{16C2CCD2-40FA-4437-9122-BD318043E38F}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.Model.dll"/>
     <ROW Component="Tools.Resources.dll" ComponentId="{F699336D-6C29-4BF4-8C1F-E97CAB9F4BBE}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.Resources.dll"/>
+    <ROW Component="Tools.Resources.resources.dll.en_US" ComponentId="{3512D9D7-16E0-4626-A9BF-0854A0950328}" Directory_="en-US_Dir" Attributes="0" KeyPath="Tools.Resources.resources.dll.en_US"/>
+    <ROW Component="Tools.Resources.resources.dll.ja_JP" ComponentId="{B888362E-D05C-4528-A9A5-8A27684373C8}" Directory_="ja-JP_Dir" Attributes="0" KeyPath="Tools.Resources.resources.dll.ja_JP"/>
     <ROW Component="Tools.View.dll" ComponentId="{42A61915-A5DC-427C-B079-9DAF6C49C887}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.View.dll"/>
     <ROW Component="Tools.ViewModel.dll" ComponentId="{A9CC3520-CE6B-4B47-B5BF-75D548D15954}" Directory_="__1_Dir" Attributes="0" KeyPath="Tools.ViewModel.dll"/>
     <ROW Component="Tools.VinaCad.Action.dll" ComponentId="{53512200-C4E5-447B-818C-3FCD09F7D681}" Directory_="__1_Dir" Attributes="256" KeyPath="Tools.VinaCad.Action.dll"/>
@@ -130,6 +134,8 @@
     <ROW File="Tools.Resources.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSR~1.JSO|Tools.Resources.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.deps.json" SelfReg="false"/>
     <ROW File="Tools.Resources.dll" Component_="Tools.Resources.dll" FileName="TOOLSR~1.DLL|Tools.Resources.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.dll" SelfReg="false"/>
     <ROW File="Tools.Resources.pdb" Component_="Tools.Resources.dll" FileName="TOOLSR~1.PDB|Tools.Resources.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.Resources.pdb" SelfReg="false"/>
+    <ROW File="Tools.Resources.resources.dll.en_US" Component_="Tools.Resources.resources.dll.en_US" FileName="TOOLSR~1.DLL|Tools.Resources.resources.dll" Attributes="0" SourcePath="..\Outcome_V2026\en-US\Tools.Resources.resources.dll" SelfReg="false"/>
+    <ROW File="Tools.Resources.resources.dll.ja_JP" Component_="Tools.Resources.resources.dll.ja_JP" FileName="TOOLSR~1.DLL|Tools.Resources.resources.dll" Attributes="0" SourcePath="..\Outcome_V2026\ja-JP\Tools.Resources.resources.dll" SelfReg="false"/>
     <ROW File="Tools.View.deps.json" Component_="ACCAMERA_26.12_17.tx" FileName="TOOLSV~1.JSO|Tools.View.deps.json" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.deps.json" SelfReg="false"/>
     <ROW File="Tools.View.dll" Component_="Tools.View.dll" FileName="TOOLSV~1.DLL|Tools.View.dll" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.dll" SelfReg="false"/>
     <ROW File="Tools.View.pdb" Component_="Tools.View.dll" FileName="TOOLSV~1.PDB|Tools.View.pdb" Attributes="0" SourcePath="..\Outcome_V2026\Tools.View.pdb" SelfReg="false"/>
@@ -305,6 +311,8 @@
     <ROW Feature_="MainFeature" Component_="TD_SpatialIndex_26.12_17.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.Model.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.Resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Tools.Resources.resources.dll.en_US"/>
+    <ROW Feature_="MainFeature" Component_="Tools.Resources.resources.dll.ja_JP"/>
     <ROW Feature_="MainFeature" Component_="Tools.View.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.ViewModel.dll"/>
     <ROW Feature_="MainFeature" Component_="Tools.VinaCad.Action.dll"/>
