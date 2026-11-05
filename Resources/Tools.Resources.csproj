@@ -24,6 +24,7 @@
   </ItemGroup>
 
     <ItemGroup>
+        <Resource Include="Images\Zalo Group Gr.png" />
 	    <None Update="Templates\Window Assets\*.dwg">
 		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    </None>

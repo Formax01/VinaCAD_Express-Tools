@@ -7,45 +7,63 @@
     xmlns:res="clr-namespace:Tools.Resources.Language;assembly=Tools.Resources"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="{x:Static res:Lang.ABOUTEXPRESS_UI_ThongTinExpressTools}"
-    Width="340"
+    Width="330"
     SizeToContent="Height"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition  />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <StackPanel
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top">
+            <Image
+                Width="100"
+                Height="100"
+                AutomationProperties.Name="Zalo Group Qr"
+                Source="pack://application:,,,/Tools.Resources;component/Images/Zalo Group Gr.png"
+                Stretch="Fill" />
+        </StackPanel>
+
         <TextBlock
             Grid.Row="0"
-            Margin="0,0,0,10"
+            Margin="5,0,5,5"
             FontSize="22"
             Foreground="Black"
             Text="Express_Tools" />
 
         <Grid Grid.Row="1" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="0" VerticalAlignment="Top">
-                <TextBlock Margin="0,0,0,4" Foreground="Black">
+            <StackPanel Grid.Row="0" VerticalAlignment="Top">
+                <TextBlock Margin="10,0,0,4" Foreground="Black" TextWrapping="Wrap">
                     <Run Text="{x:Static res:Lang.ABOUTEXPRESS_UI_PhienBanHienTai}" />
                     <Run Text=": " />
                     <Run Text="{Binding CurrentVersion}" />
                 </TextBlock>
 
-                <TextBlock Foreground="Black" Text="Formax Technologies" />
+                <TextBlock Margin="10,0,0,4" Foreground="Black" Text="Formax Technologies" />
             </StackPanel>
 
             <StackPanel
-                Grid.Column="1"
-                Margin="10,10,0,0"
+                Grid.Row="1"
+                Margin="10,16,0,0"
                 VerticalAlignment="Top">
-                <TextBlock Margin="0,0,0,8">
+                <TextBlock Margin="0,0,0,8" TextWrapping="Wrap">
                     <Hyperlink
                         Command="{Binding HyperlinkCmd}"
                         Cursor="Hand"
@@ -53,7 +71,7 @@
                         <Run Text="{x:Static res:Lang.Common_Text_HuongDanSuDung}" />
                     </Hyperlink>
                 </TextBlock>
-                <TextBlock>
+                <TextBlock TextWrapping="Wrap">
                     <Hyperlink
                         Command="{Binding FeedbackCmd}"
                         Cursor="Hand"
@@ -66,6 +84,7 @@
 
         <Button
             Grid.Row="2"
+            Grid.ColumnSpan="2"
             Width="70"
             Height="25"
             HorizontalAlignment="Right"

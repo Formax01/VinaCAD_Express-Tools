@@ -225,7 +225,7 @@ namespace Tools.VinaCad.Helper.Helper
             switch (end)
             {
                 case FlexDuctEnd.Box: return h * style.BoxDepthFactor;
-                case FlexDuctEnd.Dome: return h * style.DomeBulge;   // bulge * h = độ sâu vòm
+                case FlexDuctEnd.Dome: return 0.0; // Tâm đầu hướng xuống trùng đầu đường tâm.
                 default: return 0.0;
             }
         }
