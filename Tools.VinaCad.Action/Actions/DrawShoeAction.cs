@@ -2,6 +2,7 @@
 using Prima.VinaCAD.EditorInput;
 using PrLogTrackingSystem;
 using System;
+using System.Runtime.InteropServices;
 using Teigha.DatabaseServices;
 using Teigha.Geometry;
 using Tools.Resources.Language;
@@ -19,6 +20,16 @@ namespace Tools.VinaCad.Action.Actions
         private Database _db;
         private Matrix3d _ucsToWcs;
 
+        private static class NativeMouse
+        {
+            [DllImport("user32.dll")] public static extern IntPtr GetCapture();
+            [DllImport("user32.dll")] public static extern bool ReleaseCapture();
+            [DllImport("user32.dll")] public static extern IntPtr SetFocus(IntPtr hWnd);
+            [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+            public const uint WM_LBUTTONUP = 0x0202;
+        }
+
         public void Execute()
         {
             try
@@ -29,37 +40,37 @@ namespace Tools.VinaCad.Action.Actions
 
                 ShoeModel model = new ShoeModel();
 
-                // Bước 1: bắt điểm
+                // 1. Điểm đặt
                 PromptPointResult startResult = _ed.GetPoint(Lang.B3_UI_ChonDiemDatGotGiay);
                 if (startResult.Status != PromptStatus.OK)
                     return;
                 model.StartPoint = startResult.Value;
 
-                // Bước 2: chiều cao
+                // 2. Chiều cao
                 if (!TryGetDistance(model.StartPoint, Lang.B3_UI_NhapChieuCao, out double height))
                     return;
                 model.Height = height;
 
-                // Bước 3: cạnh bé
+                // 3. Cạnh bé
                 if (!TryGetDistance(model.StartPoint, Lang.B3_UI_NhapCanhBe, out double smallSide))
                     return;
                 model.SmallSide = smallSide;
 
-                // Bước 4: cạnh đáy — Enter = chiều cao + cạnh bé, gõ số = dùng số đó
+                // 4. Cạnh đáy (Enter = cao + cạnh bé)
                 if (!TryGetBaseSide(model, out double baseSide))
                     return;
                 model.BaseSide = baseSide;
 
-                // Bước 5: chọn bên đặt cạnh đáy (Enter = Trái)
+                // 5. Bên đặt cạnh đáy (Enter = Trái)
                 if (!TryGetMirror(out bool mirror))
                     return;
                 model.Mirror = mirror;
 
-                // Bước 6: chọn hướng bằng Jig (gõ F để đảo bên nhanh)
+                // 6. Ướm hướng bằng Jig (F = đảo bên)
                 if (!TryPlaceWithJig(model))
                     return;
 
-                // Bước 7: vẽ hình thật
+                // 7. Vẽ
                 Point3d[] corners = ShoeHelper.GetCorners(
                     model.StartPoint, model.Direction,
                     model.Height, model.SmallSide, model.BaseSide, model.Mirror);
@@ -86,9 +97,24 @@ namespace Tools.VinaCad.Action.Actions
             _ucsToWcs = _ed.CurrentUserCoordinateSystem;
         }
 
-        // ---------- Các bước nhập ----------
+        // Nhả mouse capture còn sót sau click để menu keyword nhận chuột
+        private static void ReleaseMouse()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                IntPtr cap = NativeMouse.GetCapture();
+                if (cap == IntPtr.Zero)
+                    break;
 
-        // Nhập một khoảng cách dương, có đường rubber band từ điểm đặt
+                NativeMouse.PostMessage(cap, NativeMouse.WM_LBUTTONUP, IntPtr.Zero, IntPtr.Zero);
+                NativeMouse.ReleaseCapture();
+            }
+
+            IntPtr main = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+            if (main != IntPtr.Zero)
+                NativeMouse.SetFocus(main);
+        }
+
         private bool TryGetDistance(Point3d basePoint, string message, out double value)
         {
             PromptDistanceOptions options = new PromptDistanceOptions(message)
@@ -104,39 +130,38 @@ namespace Tools.VinaCad.Action.Actions
             return result.Status == PromptStatus.OK;
         }
 
-        // Cạnh đáy: Enter = tự tính, gõ số = dùng số đó
         private bool TryGetBaseSide(ShoeModel model, out double baseSide)
         {
             double autoBase = ShoeHelper.GetAutoBase(model.Height, model.SmallSide);
             baseSide = autoBase;
 
-            PromptDistanceOptions options = new PromptDistanceOptions(Lang.B3_UI_NhapCanhDay)
+            PromptDistanceOptions options = new PromptDistanceOptions(
+                $"{Lang.B3_UI_NhapCanhDay} <{autoBase:0.##}>")
             {
                 BasePoint = model.StartPoint,
                 UseBasePoint = true,
                 AllowNegative = false,
                 AllowZero = false,
-                AllowNone = true,
-                DefaultValue = autoBase,
-                UseDefaultValue = true
+                AllowNone = true
             };
 
             PromptDoubleResult result = _ed.GetDistance(options);
 
             if (result.Status == PromptStatus.None)
-                return true;                          // Enter: dùng giá trị tự tính
+                return true;                  // Enter: dùng giá trị tự tính
 
             if (result.Status != PromptStatus.OK)
-                return false;                         // Esc / hủy
+                return false;
 
             baseSide = result.Value;
             return true;
         }
 
-        // Chọn Trái / Phải: true nếu chọn Phải (Enter = Trái)
+        // mirror = true nếu chọn Phải
         private bool TryGetMirror(out bool mirror)
         {
             mirror = false;
+            ReleaseMouse();
 
             PromptKeywordOptions options = new PromptKeywordOptions("")
             {
@@ -149,16 +174,15 @@ namespace Tools.VinaCad.Action.Actions
             PromptResult result = _ed.GetKeywords(options);
 
             if (result.Status == PromptStatus.None)
-                return true;                          // Enter: mặc định Trái
+                return true;                  // Enter: mặc định Trái
 
             if (result.Status != PromptStatus.OK)
-                return false;                         // Esc / hủy
+                return false;
 
             mirror = result.StringResult == Lang.B3_UI_KeywordPhai;
             return true;
         }
 
-        // Ướm hướng bằng Jig; lặp lại khi người dùng gõ F để đảo bên
         private bool TryPlaceWithJig(ShoeModel model)
         {
             ShoePlacementJig jig = new ShoePlacementJig(model, _ucsToWcs);
@@ -168,7 +192,7 @@ namespace Tools.VinaCad.Action.Actions
             {
                 dragResult = _ed.Drag(jig);
             }
-            while (jig.FlipRequested);
+            while (jig.FlipRequested);       // F: đảo bên rồi ướm lại
 
             if (dragResult.Status != PromptStatus.OK)
                 return false;
